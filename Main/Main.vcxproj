@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{22F3707B-3E74-4D86-ACDB-F4F5FC2AC66C}</ProjectGuid>
+    <RootNamespace>Main</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\include;C:\Users\Vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\Vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source;$(SourcePath)</SourcePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\Vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\Vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\core\fileio\file.cpp" />
+    <ClCompile Include="source\core\fileio\filesys.cpp" />
+    <ClCompile Include="source\core\math\camera.cpp" />
+    <ClCompile Include="source\core\math\frustum.cpp" />
+    <ClCompile Include="source\core\memory\memory.cpp" />
+    <ClCompile Include="source\gfx\bmp.cpp" />
+    <ClCompile Include="source\gfx\color.cpp" />
+    <ClCompile Include="source\gfx\hardwarebuffer.cpp" />
+    <ClCompile Include="source\gfx\indexbuffer.cpp" />
+    <ClCompile Include="source\gfx\raw.cpp" />
+    <ClCompile Include="source\gfx\vertexbuffer.cpp" />
+    <ClCompile Include="source\gfx\vertexformat.cpp" />
+    <ClCompile Include="source\model\mesh.cpp" />
+    <ClCompile Include="source\model\objloader.cpp" />
+    <ClCompile Include="source\ogldriver.cpp" />
+    <ClCompile Include="source\shader\glmaterialrenderer.cpp" />
+    <ClCompile Include="source\shader\glshadermaterialrenderer.cpp" />
+    <ClCompile Include="source\shader\oglshader.cpp" />
+    <ClCompile Include="source\shader\shadertypes.cpp" />
+    <ClCompile Include="source\win32\win32console.cpp" />
+    <ClCompile Include="source\win32\win32ctrl.cpp" />
+    <ClCompile Include="source\win32\win32main.cpp" />
+    <ClCompile Include="source\win32\win32timer.cpp" />
+    <ClCompile Include="test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="assert.hpp" />
+    <ClInclude Include="bits.hpp" />
+    <ClInclude Include="source\core\array.hpp" />
+    <ClInclude Include="source\core\chartypes.hpp" />
+    <ClInclude Include="source\core\fileio\file.hpp" />
+    <ClInclude Include="source\core\fileio\filesys.hpp" />
+    <ClInclude Include="source\core\hash\hashmap.h" />
+    <ClInclude Include="source\core\math\aabbox.hpp" />
+    <ClInclude Include="source\core\math\camera.hpp" />
+    <ClInclude Include="source\core\math\dimension.hpp" />
+    <ClInclude Include="source\core\math\frustum.hpp" />
+    <ClInclude Include="source\core\math\line2.hpp" />
+    <ClInclude Include="source\core\math\line3.hpp" />
+    <ClInclude Include="source\core\math\mathcommon.hpp" />
+    <ClInclude Include="source\core\math\matrix3.hpp" />
+    <ClInclude Include="source\core\math\matrix4.hpp" />
+    <ClInclude Include="source\core\math\plane.hpp" />
+    <ClInclude Include="source\core\math\point2.hpp" />
+    <ClInclude Include="source\core\math\point3.hpp" />
+    <ClInclude Include="source\core\math\polygon.hpp" />
+    <ClInclude Include="source\core\math\quaternion.hpp" />
+    <ClInclude Include="source\core\math\vector2.hpp" />
+    <ClInclude Include="source\core\math\vector3.hpp" />
+    <ClInclude Include="source\core\math\vector4.hpp" />
+    <ClInclude Include="source\core\memory\allocator.hpp" />
+    <ClInclude Include="source\core\memory\memory.hpp" />
+    <ClInclude Include="source\core\string\string.hpp" />
+    <ClInclude Include="source\core\types.hpp" />
+    <ClInclude Include="source\gfx\bmp.hpp" />
+    <ClInclude Include="source\gfx\color.hpp" />
+    <ClInclude Include="source\gfx\hardwarebuffer.hpp" />
+    <ClInclude Include="source\gfx\indexbuffer.hpp" />
+    <ClInclude Include="source\gfx\pixelformat.hpp" />
+    <ClInclude Include="source\gfx\raw.hpp" />
+    <ClInclude Include="source\gfx\texturemanager.hpp" />
+    <ClInclude Include="source\gfx\vertexbuffer.hpp" />
+    <ClInclude Include="source\gfx\vertexformat.hpp" />
+    <ClInclude Include="source\gfx\vertexstructs.hpp" />
+    <ClInclude Include="source\model\daeloader.hpp" />
+    <ClInclude Include="source\model\md5model.hpp" />
+    <ClInclude Include="source\model\mesh.hpp" />
+    <ClInclude Include="source\model\objloader.hpp" />
+    <ClInclude Include="source\ogldriver.hpp" />
+    <ClInclude Include="source\shader\glmaterialrenderer.hpp" />
+    <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />
+    <ClInclude Include="source\shader\oglshader.hpp" />
+    <ClInclude Include="source\shader\shadertypes.hpp" />
+    <ClInclude Include="source\win32\win32console.hpp" />
+    <ClInclude Include="source\win32\win32ctrl.hpp" />
+    <ClInclude Include="source\win32\win32main.hpp" />
+    <ClInclude Include="source\win32\win32timer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="source\shader\glsl\fragment\shader.frag" />
+    <None Include="source\shader\glsl\fragment\triangle.frag" />
+    <None Include="source\shader\glsl\vertex\shader.vert" />
+    <None Include="source\shader\glsl\vertex\triangle.vert" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

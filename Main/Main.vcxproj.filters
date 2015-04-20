@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\MeshLib">
+      <UniqueIdentifier>{f78c79cf-fbc1-4b0d-b7e5-3a27670ae021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{d0b36446-db07-4cef-9ecc-1a342a425052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MathLib">
+      <UniqueIdentifier>{b5952149-9c7c-4c7d-a6cf-819b8398b1ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\StringLib">
+      <UniqueIdentifier>{afa5e75b-a0a5-469a-bec0-4ba80520667f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\FileLib">
+      <UniqueIdentifier>{e430a532-6c02-49e2-b1c3-11d87d1728b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\MemoryLib">
+      <UniqueIdentifier>{43cd0430-0c28-4967-9f28-b56eb333c124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MeshLib\Loaders">
+      <UniqueIdentifier>{9786d15a-790e-49c4-a4b4-59fabc49bc6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Win32">
+      <UniqueIdentifier>{960fac17-55fb-4092-b918-81269788d05c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\XmlReader">
+      <UniqueIdentifier>{093092df-9782-46a2-86b2-d1454e9054cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SoundLib">
+      <UniqueIdentifier>{8afad947-8243-42e5-a430-0fcd445508e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderLib">
+      <UniqueIdentifier>{c3e9f1e2-5f29-41de-9699-2014549de83d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderLib\ShaderSources">
+      <UniqueIdentifier>{3e248324-1ada-44a7-90ec-bd3c5d6c7657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderLib\ShaderSources\FragmentShaders">
+      <UniqueIdentifier>{0cf0c109-3d38-4694-bbf4-9d88c92f5ea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderLib\ShaderSources\VertexShaders">
+      <UniqueIdentifier>{8fb845c0-de34-40e4-8ada-eec575125a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGL">
+      <UniqueIdentifier>{7d5679aa-c035-4c1d-aeb4-6198bc968fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GFX">
+      <UniqueIdentifier>{b3e68c5c-7f3f-40ab-a797-7805c0a5e826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GFX\ImageLib">
+      <UniqueIdentifier>{e2662702-6985-4ad1-9d77-18f3f81ad472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GFX\PixelLib">
+      <UniqueIdentifier>{9042282d-7290-4fcd-8857-015fdb93c8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GFX\TextureLib">
+      <UniqueIdentifier>{7b7bcc50-5d82-41f6-ac9c-48ef5c0abcef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GFX\BufferLib">
+      <UniqueIdentifier>{a3351615-3ba7-424d-9fa4-e99c2121980b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Algorithm">
+      <UniqueIdentifier>{d64accc5-249f-4366-ae2e-ca548590663d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\model\mesh.cpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\model\objloader.cpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\fileio\filesys.cpp">
+      <Filter>Source Files\Core\FileLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\fileio\file.cpp">
+      <Filter>Source Files\Core\FileLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\memory\memory.cpp">
+      <Filter>Source Files\Core\MemoryLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\win32\win32main.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="source\win32\win32ctrl.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="source\win32\win32console.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\raw.cpp">
+      <Filter>GFX\ImageLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\bmp.cpp">
+      <Filter>GFX\ImageLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\glshadermaterialrenderer.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\glmaterialrenderer.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\win32\win32timer.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\oglshader.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\shadertypes.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\hardwarebuffer.cpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\indexbuffer.cpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\vertexbuffer.cpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\color.cpp">
+      <Filter>GFX\PixelLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ogldriver.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\math\frustum.cpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\vertexformat.cpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\math\camera.cpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\model\mesh.hpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\md5model.hpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\daeloader.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\objloader.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\vector4.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\vector3.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\vector2.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\quaternion.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\polygon.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\point3.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\point2.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\plane.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\matrix4.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\matrix3.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\mathcommon.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\line3.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\line2.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\dimension.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\aabbox.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\fileio\filesys.hpp">
+      <Filter>Source Files\Core\FileLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\fileio\file.hpp">
+      <Filter>Source Files\Core\FileLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\memory\memory.hpp">
+      <Filter>Source Files\Core\MemoryLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\memory\allocator.hpp">
+      <Filter>Source Files\Core\MemoryLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\string\string.hpp">
+      <Filter>Source Files\Core\StringLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32main.hpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32ctrl.hpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32console.hpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\raw.hpp">
+      <Filter>GFX\ImageLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\bmp.hpp">
+      <Filter>GFX\ImageLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\glshadermaterialrenderer.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\glmaterialrenderer.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="assert.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\types.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\chartypes.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="bits.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\hash\hashmap.h">
+      <Filter>Source Files\Core\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\texturemanager.hpp">
+      <Filter>GFX\TextureLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32timer.hpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\oglshader.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\shadertypes.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\hardwarebuffer.hpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\indexbuffer.hpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\vertexbuffer.hpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\color.hpp">
+      <Filter>GFX\PixelLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\pixelformat.hpp">
+      <Filter>GFX\PixelLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\array.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\frustum.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ogldriver.hpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\vertexformat.hpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\vertexstructs.hpp">
+      <Filter>GFX\BufferLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\math\camera.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="source\shader\glsl\vertex\shader.vert">
+      <Filter>Source Files\ShaderLib\ShaderSources\VertexShaders</Filter>
+    </None>
+    <None Include="source\shader\glsl\fragment\shader.frag">
+      <Filter>Source Files\ShaderLib\ShaderSources\FragmentShaders</Filter>
+    </None>
+    <None Include="source\shader\glsl\vertex\triangle.vert">
+      <Filter>Source Files\ShaderLib\ShaderSources\VertexShaders</Filter>
+    </None>
+    <None Include="source\shader\glsl\fragment\triangle.frag">
+      <Filter>Source Files\ShaderLib\ShaderSources\FragmentShaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
