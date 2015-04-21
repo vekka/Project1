@@ -163,7 +163,8 @@ namespace camera
          float nearTop, float nearBottom, float nearDist, float farDist)
          : AbstractCamera(  )
       {
-
+         printf("hello!");
+         // I want this to be synced with git repo!.
          orientation.Set(0.0f, 0.0f, 0.0f, 0.0f);
          isDirty = true;
          this->projectionType = projectionType;
