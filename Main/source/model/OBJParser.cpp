@@ -329,18 +329,18 @@ namespace model
       if (pPtr == pEnd || *pPtr == '\0')
          return;
 
-      std::vector<unsigned int> *pIndices = new std::vector<unsigned int>;
-      std::vector<unsigned int> *pTexID = new std::vector<unsigned int>;
-      std::vector<unsigned int> *pNormalID = new std::vector<unsigned int>;
+      std::vector<uint32> *pIndices = new std::vector<uint32>;
+      std::vector<uint32> *pTexID = new std::vector<uint32>;
+      std::vector<uint32> *pNormalID = new std::vector<uint32>;
       bool hasNormal = false;
 
-      const int vSize = m_pModel->m_Vertices.size();
-      const int vtSize = m_pModel->m_TextureCoord.size();
-      const int vnSize = m_pModel->m_Normals.size();
+      const int32 vSize = m_pModel->m_Vertices.size();
+      const int32 vtSize = m_pModel->m_TextureCoord.size();
+      const int32 vnSize = m_pModel->m_Normals.size();
 
       const bool vt = (!m_pModel->m_TextureCoord.empty());
       const bool vn = (!m_pModel->m_Normals.empty());
-      int iStep = 0, iPos = 0;
+      int32 iStep = 0, iPos = 0;
       while (pPtr != pEnd)
       {
          iStep = 1;
@@ -370,10 +370,10 @@ namespace model
          else
          {
             //OBJ USES 1 Base ARRAYS!!!!
-            const int iVal = atoi(pPtr);
+            const int32 iVal = atoi(pPtr);
 
             // increment iStep position based off of the sign and # of digits
-            int tmp = iVal;
+            int32 tmp = iVal;
             if (iVal < 0)
                ++iStep;
             while ((tmp = tmp / 10) != 0)
@@ -452,8 +452,8 @@ namespace model
 
       // Store the face
       m_pModel->m_pCurrentMesh->m_Faces.push_back(face);
-      m_pModel->m_pCurrentMesh->m_uiNumIndices += (unsigned int)face->m_pVertices->size();
-      m_pModel->m_pCurrentMesh->m_uiUVCoordinates[0] += (unsigned int)face->m_pTexturCoords[0].size();
+      m_pModel->m_pCurrentMesh->m_uiNumIndices += (uint32)face->m_pVertices->size();
+      m_pModel->m_pCurrentMesh->m_uiUVCoordinates[0] += (uint32)face->m_pTexturCoords[0].size();
       if (!m_pModel->m_pCurrentMesh->m_hasNormals && hasNormal)
       {
          m_pModel->m_pCurrentMesh->m_hasNormals = true;
@@ -604,7 +604,7 @@ namespace model
    // -------------------------------------------------------------------
    int ObjFileParser::getMaterialIndex(const String_c &strMaterialName)
    {
-      int mat_index = -1;
+      int32 mat_index = -1;
       if (strMaterialName.empty()) {
          return mat_index;
       }
@@ -612,7 +612,7 @@ namespace model
       {
          if (strMaterialName == m_pModel->m_MaterialLib[index])
          {
-            mat_index = (int)index;
+            mat_index = (int32)index;
             break;
          }
       }
@@ -642,7 +642,7 @@ namespace model
          // New group name, creating a new entry
          if (it == m_pModel->m_Groups.end())
          {
-            std::vector<unsigned int> *pFaceIDArray = new std::vector<unsigned int>;
+            std::vector<uint32> *pFaceIDArray = new std::vector<uint32>;
             m_pModel->m_Groups[strGroupName] = pFaceIDArray;
             m_pModel->m_pGroupFaceIDs = (pFaceIDArray);
          }
@@ -739,7 +739,7 @@ namespace model
       assert(NULL != m_pModel);
       m_pModel->m_pCurrentMesh = new ObjFile::Mesh;
       m_pModel->m_Meshes.push_back(m_pModel->m_pCurrentMesh);
-      unsigned int meshId = m_pModel->m_Meshes.size() - 1;
+      uint32 meshId = m_pModel->m_Meshes.size() - 1;
       if (NULL != m_pModel->m_pCurrent)
       {
          m_pModel->m_pCurrent->m_Meshes.push_back(meshId);
@@ -760,9 +760,9 @@ namespace model
          return true;
       }
       bool newMat = false;
-      int matIdx = getMaterialIndex(rMaterialName);
-      int curMatIdx = m_pModel->m_pCurrentMesh->m_uiMaterialIndex;
-      if (curMatIdx != int(ObjFile::Mesh::NoMaterial) || curMatIdx != matIdx)
+      int32 matIdx = getMaterialIndex(rMaterialName);
+      int32 curMatIdx = m_pModel->m_pCurrentMesh->m_uiMaterialIndex;
+      if (curMatIdx != int32(ObjFile::Mesh::NoMaterial) || curMatIdx != matIdx)
       {
          // New material -> only one material per mesh, so we need to create a new 
          // material
