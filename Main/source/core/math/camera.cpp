@@ -1,9 +1,7 @@
-#include "core/math/camera.hpp"
+#include "camera.hpp"
 
 namespace camera
 {
-
-
    void AbstractCamera::SetupProjection(const float fovy, const float aspectRatio)
    {
       this->aspectRatio = aspectRatio;
@@ -43,9 +41,6 @@ namespace camera
          projMatrix(3, 3) = 1.0f;
       }
    }
-
-
-
 
    void FreeCamera::Update()
    {
@@ -100,9 +95,7 @@ namespace camera
     //  translation += (up*dt);
     //  isDirty = true;
     //}
-
-
-
+    
     void FreeCamera::SetTranslation(const Vector3f &t)
     {
          translation += t; 
@@ -146,7 +139,4 @@ namespace camera
     //   ////InvalidateView(&cam->frustum, cam->position, cam->orientation);
     //   //isDirty = true;
     //}
-
-
-
 }
