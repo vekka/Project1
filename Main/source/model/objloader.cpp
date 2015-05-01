@@ -131,10 +131,17 @@ bool ObjFile::Read()
       else if( tokens[0] == "v"  )
       {
          Vector3f vtemp;
+         
          vtemp[0] = tokens[1].StringToFloat();
          vtemp[1] = tokens[2].StringToFloat();
          vtemp[2] = tokens[3].StringToFloat();
          mesh.AddVertex( vtemp );
+
+         //using core::bits::enumflags::operator|;
+         //eVertexFormat b = VF_EMPTY;
+         //b |= VF_POSITION;
+
+         mesh.SetComponents(VF_POSITION);
       }
       else if( tokens[0] == "vn" )
       {
@@ -143,6 +150,8 @@ bool ObjFile::Read()
          vntemp[1] = tokens[2].StringToFloat();
          vntemp[2] = tokens[3].StringToFloat();
          mesh.AddVertexNormal(vntemp);
+
+         this->mesh.SetComponents(VF_NORMAL);
       }
       else if( tokens[0] == "g" )
       {			      
@@ -171,14 +180,13 @@ bool ObjFile::Read()
       }
       else if( tokens[0]== "vt" )
       {
-         if (!mesh.HasTexture2())
-            mesh.ToggleHasTexture2();
-
+ 
          Vector2f vttemp;
          vttemp[0] = tokens[1].StringToFloat();
          vttemp[1] = tokens[2].StringToFloat();
   
          mesh.AddVertexTexture2( vttemp );
+         this->mesh.SetComponents(VF_TEXCOORD2D_1);
       }
       else if( tokens[0] == "f" )
       {

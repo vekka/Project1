@@ -7,11 +7,41 @@
 #include "core/string/string.hpp"
 
 #include <vector>
-
 using namespace std;
+
+#include "../core/bits.hpp"
+using core::bits::enumflags::operator&;
 
 namespace vertexformat
 {
+
+   enum eVertexFormat
+   {
+      VF_EMPTY,
+      VF_POSITION = 1 << 0, // vertex position 3 floats x,y,z
+      VF_NORMAL = 1 << 1, // normal 3 floats x,y,z
+      VF_TEXCOORD2D_1 = 1 << 2, // texcoord 1 2 floats u,v
+      VF_TEXCOORD2D_2 = 1 << 3, // texcoord 2 2 floats u,v
+      VF_TEXCOORD2D_3 = 1 << 4, // texcoord 3 2 floats u,v
+      VF_COLOR = 1 << 5,
+      VF_BINORMAL = 1 << 6,
+      VF_TEXCOORD3D_1 = 1 << 7
+      // and so on
+   };
+
+    //P   N   T1   T2  T3
+    //0   0   0    0    0
+
+
+    //VF_POSITION | VF_NORMAL
+
+    //P   N   T1   T2  T3
+    //1   1   0    0    0
+
+    //bool HasComponent(eVertexFormat comp)
+
+
+
 
 // types used in GLSL shaders, prefixed with GL instead of DATATYPE
 enum eDataType
@@ -90,58 +120,67 @@ inline int32 GetDataTypeSizeInBytes(eDataType type)
 //   eVertexType type;
 //};
 
-class VertexComponent
-{
-private:
-   char componentType;
-   //int32 offset; // offset of vertex component in vertex
-   int32 size;
-   static eDataType dataType; // possibly not possible to have the vbo with mixed basic types
-   byte *data;
-public:
-   VertexComponent(char vertexComponentType, eDataType dataType, byte *data);
-   virtual ~VertexComponent();
-   int32 GetSizeInBytes();
-   char GetComponentType() { return componentType; };
-};
-
-//inline int32 GetComponentSize(char component) const
+//class VertexComponent
 //{
-//   switch (component)
-//   {
-//   case 'T': // texcoord (2 dimensional)
-//      return sizeof(float) * 2;
-//   case 'P': // position
-//   case 'N': // normal
-//   case 'C': // color
-//   case 'X': // texcoord (3 dimensional)
-//   case 'B': // binormal
-//      return sizeof(float) * 3;
-//   default:
-//      return 0;
-//   }
-//}
+//private:
+//   char componentType;
+//   //int32 offset; // offset of vertex component in vertex
+//   int32 size;
+//   static eDataType dataType; // possibly not possible to have the vbo with mixed basic types
+//   byte *data;
+//public:
+//   VertexComponent(char vertexComponentType, eDataType dataType, byte *data);
+//   virtual ~VertexComponent();
+//   int32 GetSizeInBytes();
+//   char GetComponentType() { return componentType; };
+//};
+
+
+inline int32 GetVertexComponentSize(eVertexFormat component)
+{
+   switch (component)
+   {
+   case VF_EMPTY:
+      return 0;
+   case VF_POSITION:
+   case VF_NORMAL:
+   case VF_COLOR:
+   case VF_BINORMAL:
+   case VF_TEXCOORD3D_1:
+      return sizeof(float) * 3;
+   case VF_TEXCOORD2D_1:
+   case VF_TEXCOORD2D_2:
+   case VF_TEXCOORD2D_3:
+      return sizeof(float) * 2;
+   default:
+      return 0;
+   }
+}
 
 class Vertex
 {
 private:
    //byte *vertex; // generic vertex format ptr for allocating an arbitrary vertex format
-
-   vector<VertexComponent> components; // vertex configuration and data
+   //vector<VertexComponent> components; // vertex configuration and data
    static int32 numBytes;
    static bool isPacked;
-   static int32 *vertCompOffsets; // offset for each component
-   static eDataType dataType;
-   //const static int32 FORMAT_DESCRIPTOR_LEN;
-   static core::string::String_c formatDescriptor;
+   static eVertexFormat format;
+   static int32 numComponents;
+   static int32 *vertCompOffsets; //assume offset 0 equals size of furst component, offset 1 is size of first component + the second, and so eond
+
+   int32 GetVertexFormatSize(eVertexFormat format)
+   {
+      for (int32 pos = 0; pos < sizeof(eVertexFormat); pos++)
+      {
+         numBytes += GetVertexComponentSize(static_cast<eVertexFormat>(format & (1 << pos)));
+      }
+   }
 public:
    // format description is composed of characters used for vertex formats: e.g "PNT" for position, normal, texture, respectively
    // this inits shared (static) vars only, and should be called only once
    static void Init(/*const char *formatDescriptor,*/ eDataType dataType = DATATYPE_FLOAT​​);
 
 
-   // add component, the class will make a format descriptor based on the creation
-   void AddComponent( VertexComponent & );
    // create a vertex containing the basic type and corresponding to the vertex format
    //void CreateVertexFormat(eDataType dataType); 
 

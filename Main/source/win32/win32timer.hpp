@@ -1,7 +1,7 @@
 #ifndef _WIN32TIMER_HPP_INCLUDED_HPP_
 #define _WIN32TIMER_HPP_INCLUDED_HPP_
 
-#include "core/types.hpp"
+#include "core/BasicTypes.hpp"
 
 namespace timer
 {

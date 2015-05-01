@@ -7,6 +7,10 @@
 #include <map>
 #include <vector>
 
+#include "core/bits.hpp"
+using core::bits::enumflags::operator|;
+using core::bits::enumflags::operator&;
+
 #include "core/fileio/file.hpp"
 #include "core/math/vector3.hpp"
 #include "core/math/vector2.hpp"
@@ -14,6 +18,15 @@
 
 using core::math::Vector2f;
 using core::math::Vector3f;
+
+#include "gfx/vertexformat.hpp"
+using vertexformat::eVertexFormat;
+using vertexformat::VF_EMPTY;
+using vertexformat::VF_POSITION;
+using vertexformat::VF_NORMAL;
+using vertexformat::VF_TEXCOORD2D_1;
+using vertexformat::VF_TEXCOORD2D_2;
+using vertexformat::VF_TEXCOORD2D_3;
 
 using namespace std;
 
@@ -54,7 +67,7 @@ class Mesh
 {
 private:
    int32 numGroups;
-
+   eVertexFormat vertexFormat;
    // generic basic types should be used (?)
    // vector<Vector<generic type> > vertexList;
 
@@ -68,26 +81,18 @@ private:
    vector<Vector3f> binormalList;
 
    vector<Face<TFace> > faceList;
-   bool hasNormal;
-   bool hasBinormal;
-   bool hasTexture2;
-   bool hasTexture3;
-   bool hasTangent;
 public:
    Mesh::Mesh()
    {
       vertexList.clear();
       faceList.clear();
       numGroups = 0;
-      hasNormal = false;
-      hasTexture3 = false;
-      hasTexture2 = false;
-      hasTangent = false;
-      hasBinormal = false;
+      vertexFormat = VF_EMPTY;
    };
 
    Mesh::~Mesh(){};
 
+   eVertexFormat GetVertexFormat() const { return vertexFormat; }
    void AddVertex( const Vector3f vertex ) { vertexList.push_back(vertex); }
    void AddVertexNormal( const Vector3f vertexNormal ) { normalList.push_back(vertexNormal); }
    void AddVertexTexture2( const Vector2f vertexTexture ) { texture2List.push_back(vertexTexture); }
@@ -101,6 +106,10 @@ public:
    float *GetTexture2ListPtr() { return &texture2List[0][0]; }
    float *GetTexture3ListPtr() { return &texture3List[0][0]; }
 
+   void SetComponents(eVertexFormat components) { vertexFormat = vertexFormat | components; }
+
+   bool HasComponents(eVertexFormat components) const { return vertexFormat ^ components;  }
+   
    uint32 GetNumElemVertexList() { return vertexList.size(); }
    uint32 GetNumElemNormalList() { return normalList.size(); }
    uint32 GetNumElemTexture2List() { return texture2List.size(); }
@@ -108,19 +117,13 @@ public:
 
    Face<TFace> *GetFaceListPtr() { return &faceList[0]; }
 
+   bool HasComponents(eVertexFormat components) { return vertexFormat & components; }
    bool HasNormal() { return !normalList.empty();; }
    bool HasTexture2() { return !texture2List.empty(); }
    bool HasTexture3() { return !texture3List.empty(); }
    bool HasTangent() { return !tangentList.empty(); }
    bool HasColor() { return !colorList.empty(); }
    bool HasBinormal() { return !binormal.empty(); }
-
-   void ToggleHasNormal() { hasNormal ^= true;  }
-   void ToggleHasTexture2() { hasTexture2 ^= true; }
-   void ToggleHasTexture3() { hasTexture3 ^= true; }
-   void ToggleHasTangent() { hasTangent ^= true; }
-   void ToggleHasBinormal() { hasBinormal ^= true; }
-   
 };
 
 typedef Mesh<uint16> Mesh16;

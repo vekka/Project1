@@ -1,7 +1,7 @@
 #ifndef _HARDWAREBUFFER_HPP_INCLUDED_
 #define _HARDWAREBUFFER_HPP_INCLUDED_
 
-#include "core/types.hpp"
+#include "core/BasicTypes.hpp"
 #include "ogldriver.hpp"
 namespace hardwarebuffer
 {

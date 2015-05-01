@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\core\containers\vector.cpp" />
     <ClCompile Include="source\core\fileio\file.cpp" />
     <ClCompile Include="source\core\fileio\filesys.cpp" />
     <ClCompile Include="source\core\math\camera.cpp" />
@@ -142,10 +143,11 @@
     <ClCompile Include="source\gfx\vertexformat.cpp" />
     <ClCompile Include="source\model\mesh.cpp" />
     <ClCompile Include="source\model\objloader.cpp" />
+    <ClCompile Include="source\model\OBJParser.cpp" />
     <ClCompile Include="source\ogldriver.cpp" />
     <ClCompile Include="source\shader\glmaterialrenderer.cpp" />
     <ClCompile Include="source\shader\glshadermaterialrenderer.cpp" />
-    <ClCompile Include="source\shader\oglshader.cpp" />
+    <ClCompile Include="source\shader\OGLShader.cpp" />
     <ClCompile Include="source\shader\shadertypes.cpp" />
     <ClCompile Include="source\win32\win32console.cpp" />
     <ClCompile Include="source\win32\win32ctrl.cpp" />
@@ -155,9 +157,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assert.hpp" />
-    <ClInclude Include="bits.hpp" />
     <ClInclude Include="source\core\array.hpp" />
+    <ClInclude Include="source\core\assert.hpp" />
+    <ClInclude Include="source\core\BasicTypes.hpp" />
+    <ClInclude Include="source\core\bits.hpp" />
     <ClInclude Include="source\core\chartypes.hpp" />
+    <ClInclude Include="source\core\containers\vector.hpp" />
+    <ClInclude Include="source\core\fast_atof.hpp" />
     <ClInclude Include="source\core\fileio\file.hpp" />
     <ClInclude Include="source\core\fileio\filesys.hpp" />
     <ClInclude Include="source\core\hash\hashmap.h" />
@@ -180,8 +186,8 @@
     <ClInclude Include="source\core\math\vector4.hpp" />
     <ClInclude Include="source\core\memory\allocator.hpp" />
     <ClInclude Include="source\core\memory\memory.hpp" />
+    <ClInclude Include="source\core\StringComparison.hpp" />
     <ClInclude Include="source\core\string\string.hpp" />
-    <ClInclude Include="source\core\types.hpp" />
     <ClInclude Include="source\gfx\bmp.hpp" />
     <ClInclude Include="source\gfx\color.hpp" />
     <ClInclude Include="source\gfx\hardwarebuffer.hpp" />
@@ -195,11 +201,15 @@
     <ClInclude Include="source\model\daeloader.hpp" />
     <ClInclude Include="source\model\md5model.hpp" />
     <ClInclude Include="source\model\mesh.hpp" />
+    <ClInclude Include="source\model\mesh2.hpp" />
+    <ClInclude Include="source\model\OBJFile.hpp" />
     <ClInclude Include="source\model\objloader.hpp" />
+    <ClInclude Include="source\model\OBJParser.hpp" />
+    <ClInclude Include="source\model\OBJTools.hpp" />
     <ClInclude Include="source\ogldriver.hpp" />
     <ClInclude Include="source\shader\glmaterialrenderer.hpp" />
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />
-    <ClInclude Include="source\shader\oglshader.hpp" />
+    <ClInclude Include="source\shader\OGLShader.hpp" />
     <ClInclude Include="source\shader\shadertypes.hpp" />
     <ClInclude Include="source\win32\win32console.hpp" />
     <ClInclude Include="source\win32\win32ctrl.hpp" />

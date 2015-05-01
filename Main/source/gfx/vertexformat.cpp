@@ -7,82 +7,62 @@ using core::math::Vector3f;
 namespace vertexformat
 {
 
-eDataType VertexComponent::dataType;
+//eDataType VertexComponent::dataType;
+//
+//VertexComponent::VertexComponent(char vertexComponentType, eDataType dataType, byte *data)
+//{
+//   assert(dataType < DATATYPE_ENUM_SIZE);
+//
+//   componentType = vertexComponentType;
+//   this->dataType = dataType;
+//
+//   if (componentType == 'T') // 2d texture contains two half_floats,floats, double... etc.
+//      size = GetDataTypeSizeInBytes(dataType) * 2;
+//   else
+//      size = GetDataTypeSizeInBytes(dataType) * 3;
+//
+//   this->data = new byte[size];
+//
+//   std::memmove(this->data, data, size);
+//
+//   //vertexComponentType = componentType; this->dataType = dataType;
+//}
+//
+//int32 VertexComponent::GetSizeInBytes()
+//{
+//   return size;
+//}
+//
+//VertexComponent::~VertexComponent()
+//{
+//   //delete[] this->data;  // where should delete
+//}
 
-VertexComponent::VertexComponent(char vertexComponentType, eDataType dataType, byte *data)
-{
-   assert(dataType < DATATYPE_ENUM_SIZE);
 
-   componentType = vertexComponentType;
-   this->dataType = dataType;
+//void Vertex::AddComponent(VertexComponent &c)
+//{
+//   components.push_back(c);
+//   formatDescriptor.Append(c.GetComponentType());
+//}
 
-   if (componentType == 'T') // 2d texture contains two half_floats,floats, double... etc.
-      size = GetDataTypeSizeInBytes(dataType) * 2;
-   else
-      size = GetDataTypeSizeInBytes(dataType) * 3;
-
-   this->data = new byte[size];
-
-   std::memmove(this->data, data, size);
-
-   //vertexComponentType = componentType; this->dataType = dataType;
-}
-
-int32 VertexComponent::GetSizeInBytes()
-{
-   return size;
-}
-
-VertexComponent::~VertexComponent()
-{
-   //delete[] this->data;  // where should delete
-}
-
-int32 Vertex::numBytes;
-bool Vertex::isPacked;
-int32 *Vertex::vertCompOffsets;
-core::string::String_c Vertex::formatDescriptor;
-eDataType Vertex::dataType;
-
-void Vertex::Init(/*const char* formatDescriptor,*/ eDataType dataType)
-{
-   //numBytes = 0;
-
-   isPacked = true; // assume packed for the time being
-   //strcpy(Vertex::formatDescriptor, formatDescriptor);
-   numBytes = 0;
-   vertCompOffsets = 0;
-   Vertex::dataType = dataType;
-   //vertCompOffset = new int32[strlen(formatDescriptor)];
-
-   //if (isPacked)
-   //   vertCompOffset[0] = 0; // assume that the first component always is 0 if vertex is packed
-}
-
-void Vertex::AddComponent(VertexComponent &c)
-{
-   components.push_back(c);
-   formatDescriptor.Append(c.GetComponentType());
-}
-
- int32 Vertex::GetNumBytes()
- {
-    if (numBytes == 0)
-    {
-       for (int32 i = 0; Vertex::formatDescriptor[i]; i++)
-       {
-          if (Vertex::isPacked) // is vertex packed?
-          {
-             //assert(temp != 0);
-             numBytes += components[i].GetSizeInBytes();
-          }
-          else
-          {
-          }
-       }
-    }
-   return numBytes;
-}
+// int32 Vertex::GetNumBytes()
+// {
+//    if (numBytes == 0)
+//    {
+//       for (int32 i = 0; Vertex::formatDescriptor[i]; i++)
+//       {
+//          if (Vertex::isPacked) // is vertex packed?
+//          {
+//             //assert(temp != 0);
+//             numBytes += components[i].GetSizeInBytes();
+//          }
+//          else
+//          {
+//          }
+//       }
+//    }
+//   return numBytes;
+//}
 
  //int32 *Vertex::GetOffsets()
  //{

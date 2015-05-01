@@ -30,54 +30,30 @@ using hardwarebuffer::BBTARGET_ARRAY_BUFFER;
 namespace vbo
 {
 
- template <typename T>
- class Vertex
- {
- private:
-    byte *vertex;
-    int32 numBytes;
-    char *formatDescriptor;
- public:
-    Vertex(const char *formatDescriptor)
-    { 
-       strcpy(this->formatDescriptor, formatDescriptor);
-       for (int32 i = 0, numBytes = 0; formatDescriptor[i]; i++)
-       {
-          if (formatDescriptor[i] == 'T')
-            numBytes += strlen(formatDescriptor) * sizeof(T) * 2;
-          else
-            numBytes += strlen(formatDescriptor) * sizeof(T) * 3;
-       }
-    }
-    //bool operator<(const VertexAttrib4 other) const
-    //{
-    //   return memcmp((void*)this, (void*)&other, sizeof(Vertex)) > 0;
-    //}
- };
-
-enum eVertexFormat
-{
-   VERTFORM_POSITION = 1<<0,
-   VERTFORM_NORMAL = 1<<1,
-   VERTFORM_TEXCOORD2 = 1<<2
-};
- 
 template <typename TFace>
 class VertexBuffer : public HardwareBuffer
 {
 private:
    // Keep a copy vertex data in system memory
-
-   eVertexFormat m_format;
-   int32 m_count;
+   int32 m_count;//Number of attributes in each Vertex
    int32 m_stride;
    int32 m_dataSize;
    void *m_dataPtr;
+   
+   int32 m_allocated; //?
+   int32 m_used; //?
+
+   //int32 streamIndex;
    
    // VertexAttrib2T is hard coded as a temporary fix
    // vector<Vertex<float> > indexedVertexData;
    // vector<TFace> indexBuffer;
 public:
+   void Lock( int32 start, int32 end );
+   void Unlock();
+   //void SetComponents(eVertexFormat components) { m_format |= components; }
+   //bool HasComponents(eVertexFormat components) { return m_format & components; }
+
    VertexBuffer( eVertexFormat format, int32 count, const eUsageFlag = USAGE_STATIC_READ, const eAccessFlag = ACCESS_READ_ONLY, const eBufferBindingTarget = BBTARGET_ARRAY_BUFFER ); // exclusive other bbtargets for vbo?
    virtual ~VertexBuffer();
 
@@ -92,57 +68,62 @@ public:
    TFace *GetIndexBuffer() { return &indexBuffer[0][0]; }
 };
 
+// ctor for structs (see vertexstructs.hpp)
+template <typename TFace>
+VertexBuffer<TFace>::VertexBuffer(eVertexFormat format, void *structData, int32 count, const eUsageFlag usageFlag, const eAccessFlag accessFlag, const eBufferBindingTarget bindTarget) // exclusive other bbtargets for vbo?
+{
+   m_count = count;
+   m_stride = 0;
+   this->usageFlag = usageFlag;
+   this->accessFlag = accessFlag;
+   vector<int32>  
+  
+   bufferBindingTarget = BBTARGET_ARRAY_BUFFER;
+   bufferBindingTarget = bindTarget; // exclusive other bbtargets for vbo?
+   glGenBuffers(1, &handle);
+   glBindBuffer(bufferBindingTarget, handle);
 
-// for formats, these are the supported symbols at the time being: 'P' = position, 'N' = normal, 'C' = color, 'B' = binormal, 'T' = texcoord (2 dim),
-// 'X' = texcoord (3 dim)
+   for (int32 i = 0; i < format; i++)
+   {
+      m_stride += GetVertexComponentSize(static_cast<eVertexFormat>(format & (1 << pos)));
+   }
+
+
+  
+   for (int32 i = 0; i < m_count; i++)
+   {
+      glEnableVertexAttribArray(i);
+   }
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, m_stride, (void*)0);
+}
+
+
+// ctor for FVF (Flexible Vertex Format) (For later allocation of Vertex Class placeholders)
 template <typename TFace>
 VertexBuffer<TFace>::VertexBuffer(eVertexFormat format, int32 count, const eUsageFlag usageFlag, const eAccessFlag accessFlag, const eBufferBindingTarget bindTarget) // exclusive other bbtargets for vbo?
 {
-   m_format = format;
    m_count = count;
    m_stride = 0;
-   // this->usageFlag = usageFlag;
-   // this->accessFlag = accessFlag;
+   this->usageFlag = usageFlag;
+   this->accessFlag = accessFlag;
 //http://www.gamedev.net/topic/367617-flexible-vertex-format-on-the-fly/
-    if( m_format & VERTFORM_POSITION )
+    if( format & VERTFORM_POSITION )
        m_stride += 3 * sizeof(float);
-    if( m_format & VERTFORM_NORMAL )
+    if( format & VERTFORM_NORMAL )
        m_stride += 3 * sizeof(float);    
-     if( m_format & VERTFORM_TEXCOORD2 )
+     if( format & VERTFORM_TEXCOORD2 )
        m_stride += 2 * sizeof(float);   
-   //strcpy(Vertex::formatDescriptor, formatDescriptor);
-   //Vertex::Init(0);
 
-//   bufferBindingTarget = BBTARGET_ARRAY_BUFFER;
-   //bufferBindingTarget = bindTarget; // exclusive other bbtargets for vbo?
+   bufferBindingTarget = BBTARGET_ARRAY_BUFFER;
+   bufferBindingTarget = bindTarget; // exclusive other bbtargets for vbo?
 
-   // glGenBuffers(1, &handle);
-   // glBindBuffer(bufferBindingTarget, handle);
-
-   // minimum a Position needed in VBO: Point3f or Vector3f type
-   //glEnableVertexAttribArray(0); 
-   // sizeof(Point3f) and sizeof(Vector3f) gives wrong stride value ....
-   //glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0 );
-   // prealloc a vertex to find the static vars of num bytes ;D
-   //dummy.Init(formatDescriptor);
-   //dummy.CreateVertex(vertexformat::DATATYPE_FLOAT, 0); //assume the DATATYPE_FLOAT for time being
-   // assume IsPacked == true for now
-   // uint32 i = 0;
-   // int32 stride = 0, offset = 0;
-   // int32 vertexLocation = 0;
-   // int32 normalLocation = 1;
-   // int32 texLocation = 2;
- 
-   // // set positions of attributes
-   // //while (format[i])
-   // //{
-   // //   glEnableVertexAttribArray(i);
-   // //}
-
-   // //temporary solution?
-   // glEnableVertexAttribArray(vertexLocation);
-   // glEnableVertexAttribArray(normalLocation);
-   // glEnableVertexAttribArray(texLocation);
+    glGenBuffers(1, &handle);
+    glBindBuffer(bufferBindingTarget, handle);
+    for (int i = 0; i < m_count; i++)
+     {
+        glEnableVertexAttribArray(i);
+     }
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, m_stride, (void*)0 );
 
    // glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
    // glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)12);

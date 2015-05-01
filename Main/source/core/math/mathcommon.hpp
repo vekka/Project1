@@ -1,7 +1,7 @@
 #ifndef _MATHCOMMON_HPP_INCLUDED_
 #define _MATHCOMMON_HPP_INCLUDED_
 
-#include "core/types.hpp"
+#include "core/BasicTypes.hpp"
 
 #include <cmath>
 #include <assert.h>

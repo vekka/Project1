@@ -1,7 +1,7 @@
 #ifndef _SHADERTYPES_HPP_INCLUDED_
 #define _SHADERTYPES_HPP_INCLUDED_
 
-#include "core/types.hpp"
+#include "core/BasicTypes.hpp"
 
 #include <glew.h>
 

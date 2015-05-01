@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Core\MemoryLib">
       <UniqueIdentifier>{43cd0430-0c28-4967-9f28-b56eb333c124}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Containers">
+      <UniqueIdentifier>{d1732eb0-6bba-4b52-b6d7-7528dcdb4eb0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\MeshLib\Loaders">
       <UniqueIdentifier>{9786d15a-790e-49c4-a4b4-59fabc49bc6a}</UniqueIdentifier>
     </Filter>
@@ -120,9 +123,6 @@
     <ClCompile Include="source\win32\win32timer.cpp">
       <Filter>Source Files\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="source\shader\oglshader.cpp">
-      <Filter>Source Files\ShaderLib</Filter>
-    </ClCompile>
     <ClCompile Include="source\shader\shadertypes.cpp">
       <Filter>Source Files\ShaderLib</Filter>
     </ClCompile>
@@ -149,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="source\core\math\camera.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\containers\vector.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\OGLShader.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\model\OBJParser.cpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,13 +257,7 @@
     <ClInclude Include="assert.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\types.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="source\core\chartypes.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="bits.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\hash\hashmap.h">
@@ -265,9 +268,6 @@
     </ClInclude>
     <ClInclude Include="source\win32\win32timer.hpp">
       <Filter>Source Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="source\shader\oglshader.hpp">
-      <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
     <ClInclude Include="source\shader\shadertypes.hpp">
       <Filter>Source Files\ShaderLib</Filter>
@@ -304,6 +304,39 @@
     </ClInclude>
     <ClInclude Include="source\core\math\camera.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\BasicTypes.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\bits.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\containers\vector.hpp">
+      <Filter>Source Files\Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\assert.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\OGLShader.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\mesh2.hpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\OBJParser.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\OBJFile.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\OBJTools.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\fast_atof.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\StringComparison.hpp">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
