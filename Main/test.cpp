@@ -2,6 +2,8 @@
 
 // test123
 
+// test456
+
 //#include "bmp.hpp"
 //#include "color.hpp"
 //#include "dimension.hpp"
