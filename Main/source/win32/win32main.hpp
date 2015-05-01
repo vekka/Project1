@@ -1,11 +1,7 @@
 #include <Windows.h>
 
 #include "core/string/string.hpp"
-
 using core::string::String_c;
-
-//#include "win32keyboard.hpp"
-//using win32keyboard::Win32Keyboard;
 
 namespace win32keyboard
 {
@@ -202,17 +198,14 @@ namespace win32window
          virtual void SetPosition(const float x, const float y);
          virtual void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
 
-         virtual void GetPosition(int &xPos, int &yPos) const;
-         virtual void GetRelativePosition(int &xPos, int &yPos) const;
-         virtual void OnResize(const int &sizeX, const int &sizeY);
+         virtual void GetPosition(int32 &xPos, int32 &yPos) const;
+         virtual void GetRelativePosition(int32 &xPos, int32 &yPos) const;
+         virtual void OnResize(const int32 &sizeX, const int32 &sizeY);
          virtual void UpdateBorderSize(const bool isFullScreen, const bool resizable);
          void Dispatch(); // as in win32keyboard
       };
 
       static Win32Cursor cursor;
-
-
-
 
    protected:
       HWND hWnd;
@@ -274,8 +267,6 @@ namespace win32window
       void HandleSystemMessages(MSG *);
       void ClearSystemMessages() const;
    };
-
-
 
    //#ifndef _WIN32_HPP_INCLUDED_
    //#define _WIN32_HPP_INCLUDED_
