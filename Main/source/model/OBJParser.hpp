@@ -122,7 +122,7 @@ namespace model
       /// Gets the group number and resolution from file.
       void getGroupNumberAndResolution();
       /// Returns the index of the material. Is -1 if not material was found.
-      int getMaterialIndex(const String_c &strMaterialName);
+      int32 getMaterialIndex(const String_c &strMaterialName);
       /// Parse object name
       void getObjectName();
       /// Creates a new object.
