@@ -1,5 +1,5 @@
-#ifndef QUATERNION_HPP
-#define QUATERNION_HPP
+#ifndef _QUATERNION_HPP_INCLUDED_
+#define _QUATERNION_HPP_INCLUDED_
 
 #include <assert.h>
 #include <cmath> // sqrt(), sin(), cos()
