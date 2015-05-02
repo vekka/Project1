@@ -209,9 +209,9 @@ bool ObjFile::Read()
          //f 1 2 3
 
 
-         for ( int i = 1; i < newFace.GetNumVertices() + 1; i++ )
+         for ( int32 i = 1; i < newFace.GetNumVertices() + 1; i++ )
          {
-            int idx;
+            int32 idx;
             //newFace.vertexIndex[vertexIndexCount] = tokens[i].StringToInt();
 
             newFace.AddVertexIndex( tokens[i].StringToInt() );
