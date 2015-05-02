@@ -5,7 +5,7 @@
 class RefCounterBase
 {
 private:
-   mutable int refCount;
+   mutable int32 refCount;
 public:
    RefCounterBase() : refCount(0) {};
    virtual ~RefCounterBase() {};
@@ -13,11 +13,13 @@ public:
    void Release() const;
 };
 
-template <class T>
+template <typename T>
 class RefCounterPtr: public RefCounterBase
 {
+private:
+   T *internalPtr;
+   
 public:
-
    // RCPtr < T > = new T();
    RefCounterPtr( T *ptr = NULL )
       : internalPtr( ptr )
@@ -67,6 +69,4 @@ public:
    operator bool() const { return internalPtr != NULL; }
    bool operator==( const RefCounterPtr &ptr) { internalPtr == ptr.internalPtr; }
    bool operator==( const T *ptr) { return internalPtr ==  ptr; }
-private:
-   T *internalPtr;
 };
