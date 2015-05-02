@@ -22,7 +22,7 @@ namespace gfx
 #endif
       {
          uint8 val8;
-         int val32 = 0;
+         int32 val32 = 0;
 
          // Convert to 32bit pattern
          // (RGBA = 8.8.8.8)
@@ -53,7 +53,7 @@ namespace gfx
 #endif
       {
          uint8 val8;
-         int val32 = 0;
+         int32 val32 = 0;
 
          // Convert to 32bit pattern
          // (ARGB = 8.8.8.8)
@@ -84,7 +84,7 @@ namespace gfx
 #endif
       {
          uint8 val8;
-         int val32 = 0;
+         int32 val32 = 0;
 
          // Convert to 32bit pattern
          // (ARGB = 8.8.8.8)
@@ -108,7 +108,7 @@ namespace gfx
 #endif
       {
          uint8 val8;
-         int val32 = 0;
+         int32 val32 = 0;
 
          // Convert to 32bit pattern
          // (ABRG = 8.8.8.8)
@@ -126,12 +126,12 @@ namespace gfx
       }
 
 #ifdef BIG_ENDIAN
-      void Colorf::SetAsABGR( const ABGR_t val )
+      void Colorf::SetAsABGR(const ABGR_t val)
 #else
       void Colorf::SetAsRGBA(const RGBA_t val)
 #endif
       {
-         int val32 = val;
+         int32 val32 = val;
 
          // Convert from 32bit pattern
          // (RGBA = 8.8.8.8)
@@ -148,7 +148,7 @@ namespace gfx
       void Colorf::SetAsARGB(const ARGB_t val)
 #endif
       {
-         int val32 = val;
+         int32 val32 = val;
 
          // Convert from 32bit pattern
          // (ARGB = 8.8.8.8)
@@ -160,12 +160,12 @@ namespace gfx
       }
 
 #ifdef BIG_ENDIAN
-      void Colorf::SetAsARGB( const ARGB_t val )
+      void Colorf::SetAsARGB(const ARGB_t val)
 #else
       void Colorf::SetAsBGRA(const BGRA_t val)
 #endif
       {
-         int val32 = val;
+         int32 val32 = val;
 
          // Convert from 32bit pattern
          // (ARGB = 8.8.8.8)
@@ -177,12 +177,12 @@ namespace gfx
       }
 
 #ifdef BIG_ENDIAN
-      void Colorf::SetAsRGBA( const RGBA_t val )
+      void Colorf::SetAsRGBA(const RGBA_t val)
 #else
       void Colorf::SetAsABGR(const ABGR_t val)
 #endif
       {
-         int val32 = val;
+         int32 val32 = val;
 
          // Convert from 32bit pattern
          // (ABGR = 8.8.8.8)
@@ -198,11 +198,11 @@ namespace gfx
          // wrap hue
          if (hue > 1.0f)
          {
-            hue -= (int)hue;
+            hue -= (int32)hue;
          }
          else if (hue < 0.0f)
          {
-            hue += (int)hue + 1;
+            hue += (int32)hue + 1;
          }
          // clamp saturation / brightness
          //saturation = core::Min(saturation, (float)1.0);
