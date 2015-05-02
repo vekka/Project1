@@ -39,7 +39,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-
 #ifndef ASSIMP_BUILD_NO_OBJ_IMPORTER
 
 #include <assert.h>
@@ -49,12 +48,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ObjParser.hpp"
 //#include "ObjFileData.h"
 #include <boost/scoped_ptr.hpp>
-#include "../include/assimp/Importer.hpp"
-#include "../include/assimp/scene.h"
-#include "../include/assimp/DefaultLogger.hpp"
+//#include "../include/assimp/Importer.hpp"
+//#include "../include/assimp/scene.h"
+//#include "../include/assimp/DefaultLogger.hpp"
 
+#include ""
+using ::aiPrimitiveType_LINE;
+using ::aiPrimitiveType_POINT;
 
-const aiImporterDesc desc = {
+const aiImporterDesc desc =
+{
     "Wavefront Object Importer",
     "",
     "",
@@ -227,7 +230,7 @@ namespace objimporter
           appendChildToParentNode( pParent, pNode );
       }
   
-      for ( size_t i = 0; i< pObject->m_Meshes.size(); i++ )
+      for ( size_t i = 0; i < pObject->m_Meshes.size(); i++ )
       {
           uint32 meshId = pObject->m_Meshes[ i ];
           aiMesh *pMesh = createTopology( pModel, pObject, meshId );	
