@@ -1,9 +1,5 @@
 #include <iostream>
 
-// test123
-
-// test456
-
 //#include "bmp.hpp"
 //#include "color.hpp"
 //#include "dimension.hpp"
@@ -43,7 +39,7 @@ using vbo::VertexBuffer;
 using namespace ogldriver;
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-   LPSTR lpCmdLine, int nCmdShow)
+   LPSTR lpCmdLine, int32 nCmdShow)
 {
 
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
