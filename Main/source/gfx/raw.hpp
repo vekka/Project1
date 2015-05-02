@@ -3,8 +3,6 @@
 
 #include "core/memory/allocator.hpp"
 
-#include "core/BasicTypes.hpp"
-
 enum PixelFormat
 {
    PF_MONOCHROME,
@@ -34,7 +32,7 @@ private:
    PixelFormat pixelFormat;
 public:
    RawImage( void );
-   //RawImage( int width, int height, int bitsPerPixel ) 
+   //RawImage( int32 width, int32 height, int32 bitsPerPixel ) 
    //   : width(width), height(height), bitsPerPixel(bitsPerPixel) {}
    RawImage( const RawImage &other );
    RawImage &operator=( const RawImage &other );
