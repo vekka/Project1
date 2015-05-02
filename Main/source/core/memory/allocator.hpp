@@ -3,6 +3,8 @@
 
 #include <new>
 
+#include "core/BasicTypes.hpp"
+
 template <class T>
 class Allocator
 {
