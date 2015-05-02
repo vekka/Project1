@@ -44,9 +44,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _OBJTOOLS_HPP_INCLUDED_
 #define _OBJTOOLS_HPP_INCLUDED_
 
-//#include "fast_atof.h"
+#include "fast_atof.h"
 //#include "ParsingUtils.h"
 #include <vector>
+
+#include "core/string/string.hpp"
+using core::string::String_c;
 
 namespace objtools
 {
@@ -56,7 +59,7 @@ namespace objtools
    *	@return	true, if the end of the buffer is reached.
    */
    template<typename TChar>
-   inline bool isEndOfBuffer(TChar it, TChar end)
+   inline bool IsEndOfBuffer(TChar it, TChar end)
    {
       if (it == end)
       {
@@ -75,7 +78,7 @@ namespace objtools
    *	@return	Pointer to next space
    */
    template<typename TCHAR>
-   inline TCHAR getNextWord(TCHAR pBuffer, TCHAR pEnd)
+   inline TCHAR GetNextWord(TCHAR pBuffer, TCHAR pEnd)
    {
       while (!isEndOfBuffer(pBuffer, pEnd))
       {
@@ -92,15 +95,15 @@ namespace objtools
    *	@return	Pointer to next token
    */
    template<typename TCHAR>
-   inline TCHAR getNextToken(TCHAR pBuffer, TCHAR pEnd)
+   inline TCHAR GetNextToken(TCHAR pBuffer, TCHAR pEnd)
    {
-      while (!isEndOfBuffer(pBuffer, pEnd))
+      while (!IsEndOfBuffer(pBuffer, pEnd))
       {
          if (IsSpaceOrNewLine(*pBuffer))
             break;
          pBuffer++;
       }
-      return getNextWord(pBuffer, pEnd);
+      return GetNextWord(pBuffer, pEnd);
    }
 
    /**	@brief	Skips a line
@@ -110,8 +113,8 @@ namespace objtools
    *	@return	Current-iterator with new position
    */
    template<typename TChar>
-   inline TChar skipLine(TChar it, TChar end, uint32 &uiLine) {
-      while (!isEndOfBuffer(it, end) && !IsLineEnd(*it)) {
+   inline TChar SkipLine(TChar it, TChar end, uint32 &uiLine) {
+      while (!IsEndOfBuffer(it, end) && !IsLineEnd(*it)) {
          ++it;
       }
       if (it != end)
@@ -133,19 +136,19 @@ namespace objtools
    *	@return	Current-iterator with new position
    */
    template<typename TChar>
-   inline TChar getName(TChar it, TChar end, std::string &name)
+   inline TChar GetName(TChar it, TChar end, String_c &name)
    {
       name = "";
-      if (isEndOfBuffer(it, end)) {
+      if (IsEndOfBuffer(it, end)) {
          return end;
       }
 
       char *pStart = &(*it);
-      while (!isEndOfBuffer(it, end) && !IsLineEnd(*it)) {
+      while (!IsEndOfBuffer(it, end) && !IsLineEnd(*it)) {
          ++it;
       }
 
-      while (isEndOfBuffer(it, end) || IsLineEnd(*it) || IsSpaceOrNewLine(*it)) {
+      while (IsEndOfBuffer(it, end) || IsLineEnd(*it) || IsSpaceOrNewLine(*it)) {
          --it;
       }
       ++it;
@@ -155,7 +158,7 @@ namespace objtools
       while (&(*it) < pStart) {
          ++it;
       }
-      std::string strName(pStart, &(*it));
+      String_c strName(pStart, &(*it));
       if (strName.empty())
          return it;
       else
@@ -175,8 +178,8 @@ namespace objtools
    inline TChar CopyNextWord(TChar it, TChar end, char *pBuffer, size_t length)
    {
       size_t index = 0;
-      it = getNextWord<TChar>(it, end);
-      while (!IsSpaceOrNewLine(*it) && !isEndOfBuffer(it, end))
+      it = GetNextWord<TChar>(it, end);
+      while (!IsSpaceOrNewLine(*it) && !IsEndOfBuffer(it, end))
       {
          pBuffer[index] = *it;
          index++;
@@ -195,7 +198,7 @@ namespace objtools
    *	@return	Current-iterator with new position
    */
    template<typename TChar>
-   inline TChar getFloat(TChar it, TChar end, float &value)
+   inline TChar GetFloat(TChar it, TChar end, float &value)
    {
       static const size_t BUFFERSIZE = 1024;
       char buffer[BUFFERSIZE];
@@ -211,32 +214,7 @@ namespace objtools
    *	@param	delimiters	Delimiter for tokenize.
    *	@return	Number of found token.
    */
-   template<typename string_type>
-   uint32 tokenize(const string_type& str, std::vector<string_type>& tokens,
-      const string_type& delimiters)
-   {
-      // Skip delimiters at beginning.
-      typename string_type::size_type lastPos = str.find_first_not_of(delimiters, 0);
-
-      // Find first "non-delimiter".
-      typename string_type::size_type pos = str.find_first_of(delimiters, lastPos);
-      while (string_type::npos != pos || string_type::npos != lastPos)
-      {
-         // Found a token, add it to the vector.
-         string_type tmp = str.substr(lastPos, pos - lastPos);
-         if (!tmp.empty() && ' ' != tmp[0])
-            tokens.push_back(tmp);
-
-         // Skip delimiters.  Note the "not_of"
-         lastPos = str.find_first_not_of(delimiters, pos);
-
-         // Find next "non-delimiter"
-         pos = str.find_first_of(delimiters, lastPos);
-      }
-
-      return static_cast<uint32>(tokens.size());
-   }
 
 } // namespace objtools
 
-#endif // OBJ_TOOLS_H_INC
+#endif
