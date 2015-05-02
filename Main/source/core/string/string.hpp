@@ -689,12 +689,12 @@ namespace core
             return *this;
 
          used--;
-         int len = other.GetSize() + 1;
+         int32 len = other.GetSize() + 1;
 
          if (used + len > allocated)
             Reallocate(used + len);
 
-         for (int i = 0; i < len; i++)
+         for (int32 i = 0; i < len; i++)
             strArray[used + i] = other[i];
 
          used += len;
