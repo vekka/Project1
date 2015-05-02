@@ -5,7 +5,7 @@
 
 #include "core/BasicTypes.hpp"
 
-template <class T>
+template <typename T>
 class Allocator
 {
 protected:
@@ -42,7 +42,7 @@ public:
 	}
 };
 
-template <class T, class TAlloc>
+template <typename T, typename TAlloc>
 class PoolAllocator
 {
  protected:
