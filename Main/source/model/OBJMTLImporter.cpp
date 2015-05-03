@@ -85,14 +85,14 @@ namespace model
     const String_c TypeOption			= "-type";
     
     ObjFileMtlImporter::ObjFileMtlImporter( std::vector<char> &buffer, 
-                                           const std::string & /*strAbsPath*/,
+                                           const String_c & /*strAbsPath*/,
                                            ObjFile::Model *pModel ) :
         m_DataIt( buffer.begin() ),
         m_DataItEnd( buffer.end() ),
         m_pModel( pModel ),
         m_uiLine( 0 )
     {
-        ai_assert( NULL != m_pModel );
+        assert( NULL != m_pModel );
         if ( NULL == m_pModel->m_pDefaultMaterial )
         {
             m_pModel->m_pDefaultMaterial = new ObjFile::Material;
@@ -124,7 +124,7 @@ namespace model
     
     // -------------------------------------------------------------------
     //	Loads the material description
-    void ObjFileMtlImporter::load()
+    void ObjFileMtlImporter::Load()
     {
         if ( m_DataIt == m_DataItEnd )
             return;
@@ -177,39 +177,39 @@ namespace model
                     {
                     case 's':	// Specular exponent
                         ++m_DataIt;
-                        getFloatValue(m_pModel->m_pCurrentMaterial->shineness);
+                        GetFloatValue(m_pModel->m_pCurrentMaterial->shineness);
                         break;
                     case 'i':	// Index Of refraction
                         ++m_DataIt;
-                        getFloatValue(m_pModel->m_pCurrentMaterial->ior);
+                        GetFloatValue(m_pModel->m_pCurrentMaterial->ior);
                         break;
                     case 'e':	// New material
-                        createMaterial();
+                        CreateMaterial();
                         break;
                     }
-                    m_DataIt = skipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
+                    m_DataIt = SkipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
                 }
                 break;
     
             case 'm':	// Texture
             case 'b':   // quick'n'dirty - for 'bump' sections
                 {
-                    getTexture();
-                    m_DataIt = skipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
+                    GetTexture();
+                    m_DataIt = SkipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
                 }
                 break;
     
             case 'i':	// Illumination model
                 {
-                    m_DataIt = getNextToken<DataArrayIt>(m_DataIt, m_DataItEnd);
-                    getIlluminationModel( m_pModel->m_pCurrentMaterial->illumination_model );
-                    m_DataIt = skipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
+                    m_DataIt = GetNextToken<DataArrayIt>(m_DataIt, m_DataItEnd);
+                    GetIlluminationModel( m_pModel->m_pCurrentMaterial->illumination_model );
+                    m_DataIt = SkipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
                 }
                 break;
     
             default:
                 {
-                    m_DataIt = skipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
+                    m_DataIt = SkipLine<DataArrayIt>( m_DataIt, m_DataItEnd, m_uiLine );
                 }
                 break;
             }
@@ -220,32 +220,28 @@ namespace model
     //	Loads a color definition
     void ObjFileMtlImporter::getColorRGBA( aiColor3D *pColor )
     {
-        ai_assert( NULL != pColor );
+        assert( NULL != pColor );
         
         float r( 0.0f ), g( 0.0f ), b( 0.0f );
-        m_DataIt = getFloat<DataArrayIt>( m_DataIt, m_DataItEnd, r );
+        m_DataIt = GetFloat<DataArrayIt>( m_DataIt, m_DataItEnd, r );
         pColor->r = r;
         
         // we have to check if color is default 0 with only one token
         if( !IsLineEnd( *m_DataIt ) ) {
-            m_DataIt = getFloat<DataArrayIt>( m_DataIt, m_DataItEnd, g );
-            m_DataIt = getFloat<DataArrayIt>( m_DataIt, m_DataItEnd, b );
+            m_DataIt = GetFloat<DataArrayIt>( m_DataIt, m_DataItEnd, g );
+            m_DataIt = GetFloat<DataArrayIt>( m_DataIt, m_DataItEnd, b );
         }
         pColor->g = g;
         pColor->b = b;
     }
     
-    // -------------------------------------------------------------------
-    //	Loads the kind of illumination model.
-    void ObjFileMtlImporter::getIlluminationModel( int &illum_model )
+    void ObjFileMtlImporter::GetIlluminationModel( int &illum_model )
     {
         m_DataIt = CopyNextWord<DataArrayIt>( m_DataIt, m_DataItEnd, m_buffer, BUFFERSIZE );
         illum_model = atoi(m_buffer);
     }
     
-    // -------------------------------------------------------------------
-    //	Loads a single float value. 
-    void ObjFileMtlImporter::getFloatValue( float &value )
+    void ObjFileMtlImporter::GetFloatValue( float &value )
     {
         m_DataIt = CopyNextWord<DataArrayIt>( m_DataIt, m_DataItEnd, m_buffer, BUFFERSIZE );
         value = (float) fast_atof(m_buffer);
@@ -253,24 +249,24 @@ namespace model
     
     // -------------------------------------------------------------------
     //	Creates a material from loaded data.
-    void ObjFileMtlImporter::createMaterial()
+    void ObjFileMtlImporter::CreateMaterial()
     {	
-        std::string line( "" );
+        String_c line( "" );
         while( !IsLineEnd( *m_DataIt ) ) {
             line += *m_DataIt;
             ++m_DataIt;
         }
         
-        std::vector<std::string> token;
-        const unsigned int numToken = tokenize<std::string>( line, token, " " );
-        std::string name( "" );
+        std::vector<String_c> token;
+        const unsigned int32 numToken = tokenize<String_c>( line, token, " " );
+        String_c name( "" );
         if ( numToken == 1 ) {
             name = AI_DEFAULT_MATERIAL_NAME;
         } else {
             name = token[ 1 ];
         }
     
-        std::map<std::string, ObjFile::Material*>::iterator it = m_pModel->m_MaterialMap.find( name );
+        std::map<String_c, ObjFile::Material*>::iterator it = m_pModel->m_MaterialMap.find( name );
         if ( m_pModel->m_MaterialMap.end() == it) {
             // New Material created
             m_pModel->m_pCurrentMaterial = new ObjFile::Material();	
@@ -285,9 +281,9 @@ namespace model
     
     // -------------------------------------------------------------------
     //	Gets a texture name from data.
-    void ObjFileMtlImporter::getTexture() {
+    void ObjFileMtlImporter::GetTexture() {
         aiString *out( NULL );
-        int clampIndex = -1;
+        int32 clampIndex = -1;
     
         const char *pPtr( &(*m_DataIt) );
         if ( !ASSIMP_strincmp( pPtr, DiffuseTexture.c_str(), DiffuseTexture.size() ) ) {
