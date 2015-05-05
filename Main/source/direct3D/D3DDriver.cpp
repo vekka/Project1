@@ -1,12 +1,9 @@
-
-
 #include "D3DDriver.hpp"
-
 
 D3DDriver::D3DDriver( float viewportWidth, float viewportHeight )
 {
-   this->viewportWidth = viewportWidth;
-   this->viewportHeight = viewportHeight;
+   m_viewportWidth = viewportWidth;
+   m_viewportHeight = viewportHeight;
 
    // Create a swap chain structure
    DXGI_SWAP_CHAIN_DESC sd;
@@ -18,7 +15,7 @@ D3DDriver::D3DDriver( float viewportWidth, float viewportHeight )
    sd.BufferDesc.RefreshRate.Numerator = 60;
    sd.BufferDesc.RefreshRate.Denominator = 1;
    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-   sd.OutputWindow = hWnd;
+   sd.OutputWindow = m_hWnd;
    sd.SampleDesc.Count = 1;
    sd.SampleDesc.Quality = 0;
    sd.Windowed = TRUE;
@@ -28,7 +25,6 @@ D3DDriver::D3DDriver( float viewportWidth, float viewportHeight )
    {
       return FALSE;
    }
-
 
    // Create render target view
    ID3D11Texture2D *pBackBuffer;
@@ -40,17 +36,15 @@ D3DDriver::D3DDriver( float viewportWidth, float viewportHeight )
       return FALSE;
    g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
 
-
    // Initialize the viewport
    D3D11_VIEWPORT vp;
-   vp.Width = (FLOAT)viewportWidth;
-   vp.Height = (FLOAT)viewportHeight;
+   vp.Width = (FLOAT)m_viewportWidth;
+   vp.Height = (FLOAT)m_viewportHeight;
    vp.MinDepth = 0.0f;
    vp.MaxDepth = 1.0f;
    vp.TopLeftX = 0;
    vp.TopLeftY = 0;
    g_pImmediateContext->RSSetViewports(1, &vp);
-
 }
 
 D3DDriver::~D3DDriver()
@@ -60,7 +54,7 @@ D3DDriver::~D3DDriver()
 }
 
 //test the thing by clearing buffer with a fancy color
-void Render()
+void TestRenderFunc()
 {
    //
    // Clear the backbuffer
