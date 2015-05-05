@@ -3,23 +3,21 @@
 
 #include <Windows.h>
 #include <dxgi.h>
+
 class D3DDriver
 {
 private:
    //HGLRC hRC;
-   HDC hDC;
-   HWND hWnd;
+   HDC m_hDC;
+   HWND m_hWnd;
 
-   float viewportWidth;
-   float viewportHeight;
-   float bitsPerPixel;
+   float m_viewportWidth;
+   float m_viewportHeight;
+   float m_bitsPerPixel;
 
 public:
    D3DDriver(float viewportWidth, float viewportHeight);
    ~D3DDriver();
-
-
-
 };
 
 
