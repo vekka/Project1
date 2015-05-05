@@ -26,16 +26,6 @@ D3DDriver::D3DDriver( float viewportWidth, float viewportHeight )
       return FALSE;
    }
 
-   // Create render target view
-   ID3D11Texture2D *pBackBuffer;
-   if (FAILED(g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer)))
-      return FALSE;
-   hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
-   pBackBuffer->Release();
-   if (FAILED(hr))
-      return FALSE;
-   g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
-
    // Initialize the viewport
    D3D11_VIEWPORT vp;
    vp.Width = (FLOAT)m_viewportWidth;
@@ -51,6 +41,18 @@ D3DDriver::~D3DDriver()
 {
 
 
+}
+
+void D3DDriver::CreateRenderTargetView()
+{
+   ID3D11Texture2D *pBackBuffer;
+   if (FAILED(g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer)))
+      return FALSE;
+   hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
+   pBackBuffer->Release();
+   if (FAILED(hr))
+      return FALSE;
+   g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
 }
 
 //test the thing by clearing buffer with a fancy color
