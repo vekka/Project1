@@ -17,6 +17,7 @@ private:
 
 public:
    D3DDriver(float viewportWidth, float viewportHeight);
+   void CreateRenderTargetView();
    ~D3DDriver();
 };
 
