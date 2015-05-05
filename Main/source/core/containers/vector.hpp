@@ -110,7 +110,7 @@ namespace core
          template <typename T>
          inline void vector<T>::destroy(uint32 start, uint32 end) // destroys from start to end-1 
          { 
-            AssertFatal(start <= m_numElements && end <= m_numElements, "Vector<T>::destroy - out of bounds start/end."); 
+            assert(start <= m_numElements && end <= m_numElements && "vector<T>::destroy - out of bounds start/end."); 
             while(start < end) 
                destructInPlace(&m_array[start++]); 
          } 
@@ -161,7 +161,7 @@ namespace core
          template <typename T>
          inline void vector<T>::decrement()
          {
-            AssertFatal(m_numElements != 0, "Vector<T>::decrement - cannot decrement zero-length vector.");
+            assert(m_numElements != 0 && "vector<T>::decrement - cannot decrement zero-length vector.");
             m_numElements--;
             destructInPlace(&m_array[m_numElements]);
          } 
@@ -178,7 +178,7 @@ namespace core
          template <typename T>
          inline void vector<T>::decrement(uint32 delta)
          {
-            AssertFatal(m_numElements != 0, "Vector<T>::decrement - cannot decrement zero-length vector."); 
+            assert(m_numElements != 0 && "vector<T>::decrement - cannot decrement zero-length vector."); 
 
             const uint32 count = m_numElements;
             // Determine new count after decrement...
@@ -196,7 +196,7 @@ namespace core
          template <typename T>
          inline void vector<T>::insert(uint32 index)
          {
-            assert(index <= m_numElements, "Vector<T>::insert - out of bounds index.");
+            assert(index <= m_numElements && "vector<T>::insert - out of bounds index.");
             if(m_numElements == m_array)
                resize(m_numElements + 1);
             else
@@ -264,12 +264,12 @@ namespace core
          template<class T>
          inline void vector<T>::erase_fast(uint32 index)
          {
-            assert(index < m_numElements, "vector<T>::erase_fast - out of bounds index.");
+            assert(index < m_numElements && "vector<T>::erase_fast - out of bounds index.");
          
             // CAUTION: this operator does NOT maintain list order
             // Copy the last element into the deleted 'hole' and decrement the
             //   size of the vector.
-            destructInPlace(&mArray[index]);
+            destructInPlace(&m_array[index]);
             if (index < (mElementCount - 1))
                dMemmove(&m_array[index], &m_array[m_numElements - 1], sizeof(value_type));
             m_numElements--;
@@ -322,14 +322,14 @@ namespace core
          inline const T& vector<T>::last() const
          {
             assert(m_numElements != 0 && "vector<T>::last - Error, no last element of a zero sized array! (const)");
-            return m_array[mElementCount - 1];
+            return m_array[m_numElements - 1];
          }
          
          template<class T>
          inline void vector<T>::clear()
          {
             destroy(0, m_numElements);
-            mElementCount = 0;
+            m_numElements = 0;
          }
          
          template<class T>
@@ -345,8 +345,6 @@ namespace core
          {
             qsort(address(), size(), sizeof(T), (qsort_compare_func) f);
          }
-         
-         //-----------------------------------------------------------------------------
          
          template<class T>
          inline vector<T> &vector<T>::operator=(const vector<T>& other)
@@ -423,12 +421,13 @@ namespace core
          }
          
          template<class T>
-         inline void Vector<T>::erase_fast(iterator q)
+         inline void vector<T>::erase_fast(iterator q)
          {
             erase_fast(uint32(q - m_array));
          }
          
-         template<class T> inline T& vector<T>::front()
+         template<class T>
+         inline T& vector<T>::front()
          {
             return *begin();
          }
@@ -442,67 +441,73 @@ namespace core
          template<class T>
          inline T& vector<T>::back()
          {
-            AssertFatal(mElementCount != 0, "Vector<T>::back - cannot access last element of zero-length vector.");
+            assert(m_numElements != 0 && "vector<T>::back - cannot access last element of zero-length vector.");
             return *(end()-1);
          }
          
-         template<class T> inline const T& Vector<T>::back() const
+         template<class T>
+         inline const T& vector<T>::back() const
          {
-            AssertFatal(mElementCount != 0, "Vector<T>::back - cannot access last element of zero-length vector.");
+            assert(m_numElements != 0 && "vector<T>::back - cannot access last element of zero-length vector.");
             return *(end()-1);
          }
          
-         template<class T> inline void Vector<T>::push_front(const T& x)
+         template<class T>
+         inline void vector<T>::push_front(const T& x)
          {
             insert(0);
-            mArray[0] = x;
+            m_array[0] = x;
          }
          
-         template<class T> inline void Vector<T>::push_back(const T& x)
+         template<class T>
+         inline void vector<T>::push_back(const T& x)
          {
             increment();
-            mArray[mElementCount - 1] = x;
+            m_array[m_numElements - 1] = x;
          }
          
-         template<class T> inline U32 Vector<T>::push_front_unique(const T& x)
+         template<class T>
+         inline uint32 vector<T>::push_front_unique(const T& x)
          {
-            S32 index = find_next(x);
+            int32 index = find_next(x);
          
             if (index == -1)
             {
                index = 0;
          
                insert(index);
-               mArray[index] = x;
+               m_array[index] = x;
             }
          
             return index;
          }
          
-         template<class T> inline U32 Vector<T>::push_back_unique(const T& x)
+         template<class T>
+         inline uint32 vector<T>::push_back_unique(const T& x)
          {
-            S32 index = find_next(x);
+            int32 index = find_next(x);
          
             if (index == -1)
             {
                increment();
          
-               index = mElementCount - 1;
-               mArray[index] = x;
+               index = m_numElements - 1;
+               m_array[index] = x;
             }
          
             return index;
          }
          
-         template<class T> inline S32 Vector<T>::find_next( const T& x, U32 start ) const
+         template<class T>
+         inline int32 vector<T>::find_next( const T& x, uint32 start ) const
          {
-            S32 index = -1;
+            int32 index = -1;
          
-            if (start < mElementCount)
+            if (start < m_numElements)
             {
-               for (U32 i = start; i < mElementCount; i++)
+               for (uint32 i = start; i < m_numElements; i++)
                {
-                  if (mArray[i] == x)
+                  if (m_array[i] == x)
                   {
                      index = i;
                      break;
@@ -513,302 +518,113 @@ namespace core
             return index;
          }
          
-         template<class T> inline void Vector<T>::pop_front()
+         template<class T>
+         inline void vector<T>::pop_front()
          {
-            AssertFatal(mElementCount != 0, "Vector<T>::pop_front - cannot pop the front of a zero-length vector.");
-            erase(U32(0));
+            assert(m_numElements != 0 && "Vector<T>::pop_front - cannot pop the front of a zero-length vector.");
+            erase(uint32(0));
          }
          
-         template<class T> inline void Vector<T>::pop_back()
+         template<class T>
+         inline void vector<T>::pop_back()
          {
-            AssertFatal(mElementCount != 0, "Vector<T>::pop_back - cannot pop the back of a zero-length vector.");
+            assert(m_numElements != 0 && "vector<T>::pop_back - cannot pop the back of a zero-length vector.");
             decrement();
          }
          
          template<class T> inline T& Vector<T>::operator[](U32 index)
          {
-            AssertFatal(index < mElementCount, "Vector<T>::operator[] - out of bounds array access!");
-            return mArray[index];
+            assert(index < m_numElements && "vector<T>::operator[] - out of bounds array access!");
+            return m_array[index];
          }
          
-         template<class T> inline const T& Vector<T>::operator[](U32 index) const
+         template<class T>
+         inline const T& vector<T>::operator[](uint32 index) const
          {
-            AssertFatal(index < mElementCount, "Vector<T>::operator[] - out of bounds array access!");
-            return mArray[index];
+            assert(index < m_numElements && "vector<T>::operator[] - out of bounds array access!");
+            return m_array[index];
          }
          
-         template<class T> inline void Vector<T>::reserve(U32 size)
+         template<class T>
+         inline void vector<T>::reserve(uint32 size)
          {
             if (size <= mArraySize)
                return;
          
-            const U32 ec = mElementCount;
+            const uint32 ec = m_numElements;
             if (resize(size))
                mElementCount = ec;
          }
          
-         template<class T> inline U32 Vector<T>::capacity() const
+         template<class T> inline
+         uint32 vector<T>::capacity() const
          {
-             return mArraySize;
+             return m_numElemAllocated;
          }
          
-         template<class T> inline void Vector<T>::set(void * addr, U32 sz)
+         template<class T>
+         inline void vector<T>::set(void * addr, uint32 sz)
          {
             if ( !addr )
                sz = 0;
          
-            setSize( sz );
+            set_size( sz );
          
             if ( addr && sz > 0 )
                dMemcpy(address(),addr,sz*sizeof(T));
          }
          
-         //-----------------------------------------------------------------------------
-         
-         template<class T> inline bool Vector<T>::resize(U32 ecount)
+         template<class T>
+         inline bool vector<T>::resize(uint32 ecount)
          {
          #ifdef TORQUE_DEBUG_GUARD
-            return VectorResize(&mArraySize, &mElementCount, (void**) &mArray, ecount, sizeof(T),
+            return VectorResize(&m_numElemAllocated, &m_numElements, (void**) &m_array, ecount, sizeof(T),
                                 mFileAssociation, mLineAssociation);
          #else
-            return VectorResize(&mArraySize, &mElementCount, (void**) &mArray, ecount, sizeof(T));
+            return VectorResize(&m_numElemAllocated, &m_numElements, (void**) &m_array, ecount, sizeof(T));
          #endif
          }
          
-         template<class T> inline void Vector<T>::merge( const Vector &p )
+         template<class T>
+         inline void vector<T>::merge(const vector &other)
          {
-            if ( !p.size() )
+            if ( !other.size() )
                return;
          
-            const U32 oldSize = mElementCount;
-            const U32 newSize = oldSize + p.size();
-            if ( newSize > mArraySize )
+            const uint32 oldSize = m_numElements;
+            const uint32 newSize = oldSize + other.size();
+            if ( newSize > m_numElemAllocated )
                resize( newSize );
          
-            T *dest = mArray + oldSize;
-            const T *src = p.mArray;
-            while ( dest < mArray + newSize )
+            T *dest = m_array + oldSize;
+            const T *src = other.m_array;
+            while ( dest < m_array + newSize )
                constructInPlace( dest++, src++ );
          
-            mElementCount = newSize;
+            m_numElements = newSize;
          }
          
-         template<class T> inline void Vector<T>::merge( const T *addr, U32 count )
+         template<class T>
+         inline void vector<T>::merge(const T *addr, uint32 count)
          {
-            const U32 oldSize = mElementCount;
-            const U32 newSize = oldSize + count;
+            const uint32 oldSize = m_numElements;
+            const uint32 newSize = oldSize + count;
             if ( newSize > mArraySize )
                resize( newSize );
          
-            T *dest = mArray + oldSize;
-            while ( dest < mArray + newSize )
+            T *dest = m_array + oldSize;
+            while ( dest < m_array + newSize )
                constructInPlace( dest++, addr++ );
          
-            mElementCount = newSize;
+            m_numElements = newSize;
          }
          
-         template<class T> inline void Vector<T>::reverse()
+         template<class T>
+         inline void vector<T>::reverse()
          {
-            for (U32 i = 0, j = size();  (i != j) && (i != --j);  ++i)
-               std::swap( mArray[ i ],  mArray[ j ] );
+            for (uint32 i = 0, j = size();  (i != j) && (i != --j);  ++i)
+               std::swap( m_array[i],  m_array[j] );
          }
-         
-         //-----------------------------------------------------------------------------
-         /// Template for vectors of pointers.
-         template <class T>
-         class VectorPtr : public Vector<void *>
-         {
-            /// @deprecated Disallowed.
-            VectorPtr(const VectorPtr&);  // Disallowed
-         
-           public:
-            VectorPtr();
-            VectorPtr(const char* fileName, const U32 lineNum);
-         
-            /// @name STL interface
-            /// @{
-         
-            typedef T        value_type;
-            typedef T&       reference;
-            typedef const T& const_reference;
-         
-            typedef T*       iterator;
-            typedef const T* const_iterator;
-            typedef U32      difference_type;
-            typedef U32      size_type;
-         
-            iterator       begin();
-            const_iterator begin() const;
-            iterator       end();
-            const_iterator end() const;
-         
-            void insert(iterator,const T&);
-            void insert(S32 idx) { Parent::insert(idx); }
-            void erase(iterator);
-         
-            T&       front();
-            const T& front() const;
-            T&       back();
-            const T& back() const;
-            void     push_front(const T&);
-            void     push_back(const T&);
-         
-            T&       operator[](U32);
-            const T& operator[](U32) const;
-         
-            /// @}
-         
-            /// @name Extended interface
-            /// @{
-         
-            typedef Vector<void*> Parent;
-            T&       first();
-            T&       last();
-            const T& first() const;
-            const T& last() const;
-            void erase_fast(U32);
-            void erase_fast(iterator);
-         
-            /// @}
-         };
-         
-         
-         //-----------------------------------------------------------------------------
-         template<class T> inline VectorPtr<T>::VectorPtr()
-         {
-            //
-         }
-         
-         template<class T> inline VectorPtr<T>::VectorPtr(const char* fileName,
-                                                          const U32   lineNum)
-            : Vector<void*>(fileName, lineNum)
-         {
-            //
-         }
-         
-         template<class T> inline T& VectorPtr<T>::first()
-         {
-            return (T&)Parent::first();
-         }
-         
-         template<class T> inline const T& VectorPtr<T>::first() const
-         {
-            return (const T)Parent::first();
-         }
-         
-         template<class T> inline T& VectorPtr<T>::last()
-         {
-            return (T&)Parent::last();
-         }
-         
-         template<class T> inline const T& VectorPtr<T>::last() const
-         {
-            return (const T&)Parent::last();
-         }
-         
-         template<class T> inline typename VectorPtr<T>::iterator VectorPtr<T>::begin()
-         {
-            return (iterator)Parent::begin();
-         }
-         
-         template<class T> inline typename VectorPtr<T>::const_iterator VectorPtr<T>::begin() const
-         {
-            return (const_iterator)Parent::begin();
-         }
-         
-         template<class T> inline typename VectorPtr<T>::iterator VectorPtr<T>::end()
-         {
-            return (iterator)Parent::end();
-         }
-         
-         template<class T> inline typename VectorPtr<T>::const_iterator VectorPtr<T>::end() const
-         {
-            return (const_iterator)Parent::end();
-         }
-         
-         template<class T> inline void VectorPtr<T>::insert(iterator i,const T& x)
-         {
-            Parent::insert( (Parent::iterator)i, (Parent::reference)x );
-         }
-         
-         template<class T> inline void VectorPtr<T>::erase(iterator i)
-         {
-            Parent::erase( (Parent::iterator)i );
-         }
-         
-         template<class T> inline void VectorPtr<T>::erase_fast(U32 index)
-         {
-            AssertFatal(index < mElementCount, "VectorPtr<T>::erase_fast - out of bounds index." );
-         
-            // CAUTION: this operator does not maintain list order
-            // Copy the last element into the deleted 'hole' and decrement the
-            //   size of the vector.
-            // Assert: index >= 0 && index < mElementCount
-            if (index < (mElementCount - 1))
-               mArray[index] = mArray[mElementCount - 1];
-            decrement();
-         }
-         
-         template<class T> inline void VectorPtr<T>::erase_fast(iterator i)
-         {
-            erase_fast(U32(i - iterator(mArray)));
-         }
-         
-         template<class T> inline T& VectorPtr<T>::front()
-         {
-            return *begin();
-         }
-         
-         template<class T> inline const T& VectorPtr<T>::front() const
-         {
-            return *begin();
-         }
-         
-         template<class T> inline T& VectorPtr<T>::back()
-         {
-            AssertFatal(mElementCount != 0, "Vector<T>::back - cannot access last element of zero-length vector.");
-            return *(end()-1);
-         }
-         
-         template<class T> inline const T& VectorPtr<T>::back() const
-         {
-            AssertFatal(mElementCount != 0, "Vector<T>::back - cannot access last element of zero-length vector.");
-            return *(end()-1);
-         }
-         
-         template<class T> inline void VectorPtr<T>::push_front(const T& x)
-         {
-            Parent::push_front((Parent::const_reference)x);
-         }
-         
-         template<class T> inline void VectorPtr<T>::push_back(const T& x)
-         {
-            Parent::push_back((Parent::const_reference)x);
-         }
-         
-         template<class T> inline T& VectorPtr<T>::operator[](U32 index)
-         {
-            return (T&)Parent::operator[](index);
-         }
-         
-         template<class T> inline const T& VectorPtr<T>::operator[](U32 index) const
-         {
-            return (const T&)Parent::operator[](index);
-         }
-         
-         //------------------------------------------------------------------------------
-         
-         template <class T> class VectorSet : public Vector<T>
-         {
-         public:
-            void insert(T dat)
-            {
-               if(find(this->begin(), this->end(), dat) == this->end())
-                  push_back(dat);
-            }
-         };
-         
-         #endif //_TVECTOR_H_
       
       } // namespace vector
       
