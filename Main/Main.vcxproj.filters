@@ -79,6 +79,9 @@
     <Filter Include="Source Files\Core\Algorithm">
       <UniqueIdentifier>{d64accc5-249f-4366-ae2e-ca548590663d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Direct3D">
+      <UniqueIdentifier>{5316a8b4-3957-4f37-ab73-5d1569c50b2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\model\mesh.cpp">
@@ -158,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="source\model\OBJParser.cpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="source\direct3D\D3DDriver.cpp">
+      <Filter>Source Files\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="source\core\StringComparison.hpp">
       <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\direct3D\D3DDriver.hpp">
+      <Filter>Source Files\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

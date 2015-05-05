@@ -134,6 +134,7 @@
     <ClCompile Include="source\core\math\camera.cpp" />
     <ClCompile Include="source\core\math\frustum.cpp" />
     <ClCompile Include="source\core\memory\memory.cpp" />
+    <ClCompile Include="source\direct3D\D3DDriver.cpp" />
     <ClCompile Include="source\gfx\bmp.cpp" />
     <ClCompile Include="source\gfx\color.cpp" />
     <ClCompile Include="source\gfx\hardwarebuffer.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="source\core\memory\memory.hpp" />
     <ClInclude Include="source\core\StringComparison.hpp" />
     <ClInclude Include="source\core\string\string.hpp" />
+    <ClInclude Include="source\direct3D\D3DDriver.hpp" />
     <ClInclude Include="source\gfx\bmp.hpp" />
     <ClInclude Include="source\gfx\color.hpp" />
     <ClInclude Include="source\gfx\hardwarebuffer.hpp" />
