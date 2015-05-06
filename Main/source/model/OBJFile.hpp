@@ -50,14 +50,12 @@ using mesh2::aiPrimitiveType_POLYGON;
 
 namespace objfile
 {
-   // ------------------------------------------------------------------------------------------------
+ 
    struct Object;
    struct Face;
    struct Material;
 
-   // ------------------------------------------------------------------------------------------------
-   //!	\struct	Face
-   //!	\brief	Data structure for a simple obj-face, describes discredit,l.ation and materials
+   // data structure for a simple obj-face, describes discredit,l.ation and materials
    struct Face
    {
       typedef std::vector<uint32> IndexArray;
@@ -90,7 +88,6 @@ namespace objfile
          // empty
       }
 
-      //!	\brief	Destructor	
       ~Face()
       {
          delete m_pVertices;
@@ -131,7 +128,6 @@ namespace objfile
          // empty
       }
 
-      //!	\brief	Destructor	
       ~Object()
       {
          for (std::vector<Object*>::iterator it = m_SubObjects.begin();
@@ -143,8 +139,6 @@ namespace objfile
       }
    };
 
-   // ------------------------------------------------------------------------------------------------
-   //!	\struct	Material
    //!	\brief	Data structure to store all material specific data
    struct Material
    {
@@ -161,7 +155,7 @@ namespace objfile
       String_c textureSpecularity;
       String_c textureOpacity;
       String_c textureDisp;
-      enum TextureType
+      enum eTextureType
       {
          TextureDiffuseType ,
          TextureSpecularType,
@@ -176,30 +170,26 @@ namespace objfile
       };
       bool clamp[TextureTypeCount];
 
-      //!	Ambient color 
-      Colorf ambient;
-      //!	Diffuse color
-      Colorf diffuse;
-      //!	Specular color
-      Colorf specular;
-      //!	Emissive color
-      Colorf emissive;
-      //!	Alpha value
-      float alpha;
-      //!	Shineness factor
-      float shineness;
-      //!	Illumination model 
-      int32 illumination_model;
-      //! Index of refraction
-      float ior;
 
-      //!	Constructor
+      Colorf ambientColor;
+      Colorf diffuseColor;
+      Colorf specularColor;
+      Colorf emissiveColor;
+
+      float alpha;
+
+      float shineness;
+
+      int32 illumination_model;
+
+      float indexOfRefraction;
+
       Material()
-         : diffuse(0.6f, 0.6f, 0.6f)
+         : diffuseColor(0.6f, 0.6f, 0.6f)
          , alpha(1.f)
          , shineness(0.0f)
          , illumination_model(1)
-         , ior(1.f)
+         , indexOfRefraction(1.f)
       {
          // empty
          for (size_t i = 0; i < TextureTypeCount; ++i)
@@ -208,15 +198,12 @@ namespace objfile
          }
       }
 
-      // Destructor
       ~Material()
       {
          // empty
       }
    };
 
-   // ------------------------------------------------------------------------------------------------
-   //!	\struct	Mesh
    //!	\brief	Data structure to store a mesh
    struct Mesh
    {
@@ -255,49 +242,45 @@ namespace objfile
       }
    };
 
-   // ------------------------------------------------------------------------------------------------
-   //!	\struct	Model
-   //!	\brief	Data structure to store all obj-specific model datas
+   // data structure to store all obj-specific model datas
    struct Model
    {
       typedef std::map<String_c, std::vector<uint32>* > GroupMap;
       typedef std::map<String_c, std::vector<uint32>* >::iterator GroupMapIt;
       typedef std::map<String_c, std::vector<uint32>* >::const_iterator ConstGroupMapIt;
 
-      //!	Model name
       String_c m_ModelName;
-      //!	List ob assigned objects
+      //	List ob assigned objects
       std::vector<Object*> m_Objects;
-      //!	Pointer to current object
+      //	Pointer to current object
       objfile::Object *m_pCurrent;
-      //!	Pointer to current material
+      //	Pointer to current material
       objfile::Material *m_pCurrentMaterial;
-      //!	Pointer to default material
+      //	Pointer to default material
       objfile::Material *m_pDefaultMaterial;
-      //!	Vector with all generated materials
+      //	Vector with all generated materials
       std::vector<String_c> m_MaterialLib;
-      //!	Vector with all generated group
+      //	Vector with all generated group
       std::vector<String_c> m_GroupLib;
-      //!	Vector with all generated vertices
+      //	Vector with all generated vertices
       std::vector<Vector3f> m_Vertices;
-      //!	vector with all generated normals
+      //	vector with all generated normals
       std::vector<Vector3f> m_Normals;
-      //!	Group map
+      //	Group map
       GroupMap m_Groups;
-      //!	Group to face id assignment
+      //	Group to face id assignment
       std::vector<uint32> *m_pGroupFaceIDs;
-      //!	Active group
+      //	Active group
       String_c m_strActiveGroup;
-      //!	Vector with generated texture coordinates
+      //	Vector with generated texture coordinates
       std::vector<Vector3f> m_TextureCoord;
-      //!	Current mesh instance
+
       Mesh *m_pCurrentMesh;
-      //!	Vector with stored meshes
+
       std::vector<Mesh*> m_Meshes;
-      //!	Material map
+
       std::map<String_c, Material*> m_MaterialMap;
 
-      //!	\brief	The default class constructor
       Model() :
          m_ModelName(""),
          m_pCurrent(NULL),
@@ -313,14 +296,14 @@ namespace objfile
       //!	\brief	The class destructor
       ~Model()
       {
-         // Clear all stored object instances
+         // clear all stored object instances
          for (std::vector<Object*>::iterator it = m_Objects.begin();
             it != m_Objects.end(); ++it) {
             delete *it;
          }
          m_Objects.clear();
 
-         // Clear all stored mesh instances
+         // clear all stored mesh instances
          for (std::vector<Mesh*>::iterator it = m_Meshes.begin();
             it != m_Meshes.end(); ++it) {
             delete *it;
@@ -338,9 +321,7 @@ namespace objfile
       }
    };
 
-   // ------------------------------------------------------------------------------------------------
-
-} // Namespace ObjFile
+} // namespace objfile
 
 
 #endif

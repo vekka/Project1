@@ -20,8 +20,6 @@ using vertexstructs::VertexPC;
 
 using win32window::Win32Window;
 
-#include "model/objloader.hpp"
-
 #include "win32/win32console.hpp"
 #include "core/math/frustum.hpp"
 #include "core/math/camera.hpp"

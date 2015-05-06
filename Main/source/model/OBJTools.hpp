@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _OBJTOOLS_HPP_INCLUDED_
 #define _OBJTOOLS_HPP_INCLUDED_
 
-#include "fast_atof.h"
+#include "../core/fast_atof.hpp"
 //#include "ParsingUtils.h"
 #include <vector>
 

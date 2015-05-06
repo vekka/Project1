@@ -58,9 +58,6 @@
     <Filter Include="Source Files\ShaderLib\ShaderSources\VertexShaders">
       <UniqueIdentifier>{8fb845c0-de34-40e4-8ada-eec575125a39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\OpenGL">
-      <UniqueIdentifier>{7d5679aa-c035-4c1d-aeb4-6198bc968fde}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GFX">
       <UniqueIdentifier>{b3e68c5c-7f3f-40ab-a797-7805c0a5e826}</UniqueIdentifier>
     </Filter>
@@ -79,17 +76,17 @@
     <Filter Include="Source Files\Core\Algorithm">
       <UniqueIdentifier>{d64accc5-249f-4366-ae2e-ca548590663d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Direct3D">
+    <Filter Include="Source Files\Driver">
+      <UniqueIdentifier>{acb1e663-a10b-4f29-9e53-08b94ebb0d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Driver\Direct3D">
       <UniqueIdentifier>{5316a8b4-3957-4f37-ab73-5d1569c50b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Driver\OpenGL">
+      <UniqueIdentifier>{7d5679aa-c035-4c1d-aeb4-6198bc968fde}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\model\mesh.cpp">
-      <Filter>Source Files\MeshLib</Filter>
-    </ClCompile>
-    <ClCompile Include="source\model\objloader.cpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
-    </ClCompile>
     <ClCompile Include="source\core\fileio\filesys.cpp">
       <Filter>Source Files\Core\FileLib</Filter>
     </ClCompile>
@@ -142,7 +139,7 @@
       <Filter>GFX\PixelLib</Filter>
     </ClCompile>
     <ClCompile Include="source\ogldriver.cpp">
-      <Filter>Source Files\OpenGL</Filter>
+      <Filter>Source Files\Driver\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="source\core\math\frustum.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -153,9 +150,6 @@
     <ClCompile Include="source\core\math\camera.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\containers\vector.cpp">
-      <Filter>Source Files\Core\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="source\shader\OGLShader.cpp">
       <Filter>Source Files\ShaderLib</Filter>
     </ClCompile>
@@ -163,20 +157,17 @@
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="source\direct3D\D3DDriver.cpp">
-      <Filter>Source Files\OpenGL</Filter>
+      <Filter>Source Files\Driver\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\containers\_vector.cpp">
+      <Filter>Source Files\Core\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\model\mesh.hpp">
-      <Filter>Source Files\MeshLib</Filter>
-    </ClInclude>
     <ClInclude Include="source\model\md5model.hpp">
       <Filter>Source Files\MeshLib</Filter>
     </ClInclude>
     <ClInclude Include="source\model\daeloader.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="source\model\objloader.hpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\core\math\vector4.hpp">
@@ -300,7 +291,7 @@
       <Filter>Source Files\Core\MathLib</Filter>
     </ClInclude>
     <ClInclude Include="source\ogldriver.hpp">
-      <Filter>Source Files\OpenGL</Filter>
+      <Filter>Source Files\Driver\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\vertexformat.hpp">
       <Filter>GFX\BufferLib</Filter>
@@ -316,9 +307,6 @@
     </ClInclude>
     <ClInclude Include="source\core\bits.hpp">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\containers\vector.hpp">
-      <Filter>Source Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="source\core\assert.hpp">
       <Filter>Source Files\Core</Filter>
@@ -345,7 +333,10 @@
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="source\direct3D\D3DDriver.hpp">
-      <Filter>Source Files\OpenGL</Filter>
+      <Filter>Source Files\Driver\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\containers\_vector.hpp">
+      <Filter>Source Files\Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

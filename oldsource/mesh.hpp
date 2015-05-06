@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-#include "core/bits.hpp"
+#include "../core/bits.hpp"
 using core::bits::enumflags::operator|;
 using core::bits::enumflags::operator&;
 

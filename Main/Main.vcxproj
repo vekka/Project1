@@ -128,7 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\core\containers\vector.cpp" />
+    <ClCompile Include="source\core\containers\_vector.cpp" />
     <ClCompile Include="source\core\fileio\file.cpp" />
     <ClCompile Include="source\core\fileio\filesys.cpp" />
     <ClCompile Include="source\core\math\camera.cpp" />
@@ -142,8 +142,6 @@
     <ClCompile Include="source\gfx\raw.cpp" />
     <ClCompile Include="source\gfx\vertexbuffer.cpp" />
     <ClCompile Include="source\gfx\vertexformat.cpp" />
-    <ClCompile Include="source\model\mesh.cpp" />
-    <ClCompile Include="source\model\objloader.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
     <ClCompile Include="source\ogldriver.cpp" />
     <ClCompile Include="source\shader\glmaterialrenderer.cpp" />
@@ -163,7 +161,7 @@
     <ClInclude Include="source\core\BasicTypes.hpp" />
     <ClInclude Include="source\core\bits.hpp" />
     <ClInclude Include="source\core\chartypes.hpp" />
-    <ClInclude Include="source\core\containers\vector.hpp" />
+    <ClInclude Include="source\core\containers\_vector.hpp" />
     <ClInclude Include="source\core\fast_atof.hpp" />
     <ClInclude Include="source\core\fileio\file.hpp" />
     <ClInclude Include="source\core\fileio\filesys.hpp" />
@@ -202,10 +200,8 @@
     <ClInclude Include="source\gfx\vertexstructs.hpp" />
     <ClInclude Include="source\model\daeloader.hpp" />
     <ClInclude Include="source\model\md5model.hpp" />
-    <ClInclude Include="source\model\mesh.hpp" />
     <ClInclude Include="source\model\mesh2.hpp" />
     <ClInclude Include="source\model\OBJFile.hpp" />
-    <ClInclude Include="source\model\objloader.hpp" />
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
     <ClInclude Include="source\ogldriver.hpp" />

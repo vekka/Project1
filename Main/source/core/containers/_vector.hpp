@@ -84,6 +84,7 @@ namespace core
             T* address() const;
             void decrement();
             void erase(uint32 index);
+            void erase_fast(iterator q);
             void insert(uint32 index, const T &x);
             uint32 mem_size() const;
             uint32 set_size(uint32 size);
@@ -227,7 +228,7 @@ namespace core
             m_numElements--;
          }
          
-         template<class T>
+         template<typename T>
          inline bool vector<T>::remove(const T& x)
          {
             iterator i = begin();
@@ -245,7 +246,7 @@ namespace core
             return false;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::erase(uint32 index, uint32 count)
          {
             assert(index < m_numElements && "vector<T>::erase - out of bounds index!");
@@ -261,7 +262,7 @@ namespace core
             m_numElements -= count;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::erase_fast(uint32 index)
          {
             assert(index < m_numElements && "vector<T>::erase_fast - out of bounds index.");
@@ -275,7 +276,7 @@ namespace core
             m_numElements--;
          }
          
-         template<class T>
+         template<typename T>
          inline bool vector<T>::contains(const T& x) const
          {
          	const_iterator i = begin();
@@ -290,63 +291,63 @@ namespace core
          	return false;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::fill( const T& value )
          {
             for( uint32 i = 0; i < size(); ++ i )
                m_array[i] = value;
          }
          
-         template<class T>
+         template<typename T>
          inline T& vector<T>::first()
          {
             assert(m_numElements != 0 && "vector<T>::first - Error, no first element of a zero sized array!");
             return m_array[0];
          }
          
-         template<class T>
+         template<typename T>
          inline const T& vector<T>::first() const
          {
             assert(m_numElements != 0 && "vector<T>::first - Error, no first element of a zero sized array! (const)");
             return m_array[0];
          }
          
-         template<class T>
+         template<typename T>
          inline T& vector<T>::last()
          {
             assert(m_numElements != 0 && "vector<T>::last - Error, no last element of a zero sized array!");
             return m_array[m_numElements - 1];
          }
          
-         template<class T>
+         template<typename T>
          inline const T& vector<T>::last() const
          {
             assert(m_numElements != 0 && "vector<T>::last - Error, no last element of a zero sized array! (const)");
             return m_array[m_numElements - 1];
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::clear()
          {
             destroy(0, m_numElements);
             m_numElements = 0;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::compact()
          {
             resize(m_numElements);
          }
          
-         typedef S32 (QSORT_CALLBACK *qsort_compare_func)(const void *, const void *);
+         //typedef uint32 (QSORT_CALLBACK *qsort_compare_func)(const void *, const void *);
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::sort(compare_func f)
          {
             qsort(address(), size(), sizeof(T), (qsort_compare_func) f);
          }
          
-         template<class T>
+         template<typename T>
          inline vector<T> &vector<T>::operator=(const vector<T>& other)
          {
             if(m_numElements > other.mElementCount)
@@ -370,43 +371,43 @@ namespace core
             return *this;
          }
          
-         template<class T>
+         template<typename T>
          inline typename vector<T>::iterator vector<T>::begin()
          {
             return m_array;
          }
          
-         template<class T>
+         template<typename T>
          inline typename vector<T>::const_iterator vector<T>::begin() const
          {
             return m_array;
          }
          
-         template<class T> 
+         template<typename T> 
          inline typename vector<T>::iterator vector<T>::end()
          {
             return m_array + m_numElements;
          }
          
-         template<class T>
+         template<typename T>
          inline typename vector<T>::const_iterator vector<T>::end() const
          {
             return m_array + m_numElements;
          }
          
-         template<class T>
+         template<typename T>
          inline int32 vector<T>::size() const
          {
             return (int32)m_numElements;
          }
          
-         template<class T>
+         template<typename T>
          inline bool vector<T>::empty() const
          {
             return (m_numElements == 0);
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::insert(iterator p, const T &x)
          {
             uint32 index = (uint32)(p - m_array);
@@ -414,59 +415,59 @@ namespace core
             m_array[index] = x;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::erase(iterator q)
          {
             erase(uint32(q - m_array));
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::erase_fast(iterator q)
          {
             erase_fast(uint32(q - m_array));
          }
          
-         template<class T>
+         template<typename T>
          inline T& vector<T>::front()
          {
             return *begin();
          }
          
-         template<class T>
+         template<typename T>
          inline const T &vector<T>::front() const
          {
             return *begin();
          }
          
-         template<class T>
+         template<typename T>
          inline T& vector<T>::back()
          {
             assert(m_numElements != 0 && "vector<T>::back - cannot access last element of zero-length vector.");
             return *(end()-1);
          }
          
-         template<class T>
+         template<typename T>
          inline const T& vector<T>::back() const
          {
             assert(m_numElements != 0 && "vector<T>::back - cannot access last element of zero-length vector.");
             return *(end()-1);
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::push_front(const T& x)
          {
             insert(0);
             m_array[0] = x;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::push_back(const T& x)
          {
             increment();
             m_array[m_numElements - 1] = x;
          }
          
-         template<class T>
+         template<typename T>
          inline uint32 vector<T>::push_front_unique(const T& x)
          {
             int32 index = find_next(x);
@@ -482,7 +483,7 @@ namespace core
             return index;
          }
          
-         template<class T>
+         template<typename T>
          inline uint32 vector<T>::push_back_unique(const T& x)
          {
             int32 index = find_next(x);
@@ -498,7 +499,7 @@ namespace core
             return index;
          }
          
-         template<class T>
+         template<typename T>
          inline int32 vector<T>::find_next( const T& x, uint32 start ) const
          {
             int32 index = -1;
@@ -518,34 +519,35 @@ namespace core
             return index;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::pop_front()
          {
             assert(m_numElements != 0 && "Vector<T>::pop_front - cannot pop the front of a zero-length vector.");
             erase(uint32(0));
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::pop_back()
          {
             assert(m_numElements != 0 && "vector<T>::pop_back - cannot pop the back of a zero-length vector.");
             decrement();
          }
          
-         template<class T> inline T& Vector<T>::operator[](U32 index)
+         template<typename T> 
+         inline T& vector<T>::operator[](U32 index)
          {
             assert(index < m_numElements && "vector<T>::operator[] - out of bounds array access!");
             return m_array[index];
          }
          
-         template<class T>
+         template<typename T>
          inline const T& vector<T>::operator[](uint32 index) const
          {
             assert(index < m_numElements && "vector<T>::operator[] - out of bounds array access!");
             return m_array[index];
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::reserve(uint32 size)
          {
             if (size <= mArraySize)
@@ -556,13 +558,13 @@ namespace core
                mElementCount = ec;
          }
          
-         template<class T> inline
+         template<typename T> inline
          uint32 vector<T>::capacity() const
          {
              return m_numElemAllocated;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::set(void * addr, uint32 sz)
          {
             if ( !addr )
@@ -574,10 +576,10 @@ namespace core
                dMemcpy(address(),addr,sz*sizeof(T));
          }
          
-         template<class T>
+         template<typename T>
          inline bool vector<T>::resize(uint32 ecount)
          {
-         #ifdef TORQUE_DEBUG_GUARD
+         #ifdef hsfhaf_DEBUG_GUARD
             return VectorResize(&m_numElemAllocated, &m_numElements, (void**) &m_array, ecount, sizeof(T),
                                 mFileAssociation, mLineAssociation);
          #else
@@ -585,7 +587,7 @@ namespace core
          #endif
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::merge(const vector &other)
          {
             if ( !other.size() )
@@ -604,7 +606,7 @@ namespace core
             m_numElements = newSize;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::merge(const T *addr, uint32 count)
          {
             const uint32 oldSize = m_numElements;
@@ -619,7 +621,7 @@ namespace core
             m_numElements = newSize;
          }
          
-         template<class T>
+         template<typename T>
          inline void vector<T>::reverse()
          {
             for (uint32 i = 0, j = size();  (i != j) && (i != --j);  ++i)

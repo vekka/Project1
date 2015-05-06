@@ -41,6 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _OBJPARSER_HPP_INCLUDED_
 #define _OBJPARSER_HPP_INCLUDED_
 
+// parser for a obj waveform file
+
 #include <vector>
 #include <map>
 
@@ -77,33 +79,24 @@ namespace model
        class ObjFileImporter;
        class IOSystem;
     
-       ///	\class	ObjFileParser
-       ///	\brief	Parser for a obj waveform file
        class ObjFileParser
        {
-       private:
-          static const String_c DEFAULT_MATERIAL_NAME;
-          DataArrayIt m_DataIterator;
-          DataArrayIt m_DataIteratorEndOfBuffer;
-          objfile::Model *m_pModelInstance;
-          uint32 m_uiCurrentLine;
-          //	Helper buffer
-          char m_buffer[BUFFERSIZE];
-          //	Pointer to IO system instance.
-          IOSystem *m_pIO;   
        public:
           static const size_t BUFFERSIZE = 4096;
           typedef std::vector<char> DataArray;
           typedef std::vector<char>::iterator DataArrayIt;
           typedef std::vector<char>::const_iterator ConstDataArrayIt;
-    
-          ///	\brief	Constructor with data array.
-          ObjFileParser(std::vector<char> &Data, const String_c &strModelName, IOSystem* io);
-          ///	\brief	Destructor
-          ~ObjFileParser();
-          objfile::Model *GetModel() const
-    
        private:
+          static const String_c DEFAULT_MATERIAL_NAME;
+          DataArrayIt m_DataIterator;
+          DataArrayIt m_DataIteratorEndOfBuffer;
+          objfile::Model *m_pModelInstance;
+          uint32 m_currentLine;
+          //	Helper buffer
+          char m_buffer[BUFFERSIZE];
+          //	Pointer to IO system instance.
+          IOSystem *m_pIO;
+
           //	Parse the loaded file
           void ParseFile();
           //	Method to copy the new delimited word in the current line.
@@ -144,6 +137,12 @@ namespace model
           bool NeedsNewMesh(const String_c &rMaterialName);
           //	Error report in token
           void ReportErrorTokenInFace();
+       public:
+          ///	\brief	Constructor with data array.
+          ObjFileParser(std::vector<char> &Data, const String_c &strModelName, IOSystem* io);
+          ///	\brief	Destructor
+          ~ObjFileParser();
+          objfile::Model *GetModel() const;
       };
        
     } // namespace objparser

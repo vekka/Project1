@@ -55,12 +55,17 @@ namespace core
          void Reallocate(const uint32 newSize);
 
       public:
+         typedef T* iterator;
+
          String();
          String(const String &other);
-         template <class B> String(const B* const c, const uint32 length);
-         template <class B> String(const B* const c);
+         template <typename B> String(const B* const c, const uint32 length);
+         template <typename B> String(const B* const c);
          explicit String(const int32 number);
          explicit String(const float number);
+         template <typename TInputIterator> String(TInputIterator first, TInputIterator last);
+
+         iterator begin() const;
 
          ~String();
 
@@ -300,9 +305,28 @@ namespace core
       }
 
       template <class T, class TAlloc>
+      template <typename TInputIterator>
+      inline String<T, TAlloc>::(TInputIterator first, TInputIterator last)
+      {
+         strArray
+      }
+
+      template <class T, class TAlloc>
       inline String<T, TAlloc>::~String()
       {
          allocator.Free(strArray);
+      }
+
+      template <class T, class TAlloc>
+      String<class T, class TAlloc>::iterator String<class T, class TAlloc>::begin()
+      {
+         return &strArray[0];
+      }
+
+      template <class T, class TAlloc>
+      String<class T, class TAlloc>::iterator String<class T, class TAlloc>::end()
+      {
+         return &strArray[used-1];
       }
 
       template <class T, class TAlloc>

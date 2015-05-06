@@ -6,8 +6,8 @@
 #include "vertexstructs.hpp"
 using vertexstructs::VertexPC;
 
-#include "model/mesh.hpp"
-using mesh::Mesh;
+#include "model/mesh2.hpp"
+using mesh2::aiMesh;
 
 #include <map>
 using std::map;
