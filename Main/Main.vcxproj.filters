@@ -138,9 +138,6 @@
     <ClCompile Include="source\gfx\color.cpp">
       <Filter>GFX\PixelLib</Filter>
     </ClCompile>
-    <ClCompile Include="source\ogldriver.cpp">
-      <Filter>Source Files\Driver\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="source\core\math\frustum.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
     </ClCompile>
@@ -161,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="source\core\containers\_vector.cpp">
       <Filter>Source Files\Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\opengl\ogldriver.cpp">
+      <Filter>Source Files\Driver\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,9 +290,6 @@
     <ClInclude Include="source\core\math\frustum.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
     </ClInclude>
-    <ClInclude Include="source\ogldriver.hpp">
-      <Filter>Source Files\Driver\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="source\gfx\vertexformat.hpp">
       <Filter>GFX\BufferLib</Filter>
     </ClInclude>
@@ -340,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="source\model\OBJMTLImporter.hpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\opengl\ogldriver.hpp">
+      <Filter>Source Files\Driver\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
