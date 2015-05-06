@@ -14,9 +14,9 @@ namespace ogldriver
    OGLDriver::OGLDriver(HWND hWnd, float viewportWidth, float viewportHeight, bool fullscreen)
    {
       m_hWnd = hWnd;
-      m_viewportWidth = viewportWidth;
-      m_viewportHeight = viewportHeight;
-      m_fullsreen = fullscreen;
+      m_viewPortWidth = viewportWidth;
+      m_viewPortHeight = viewportHeight;
+      m_fullscreen = fullscreen;
 
       CreateContext();
    }
@@ -104,8 +104,8 @@ namespace ogldriver
 
    void OGLDriver::GetViewportSize(float &viewportWidth, float &viewportHeight)
    {
-      viewportWidth = m_viewportWidth;
-      viewportHeight = m_viewportHeight;
+      viewportWidth = m_viewPortWidth;
+      viewportHeight = m_viewPortHeight;
    }
 
    void OGLDriver::EnableCulling() const

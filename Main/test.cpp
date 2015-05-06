@@ -44,11 +44,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    //FreeCamera camera(FRUSTUM_PERSPECTIVE, -1.0f, 1.0f, 1.0f, -1.0f, 0.3f, 1000.0f);
 
-   ObjFile cube;
-   cube.Open("assets/testObjects/cubePNT.obj");
+   //ObjFile cube;
+   //cube.Open("assets/testObjects/cubePNT.obj");
 
-   cube.Read();
-   cube.Close();
+   //cube.Read();
+   //cube.Close();
    Win32Console debugConsole;
    debugConsole.Create(100, 50, 100, 50);
    bool resized = false;
@@ -66,14 +66,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
    //create rendering context for window
-   OGLDriver oglContext(hWnd);
+   OGLDriver oglContext(hWnd, 800, 600 );
    win.Show();
    win.Update();
    oglContext.SetClearColor();
    oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
    //oglContext.EnableCulling();
-  
-   VertexBuffer<float> buffer(cube.mesh.GetVertexFormat(), 3, USAGE_STATIC_READ, ACCESS_READ_ONLY,BBTARGET_ARRAY_BUFFER );
+ 
 
    GLSLShader shader;
    shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
