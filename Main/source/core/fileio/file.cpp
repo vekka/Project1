@@ -2,164 +2,174 @@
 
 using core::string::String_c;
 
-File::File()
+namespace core
 {
-   isOpen = false;
-}
 
-bool File::Open( const String_c &path, const bool readAsBinary, const eFileMode mode, const bool update )
-{
-   assert( FMODE_READ || FMODE_WRITE || FMODE_APPEND /* || FMODE_READWRITE */ );
-
-   this->mode = mode;
-   this->path = path;
-   this->readAsBinary = readAsBinary;
-   String_c strMode;
-
-   switch( mode )
+   namespace fileio
    {
-   case FMODE_READ:
-      strMode = "r";
-      break;
-   case FMODE_WRITE:
-      strMode = "w";
-      break;
-   case FMODE_APPEND:
-      strMode = "a";
-      break;
-   }
 
-   if ( update )
-      strMode = strMode.Append('+');
-   if ( readAsBinary )
-      strMode = strMode.Append('b');
+      File::File()
+      {
+         isOpen = false;
+      }
 
-   errno_t err = fopen_s( &stream, path.CString(), strMode.CString() );
-   if ( err != 0)
-      return false;
-   
-   isOpen = true;
+      bool File::Open(const String_c &path, const bool readAsBinary, const eFileMode mode, const bool update)
+      {
+         assert(FMODE_READ || FMODE_WRITE || FMODE_APPEND /* || FMODE_READWRITE */);
 
-   fseek( stream, 0, SEEK_END );
-   fileSize = GetPosition();
-   fseek( stream, 0, SEEK_SET );
+         this->mode = mode;
+         this->path = path;
+         this->readAsBinary = readAsBinary;
+         String_c strMode;
 
-   return true;
-}
+         switch (mode)
+         {
+         case FMODE_READ:
+            strMode = "r";
+            break;
+         case FMODE_WRITE:
+            strMode = "w";
+            break;
+         case FMODE_APPEND:
+            strMode = "a";
+            break;
+         }
 
-// TODO fix me one day
-//String_c &File::GetFilePath() const
-//{
-//   assert( isOpen );
-//
-//   return path;
-//}
+         if (update)
+            strMode = strMode.Append('+');
+         if (readAsBinary)
+            strMode = strMode.Append('b');
 
-//! get the filename extension from a file path
-//String_c &File::GetFileNameExtension()
-//{
-// //  String_c dest;
-//	//int endPos = path.find_last_of ( '.' );
-//	//if ( endPos < 0 )
-//	//	dest = "";
-//	//else
-// //     dest = path.substr ( endPos, path.size() );
-//	//return dest;
-//
-//}
+         errno_t err = fopen_s(&stream, path.CString(), strMode.CString());
+         if (err != 0)
+            return false;
 
-int32 File::GetPosition() const
-{
-   assert( isOpen );
+         isOpen = true;
 
-   return (int32)ftell( stream );
-}
+         fseek(stream, 0, SEEK_END);
+         fileSize = GetPosition();
+         fseek(stream, 0, SEEK_SET);
 
-int32 File::GetSize() const
-{
-   assert( isOpen );
-   
-   return fileSize;
-}
+         return true;
+      }
 
-bool File::Seek( const uint32 finalPos, const bool relative ) const
-{
-   assert( isOpen );
+      // TODO fix me one day
+      //String_c &File::GetFilePath() const
+      //{
+      //   assert( isOpen );
+      //
+      //   return path;
+      //}
 
-   return (bool)(fseek( stream, finalPos, relative ? SEEK_CUR : SEEK_SET ) == 0);
-}
+      //! get the filename extension from a file path
+      //String_c &File::GetFileNameExtension()
+      //{
+      // //  String_c dest;
+      //	//int endPos = path.find_last_of ( '.' );
+      //	//if ( endPos < 0 )
+      //	//	dest = "";
+      //	//else
+      // //     dest = path.substr ( endPos, path.size() );
+      //	//return dest;
+      //
+      //}
 
-void File::Close()
-{
-   assert( isOpen );
-   
-   if ( stream )
-      fclose( stream );
+      int32 File::GetPosition() const
+      {
+         assert(isOpen);
 
-   isOpen = false;
-}
+         return (int32)ftell(stream);
+      }
 
-bool File::ReadLine( String_c &lineOut, const bool includeNewLine, const uint32 offset, const int32 length, const bool relative ) const
-{
-   assert( isOpen );
+      int32 File::GetSize() const
+      {
+         assert(isOpen);
 
-   char *str = new char[length];
+         return fileSize;
+      }
 
-   if (offset != -1)
-   {
-      fseek( stream, offset, relative ? SEEK_CUR : SEEK_SET );
-   }
+      bool File::Seek(const uint32 finalPos, const bool relative) const
+      {
+         assert(isOpen);
 
-   if (fgets(str, length, stream) == NULL) // false
-   {
-      delete[] str;
-      return false;
-   }
+         return (bool)(fseek(stream, finalPos, relative ? SEEK_CUR : SEEK_SET) == 0);
+      }
 
-   lineOut = str;
-   if (!includeNewLine)
-      lineOut.RemoveChars("\n\r");
+      void File::Close()
+      {
+         assert(isOpen);
 
-   delete[] str;
-   return true;
-}
+         if (stream)
+            fclose(stream);
 
-File &File::operator<<( const String_c &str )
-{
-   assert( isOpen/* && mode != FMODE_READ*/ );
+         isOpen = false;
+      }
 
-   fputs( str.CString(), stream );
-	return *this;
-}
+      bool File::ReadLine(String_c &lineOut, const bool includeNewLine, const uint32 offset, const int32 length, const bool relative) const
+      {
+         assert(isOpen);
 
-File &File::operator<<( const char &c )
-{
-   assert( isOpen/* && mode != FMODE_READ*/ );
+         char *str = new char[length];
 
-	fputc( c, stream );
-	return *this;
-}
+         if (offset != -1)
+         {
+            fseek(stream, offset, relative ? SEEK_CUR : SEEK_SET);
+         }
 
-File &File::operator<<( const int32 &i )
-{
-   assert( isOpen/* && mode != FMODE_READ*/ );
+         if (fgets(str, length, stream) == NULL) // false
+         {
+            delete[] str;
+            return false;
+         }
 
-   String_c integerStr(i);
-	fputs( integerStr.CString(), stream );
-	return *this;
-}
+         lineOut = str;
+         if (!includeNewLine)
+            lineOut.RemoveChars("\n\r");
 
-byte File::GetByte() const
-{
-   assert( isOpen );
+         delete[] str;
+         return true;
+      }
 
-   return fgetc( stream );
-}
+      File &File::operator<<(const String_c &str)
+      {
+         assert(isOpen/* && mode != FMODE_READ*/);
 
-File::~File()
-{
-   if ( stream )
-      fclose( stream );
+         fputs(str.CString(), stream);
+         return *this;
+      }
 
-   isOpen = false;
-}
+      File &File::operator<<(const char &c)
+      {
+         assert(isOpen/* && mode != FMODE_READ*/);
+
+         fputc(c, stream);
+         return *this;
+      }
+
+      File &File::operator<<(const int32 &i)
+      {
+         assert(isOpen/* && mode != FMODE_READ*/);
+
+         String_c integerStr(i);
+         fputs(integerStr.CString(), stream);
+         return *this;
+      }
+
+      byte File::GetByte() const
+      {
+         assert(isOpen);
+
+         return fgetc(stream);
+      }
+
+      File::~File()
+      {
+         if (stream)
+            fclose(stream);
+
+         isOpen = false;
+      }
+
+   } // namespace fileio
+
+} // namespace core

@@ -44,6 +44,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "core/string/string.hpp"
 using core::string::String_c;
 
+#include "OBJParser.hpp"
+
 struct aiColor3D;
 
 namespace model
@@ -59,26 +61,30 @@ namespace model
     //}
     
     // Loads the material description from a mtl file.
-    class ObjFileMtlImporter
+    class ObjMtlImporter
     {
+    public:
+       static const size_t BUFFERSIZE = 2048;
+       typedef std::vector<char> DataArray;
+       typedef std::vector<char>::iterator DataArrayIt;
+       typedef std::vector<char>::const_iterator ConstDataArrayIt;
     private:
-    	//	Absolute pathname
+
     	String_c m_strAbsPath;
     	//	Data iterator showing to the current position in data buffer
-    	DataArrayIt m_DataIt;
+    	DataArrayIt m_DataIterator;
     	//	Data iterator to end of buffer
-    	DataArrayIt m_DataItEnd;
+    	DataArrayIt m_DataIteratorEndOfBuffer;
     	//	USed model instance
-    	ObjFile::Model *m_pModel;
+    	objfile::Model *m_pModelInstance;
     	uint32 m_uiCurrentLine;
     	//	Helper buffer
     	char m_buffer[BUFFERSIZE];
     	
-    private:
     	//	Copy constructor, empty.
-    	ObjFileMtlImporter(const ObjFileMtlImporter &rOther);
+      ObjMtlImporter(const ObjMtlImporter &other);
     	//	\brief	Assignment operator, returns only a reference of this instance.
-    	ObjFileMtlImporter &operator = (const ObjFileMtlImporter &rOther);
+      ObjMtlImporter &operator = (const ObjMtlImporter &other);
     	//	Load the whole material description
     	void Load();
     	//	Get color data.
@@ -92,17 +98,11 @@ namespace model
 
     	void GetTextureName();
     	void GetTextureOption(bool &clamp);    	
-    	
+    
     public:
-    	static const size_t BUFFERSIZE = 2048;
-    	typedef std::vector<char> DataArray;
-    	typedef std::vector<char>::iterator DataArrayIt;
-    	typedef std::vector<char>::const_iterator ConstDataArrayIt;
+    	ObjMtlImporter( const std::vector<char> &buffer, const String_c &strAbsPath, objfile::Model *pModel );
     	
-    	ObjFileMtlImporter( std::vector<char> &buffer, const String_c &strAbsPath, 
-    		ObjFile::Model *pModel );
-    	
-    	~ObjFileMtlImporter();
+    	~ObjMtlImporter();
     };
   
   } // namespace objmtlimporter

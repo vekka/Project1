@@ -88,6 +88,7 @@ namespace core
             void insert(uint32 index, const T &x);
             uint32 mem_size() const;
             uint32 set_size(uint32 size);
+            void clear()
          };
          
          template <typename T>
@@ -271,13 +272,13 @@ namespace core
             // Copy the last element into the deleted 'hole' and decrement the
             //   size of the vector.
             destructInPlace(&m_array[index]);
-            if (index < (mElementCount - 1))
+            if (index < (m_numElements - 1))
                dMemmove(&m_array[index], &m_array[m_numElements - 1], sizeof(value_type));
             m_numElements--;
          }
          
          template<typename T>
-         inline bool vector<T>::contains(const T& x) const
+         inline bool vector<T>::contains(const T &x) const
          {
          	const_iterator i = begin();
          	while (i != end())
@@ -292,35 +293,35 @@ namespace core
          }
          
          template<typename T>
-         inline void vector<T>::fill( const T& value )
+         inline void vector<T>::fill( const T &value )
          {
             for( uint32 i = 0; i < size(); ++ i )
                m_array[i] = value;
          }
          
          template<typename T>
-         inline T& vector<T>::first()
+         inline T &vector<T>::first()
          {
             assert(m_numElements != 0 && "vector<T>::first - Error, no first element of a zero sized array!");
             return m_array[0];
          }
          
          template<typename T>
-         inline const T& vector<T>::first() const
+         inline const T &vector<T>::first() const
          {
             assert(m_numElements != 0 && "vector<T>::first - Error, no first element of a zero sized array! (const)");
             return m_array[0];
          }
          
          template<typename T>
-         inline T& vector<T>::last()
+         inline T &vector<T>::last()
          {
             assert(m_numElements != 0 && "vector<T>::last - Error, no last element of a zero sized array!");
             return m_array[m_numElements - 1];
          }
          
          template<typename T>
-         inline const T& vector<T>::last() const
+         inline const T &vector<T>::last() const
          {
             assert(m_numElements != 0 && "vector<T>::last - Error, no last element of a zero sized array! (const)");
             return m_array[m_numElements - 1];

@@ -202,6 +202,7 @@
     <ClInclude Include="source\model\md5model.hpp" />
     <ClInclude Include="source\model\mesh2.hpp" />
     <ClInclude Include="source\model\OBJFile.hpp" />
+    <ClInclude Include="source\model\OBJMTLImporter.hpp" />
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
     <ClInclude Include="source\ogldriver.hpp" />

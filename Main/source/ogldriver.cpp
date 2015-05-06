@@ -11,9 +11,13 @@ namespace ogldriver
    {
    }
 
-   OGLDriver::OGLDriver(HWND hWnd)
+   OGLDriver::OGLDriver(HWND hWnd, float viewportWidth, float viewportHeight, bool fullscreen)
    {
-      this->hWnd = hWnd;
+      m_hWnd = hWnd;
+      m_viewportWidth = viewportWidth;
+      m_viewportHeight = viewportHeight;
+      m_fullsreen = fullscreen;
+
       CreateContext();
    }
 
@@ -21,12 +25,12 @@ namespace ogldriver
    {
       wglMakeCurrent(hDC, 0);
       wglDeleteContext(hRC);
-      ReleaseDC(hWnd, hDC);
+      ReleaseDC(m_hWnd, hDC);
    }
 
    bool OGLDriver::CreateContext()
    {
-      hDC = GetDC(hWnd);
+      hDC = GetDC(m_hWnd);
 
       int32 nPixelFormat;
       PIXELFORMATDESCRIPTOR pfd;
@@ -83,12 +87,12 @@ namespace ogldriver
       glClearColor(0.0, 0.0f, 0.0f, 0.0f);
    }
 
-   void OGLDriver::SetViewportSize()
+   void OGLDriver::SetViewportSize(float viewportWidth, float viewportHeight)
    {
       RECT rect;
       int width, height;
 
-      GetClientRect(hWnd, &rect);
+      GetClientRect(m_hWnd, &rect);
       width = rect.right;
       height = rect.bottom;
 
@@ -98,6 +102,11 @@ namespace ogldriver
       glViewport(0, 0, width, height);
    }
 
+   void OGLDriver::GetViewportSize(float &viewportWidth, float &viewportHeight)
+   {
+      viewportWidth = m_viewportWidth;
+      viewportHeight = m_viewportHeight;
+   }
 
    void OGLDriver::EnableCulling() const
    {

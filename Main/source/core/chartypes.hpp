@@ -129,7 +129,7 @@ namespace core
    }
 
    template<typename TChar>
-   inline Char_T getNextToken(Char_T pBuffer, Char_T pEnd)
+   inline TChar GetNextToken(TChar pBuffer, TChar pEnd)
    {
       while (!isEndOfBuffer(pBuffer, pEnd))
       {
@@ -137,7 +137,7 @@ namespace core
             break;
          pBuffer++;
       }
-      return getNextWord(pBuffer, pEnd);
+      return GetNextWord(pBuffer, pEnd);
    }
 
 } // namespace core

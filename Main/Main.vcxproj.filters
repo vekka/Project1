@@ -338,6 +338,9 @@
     <ClInclude Include="source\core\containers\_vector.hpp">
       <Filter>Source Files\Core\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="source\model\OBJMTLImporter.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

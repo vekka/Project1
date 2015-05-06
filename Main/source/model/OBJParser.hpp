@@ -77,7 +77,7 @@ namespace model
        //   class Point2f;
        //}
        class ObjFileImporter;
-       class IOSystem;
+       //class IOSystem;
     
        class ObjFileParser
        {
@@ -92,10 +92,11 @@ namespace model
           DataArrayIt m_DataIteratorEndOfBuffer;
           objfile::Model *m_pModelInstance;
           uint32 m_currentLine;
-          //	Helper buffer
+          
+          // helper buffer
           char m_buffer[BUFFERSIZE];
-          //	Pointer to IO system instance.
-          IOSystem *m_pIO;
+          
+          File *m_file;
 
           //	Parse the loaded file
           void ParseFile();
@@ -126,7 +127,7 @@ namespace model
           // Gets the group number and resolution from file.
           void GetGroupNumberAndResolution();
           // Returns the index of the material. Is -1 if not material was found.
-          int32 getMaterialIndex(const String_c &strMaterialName);
+          int32 GetMaterialIndex(const String_c &strMaterialName);
           // Parse object name
           void GetObjectName();
           // Creates a new object.
@@ -138,9 +139,9 @@ namespace model
           //	Error report in token
           void ReportErrorTokenInFace();
        public:
-          ///	\brief	Constructor with data array.
-          ObjFileParser(std::vector<char> &Data, const String_c &strModelName, IOSystem* io);
-          ///	\brief	Destructor
+
+          ObjFileParser(std::vector<char> &Data, const String_c &strModelName, File* file);
+
           ~ObjFileParser();
           objfile::Model *GetModel() const;
       };

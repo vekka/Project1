@@ -29,15 +29,21 @@ namespace ogldriver
    private:
       HGLRC hRC;
       HDC hDC;
-      HWND hWnd;
+      HWND m_hWnd;
+
+      float m_viewPortWidth;
+      float m_viewPortHeight;
+
+      bool m_fullscreen;
       //Win32Window *window;
    public:
       OGLDriver();
-      OGLDriver(const HWND hWnd);
+      OGLDriver(HWND hWnd, float viewportWidth, float viewportHeight, bool fullscreen = false);
       ~OGLDriver();
       bool CreateContext();
       void SetClearColor();
-      void SetViewportSize();
+      void SetViewportSize(float viewportWidth, float viewportHeight);
+      void GetViewportSize(float &viewportWidth, float &viewportHeight);
       void ClearBuffers() const;
       bool SwapFrontAndBackBuffer();
       void EnableCulling() const;

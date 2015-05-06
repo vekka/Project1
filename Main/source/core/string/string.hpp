@@ -65,7 +65,10 @@ namespace core
          explicit String(const float number);
          template <typename TInputIterator> String(TInputIterator first, TInputIterator last);
 
+         iterator begin();
          iterator begin() const;
+         iterator end();
+         iterator end() const;
 
          ~String();
 
@@ -308,7 +311,11 @@ namespace core
       template <typename TInputIterator>
       inline String<T, TAlloc>::(TInputIterator first, TInputIterator last)
       {
-         strArray
+         int32 i = 0;
+         while (first != last)
+         {
+            strArray[i++] = *(first++);
+         }
       }
 
       template <class T, class TAlloc>
@@ -320,13 +327,25 @@ namespace core
       template <class T, class TAlloc>
       String<class T, class TAlloc>::iterator String<class T, class TAlloc>::begin()
       {
-         return &strArray[0];
+         return strArray;
+      }
+
+      template <class T, class TAlloc>
+      String<class T, class TAlloc>::iterator String<class T, class TAlloc>::begin() const
+      {
+         return strArray;
       }
 
       template <class T, class TAlloc>
       String<class T, class TAlloc>::iterator String<class T, class TAlloc>::end()
       {
-         return &strArray[used-1];
+         return strArray + used;
+      }
+
+      template <class T, class TAlloc>
+      String<class T, class TAlloc>::iterator String<class T, class TAlloc>::end() const
+      {
+         return strArray + used;
       }
 
       template <class T, class TAlloc>
