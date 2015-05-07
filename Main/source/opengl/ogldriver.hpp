@@ -37,8 +37,8 @@ namespace ogldriver
       bool m_fullscreen;
       //Win32Window *window;
    public:
-      OGLDriver();
       OGLDriver(HWND hWnd, float viewportWidth, float viewportHeight, bool fullscreen = false);
+
       ~OGLDriver();
       bool CreateContext();
       void SetClearColor();

@@ -2,7 +2,7 @@
 #ifndef _ARRAY_HPP_INCLUDED_
 #define _ARRAY_HPP_INCLUDED_
 
-#include "types.hpp"
+#include "BasicTypes.hpp"
 #include "math/mathcommon.hpp"
 #include "memory/allocator.hpp"
 

@@ -83,13 +83,13 @@ namespace model
        {
        public:
           static const size_t BUFFERSIZE = 4096;
-          typedef std::vector<char> DataArray;
-          typedef std::vector<char>::iterator DataArrayIt;
-          typedef std::vector<char>::const_iterator ConstDataArrayIt;
+          typedef std::vector<char> DataArray_t;
+          typedef std::vector<char>::iterator DataArrayIterator_t;
+          typedef std::vector<char>::const_iterator ConstDataArrayIterator_t;
        private:
           static const String_c DEFAULT_MATERIAL_NAME;
-          DataArrayIt m_DataIterator;
-          DataArrayIt m_DataIteratorEndOfBuffer;
+          DataArrayIterator_t m_dataIterator;
+          DataArrayIterator_t m_dataIteratorEndOfBuffer;
           objfile::Model *m_pModelInstance;
           uint32 m_currentLine;
           
@@ -140,7 +140,7 @@ namespace model
           void ReportErrorTokenInFace();
        public:
 
-          ObjFileParser(std::vector<char> &Data, const String_c &strModelName, File* file);
+          ObjFileParser(std::vector<char> &inData, const String_c &strModelName, File *file);
 
           ~ObjFileParser();
           objfile::Model *GetModel() const;

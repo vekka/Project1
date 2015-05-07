@@ -1,4 +1,3 @@
-
 #include "hardwarebuffer.hpp"
 
 using namespace hardwarebuffer;

@@ -65,16 +65,16 @@ namespace model
     {
     public:
        static const size_t BUFFERSIZE = 2048;
-       typedef std::vector<char> DataArray;
-       typedef std::vector<char>::iterator DataArrayIt;
-       typedef std::vector<char>::const_iterator ConstDataArrayIt;
+       typedef std::vector<char> DataArray_t;
+       typedef std::vector<char>::iterator DataArrayIterator_t;
+       typedef std::vector<char>::const_iterator ConstDataArrayIterator_t;
     private:
 
     	String_c m_strAbsPath;
     	//	Data iterator showing to the current position in data buffer
-    	DataArrayIt m_DataIterator;
+    	DataArrayIterator_t m_dataIterator;
     	//	Data iterator to end of buffer
-    	DataArrayIt m_DataIteratorEndOfBuffer;
+    	DataArrayIterator_t m_dataIteratorEndOfBuffer;
     	//	USed model instance
     	objfile::Model *m_pModelInstance;
     	uint32 m_uiCurrentLine;

@@ -6,25 +6,25 @@
 namespace core
 {
 
-namespace math
-{
+   namespace math
+   {
 
-template <class T>
-class Polygon
-{
-protected:
-   // vertexList;
-public:
-   Polygon();
-   Polygon( const Polygon &other );
-   ~Polygon();
+      template <class T>
+      class Polygon
+      {
+      protected:
+         // vertexList;
+      public:
+         Polygon();
+         Polygon(const Polygon &other);
+         ~Polygon();
 
-   void InsertVertex( const Point3<T> &vertex, const uint32 pos );
-   void AppendVertex( const Point3<T> &vertex );
+         void InsertVertex(const Point3<T> &vertex, const uint32 pos);
+         void AppendVertex(const Point3<T> &vertex);
 
-};
+      };
 
-} // namespace math
+   } // namespace math
 
 } // namespace core
 

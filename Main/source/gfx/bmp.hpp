@@ -2,6 +2,8 @@
 #define _BMP_HPP_INCLUDED_
 
 #include "core/fileio/file.hpp"
+using core::fileio::File;
+
 #include "raw.hpp"
 
 struct Header

@@ -1,6 +1,7 @@
 
 #include <iostream>
-#include "assert.h"
+
+#include "../../core/BasicTypes.hpp"
 
 class RefCounterBase
 {

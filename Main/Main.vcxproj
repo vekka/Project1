@@ -83,7 +83,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32s.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -155,9 +155,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="assert.hpp" />
     <ClInclude Include="source\core\array.hpp" />
-    <ClInclude Include="source\core\assert.hpp" />
     <ClInclude Include="source\core\BasicTypes.hpp" />
     <ClInclude Include="source\core\bits.hpp" />
     <ClInclude Include="source\core\chartypes.hpp" />
@@ -165,7 +163,6 @@
     <ClInclude Include="source\core\fast_atof.hpp" />
     <ClInclude Include="source\core\fileio\file.hpp" />
     <ClInclude Include="source\core\fileio\filesys.hpp" />
-    <ClInclude Include="source\core\hash\hashmap.h" />
     <ClInclude Include="source\core\math\aabbox.hpp" />
     <ClInclude Include="source\core\math\camera.hpp" />
     <ClInclude Include="source\core\math\dimension.hpp" />
@@ -206,7 +203,6 @@
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
     <ClInclude Include="source\opengl\ogldriver.hpp" />
-    <ClInclude Include="source\shader\glmaterialrenderer.hpp" />
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />
     <ClInclude Include="source\shader\OGLShader.hpp" />
     <ClInclude Include="source\shader\shadertypes.hpp" />

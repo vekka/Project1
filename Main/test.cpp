@@ -9,6 +9,7 @@
 #include "shader/oglshader.hpp"
 #include "gfx/vertexbuffer.hpp"
 #include "win32/win32console.hpp"
+using win32console::Win32Console;
 
 using namespace shader;
 
@@ -132,7 +133,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    {
       if( win.GetResizeFlag() )
       {
-         oglContext.SetViewportSize();
+         oglContext.SetViewportSize(100.0f, 100.0f);
          win.OnResize();
       }
       win.HandleSystemMessages(&msg);

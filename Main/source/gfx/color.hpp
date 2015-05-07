@@ -57,11 +57,12 @@ namespace gfx
 
       inline uint32 A1R5G5B5toA8R8G8B8(uint16 color)
       {
-         return (((-((uint32)color & 0x00008000) >> (uint32)31) & 0xff000000) |
-            ((color & 0x00007c00) << 9) | ((color & 0x00007000) << 4) |
-            ((color & 0x000003e0) << 6) | ((color & 0x00000380) << 1) |
-            ((color & 0x0000001f) << 3) | ((color & 0x0000001c) >> 2)
-            );
+         return 0;
+         //return (((-((uint32)color & 0x00008000) >> (uint32)31) & 0xff000000) |
+         //   ((color & 0x00007c00) << 9) | ((color & 0x00007000) << 4) |
+         //   ((color & 0x000003e0) << 6) | ((color & 0x00000380) << 1) |
+         //   ((color & 0x0000001f) << 3) | ((color & 0x0000001c) >> 2)
+         //   );
       }
 
       inline uint32 R5G6B5toA8R8G8B8(uint16 color)

@@ -1,7 +1,7 @@
 #ifndef _TEXTUREMANAGER_HPP_INCLUDED_
 #define _TEXTUREMANAGER_HPP_INCLUDED_
 
-#include "core/types.hpp"
+#include "../core/BasicTypes.hpp"
 
 #include "pixelformat.hpp"
 

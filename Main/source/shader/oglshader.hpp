@@ -4,18 +4,17 @@
 #include <vector>
 #include <map>
 
-#include "ogldriver.hpp"
+#include "../opengl/ogldriver.hpp"
 #include "shadertypes.hpp"
 
 #include "core/fileio/file.hpp"
 
 #include <string>
 using std::getline;
-using std::string;
 
 using std::map;
 
-namespace shader
+namespace oglshader
 {
 
    enum eShaderType
@@ -33,25 +32,25 @@ namespace shader
       GLuint m_program;
       int32 m_totalShaders;
       //eShaderType m_type;
-      map<string, GLuint> m_attributeMap;
-      map<string, GLuint> m_uniformLocationMap;
+      map<std::string, GLuint> m_attributeMap;
+      map<std::string, GLuint> m_uniformLocationMap;
       enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER }; //tmp
       GLuint m_shaders[3];//0->vertexshader, 1->fragmentshader, 2->geometryshader //tmp
    public:
       GLSLShader();
       ~GLSLShader();
-      void Load(GLenum type, const string &filename);
-      GLuint operator[](const string &attribute);
-      GLuint operator()(const string &uniform);
+      void Load(GLenum type, const std::string &filename);
+      GLuint operator[](const std::string &attribute);
+      GLuint operator()(const std::string &uniform);
 
-      void AddUniform(const string &uniform);
+      void AddUniform(const std::string &uniform);
       void AddUniformData(const char *variableName, const void *_array, eVectorType type, int32 numElementsToModify);
       void AddUniformData(const char *variableName, const void *_array, eMatrixType type, int32 numMatrices, bool transposed = false);
       void AddUniformSampler(const char* variableName, eOpaqueType sampler);
 
       void Use();
       void Unuse();
-      void AddAttribute(const string &);
+      void AddAttribute(const std::string &);
       void DeleteProgram();
       void CreateAndLink();
       //void GetCompilationStatus(string &outStatus) const;
@@ -93,6 +92,6 @@ namespace shader
       uint32 GetHandle() const;
    };
 
-} // namespace shader
+} // namespace oglshader
 
 #endif

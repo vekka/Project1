@@ -7,10 +7,6 @@
 namespace ogldriver
 {
 
-   OGLDriver::OGLDriver()
-   {
-   }
-
    OGLDriver::OGLDriver(HWND hWnd, float viewportWidth, float viewportHeight, bool fullscreen)
    {
       m_hWnd = hWnd;

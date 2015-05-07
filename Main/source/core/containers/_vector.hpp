@@ -82,13 +82,33 @@ namespace core
             void reserve(uint32); 
             uint32 capacity() const;
             T* address() const;
+            void increment();
+            void increment(uint32 delta);
             void decrement();
+            void erase(uint32 index, uint32 count);
+            void erase(iterator q);
             void erase(uint32 index);
             void erase_fast(iterator q);
+            void erase_fast(uint32 index);
             void insert(uint32 index, const T &x);
+            void insert(uint32 index);
+            void insert(iterator p, const T &x);
             uint32 mem_size() const;
             uint32 set_size(uint32 size);
-            void clear()
+            void clear();
+            void decrement(uint32 delta);
+            const T &first() const;
+            T &first();
+            void fill(const T &value);
+            void compact();
+            T &last();
+            const T &last() const;
+            void merge(const vector &other);
+            void merge(const T *addr, uint32 count);
+            bool resize(uint32 ecount);
+            void reverse();
+            void set(void *addr, uint32 sz);
+            bool remove(const T& x);
          };
          
          template <typename T>
@@ -342,11 +362,11 @@ namespace core
          
          //typedef uint32 (QSORT_CALLBACK *qsort_compare_func)(const void *, const void *);
          
-         template<typename T>
-         inline void vector<T>::sort(compare_func f)
-         {
-            qsort(address(), size(), sizeof(T), (qsort_compare_func) f);
-         }
+         //template<typename T>
+         //inline void vector<T>::sort(compare_func f)
+         //{
+         //   qsort(address(), size(), sizeof(T), (qsort_compare_func) f);
+         //}
          
          template<typename T>
          inline vector<T> &vector<T>::operator=(const vector<T>& other)
@@ -535,7 +555,7 @@ namespace core
          }
          
          template<typename T> 
-         inline T& vector<T>::operator[](U32 index)
+         inline T& vector<T>::operator[](uint32 index)
          {
             assert(index < m_numElements && "vector<T>::operator[] - out of bounds array access!");
             return m_array[index];

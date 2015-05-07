@@ -13,7 +13,7 @@ namespace win32window
    bool Win32Window::isResized = false;
 
    Win32Window::Win32Window()
-      : hWnd(NULL), isFullScreen(false), externalWindow(false), close(false)
+      : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
    {
    }
 
@@ -22,7 +22,7 @@ namespace win32window
       const uint32 width, const uint32 height,
       const uint32 bitsPerPel, const DWORD dStyle,
       const HWND parentWnd)
-      : hWnd(NULL), isFullScreen(false), externalWindow(false), close(false)
+      : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
    {
       Create(hInstance, x, y, width, height, bitsPerPel, dStyle, parentWnd);
    }
@@ -106,7 +106,7 @@ namespace win32window
 
    bool Win32Window::SwitchToFullScreen()
    {
-      if (isFullScreen)
+      if (fullscreen)
          return true;
 
       //if (changedtofullscreen)
@@ -163,7 +163,7 @@ namespace win32window
          SetMenu(hWnd, NULL);
       }
 
-      isFullScreen = true;
+      fullscreen = true;
 
       return true;
    }
@@ -175,7 +175,7 @@ namespace win32window
 
    bool Win32Window::IsFullScreen() const
    {
-      return isFullScreen;
+      return fullscreen;
    }
 
    void Win32Window::OnResize() const

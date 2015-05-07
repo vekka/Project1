@@ -1,6 +1,8 @@
 
 #include "memory.hpp"
 
+#include <assert.h>
+
 void RefCounterBase::Grab() const
 {
    refCount++;

@@ -211,7 +211,7 @@ namespace win32window
       HWND hWnd;
       HMENU hMenu;
       HINSTANCE hInstance;
-      bool isFullScreen;
+      bool fullscreen; // ogldriver or d3ddriver should psbly hav this option alone ? fullscreen need psbly anyway nne set in here. maybe also same for height/width/bpp.
       bool externalWindow;
       bool close;
       uint32 height;

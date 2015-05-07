@@ -248,17 +248,8 @@
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp">
       <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
-    <ClInclude Include="source\shader\glmaterialrenderer.hpp">
-      <Filter>Source Files\ShaderLib</Filter>
-    </ClInclude>
-    <ClInclude Include="assert.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\core\chartypes.hpp">
       <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\hash\hashmap.h">
-      <Filter>Source Files\Core\Algorithm</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\texturemanager.hpp">
       <Filter>GFX\TextureLib</Filter>
@@ -303,9 +294,6 @@
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\bits.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\assert.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="source\shader\OGLShader.hpp">
