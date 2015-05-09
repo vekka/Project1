@@ -80,7 +80,7 @@ namespace objtools
    template<typename TCHAR>
    inline TCHAR GetNextWord(TCHAR pBuffer, TCHAR pEnd)
    {
-      while (!isEndOfBuffer(pBuffer, pEnd))
+      while (!IsEndOfBuffer(pBuffer, pEnd))
       {
          if (!IsSpaceOrNewLine(*pBuffer) || IsLineEnd(*pBuffer))
             break;
@@ -159,7 +159,7 @@ namespace objtools
          ++it;
       }
       String_c strName(pStart, &(*it));
-      if (strName.empty())
+      if (strName.IsEmpty())
          return it;
       else
          name = strName;

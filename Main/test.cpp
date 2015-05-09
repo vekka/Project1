@@ -11,7 +11,7 @@
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
 
-using namespace shader;
+using namespace oglshader;
 
 #include "win32/win32console.hpp"
 #include "gfx/vertexbuffer.hpp"

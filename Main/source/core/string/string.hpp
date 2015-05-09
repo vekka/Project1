@@ -326,25 +326,25 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::begin()
+      inline typename String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::begin()
       {
          return strArray;
       }
 
       template <typename T, typename TAlloc>
-      inline String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::begin() const
+      inline typename String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::begin() const
       {
          return strArray;
       }
 
       template <typename T, typename TAlloc>
-      inline String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::end()
+      inline typename String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::end()
       {
          return strArray + used;
       }
 
       template <typename T, typename TAlloc>
-      inline String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::end() const
+      inline typename String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::end() const
       {
          return strArray + used;
       }

@@ -41,7 +41,7 @@ namespace core
 
          // copy whole file content into a buffer and rewind the file pointer, the buffer need to be preallocated
          template <typename TCharType> bool CopyToBuffer(TCharType *bufferOut) const;
-         template <typename TCharType> bool CopyToBuffer(const vector<TCharType> &bufferOut) const;
+         template <typename TCharType> bool CopyToBuffer( vector<TCharType> &bufferOut) const;
          
          int32 GetPosition() const;
          int32 GetSize() const;
@@ -80,11 +80,11 @@ namespace core
       }
 
       template <class TCharType>
-      bool File::CopyToBuffer(const vector<TCharType> &bufferOut) const
+      bool File::CopyToBuffer( vector<TCharType> &bufferOut) const
       {
          assert(isOpen);
 
-         if (bufferOut == NULL)
+         if (bufferOut[0] == NULL)
             return false;
 
          if (!fileSize)
@@ -93,7 +93,7 @@ namespace core
          bufferOut.reserve(fileSize + 1);
          bufferOut.resize(fileSize);
 
-         if (fileSize != fread(bufferOut, sizeof(TCharType), fileSize, stream))
+         if (fileSize != fread(&bufferOut[0], sizeof(TCharType), fileSize, stream))
          {
          //   throw DeadlyImportError("File read error");
          }
@@ -101,7 +101,8 @@ namespace core
          //ConvertToUTF8(data);
 
          // append a binary zero to simplify string parsing
-         data.push_back(0);
+         bufferOut.push_back(0);
+         return true;
       }
 
    } // namespace fileio

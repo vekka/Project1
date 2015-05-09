@@ -63,6 +63,10 @@ using core::math::Vector3f;
 #include "ObjFile.hpp"
 using objfile::Model;
 
+#include "core/fileio/file.hpp"
+using core::fileio::File;
+
+
 namespace model
 {
   

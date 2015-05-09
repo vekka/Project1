@@ -109,7 +109,7 @@ namespace core
    template <typename TChar>
    inline bool SkipSpaces(const TChar* in, const TChar** out)
    {
-      while (*in == (char_t)' ' || *in == (char_t)'\t') {
+      while (*in == (TChar)' ' || *in == (TChar)'\t') {
          ++in;
       }
       *out = in;
@@ -131,7 +131,7 @@ namespace core
    template<typename TChar>
    inline TChar GetNextToken(TChar pBuffer, TChar pEnd)
    {
-      while (!isEndOfBuffer(pBuffer, pEnd))
+      while (!IsEndOfBuffer(pBuffer, pEnd))
       {
          if (IsSpaceOrNewLine(*pBuffer))
             break;

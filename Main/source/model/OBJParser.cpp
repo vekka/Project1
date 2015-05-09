@@ -73,8 +73,6 @@ using objtools::CopyNextWord;
 //#include "../include/assimp/types.h"
 //#include "DefaultIOSystem.h"
 
-#include "core/fileio/file.hpp"
-using core::fileio::File;
 
 #include <algorithm>
 using std::fill_n;
@@ -85,7 +83,7 @@ namespace model
    namespace objparser
    {
 
-      const String_c ObjFileParser::DEFAULT_MATERIAL_NAME = AI_DEFAULT_MATERIAL_NAME;
+      const String_c ObjFileParser::DEFAULT_MATERIAL_NAME = "default_material_name";
 
       ObjFileParser::ObjFileParser(std::vector<char> &inData, const String_c &strModelName, File *file) :
          m_dataIterator(inData.begin()),
@@ -99,7 +97,7 @@ namespace model
          // Create the model instance to store all the data
          m_pModelInstance = new objfile::Model();
          m_pModelInstance->m_ModelName = strModelName;
-
+         
          // create default material and store it
          m_pModelInstance->m_pDefaultMaterial = new objfile::Material();
          m_pModelInstance->m_pDefaultMaterial->MaterialName = DEFAULT_MATERIAL_NAME;
