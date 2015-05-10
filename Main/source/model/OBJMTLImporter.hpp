@@ -105,8 +105,12 @@ namespace model
     	~ObjMtlImporter();
     };
   
+  
+
   } // namespace objmtlimporter
 
+
 } // namespace model
+
 
 #endif

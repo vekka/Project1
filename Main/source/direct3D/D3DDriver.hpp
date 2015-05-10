@@ -1,12 +1,12 @@
 #ifndef _D3DDRIVER_HPP_INCLUDED_
 #define _D3DDRIVER_HPP_INCLUDED_
 
-#include <Windows.h>
+#include <windows.h>
+
 #include <dxgi.h>
-#include <D3DCommon.h>
+#include <d3dcommon.h>
 #include <d3d11.h>
-//#include <d3dx11.h>
-//#include <d3dx10.h>
+#include <d3dx10math.h>
 
 #include "../core/BasicTypes.hpp"
 

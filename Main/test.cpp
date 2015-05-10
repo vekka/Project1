@@ -26,6 +26,8 @@ using win32window::Win32Window;
 #include "core/math/camera.hpp"
 using namespace std;
 
+#include "direct3D/D3DDriver.hpp"
+using d3ddriver::D3DDriver;
 HINSTANCE hInst;
 
 using namespace core::math;
@@ -66,27 +68,29 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    win.Create(hInst, 20, 20, 800, 600);
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
-   //create rendering context for window
-   OGLDriver oglContext(hWnd, 800, 600 );
+
+   //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
+
+   D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);
    win.Show();
    win.Update();
-   oglContext.SetClearColor();
-   oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
-   //oglContext.EnableCulling();
+   //oglContext.SetClearColor();
+   //oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
+   ////oglContext.EnableCulling();
  
 
-   GLSLShader shader;
-   shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
-   shader.Load(GL_FRAGMENT_SHADER, "source/shader/glsl/fragment/triangle.frag");
-   shader.CreateAndLink();
+   //GLSLShader shader;
+   //shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
+   //shader.Load(GL_FRAGMENT_SHADER, "source/shader/glsl/fragment/triangle.frag");
+   //shader.CreateAndLink();
 
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   shader.Use();
-   shader.AddAttribute("vColor");
-   shader.AddAttribute("vVertex");   
-   shader.AddUniform("P");
-   shader.AddUniform("M");
-   shader.Unuse();
+   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   //shader.Use();
+   //shader.AddAttribute("vColor");
+   //shader.AddAttribute("vVertex");   
+   //shader.AddUniform("P");
+   //shader.AddUniform("M");
+   //shader.Unuse();
 
    //vertex array and vertex buffer object IDs
    GLuint vaoID = 0;
@@ -102,14 +106,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       0.0f,  0.0f, -5.0f, 1.0f
    };
    //you must activate shader program to give uniform variables data
-   shader.Use();
-   shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
-   shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
-   shader.Unuse();
+   //shader.Use();
+   //shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
+   //shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
+   //shader.Unuse();
   
-   glGenBuffers(1, &vboVerticesID);
-   glGenBuffers(1, &vboIndicesID);
-   
+
+
+   //glGenBuffers(1, &vboVerticesID);
+   //glGenBuffers(1, &vboIndicesID);
    ///////////////////////////////////////
    //glGenVertexArrays(1, &vaoID);
    //glBindVertexArray(vaoID);
@@ -129,37 +134,24 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(NULL), NULL, GL_STATIC_DRAW);
 
   // Process the messages
-   while( 1 )
+   while (1)
    {
-      if( win.GetResizeFlag() )
+      if (win.GetResizeFlag())
       {
-         oglContext.SetViewportSize(100.0f, 100.0f);
-         win.OnResize();
+         //oglContext.SetViewportSize(100.0f, 100.0f);
+         //win.OnResize();
       }
       win.HandleSystemMessages(&msg);
       //resized = win.GetResizeFlag();
-      if( msg.message == WM_QUIT )
+      if (msg.message == WM_QUIT)
          break;
 
-      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE) )
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
          msg.message = WM_QUIT;
       /*if (GetAsyncKeyState('K') & 0x8000)
          msg.message = WM_QUIT;*/
 
-      oglContext.ClearBuffers();
-      shader.Use();
-      //glBindVertexArray(vaoID);
-      glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
 
-      glDrawElements(GL_TRIANGLE_STRIP, 14, GL_UNSIGNED_INT, (const GLvoid*)0);
-      //glDrawArrays(GL_TRIANGLES, 0, 8);
-      shader.Unuse();
-
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-      oglContext.SwapFrontAndBackBuffer();
    }
 
    //f.CopyToBuffer( buf );

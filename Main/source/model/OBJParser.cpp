@@ -563,8 +563,9 @@ namespace model
          //m_pIO->Close(pFile);
          file.Close();
 
-         // Importing the material library 
-         ObjMtlImporter mtlImporter(buffer, strMatName, m_pModelInstance);
+         // Importing the material library
+
+         //ObjMtlImporter mtlImporter(buffer, strMatName, m_pModelInstance);
       }
 
       //	Set a new material definition as the current material.

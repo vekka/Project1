@@ -112,8 +112,7 @@ namespace vertexformat
 
 Vertex::~Vertex()
 {
-   if (vertCompOffsets != 0)
-      delete[] vertCompOffsets;
+  
 }
 
 } // namespace vertexformat
