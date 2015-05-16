@@ -57,7 +57,7 @@ using objtools::SkipLine;
 using objtools::GetNextWord;
 
 #include "core/fast_atof.hpp"
-using Assimp::fast_atof;
+using assimp::fast_atof;
 
 #include "OBJFile.hpp"
 
@@ -68,11 +68,14 @@ using model::objmtlimporter::ObjMtlImporter;
 using objtools::GetName;
 using objtools::IsEndOfBuffer;
 using objtools::CopyNextWord;
+using objtools::GetNextToken;
+
+using core::IsSpaceOrNewLine;
+using core::SkipSpaces;
 
 //#include "ParsingUtils.h"
 //#include "../include/assimp/types.h"
 //#include "DefaultIOSystem.h"
-
 
 #include <algorithm>
 using std::fill_n;
@@ -85,18 +88,24 @@ namespace model
 
       const String_c ObjFileParser::DEFAULT_MATERIAL_NAME = "default_material_name";
 
-      ObjFileParser::ObjFileParser(std::vector<char> &inData, const String_c &strModelName, File *file) :
-         m_dataIterator(inData.begin()),
-         m_dataIteratorEndOfBuffer(inData.end()),
+      ObjFileParser::ObjFileParser(const File *file) :
+         //m_dataIterator(inData.begin()),
+         //m_dataIteratorEndOfBuffer(inData.end()),
          m_pModelInstance(NULL),
-         m_currentLine(0),
-         m_file(file)
+         m_currentLine(0)
       {
+         assert(file->IsOpen());
+
+         file->CopyToBuffer(m_data);
+
+         m_dataIterator = m_data.begin();
+         m_dataIteratorEndOfBuffer = m_data.end();
+
          fill_n(m_buffer, BUFFERSIZE, 0);
 
          // Create the model instance to store all the data
          m_pModelInstance = new objfile::Model();
-         m_pModelInstance->m_ModelName = strModelName;
+         m_pModelInstance->m_ModelName = file->GetFilePath();
          
          // create default material and store it
          m_pModelInstance->m_pDefaultMaterial = new objfile::Material();
@@ -199,7 +208,7 @@ namespace model
 
             default:
             {
-               m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+               m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
             }
             break;
             }
@@ -209,7 +218,7 @@ namespace model
       void ObjFileParser::CopyNextWord(char *pBuffer, size_t length)
       {
          size_t index = 0;
-         m_dataIterator = GetNextWord<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextWord<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          while (m_dataIterator != m_dataIteratorEndOfBuffer && !IsSpaceOrNewLine(*m_dataIterator)) {
             pBuffer[index] = *m_dataIterator;
             index++;
@@ -285,7 +294,7 @@ namespace model
             assert(!"Invalid number of components");
          }
          point3d_array.push_back(Vector3f(x, y, z));
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       void ObjFileParser::GetVector3(std::vector<Vector3f> &point3d_array) {
@@ -300,7 +309,7 @@ namespace model
          z = (float)fast_atof(m_buffer);
 
          point3d_array.push_back(Vector3f(x, y, z));
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       void ObjFileParser::GetVector2(std::vector<Vector2f> &point2d_array) {
@@ -313,7 +322,7 @@ namespace model
 
          point2d_array.push_back(Vector2f(x, y));
 
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       void ObjFileParser::GetFace(aiPrimitiveType type)
@@ -427,7 +436,7 @@ namespace model
          if (pIndices->empty())
          {
             //DefaultLogger::Get()->error("Obj: Ignoring empty face");
-            m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+            m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
             return;
          }
 
@@ -458,7 +467,7 @@ namespace model
             m_pModelInstance->m_pCurrentMesh->m_hasNormals = true;
          }
          // Skip the rest of the line
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Get values for a new material description
@@ -474,11 +483,11 @@ namespace model
             m_pModelInstance->m_pCurrent = NULL;
 
          // Get next data for material data
-         m_dataIterator = GetNextToken<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          if (m_dataIterator == m_dataIteratorEndOfBuffer)
             return;
 
-         char *pStart = &(*m_dataIterator);
+         const char *pStart = &(*m_dataIterator);
          while (m_dataIterator != m_dataIteratorEndOfBuffer && !IsSpaceOrNewLine(*m_dataIterator)) {
             m_dataIterator++;
          }
@@ -508,7 +517,7 @@ namespace model
          }
 
          // Skip rest of line
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Get a comment, values will be skipped
@@ -531,12 +540,12 @@ namespace model
       void ObjFileParser::GetMaterialLib()
       {
          // Translate tuple
-         m_dataIterator = GetNextToken<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          if (m_dataIterator == m_dataIteratorEndOfBuffer) {
             return;
          }
 
-         char *pStart = &(*m_dataIterator);
+         const char *pStart = &(*m_dataIterator);
          while (m_dataIterator != m_dataIteratorEndOfBuffer && !IsLineEnd(*m_dataIterator)) {
             ++m_dataIterator;
          }
@@ -551,7 +560,7 @@ namespace model
          if (!file.Open(strMatName))
          {
             //DefaultLogger::get()->error("OBJ: Unable to locate material file " + strMatName);
-            m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+            m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
             return;
          }
 
@@ -565,19 +574,19 @@ namespace model
 
          // Importing the material library
 
-         //ObjMtlImporter mtlImporter(buffer, strMatName, m_pModelInstance);
+         ObjMtlImporter mtlImporter(buffer, strMatName, m_pModelInstance);
       }
 
       //	Set a new material definition as the current material.
       void ObjFileParser::GetNewMaterial()
       {
-         m_dataIterator = GetNextToken<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
-         m_dataIterator = GetNextToken<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          if (m_dataIterator == m_dataIteratorEndOfBuffer) {
             return;
          }
 
-         char *pStart = &(*m_dataIterator);
+         const char *pStart = &(*m_dataIterator);
          String_c strMat(pStart, *m_dataIterator);
          while (m_dataIterator != m_dataIterator && IsSpaceOrNewLine(*m_dataIterator)) {
             ++m_dataIterator;
@@ -599,7 +608,7 @@ namespace model
             m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex = GetMaterialIndex(strMat);
          }
 
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       int32 ObjFileParser::GetMaterialIndex(const String_c &strMaterialName)
@@ -624,7 +633,7 @@ namespace model
       {
          String_c strGroupName;
 
-         m_dataIterator = GetName<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, strGroupName);
+         m_dataIterator = GetName<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, strGroupName);
          if (IsEndOfBuffer(m_dataIterator, m_dataIteratorEndOfBuffer)) {
             return;
          }
@@ -651,7 +660,7 @@ namespace model
             }
             m_pModelInstance->m_strActiveGroup = strGroupName;
          }
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Not supported
@@ -659,7 +668,7 @@ namespace model
       {
          // Not used
 
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Not supported
@@ -667,18 +676,18 @@ namespace model
       {
          // Not used
 
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Stores values for a new object instance, name will be used to 
       //	identify it.
       void ObjFileParser::GetObjectName()
       {
-         m_dataIterator = GetNextToken<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
+         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          if (m_dataIterator == m_dataIteratorEndOfBuffer) {
             return;
          }
-         char *pStart = &(*m_dataIterator);
+         const char *pStart = &(*m_dataIterator);
          while (m_dataIterator != m_dataIteratorEndOfBuffer && !IsSpaceOrNewLine(*m_dataIterator)) {
             ++m_dataIterator;
          }
@@ -706,7 +715,7 @@ namespace model
                CreateObject(strObjectName);
             }
          }
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
       //	Creates a new object instance
@@ -768,7 +777,7 @@ namespace model
 
       void ObjFileParser::ReportErrorTokenInFace()
       {
-         m_dataIterator = SkipLine<DataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
+         m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
          //DefaultLogger::get()->error("OBJ: Not supported token in face description detected");
       }
 

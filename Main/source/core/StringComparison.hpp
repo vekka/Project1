@@ -59,7 +59,7 @@ or the provided implementations behave too differently.
 
 #include "BasicTypes.hpp"
 
-namespace Assimp	{
+namespace assimp	{
 
    // -------------------------------------------------------------------------------
    /** @brief itoa with a fixed base 10

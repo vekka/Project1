@@ -22,7 +22,7 @@
 
 #include "StringComparison.hpp"
 
-namespace Assimp
+namespace assimp
 {
 
    const double fast_atof_table[16] = {  // we write [16] here instead of [] to work around a swig bug

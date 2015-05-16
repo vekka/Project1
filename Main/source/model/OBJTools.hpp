@@ -51,6 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "core/string/string.hpp"
 using core::string::String_c;
 
+using core::IsSpaceOrNewLine;
+
 namespace objtools
 {
    /**	@brief	Returns true, if the last entry of the buffer is reached.
@@ -107,25 +109,25 @@ namespace objtools
    }
 
    /**	@brief	Skips a line
-   *	@param	it		Iterator set to current position
+   *	@param	currentPos		Iterator set to current position
    *	@param	end		Iterator set to end of scratch buffer for readout
-   *	@param	uiLine	Current line number in format
+   *	@param	currentLine	Current line number in format
    *	@return	Current-iterator with new position
    */
-   template<typename TChar>
-   inline TChar SkipLine(TChar it, TChar end, uint32 &uiLine) {
-      while (!IsEndOfBuffer(it, end) && !IsLineEnd(*it)) {
-         ++it;
+   template<typename TIterator>
+   inline TIterator SkipLine(TIterator currentPos, TIterator end, uint32 &currentLine) {
+      while (!IsEndOfBuffer(currentPos, end) && !IsLineEnd(*currentPos)) {
+         currentPos++;
       }
-      if (it != end)
+      if (currentPos != end)
       {
-         ++it;
-         ++uiLine;
+         currentPos++;
+         currentLine++;
       }
       // fix .. from time to time there are spaces at the beginning of a material line
-      while (it != end && (*it == '\t' || *it == ' '))
-         ++it;
-      return it;
+      while (currentPos != end && (*currentPos == '\t' || *currentPos == ' '))
+         currentPos++;
+      return currentPos;
    }
 
    /**	@brief	Get a name from the current line. Preserve space in the middle,
@@ -143,7 +145,7 @@ namespace objtools
          return end;
       }
 
-      char *pStart = &(*it);
+      const char *pStart = &(*it);
       while (!IsEndOfBuffer(it, end) && !IsLineEnd(*it)) {
          ++it;
       }
@@ -203,7 +205,7 @@ namespace objtools
       static const size_t BUFFERSIZE = 1024;
       char buffer[BUFFERSIZE];
       it = CopyNextWord<TChar>(it, end, buffer, BUFFERSIZE);
-      value = (float)fast_atof(buffer);
+      value = (float)assimp::fast_atof(buffer);
 
       return it;
    }

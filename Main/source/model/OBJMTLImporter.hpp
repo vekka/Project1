@@ -44,9 +44,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "core/string/string.hpp"
 using core::string::String_c;
 
-#include "OBJParser.hpp"
+#include "gfx/color.hpp"
+using gfx::color::Colorf;
 
-struct aiColor3D;
+#include "OBJParser.hpp"
+using core::IsLineEnd;
 
 namespace model
 {
@@ -72,9 +74,11 @@ namespace model
 
     	String_c m_strAbsPath;
     	//	Data iterator showing to the current position in data buffer
-    	DataArrayIterator_t m_dataIterator;
+    	/*DataArrayIterator_t m_dataIterator;*/
+      ConstDataArrayIterator_t m_dataIterator;
     	//	Data iterator to end of buffer
-    	DataArrayIterator_t m_dataIteratorEndOfBuffer;
+    	//DataArrayIterator_t m_dataIteratorEndOfBuffer;
+      ConstDataArrayIterator_t m_dataIteratorEndOfBuffer;
     	//	USed model instance
     	objfile::Model *m_pModelInstance;
     	uint32 m_uiCurrentLine;
@@ -83,12 +87,12 @@ namespace model
     	
     	//	Copy constructor, empty.
       ObjMtlImporter(const ObjMtlImporter &other);
-    	//	\brief	Assignment operator, returns only a reference of this instance.
-      ObjMtlImporter &operator = (const ObjMtlImporter &other);
+
+      ObjMtlImporter &operator=(const ObjMtlImporter &other);
     	//	Load the whole material description
     	void Load();
     	//	Get color data.
-    	void GetColorRGBA( aiColor3D *pColor);
+    	void GetColorRGBA( Colorf *pColor);
     	//	Get illumination model from loaded data
     	void GetIlluminationModel( int32 &illum_model );
     	//	Gets a float value from data.	
@@ -100,8 +104,7 @@ namespace model
     	void GetTextureOption(bool &clamp);    	
     
     public:
-    	ObjMtlImporter( const std::vector<char> &buffer, const String_c &strAbsPath, objfile::Model *pModel );
-    	
+    	ObjMtlImporter( const std::vector<char> &buffer, const String_c &strAbsPath, objfile::Model *pModel ); 	
     	~ObjMtlImporter();
     };
   

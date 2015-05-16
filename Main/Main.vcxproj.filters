@@ -162,6 +162,9 @@
     <ClCompile Include="source\opengl\ogldriver.cpp">
       <Filter>Source Files\Driver\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="source\model\OBJMTLImporter.cpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">

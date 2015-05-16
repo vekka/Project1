@@ -19,6 +19,9 @@ using namespace oglshader;
 #include "gfx/vertexstructs.hpp"
 using vertexstructs::VertexPC;
 
+#include "model/ObjParser.hpp"
+using namespace model::objparser;
+
 using win32window::Win32Window;
 
 #include "win32/win32console.hpp"
@@ -27,7 +30,7 @@ using win32window::Win32Window;
 using namespace std;
 
 #include "direct3D/D3DDriver.hpp"
-using d3ddriver::D3DDriver;
+//using d3ddriver::D3DDriver;
 HINSTANCE hInst;
 
 using namespace core::math;
@@ -44,7 +47,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
 
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
+   File file;
+   file.Open("assets/testObjects/cubePNT.obj");
+   ObjFileParser obj(&file);
+   Model *cubeModel;
 
+   cubeModel = obj.GetModel();
    //FreeCamera camera(FRUSTUM_PERSPECTIVE, -1.0f, 1.0f, 1.0f, -1.0f, 0.3f, 1000.0f);
 
    //ObjFile cube;
@@ -71,7 +79,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
-   D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);
+   /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
    win.Show();
    win.Update();
    //oglContext.SetClearColor();

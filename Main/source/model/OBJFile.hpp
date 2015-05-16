@@ -48,6 +48,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using mesh2::aiPrimitiveType;
 using mesh2::aiPrimitiveType_POLYGON;
 
+//namespace model
+//{
+//   namespace objparser
+//   {
+//      class ObjFileParser;
+//   };
+//};
+
 namespace objfile
 {
  
@@ -58,6 +66,9 @@ namespace objfile
    // data structure for a simple obj-face, describes discredit,l.ation and materials
    struct Face
    {
+   //private:
+      //friend void model::objparser::ObjFileParser::GetFace(aiPrimitiveType type);
+      
       typedef std::vector<uint32> IndexArray;
 
       //!	Primitive type
@@ -75,6 +86,9 @@ namespace objfile
       //!	\param	pVertices	Pointer to assigned vertex indexbuffer
       //!	\param	pNormals	Pointer to assigned normals indexbuffer
       //!	\param	pTexCoords	Pointer to assigned texture indexbuffer
+
+   //public:
+
       Face(std::vector<uint32> *pVertices,
          std::vector<uint32> *pNormals,
          std::vector<uint32> *pTexCoords,
@@ -168,8 +182,8 @@ namespace objfile
          TextureDispType,
          TextureTypeCount
       };
-      bool clamp[TextureTypeCount];
 
+      bool clamp[TextureTypeCount];
 
       Colorf ambientColor;
       Colorf diffuseColor;
@@ -180,7 +194,7 @@ namespace objfile
 
       float shineness;
 
-      int32 illumination_model;
+      int32 illuminationModel;
 
       float indexOfRefraction;
 
@@ -188,10 +202,9 @@ namespace objfile
          : diffuseColor(0.6f, 0.6f, 0.6f)
          , alpha(1.f)
          , shineness(0.0f)
-         , illumination_model(1)
+         , illuminationModel(1)
          , indexOfRefraction(1.f)
       {
-         // empty
          for (size_t i = 0; i < TextureTypeCount; ++i)
          {
             clamp[i] = false;
@@ -200,28 +213,27 @@ namespace objfile
 
       ~Material()
       {
-         // empty
       }
    };
 
-   //!	\brief	Data structure to store a mesh
+   // data structure to store a mesh
    struct Mesh
    {
       static const uint32 NoMaterial = ~0u;
 
-      ///	Array with pointer to all stored faces
+      //	Array with pointer to all stored faces
       std::vector<Face*> m_Faces;
-      ///	Assigned material
+      //	Assigned material
       Material *m_pMaterial;
-      ///	Number of stored indices.
+      //	Number of stored indices.
       uint32 m_uiNumIndices;
-      /// Number of UV
+      // Number of UV
       uint32 m_uiUVCoordinates[AI_MAX_NUMBER_OF_TEXTURECOORDS];
-      ///	Material index.
+      //	Material index.
       uint32 m_uiMaterialIndex;
-      ///	True, if normals are stored.
+      //	True, if normals are stored.
       bool m_hasNormals;
-      ///	Constructor
+
       Mesh() :
          m_pMaterial(NULL),
          m_uiNumIndices(0),
@@ -231,7 +243,7 @@ namespace objfile
          memset(m_uiUVCoordinates, 0, sizeof(uint32) * AI_MAX_NUMBER_OF_TEXTURECOORDS);
       }
 
-      ///	Destructor
+
       ~Mesh()
       {
          for (std::vector<Face*>::iterator it = m_Faces.begin();

@@ -66,7 +66,6 @@ using objfile::Model;
 #include "core/fileio/file.hpp"
 using core::fileio::File;
 
-
 namespace model
 {
   
@@ -80,22 +79,27 @@ namespace model
        //   class Point3f;
        //   class Point2f;
        //}
-       class ObjFileImporter;
+       //class ObjFileImporter;
        //class IOSystem;
     
        class ObjFileParser
        {
        public:
           static const size_t BUFFERSIZE = 4096;
+          static const String_c DEFAULT_MATERIAL_NAME;
+
           typedef std::vector<char> DataArray_t;
           typedef std::vector<char>::iterator DataArrayIterator_t;
           typedef std::vector<char>::const_iterator ConstDataArrayIterator_t;
        private:
-          static const String_c DEFAULT_MATERIAL_NAME;
-          DataArrayIterator_t m_dataIterator;
-          DataArrayIterator_t m_dataIteratorEndOfBuffer;
+          //DataArrayIterator_t m_dataIterator;
+          ConstDataArrayIterator_t m_dataIterator;
+          //DataArrayIterator_t m_dataIteratorEndOfBuffer;
+          ConstDataArrayIterator_t m_dataIteratorEndOfBuffer;
           objfile::Model *m_pModelInstance;
           uint32 m_currentLine;
+
+          std::vector<char> m_data;
           
           // helper buffer
           char m_buffer[BUFFERSIZE];
@@ -144,7 +148,7 @@ namespace model
           void ReportErrorTokenInFace();
        public:
 
-          ObjFileParser(std::vector<char> &inData, const String_c &strModelName, File *file);
+          ObjFileParser(const File *file);
 
           ~ObjFileParser();
           objfile::Model *GetModel() const;

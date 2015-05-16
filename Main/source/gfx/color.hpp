@@ -5,13 +5,15 @@
 
 #include "core/math/mathcommon.hpp"
 
-using namespace core;
-
 namespace gfx
 {
 
    namespace color
    {
+      enum eIdxColorComponent
+      {
+         IDX_RED, IDX_GREEN, IDX_BLUE, IDX_ALPHA
+      };
 
       inline uint16 CreateA1R5G5B5(uint16 r, uint16 g, uint16 b, uint16 a = 0xFF)
       {
@@ -134,8 +136,8 @@ namespace gfx
 
          bool operator==(const Colorf &other) const;
          bool operator!=(const Colorf &other) const;
-         float operator[](const int index) const;
-         float &operator[](const int index);
+         float operator[](const eIdxColorComponent index) const;
+         float &operator[](const eIdxColorComponent index);
          Colorf operator+(const Colorf &color) const;
          Colorf &operator+=(const Colorf &other);
          Colorf operator-(const Colorf &other) const;
@@ -161,13 +163,13 @@ namespace gfx
          void GetHSB(float* hue, float* saturation, float* brightness) const;
       };
 
-      inline float Colorf::operator[](const int32 index) const
+      inline float Colorf::operator[](const eIdxColorComponent index) const
       {
          assert(index < 4);
          return *(&r + index);
       }
 
-      inline float &Colorf::operator[](const int32 index)
+      inline float &Colorf::operator[](const eIdxColorComponent index)
       {
          assert(index < 4);
          return *(&r + index);

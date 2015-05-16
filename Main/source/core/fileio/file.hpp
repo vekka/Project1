@@ -35,7 +35,8 @@ namespace core
          File();
          virtual ~File(void);
          bool Open(const String_c &path, const bool readAsBinary = false, const eFileMode mode = FMODE_READ, const bool update = false);
-         String_c &GetFilePath() const;
+         bool IsOpen() const { return isOpen; }
+         String_c GetFilePath() const { return path; }
          void Close();
          //String_c &GetFileNameExtension();
 
@@ -45,6 +46,7 @@ namespace core
          
          int32 GetPosition() const;
          int32 GetSize() const;
+
          bool Seek(const uint32 finalPos, const bool relative) const;
 
          // read a line from file and the file pointer advances, or read line from an offset, -1 means only advance ptr
@@ -80,12 +82,12 @@ namespace core
       }
 
       template <class TCharType>
-      bool File::CopyToBuffer( vector<TCharType> &bufferOut) const
+      bool File::CopyToBuffer(vector<TCharType> &bufferOut) const
       {
          assert(isOpen);
 
-         if (bufferOut[0] == NULL)
-            return false;
+         //if (bufferOut[0] == NULL)
+         //   return false;
 
          if (!fileSize)
             return false;
