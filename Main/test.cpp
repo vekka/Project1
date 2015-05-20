@@ -45,7 +45,6 @@ using namespace ogldriver;
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
-
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
    File file;
    file.Open("assets/testObjects/cubePNT.obj");
@@ -102,8 +101,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    //vertex array and vertex buffer object IDs
    GLuint vaoID = 0;
-   GLuint vboVerticesID;
-   GLuint vboIndicesID;
+   //GLuint vboVerticesID;
+   //GLuint vboIndicesID;
 
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f );
    //for positioning cube in 3-space

@@ -361,51 +361,51 @@ extern "C" {
       */
       struct aiAnimMesh
       {
-         /** Replacement for aiMesh::mVertices. If this array is non-NULL,
-         *  it *must* contain mNumVertices entries. The corresponding
+         /** Replacement for aiMesh::m_vertices. If this array is non-NULL,
+         *  it *must* contain m_numVertices entries. The corresponding
          *  array in the host mesh must be non-NULL as well - animation
          *  meshes may neither add or nor remove vertex components (if
          *  a replacement array is NULL and the corresponding source
          *  array is not, the source data is taken instead)*/
-         Vector3f* mVertices;
+         Vector3f* m_vertices;
 
-         /** Replacement for aiMesh::mNormals.  */
-         Vector3f* mNormals;
+         /** Replacement for aiMesh::m_normals.  */
+         Vector3f* m_normals;
 
-         /** Replacement for aiMesh::mTangents. */
-         Vector3f* mTangents;
+         /** Replacement for aiMesh::m_tangents. */
+         Vector3f* m_tangents;
 
-         /** Replacement for aiMesh::mBitangents. */
-         Vector3f* mBitangents;
+         /** Replacement for aiMesh::m_biTangets. */
+         Vector3f* m_biTangets;
 
          /** Replacement for aiMesh::mColors */
          Colorf* mColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
-         /** Replacement for aiMesh::mTextureCoords */
-         Vector3f* mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+         /** Replacement for aiMesh::m_textureCoords */
+         Vector3f* m_textureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
 
          /** The number of vertices in the aiAnimMesh, and thus the length of all
          * the member arrays.
          *
-         * This has always the same value as the mNumVertices property in the
+         * This has always the same value as the m_numVertices property in the
          * corresponding aiMesh. It is duplicated here merely to make the length
          * of the member arrays accessible even if the aiMesh is not known, e.g.
          * from language bindings.
          */
-         uint32 mNumVertices;
+         uint32 m_numVertices;
 
 #ifdef __cplusplus
 
          aiAnimMesh()
-            : mVertices(NULL)
-            , mNormals(NULL)
-            , mTangents(NULL)
-            , mBitangents(NULL)
-            , mNumVertices(0)
+            : m_vertices(NULL)
+            , m_normals(NULL)
+            , m_tangents(NULL)
+            , m_biTangets(NULL)
+            , m_numVertices(0)
          {
             // fixme consider moving this to the ctor initializer list as well
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++){
-               mTextureCoords[a] = NULL;
+               m_textureCoords[a] = NULL;
             }
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
                mColors[a] = NULL;
@@ -414,12 +414,12 @@ extern "C" {
 
          ~aiAnimMesh()
          {
-            delete[] mVertices;
-            delete[] mNormals;
-            delete[] mTangents;
-            delete[] mBitangents;
+            delete[] m_vertices;
+            delete[] m_normals;
+            delete[] m_tangents;
+            delete[] m_biTangets;
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++) {
-               delete[] mTextureCoords[a];
+               delete[] m_textureCoords[a];
             }
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
                delete[] mColors[a];
@@ -429,20 +429,20 @@ extern "C" {
          /** Check whether the anim mesh overrides the vertex positions
          *  of its host mesh*/
          bool HasPositions() const {
-            return mVertices != NULL;
+            return m_vertices != NULL;
          }
 
          /** Check whether the anim mesh overrides the vertex normals
          *  of its host mesh*/
          bool HasNormals() const {
-            return mNormals != NULL;
+            return m_normals != NULL;
          }
 
          /** Check whether the anim mesh overrides the vertex tangents
          *  and bitangents of its host mesh. As for aiMesh,
          *  tangents and bitangents always go together. */
          bool HasTangentsAndBitangents() const {
-            return mTangents != NULL;
+            return m_tangents != NULL;
          }
 
          /** Check whether the anim mesh overrides a particular
@@ -456,7 +456,7 @@ extern "C" {
          * set of texture coordinates on his host mesh.
          *  @param pIndex 0<index<AI_MAX_NUMBER_OF_TEXTURECOORDS */
          bool HasTextureCoords(uint32 pIndex) const	{
-            return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : mTextureCoords[pIndex] != NULL;
+            return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : m_textureCoords[pIndex] != NULL;
          }
 
 #endif
@@ -495,7 +495,7 @@ extern "C" {
          * This is also the size of all of the per-vertex data arrays.
          * The maximum value for this member is #AI_MAX_VERTICES.
          */
-         uint32 mNumVertices;
+         uint32 m_numVertices;
 
          /** The number of primitives (triangles, polygons, lines) in this  mesh.
          * This is also the size of the mFaces array.
@@ -505,13 +505,13 @@ extern "C" {
 
          /** Vertex positions.
          * This array is always present in a mesh. The array is
-         * mNumVertices in size.
+         * m_numVertices in size.
          */
-         Vector3f* mVertices;
+         Vector3f* m_vertices;
 
          /** Vertex normals.
          * The array contains normalized vectors, NULL if not present.
-         * The array is mNumVertices in size. Normals are undefined for
+         * The array is m_numVertices in size. Normals are undefined for
          * point and line primitives. A mesh consisting of points and
          * lines only may not have normal vectors. Meshes with mixed
          * primitive types (i.e. lines and triangles) may have normals,
@@ -529,48 +529,48 @@ extern "C" {
          * However, this needn't apply for normals that have been taken
          *   directly from the model file.
          */
-         Vector3f* mNormals;
+         Vector3f* m_normals;
 
          /** Vertex tangents.
          * The tangent of a vertex points in the direction of the positive
          * X texture axis. The array contains normalized vectors, NULL if
-         * not present. The array is mNumVertices in size. A mesh consisting
+         * not present. The array is m_numVertices in size. A mesh consisting
          * of points and lines only may not have normal vectors. Meshes with
          * mixed primitive types (i.e. lines and triangles) may have
          * normals, but the normals for vertices that are only referenced by
          * point or line primitives are undefined and set to qNaN.  See
-         * the #mNormals member for a detailled discussion of qNaNs.
+         * the #m_normals member for a detailled discussion of qNaNs.
          * @note If the mesh contains tangents, it automatically also
          * contains bitangents.
          */
-         Vector3f* mTangents;
+         Vector3f* m_tangents;
 
          /** Vertex bitangents.
          * The bitangent of a vertex points in the direction of the positive
          * Y texture axis. The array contains normalized vectors, NULL if not
-         * present. The array is mNumVertices in size.
+         * present. The array is m_numVertices in size.
          * @note If the mesh contains tangents, it automatically also contains
          * bitangents.
          */
-         Vector3f* mBitangents;
+         Vector3f* m_biTangets;
 
          /** Vertex color sets.
          * A mesh may contain 0 to #AI_MAX_NUMBER_OF_COLOR_SETS vertex
          * colors per vertex. NULL if not present. Each array is
-         * mNumVertices in size if present.
+         * m_numVertices in size if present.
          */
          Colorf* mColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
          /** Vertex texture coords, also known as UV channels.
          * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
-         * vertex. NULL if not present. The array is mNumVertices in size.
+         * vertex. NULL if not present. The array is m_numVertices in size.
          */
-         Vector3f* mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+         Vector3f* m_textureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
 
          /** Specifies the number of components for a given UV channel.
          * Up to three channels are supported (UVW, for accessing volume
          * or cube maps). If the value is 2 for a given channel n, the
-         * component p.z of mTextureCoords[n][p] is set to 0.0f.
+         * component p.z of m_textureCoords[n][p] is set to 0.0f.
          * If the value is 1 for a given channel, p.y is set to 0.0f, too.
          * @note 4D coords are not supported
          */
@@ -630,12 +630,12 @@ extern "C" {
          //! Default constructor. Initializes all members to 0
          aiMesh()
             : mPrimitiveTypes(0)
-            , mNumVertices(0)
+            , m_numVertices(0)
             , mNumFaces(0)
-            , mVertices(NULL)
-            , mNormals(NULL)
-            , mTangents(NULL)
-            , mBitangents(NULL)
+            , m_vertices(NULL)
+            , m_normals(NULL)
+            , m_tangents(NULL)
+            , m_biTangets(NULL)
             , mFaces(NULL)
             , mNumBones(0)
             , mBones(NULL)
@@ -646,7 +646,7 @@ extern "C" {
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++)
             {
                mNumUVComponents[a] = 0;
-               mTextureCoords[a] = NULL;
+               m_textureCoords[a] = NULL;
             }
 
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++)
@@ -656,12 +656,12 @@ extern "C" {
          //! Deletes all storage allocated for the mesh
          ~aiMesh()
          {
-            delete[] mVertices;
-            delete[] mNormals;
-            delete[] mTangents;
-            delete[] mBitangents;
+            delete[] m_vertices;
+            delete[] m_normals;
+            delete[] m_tangents;
+            delete[] m_biTangets;
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++) {
-               delete[] mTextureCoords[a];
+               delete[] m_textureCoords[a];
             }
             for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
                delete[] mColors[a];
@@ -689,7 +689,7 @@ extern "C" {
          //! scene flags are set, this will always be true 
          bool HasPositions() const
          {
-            return mVertices != NULL && mNumVertices > 0;
+            return m_vertices != NULL && m_numVertices > 0;
          }
 
          //! Check whether the mesh contains faces. If no special scene flags
@@ -702,7 +702,7 @@ extern "C" {
          //! Check whether the mesh contains normal vectors
          bool HasNormals() const
          {
-            return mNormals != NULL && mNumVertices > 0;
+            return m_normals != NULL && m_numVertices > 0;
          }
 
          //! Check whether the mesh contains tangent and bitangent vectors
@@ -711,7 +711,7 @@ extern "C" {
          //! implies that the second is there, too.
          bool HasTangentsAndBitangents() const
          {
-            return mTangents != NULL && mBitangents != NULL && mNumVertices > 0;
+            return m_tangents != NULL && m_biTangets != NULL && m_numVertices > 0;
          }
 
          //! Check whether the mesh contains a vertex color set
@@ -721,7 +721,7 @@ extern "C" {
             if (pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS)
                return false;
             else
-               return mColors[pIndex] != NULL && mNumVertices > 0;
+               return mColors[pIndex] != NULL && m_numVertices > 0;
          }
 
          //! Check whether the mesh contains a texture coordinate set
@@ -731,14 +731,14 @@ extern "C" {
             if (pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS)
                return false;
             else
-               return mTextureCoords[pIndex] != NULL && mNumVertices > 0;
+               return m_textureCoords[pIndex] != NULL && m_numVertices > 0;
          }
 
          //! Get the number of UV channels the mesh contains
          uint32 GetNumUVChannels() const
          {
             uint32 n = 0;
-            while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS && mTextureCoords[n])++n;
+            while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS && m_textureCoords[n])++n;
             return n;
          }
 

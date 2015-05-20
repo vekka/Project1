@@ -1,12 +1,21 @@
 #ifndef _D3DDRIVER_HPP_INCLUDED_
 #define _D3DDRIVER_HPP_INCLUDED_
 
-#include <windows.h>
+//#include <windows.h>
+//#define NOMINMAX
 
-//#include <dxgi.h>
-//#include <d3dcommon.h>
-//#include <d3d11.h>
-//#include <d3dx10math.h>
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dx11.lib")
+#pragma comment(lib, "d3dx10.lib")
+
+#include <D3D11.h>
+#include <d3dcommon.h>
+#include <d3dx10math.h>
+//#include <D3Dcompiler.h> 
+#include <dxgi.h>
+
+
 //
 //#include "../core/BasicTypes.hpp"
 //

@@ -84,7 +84,7 @@ inline void ToggleBit(uint32 &value, int32 bitNum)
 
 inline bool CheckBit(int32 var, int32 pos)
 {
-   return static_cast<bool>(var & (1 << pos));
+   return ((var & (1 << pos)) != 0);
 }
 
 inline int32 GetLeadingBit( uint32 value )

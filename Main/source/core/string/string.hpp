@@ -330,6 +330,7 @@ namespace core
          {
             m_strArray[i] = _first[i];
          }
+         m_strArray[length] = '\0';
          //m_strArray[0] = 'a';
       }
 

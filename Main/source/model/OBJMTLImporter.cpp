@@ -274,13 +274,13 @@ namespace model
             name = token[1];
         }
     
-        std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_MaterialMap.find( name );
-        if ( m_pModelInstance->m_MaterialMap.end() == it) {
+        std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find( name );
+        if ( m_pModelInstance->m_materialMap.end() == it) {
             // New Material created
            m_pModelInstance->m_pCurrentMaterial = new objfile::Material();
             m_pModelInstance->m_pCurrentMaterial->MaterialName = name;
-            m_pModelInstance->m_MaterialLib.push_back( name );
-            m_pModelInstance->m_MaterialMap[ name ] = m_pModelInstance->m_pCurrentMaterial;
+            m_pModelInstance->m_materialLib.push_back( name );
+            m_pModelInstance->m_materialMap[ name ] = m_pModelInstance->m_pCurrentMaterial;
         } else {
             // Use older material
             m_pModelInstance->m_pCurrentMaterial = (*it).second;

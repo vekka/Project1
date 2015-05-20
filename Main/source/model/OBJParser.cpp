@@ -105,13 +105,13 @@ namespace model
 
          // Create the model instance to store all the data
          m_pModelInstance = new objfile::Model();
-         m_pModelInstance->m_ModelName = file->GetFilePath();
+         m_pModelInstance->m_modelName = file->GetFilePath();
          
          // create default material and store it
          m_pModelInstance->m_pDefaultMaterial = new objfile::Material();
          m_pModelInstance->m_pDefaultMaterial->MaterialName = DEFAULT_MATERIAL_NAME;
-         m_pModelInstance->m_MaterialLib.push_back(DEFAULT_MATERIAL_NAME);
-         m_pModelInstance->m_MaterialMap[DEFAULT_MATERIAL_NAME] = m_pModelInstance->m_pDefaultMaterial;
+         m_pModelInstance->m_materialLib.push_back(DEFAULT_MATERIAL_NAME);
+         m_pModelInstance->m_materialMap[DEFAULT_MATERIAL_NAME] = m_pModelInstance->m_pDefaultMaterial;
 
          ParseFile();
       }
@@ -143,17 +143,17 @@ namespace model
                ++m_dataIterator;
                if (*m_dataIterator == ' ' || *m_dataIterator == '\t') {
                   // read in vertex definition
-                  GetVector3(m_pModelInstance->m_Vertices);
+                  GetVector3(m_pModelInstance->m_vertices);
                }
                else if (*m_dataIterator == 't') {
                   // read in texture coordinate ( 2D or 3D )
                   m_dataIterator++;
-                  GetVector(m_pModelInstance->m_TextureCoord);
+                  GetVector(m_pModelInstance->m_textureCoord);
                }
                else if (*m_dataIterator == 'n') {
                   // Read in normal vector definition
                   m_dataIterator++;
-                  GetVector3(m_pModelInstance->m_Normals);
+                  GetVector3(m_pModelInstance->m_normals);
                }
             }
             break;
@@ -194,9 +194,9 @@ namespace model
             }
             break;
 
-            case 's': // Parse group number
+            case 's': // parse group number (shouldn't this be smoothing option?)
             {
-               GetGroupNumber();
+               GetGroupNumber(); // ??
             }
             break;
 
@@ -342,12 +342,12 @@ namespace model
          std::vector<uint32> *pNormalID = new std::vector < uint32 > ;
          bool hasNormal = false;
 
-         const int32 vSize = m_pModelInstance->m_Vertices.size();
-         const int32 vtSize = m_pModelInstance->m_TextureCoord.size();
-         const int32 vnSize = m_pModelInstance->m_Normals.size();
+         const int32 vSize = m_pModelInstance->m_vertices.size();
+         const int32 vtSize = m_pModelInstance->m_textureCoord.size();
+         const int32 vnSize = m_pModelInstance->m_normals.size();
 
-         const bool vt = (!m_pModelInstance->m_TextureCoord.empty());
-         const bool vn = (!m_pModelInstance->m_Normals.empty());
+         const bool vt = (!m_pModelInstance->m_textureCoord.empty());
+         const bool vn = (!m_pModelInstance->m_normals.empty());
          int32 iStep = 0, iPos = 0;
          while (pPtr != pEnd)
          {
@@ -477,8 +477,8 @@ namespace model
          // Sometimes the object is already created (see 'o' tag by example), but it is not initialized !
          // So, we create a new object only if the current on is already initialized !
          if (m_pModelInstance->m_pCurrent != NULL &&
-            (m_pModelInstance->m_pCurrent->m_Meshes.size() > 1 ||
-            (m_pModelInstance->m_pCurrent->m_Meshes.size() == 1 && m_pModelInstance->m_Meshes[m_pModelInstance->m_pCurrent->m_Meshes[0]]->m_Faces.size() != 0))
+            (m_pModelInstance->m_pCurrent->m_meshes.size() > 1 ||
+            (m_pModelInstance->m_pCurrent->m_meshes.size() == 1 && m_pModelInstance->m_meshes[m_pModelInstance->m_pCurrent->m_meshes[0]]->m_Faces.size() != 0))
             )
             m_pModelInstance->m_pCurrent = NULL;
 
@@ -498,8 +498,8 @@ namespace model
             return;
 
          // Search for material
-         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_MaterialMap.find(strName);
-         if (it == m_pModelInstance->m_MaterialMap.end())
+         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strName);
+         if (it == m_pModelInstance->m_materialMap.end())
          {
             // Not found, use default material
             m_pModelInstance->m_pCurrentMaterial = m_pModelInstance->m_pDefaultMaterial;
@@ -591,8 +591,8 @@ namespace model
          while (m_dataIterator != m_dataIterator && IsSpaceOrNewLine(*m_dataIterator)) {
             ++m_dataIterator;
          }
-         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_MaterialMap.find(strMat);
-         if (it == m_pModelInstance->m_MaterialMap.end())
+         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strMat);
+         if (it == m_pModelInstance->m_materialMap.end())
          {
             // Show a warning, if material was not found
             //DefaultLogger::get()->warn("OBJ: Unsupported material requested: " + strMat);
@@ -617,9 +617,9 @@ namespace model
          if (strMaterialName.IsEmpty()) {
             return mat_index;
          }
-         for (size_t index = 0; index < m_pModelInstance->m_MaterialLib.size(); ++index)
+         for (size_t index = 0; index < m_pModelInstance->m_materialLib.size(); ++index)
          {
-            if (strMaterialName == m_pModelInstance->m_MaterialLib[index])
+            if (strMaterialName == m_pModelInstance->m_materialLib[index])
             {
                mat_index = (int32)index;
                break;
@@ -699,8 +699,8 @@ namespace model
             m_pModelInstance->m_pCurrent = NULL;
 
             // Search for actual object
-            for (std::vector<objfile::Object*>::const_iterator it = m_pModelInstance->m_Objects.begin();
-               it != m_pModelInstance->m_Objects.end();
+            for (std::vector<objfile::Object*>::const_iterator it = m_pModelInstance->m_objects.begin();
+               it != m_pModelInstance->m_objects.end();
                ++it)
             {
                if ((*it)->m_strObjName == strObjectName)
@@ -726,7 +726,7 @@ namespace model
 
          m_pModelInstance->m_pCurrent = new objfile::Object;
          m_pModelInstance->m_pCurrent->m_strObjName = strObjectName;
-         m_pModelInstance->m_Objects.push_back(m_pModelInstance->m_pCurrent);
+         m_pModelInstance->m_objects.push_back(m_pModelInstance->m_pCurrent);
 
          CreateMesh();
 
@@ -743,11 +743,11 @@ namespace model
       {
          assert(NULL != m_pModelInstance);
          m_pModelInstance->m_pCurrentMesh = new objfile::Mesh;
-         m_pModelInstance->m_Meshes.push_back(m_pModelInstance->m_pCurrentMesh);
-         uint32 meshId = m_pModelInstance->m_Meshes.size() - 1;
+         m_pModelInstance->m_meshes.push_back(m_pModelInstance->m_pCurrentMesh);
+         uint32 meshId = m_pModelInstance->m_meshes.size() - 1;
          if (NULL != m_pModelInstance->m_pCurrent)
          {
-            m_pModelInstance->m_pCurrent->m_Meshes.push_back(meshId);
+            m_pModelInstance->m_pCurrent->m_meshes.push_back(meshId);
          }
          else
          {

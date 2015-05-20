@@ -82,7 +82,6 @@ namespace objfile
       //!	Pointer to assigned material
       Material *m_pMaterial;
 
-      //!	\brief	Default constructor
       //!	\param	pVertices	Pointer to assigned vertex indexbuffer
       //!	\param	pNormals	Pointer to assigned normals indexbuffer
       //!	\param	pTexCoords	Pointer to assigned texture indexbuffer
@@ -133,7 +132,7 @@ namespace objfile
       //!	All sub-objects referenced by this object
       std::vector<Object*> m_SubObjects;
       ///	Assigned meshes
-      std::vector<uint32> m_Meshes;
+      std::vector<uint32> m_meshes;
 
       //!	\brief	Default constructor
       Object() :
@@ -261,9 +260,9 @@ namespace objfile
       typedef std::map<String_c, std::vector<uint32>* >::iterator GroupMapIt;
       typedef std::map<String_c, std::vector<uint32>* >::const_iterator ConstGroupMapIt;
 
-      String_c m_ModelName;
+      String_c m_modelName;
       //	List ob assigned objects
-      std::vector<Object*> m_Objects;
+      std::vector<Object*> m_objects;
       //	Pointer to current object
       objfile::Object *m_pCurrent;
       //	Pointer to current material
@@ -271,13 +270,13 @@ namespace objfile
       //	Pointer to default material
       objfile::Material *m_pDefaultMaterial;
       //	Vector with all generated materials
-      std::vector<String_c> m_MaterialLib;
+      std::vector<String_c> m_materialLib;
       //	Vector with all generated group
-      std::vector<String_c> m_GroupLib;
+      std::vector<String_c> m_groupLib;
       //	Vector with all generated vertices
-      std::vector<Vector3f> m_Vertices;
+      std::vector<Vector3f> m_vertices;
       //	vector with all generated normals
-      std::vector<Vector3f> m_Normals;
+      std::vector<Vector3f> m_normals;
       //	Group map
       GroupMap m_Groups;
       //	Group to face id assignment
@@ -285,16 +284,17 @@ namespace objfile
       //	Active group
       String_c m_strActiveGroup;
       //	Vector with generated texture coordinates
-      std::vector<Vector3f> m_TextureCoord;
+      //std::vector<Vector2f> m_textureCoord2;
+      std::vector<Vector3f> m_textureCoord;
 
       Mesh *m_pCurrentMesh;
 
-      std::vector<Mesh*> m_Meshes;
+      std::vector<Mesh*> m_meshes;
 
-      std::map<String_c, Material*> m_MaterialMap;
+      std::map<String_c, Material*> m_materialMap;
 
       Model() :
-         m_ModelName(""),
+         m_modelName(""),
          m_pCurrent(NULL),
          m_pCurrentMaterial(NULL),
          m_pDefaultMaterial(NULL),
@@ -309,25 +309,25 @@ namespace objfile
       ~Model()
       {
          // clear all stored object instances
-         for (std::vector<Object*>::iterator it = m_Objects.begin();
-            it != m_Objects.end(); ++it) {
+         for (std::vector<Object*>::iterator it = m_objects.begin();
+            it != m_objects.end(); ++it) {
             delete *it;
          }
-         m_Objects.clear();
+         m_objects.clear();
 
          // clear all stored mesh instances
-         for (std::vector<Mesh*>::iterator it = m_Meshes.begin();
-            it != m_Meshes.end(); ++it) {
+         for (std::vector<Mesh*>::iterator it = m_meshes.begin();
+            it != m_meshes.end(); ++it) {
             delete *it;
          }
-         m_Meshes.clear();
+         m_meshes.clear();
 
          for (GroupMapIt it = m_Groups.begin(); it != m_Groups.end(); ++it) {
             delete it->second;
          }
          m_Groups.clear();
 
-         for (std::map<String_c, Material*>::iterator it = m_MaterialMap.begin(); it != m_MaterialMap.end(); ++it) {
+         for (std::map<String_c, Material*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
             delete it->second;
          }
       }
