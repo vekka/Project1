@@ -269,7 +269,7 @@ namespace model
         const uint32 numToken = line.Tokenize(token); //tokenize<String_c>( line, token, " " );
         String_c name( "" );
         if ( numToken == 1 ) {
-            name = objparser::ObjFileParser::DEFAULT_MATERIAL_NAME;
+            name = objparser::ObjParser::DEFAULT_MATERIAL_NAME;
         } else {
             name = token[1];
         }
@@ -364,7 +364,7 @@ namespace model
      * So we need to parse and skip these options, and leave the last part which is 
      * the url of image, otherwise we will get a wrong url like "-clamp on some.png".
      *
-     * Because aiMaterial supports clamp option, so we also want to return it
+     * Because Material supports clamp option, so we also want to return it
      * /////////////////////////////////////////////////////////////////////////////
      */
     void ObjMtlImporter::GetTextureOption(bool &clamp)

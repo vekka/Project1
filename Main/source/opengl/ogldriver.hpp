@@ -9,6 +9,8 @@
 #include "win32/win32main.hpp"
 using win32window::Win32Window;
 
+#include "../core/math/vector4.hpp"
+using core::math::Vector4f;
 namespace ogldriver
 {
 
@@ -41,7 +43,7 @@ namespace ogldriver
 
       ~OGLDriver();
       bool CreateContext();
-      void SetClearColor();
+      void SetClearColor(Vector4f &inColor);
       void SetViewportSize(float viewportWidth, float viewportHeight);
       void GetViewportSize(float &viewportWidth, float &viewportHeight);
       void ClearBuffers() const;

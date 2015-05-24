@@ -27,7 +27,7 @@ namespace oglshader
       m_uniformLocationMap.clear();
    }
 
-   void GLSLShader::Load(GLenum type, const std::string &filename)
+   void GLSLShader::Load(GLenum type, const String_c &filename)
    {
       ifstream stream;
 
@@ -37,7 +37,7 @@ namespace oglshader
 
       if (stream)
       {
-         std::string line, buffer;
+         String_c line, buffer;
          while (std::getline(stream, line))
          {
             buffer.append(line);
@@ -72,17 +72,17 @@ namespace oglshader
    }
 
    //An indexer that returns the location of the attribute
-   GLuint GLSLShader::operator[](const std::string &attribute)
+   GLuint GLSLShader::operator[](const String_c &attribute)
    {
       return m_attributeMap[attribute];
    }
 
-   GLuint GLSLShader::operator()(const std::string &uniform)
+   GLuint GLSLShader::operator()(const String_c &uniform)
    {
       return m_uniformLocationMap[uniform];
    }
 
-   void GLSLShader::AddUniform(const std::string &uniform)
+   void GLSLShader::AddUniform(const String_c &uniform)
    {
       m_uniformLocationMap[uniform] = glGetUniformLocation(m_program, uniform.c_str());
    }
@@ -97,7 +97,7 @@ namespace oglshader
       glUseProgram(0);
    }
 
-   void GLSLShader::AddAttribute(const std::string &attribute)
+   void GLSLShader::AddAttribute(const String_c &attribute)
    {
       m_attributeMap[attribute] = glGetAttribLocation(m_program, attribute.c_str());
 

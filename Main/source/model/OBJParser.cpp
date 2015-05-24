@@ -44,8 +44,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "OBJParser.hpp"
 
-using mesh2::aiPrimitiveType_LINE;
-using mesh2::aiPrimitiveType_POINT;
+using mesh2::PRIMITIVE_TYPE_LINE;
+using mesh2::PRIMITIVE_TYPE_POINT;
 
 using core::SkipToken;
 
@@ -75,7 +75,7 @@ using core::SkipSpaces;
 
 //#include "ParsingUtils.h"
 //#include "../include/assimp/types.h"
-//#include "DefaultIOSystem.h"
+//#include "FileSys.h"
 
 #include <algorithm>
 using std::fill_n;
@@ -86,9 +86,9 @@ namespace model
    namespace objparser
    {
 
-      const String_c ObjFileParser::DEFAULT_MATERIAL_NAME = "default_material_name";
+      const String_c ObjParser::DEFAULT_MATERIAL_NAME = "default_material_name";
 
-      ObjFileParser::ObjFileParser(const File *file) :
+      ObjParser::ObjParser(const File *file) :
          //m_dataIterator(inData.begin()),
          //m_dataIteratorEndOfBuffer(inData.end()),
          m_pModelInstance(NULL),
@@ -116,7 +116,7 @@ namespace model
          ParseFile();
       }
 
-      ObjFileParser::~ObjFileParser()
+      ObjParser::~ObjParser()
       {
          delete m_pModelInstance;
          m_pModelInstance = NULL;
@@ -124,12 +124,12 @@ namespace model
 
       // -------------------------------------------------------------------
       //	Returns a pointer to the model instance.
-      objfile::Model *ObjFileParser::GetModel() const
+      objfile::Model *ObjParser::GetModel() const
       {
          return m_pModelInstance;
       }
 
-      void ObjFileParser::ParseFile()
+      void ObjParser::ParseFile()
       {
          if (m_dataIterator == m_dataIteratorEndOfBuffer)
             return;
@@ -143,7 +143,7 @@ namespace model
                ++m_dataIterator;
                if (*m_dataIterator == ' ' || *m_dataIterator == '\t') {
                   // read in vertex definition
-                  GetVector3(m_pModelInstance->m_vertices);
+                  GetVector3(m_pModelInstance->m_pVertices);
                }
                else if (*m_dataIterator == 't') {
                   // read in texture coordinate ( 2D or 3D )
@@ -153,7 +153,7 @@ namespace model
                else if (*m_dataIterator == 'n') {
                   // Read in normal vector definition
                   m_dataIterator++;
-                  GetVector3(m_pModelInstance->m_normals);
+                  GetVector3(m_pModelInstance->m_pNormals);
                }
             }
             break;
@@ -162,8 +162,8 @@ namespace model
             case 'l':
             case 'f':
             {
-               GetFace(*m_dataIterator == 'f' ? aiPrimitiveType_POLYGON : (*m_dataIterator == 'l'
-                  ? aiPrimitiveType_LINE : aiPrimitiveType_POINT));
+               GetFace(*m_dataIterator == 'f' ? PRIMITIVE_TYPE_POLYGON : (*m_dataIterator == 'l'
+                  ? PRIMITIVE_TYPE_LINE : PRIMITIVE_TYPE_POINT));
             }
             break;
 
@@ -215,7 +215,7 @@ namespace model
          }
       }
 
-      void ObjFileParser::CopyNextWord(char *pBuffer, size_t length)
+      void ObjParser::CopyNextWord(char *pBuffer, size_t length)
       {
          size_t index = 0;
          m_dataIterator = GetNextWord<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
@@ -232,7 +232,7 @@ namespace model
          pBuffer[index] = '\0';
       }
 
-      void ObjFileParser::CopyNextLine(char *pBuffer, size_t length)
+      void ObjParser::CopyNextLine(char *pBuffer, size_t length)
       {
          size_t index = 0u;
 
@@ -261,7 +261,7 @@ namespace model
          pBuffer[index] = '\0';
       }
 
-      void ObjFileParser::GetVector(std::vector<Vector3f> &point3d_array) {
+      void ObjParser::GetVector(std::vector<Vector3f> &point3d_array) {
          size_t numComponents(0);
          const char* tmp(&m_dataIterator[0]);
          while (!IsLineEnd(*tmp)) {
@@ -297,7 +297,7 @@ namespace model
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
-      void ObjFileParser::GetVector3(std::vector<Vector3f> &point3d_array) {
+      void ObjParser::GetVector3(std::vector<Vector3f> &point3d_array) {
          float x, y, z;
          CopyNextWord(m_buffer, BUFFERSIZE);
          x = (float)fast_atof(m_buffer);
@@ -312,7 +312,7 @@ namespace model
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
-      void ObjFileParser::GetVector2(std::vector<Vector2f> &point2d_array) {
+      void ObjParser::GetVector2(std::vector<Vector2f> &point2d_array) {
          float x, y;
          CopyNextWord(m_buffer, BUFFERSIZE);
          x = (float)fast_atof(m_buffer);
@@ -325,7 +325,7 @@ namespace model
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
-      void ObjFileParser::GetFace(aiPrimitiveType type)
+      void ObjParser::GetFace(ePrimitiveType type)
       {
          CopyNextLine(m_buffer, BUFFERSIZE);
          if (m_dataIterator == m_dataIteratorEndOfBuffer)
@@ -342,12 +342,12 @@ namespace model
          std::vector<uint32> *pNormalID = new std::vector < uint32 > ;
          bool hasNormal = false;
 
-         const int32 vSize = m_pModelInstance->m_vertices.size();
+         const int32 vSize = m_pModelInstance->m_pVertices.size();
          const int32 vtSize = m_pModelInstance->m_textureCoord.size();
-         const int32 vnSize = m_pModelInstance->m_normals.size();
+         const int32 vnSize = m_pModelInstance->m_pNormals.size();
 
          const bool vt = (!m_pModelInstance->m_textureCoord.empty());
-         const bool vn = (!m_pModelInstance->m_normals.empty());
+         const bool vn = (!m_pModelInstance->m_pNormals.empty());
          int32 iStep = 0, iPos = 0;
          while (pPtr != pEnd)
          {
@@ -358,7 +358,7 @@ namespace model
 
             if (*pPtr == '/')
             {
-               if (type == aiPrimitiveType_POINT) {
+               if (type == PRIMITIVE_TYPE_POINT) {
                   //DefaultLogger::get()->error("Obj: Separator unexpected in point statement");
                }
                if (iPos == 0)
@@ -459,9 +459,9 @@ namespace model
          }
 
          // Store the face
-         m_pModelInstance->m_pCurrentMesh->m_Faces.push_back(face);
-         m_pModelInstance->m_pCurrentMesh->m_uiNumIndices += (uint32)face->m_pVertices->size();
-         m_pModelInstance->m_pCurrentMesh->m_uiUVCoordinates[0] += (uint32)face->m_pTexturCoords[0].size();
+         m_pModelInstance->m_pCurrentMesh->m_faces.push_back(face);
+         m_pModelInstance->m_pCurrentMesh->m_uiNumIndices += (uint32)face->m_pVertexIndices->size();
+         m_pModelInstance->m_pCurrentMesh->m_uiUVCoordinates[0] += (uint32)face->m_pTexCoordIndices[0].size();
          if (!m_pModelInstance->m_pCurrentMesh->m_hasNormals && hasNormal)
          {
             m_pModelInstance->m_pCurrentMesh->m_hasNormals = true;
@@ -471,14 +471,14 @@ namespace model
       }
 
       //	Get values for a new material description
-      void ObjFileParser::GetMaterialDesc()
+      void ObjParser::GetMaterialDesc()
       {
          // Each material request a new object.
          // Sometimes the object is already created (see 'o' tag by example), but it is not initialized !
          // So, we create a new object only if the current on is already initialized !
          if (m_pModelInstance->m_pCurrent != NULL &&
             (m_pModelInstance->m_pCurrent->m_meshes.size() > 1 ||
-            (m_pModelInstance->m_pCurrent->m_meshes.size() == 1 && m_pModelInstance->m_meshes[m_pModelInstance->m_pCurrent->m_meshes[0]]->m_Faces.size() != 0))
+            (m_pModelInstance->m_pCurrent->m_meshes.size() == 1 && m_pModelInstance->m_meshes[m_pModelInstance->m_pCurrent->m_meshes[0]]->m_faces.size() != 0))
             )
             m_pModelInstance->m_pCurrent = NULL;
 
@@ -521,7 +521,7 @@ namespace model
       }
 
       //	Get a comment, values will be skipped
-      void ObjFileParser::GetComment()
+      void ObjParser::GetComment()
       {
          while (m_dataIterator != m_dataIteratorEndOfBuffer)
          {
@@ -537,7 +537,7 @@ namespace model
          }
       }
 
-      void ObjFileParser::GetMaterialLib()
+      void ObjParser::GetMaterialLib()
       {
          // Translate tuple
          m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
@@ -552,7 +552,7 @@ namespace model
 
          // Check for existence
          const String_c strMatName(pStart, &(*m_dataIterator));
-         //std::string strMatName(pStart, &(*m_dataIterator));
+         //String_c strMatName(pStart, &(*m_dataIterator));
 
          //IOStream *pFile = m_pIO->Open(strMatName);
          File file;
@@ -578,7 +578,7 @@ namespace model
       }
 
       //	Set a new material definition as the current material.
-      void ObjFileParser::GetNewMaterial()
+      void ObjParser::GetNewMaterial()
       {
          m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
@@ -611,7 +611,7 @@ namespace model
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
-      int32 ObjFileParser::GetMaterialIndex(const String_c &strMaterialName)
+      int32 ObjParser::GetMaterialIndex(const String_c &strMaterialName)
       {
          int32 mat_index = -1;
          if (strMaterialName.IsEmpty()) {
@@ -629,7 +629,7 @@ namespace model
       }
 
       //	Getter for a group name.  
-      void ObjFileParser::GetGroupName()
+      void ObjParser::GetGroupName()
       {
          String_c strGroupName;
 
@@ -642,16 +642,16 @@ namespace model
          if (m_pModelInstance->m_strActiveGroup != strGroupName)
          {
             // Search for already existing entry
-            objfile::Model::ConstGroupMapIt it = m_pModelInstance->m_Groups.find(strGroupName);
+            objfile::Model::ConstGroupMapIt it = m_pModelInstance->m_groups.find(strGroupName);
 
             // We are mapping groups into the object structure
             CreateObject(strGroupName);
 
             // New group name, creating a new entry
-            if (it == m_pModelInstance->m_Groups.end())
+            if (it == m_pModelInstance->m_groups.end())
             {
                std::vector<uint32> *pFaceIDArray = new std::vector < uint32 > ;
-               m_pModelInstance->m_Groups[strGroupName] = pFaceIDArray;
+               m_pModelInstance->m_groups[strGroupName] = pFaceIDArray;
                m_pModelInstance->m_pGroupFaceIDs = (pFaceIDArray);
             }
             else
@@ -664,7 +664,7 @@ namespace model
       }
 
       //	Not supported
-      void ObjFileParser::GetGroupNumber()
+      void ObjParser::GetGroupNumber()
       {
          // Not used
 
@@ -672,7 +672,7 @@ namespace model
       }
 
       //	Not supported
-      void ObjFileParser::GetGroupNumberAndResolution()
+      void ObjParser::GetGroupNumberAndResolution()
       {
          // Not used
 
@@ -681,7 +681,7 @@ namespace model
 
       //	Stores values for a new object instance, name will be used to 
       //	identify it.
-      void ObjFileParser::GetObjectName()
+      void ObjParser::GetObjectName()
       {
          m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
          if (m_dataIterator == m_dataIteratorEndOfBuffer) {
@@ -719,7 +719,7 @@ namespace model
       }
 
       //	Creates a new object instance
-      void ObjFileParser::CreateObject(const String_c &strObjectName)
+      void ObjParser::CreateObject(const String_c &strObjectName)
       {
          assert(NULL != m_pModelInstance);
          //assert( !strObjectName.empty() );
@@ -739,7 +739,7 @@ namespace model
       }
 
       //	Creates a new mesh
-      void ObjFileParser::CreateMesh()
+      void ObjParser::CreateMesh()
       {
          assert(NULL != m_pModelInstance);
          m_pModelInstance->m_pCurrentMesh = new objfile::Mesh;
@@ -756,7 +756,7 @@ namespace model
       }
 
       //	Returns true, if a new mesh must be created.
-      bool ObjFileParser::NeedsNewMesh(const String_c &rMaterialName)
+      bool ObjParser::NeedsNewMesh(const String_c &rMaterialName)
       {
          if (m_pModelInstance->m_pCurrentMesh == 0)
          {
@@ -775,7 +775,7 @@ namespace model
          return newMat;
       }
 
-      void ObjFileParser::ReportErrorTokenInFace()
+      void ObjParser::ReportErrorTokenInFace()
       {
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
          //DefaultLogger::get()->error("OBJ: Not supported token in face description detected");

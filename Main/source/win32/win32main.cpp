@@ -1358,7 +1358,7 @@ namespace win32window
    ////{
    ////}
    //
-   //void Win32Window::Sleep( const unsigned int timeMs, const bool pauseTimer )
+   //void Win32Window::Sleep( const uint32 timeMs, const bool pauseTimer )
    //{
    //}
 

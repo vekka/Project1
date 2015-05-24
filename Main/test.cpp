@@ -42,16 +42,25 @@ using vbo::VertexBuffer;
 
 using namespace ogldriver;
 
+#include "model\mesh2.hpp"
+using mesh2::Mesh;
+
+#include "source\model\mesh2.hpp"
+//using mesh2;
+
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
    File file;
-   file.Open("assets/testObjects/cubePNT.obj");
-   ObjFileParser obj(&file);
-   Model *cubeModel;
+   file.Open("assets/testObjects/monkey.obj");
+   ObjParser obj(&file);
+   Model *monkey;
 
-   cubeModel = obj.GetModel();
+   monkey = obj.GetModel();
+
+   Mesh mesh;
+
    //FreeCamera camera(FRUSTUM_PERSPECTIVE, -1.0f, 1.0f, 1.0f, -1.0f, 0.3f, 1000.0f);
 
    //ObjFile cube;
@@ -78,31 +87,33 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
+   OGLDriver oglContext(hWnd, 800, 600, false);
+   Vector4f clearColor(0.0f, 0.0f, 0.0f, 1.0f);
    /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
    win.Show();
    win.Update();
-   //oglContext.SetClearColor();
-   //oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
-   ////oglContext.EnableCulling();
+   oglContext.SetClearColor(clearColor);
+   oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
+   //oglContext.EnableCulling();
  
 
-   //GLSLShader shader;
-   //shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
-   //shader.Load(GL_FRAGMENT_SHADER, "source/shader/glsl/fragment/triangle.frag");
-   //shader.CreateAndLink();
 
-   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   //shader.Use();
+   GLSLShader shader;
+   shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
+   shader.Load(GL_FRAGMENT_SHADER, "source/shader/glsl/fragment/triangle.frag");
+   shader.CreateAndLink();
+
+   shader.Use();
    //shader.AddAttribute("vColor");
-   //shader.AddAttribute("vVertex");   
-   //shader.AddUniform("P");
-   //shader.AddUniform("M");
-   //shader.Unuse();
+   shader.AddAttribute("vVertex");   
+   shader.AddUniform("P");
+   shader.AddUniform("M");
+   shader.Unuse();
 
    //vertex array and vertex buffer object IDs
    GLuint vaoID = 0;
-   //GLuint vboVerticesID;
-   //GLuint vboIndicesID;
+   GLuint vboVerticesID;
+   GLuint vboIndicesID;
 
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f );
    //for positioning cube in 3-space
@@ -110,39 +121,48 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       1.0f, 0.0f, 0.0f, 0.0f,
       0.0f, 1.0f, 0.0f, 0.0f,
       0.0f, 0.0f, 1.0f, 0.0f,
-      0.0f,  0.0f, -5.0f, 1.0f
+      2.4f,  0.0f, -5.0f, 1.0f
    };
    //you must activate shader program to give uniform variables data
-   //shader.Use();
-   //shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
-   //shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
-   //shader.Unuse();
+   shader.Use();
+   shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
+   shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
+   shader.Unuse();
   
+   uint32 cubeIndices[2904], x = 0;
 
+   uint32 arrayPos = 0;
+   for (int32 face = 0; face < monkey->m_pCurrentMesh->m_faces.size(); face++)
+   {
+      cubeIndices[arrayPos] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](0);
+      cubeIndices[arrayPos + 1] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](1);
+      cubeIndices[arrayPos + 2] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](2);
+      arrayPos+=3;
+   }
 
-   //glGenBuffers(1, &vboVerticesID);
-   //glGenBuffers(1, &vboIndicesID);
-   ///////////////////////////////////////
-   //glGenVertexArrays(1, &vaoID);
-   //glBindVertexArray(vaoID);
+   float *test = &(monkey->m_pVertices[0][0]);
+   GLsizeiptr size = monkey->m_pVertices.size() * sizeof(Vector3f);
 
-   //glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-   //glBufferData(GL_ARRAY_BUFFER,sizeof(NULL), NULL, GL_STATIC_DRAW);
+   glGenBuffers(1, &vboVerticesID);
+   glGenBuffers(1, &vboIndicesID);
+   /////////////////////////////////////
+   glGenVertexArrays(1, &vaoID);
+   glBindVertexArray(vaoID);
+   
+   glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
+   glBufferData(GL_ARRAY_BUFFER, size, (void*)test, GL_STATIC_DRAW);
  
-   ////enable vertex attribute array for position
-   //glEnableVertexAttribArray(shader["vVertex"]);
-   //glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(VertexPC<float>), (const GLvoid*)offsetof(VertexPC<float>, position));
+  
+   glEnableVertexAttribArray(shader["vVertex"]);
+   glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (const GLvoid*)0);
 
-   ////enable vertex attribute array for colour
-   //glEnableVertexAttribArray(shader["vColor"]);
-   //glVertexAttribPointer(shader["vColor"], 3, GL_FLOAT, GL_FALSE, sizeof(VertexPC<float>), (const GLvoid*)offsetof(VertexPC<float>, color));
-
-   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
-   //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(NULL), NULL, GL_STATIC_DRAW);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
+   //glBufferData(GL_ELEMENT_ARRAY_BUFFER, monkey->m_pCurrentMesh->m_faces.size() * 3 * sizeof(uint32), (const void*)monkey->m_pCurrentMesh->, GL_STATIC_DRAW);
 
   // Process the messages
    while (1)
    {
+      oglContext.ClearBuffers();
       if (win.GetResizeFlag())
       {
          //oglContext.SetViewportSize(100.0f, 100.0f);
@@ -152,12 +172,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       //resized = win.GetResizeFlag();
       if (msg.message == WM_QUIT)
          break;
-
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
          msg.message = WM_QUIT;
-      /*if (GetAsyncKeyState('K') & 0x8000)
-         msg.message = WM_QUIT;*/
-
+     
+      glBindVertexArray(vaoID);
+    
+      shader.Use();
+      glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+      //glDrawArrays(GL_TRIANGLES, 0, 8);
+      shader.Unuse();
+      
+      glBindVertexArray(0);
+     
+      oglContext.SwapFrontAndBackBuffer();
 
    }
 

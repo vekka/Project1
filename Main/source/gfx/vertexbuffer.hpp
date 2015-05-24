@@ -7,7 +7,7 @@
 using vertexstructs::VertexPC;
 
 #include "model/mesh2.hpp"
-using mesh2::aiMesh;
+using mesh2::Mesh;
 
 #include <map>
 using std::map;

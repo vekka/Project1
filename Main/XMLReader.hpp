@@ -1,0 +1,6 @@
+#ifndef _XMLREADER_HPP_INCLUDED_
+#define _XMLREADER_HPP_INCLUDED_
+
+
+
+#endif

@@ -184,7 +184,7 @@ namespace assimp
       uint64_t value = 0;
 
       if (*in < '0' || *in > '9')
-         throw std::invalid_argument(std::string("The string \"") + in + "\" cannot be converted into a value.");
+         throw std::invalid_argument(String_c("The string \"") + in + "\" cannot be converted into a value.");
 
       bool running = true;
       while (running)
@@ -195,7 +195,7 @@ namespace assimp
          const uint64_t new_value = (value * 10) + (*in - '0');
 
          if (new_value < value) /* numeric overflow, we rely on you */
-            throw std::overflow_error(std::string("Converting the string \"") + in + "\" into a value resulted in overflow.");
+            throw std::overflow_error(String_c("Converting the string \"") + in + "\" into a value resulted in overflow.");
 
          value = new_value;
 

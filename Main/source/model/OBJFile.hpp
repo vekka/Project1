@@ -45,14 +45,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <map>
 
 #include "mesh2.hpp"
-using mesh2::aiPrimitiveType;
-using mesh2::aiPrimitiveType_POLYGON;
+using mesh2::ePrimitiveType;
+using mesh2::PRIMITIVE_TYPE_POLYGON;
 
 //namespace model
 //{
 //   namespace objparser
 //   {
-//      class ObjFileParser;
+//      class ObjParser;
 //   };
 //};
 
@@ -66,19 +66,17 @@ namespace objfile
    // data structure for a simple obj-face, describes discredit,l.ation and materials
    struct Face
    {
-   //private:
-      //friend void model::objparser::ObjFileParser::GetFace(aiPrimitiveType type);
+   //protected:
+      //friend void model::objparser::ObjParser::GetFace(ePrimitiveType type);
       
-      typedef std::vector<uint32> IndexArray;
+      typedef std::vector<uint32> IndexList;
 
       //!	Primitive type
-      aiPrimitiveType m_PrimitiveType;
-      //!	Vertex indices
-      IndexArray *m_pVertices;
-      //!	Normal indices
-      IndexArray *m_pNormals;
-      //!	Texture coordinates indices
-      IndexArray *m_pTexturCoords;
+      ePrimitiveType m_primitiveType;
+
+      IndexList *m_pVertexIndices;
+      IndexList *m_pNormalIndices;
+      IndexList *m_pTexCoordIndices;
       //!	Pointer to assigned material
       Material *m_pMaterial;
 
@@ -91,26 +89,26 @@ namespace objfile
       Face(std::vector<uint32> *pVertices,
          std::vector<uint32> *pNormals,
          std::vector<uint32> *pTexCoords,
-         aiPrimitiveType pt = aiPrimitiveType_POLYGON) :
-         m_PrimitiveType(pt),
-         m_pVertices(pVertices),
-         m_pNormals(pNormals),
-         m_pTexturCoords(pTexCoords),
+         ePrimitiveType pt = PRIMITIVE_TYPE_POLYGON) :
+         m_primitiveType(pt),
+         m_pVertexIndices(pVertices),
+         m_pNormalIndices(pNormals),
+         m_pTexCoordIndices(pTexCoords),
          m_pMaterial(0L)
       {
          // empty
       }
-
+     
       ~Face()
       {
-         delete m_pVertices;
-         m_pVertices = NULL;
+         delete m_pVertexIndices;
+         m_pVertexIndices = NULL;
 
-         delete m_pNormals;
-         m_pNormals = NULL;
+         delete m_pNormalIndices;
+         m_pNormalIndices = NULL;
 
-         delete m_pTexturCoords;
-         m_pTexturCoords = NULL;
+         delete m_pTexCoordIndices;
+         m_pTexCoordIndices = NULL;
       }
    };
 
@@ -221,7 +219,7 @@ namespace objfile
       static const uint32 NoMaterial = ~0u;
 
       //	Array with pointer to all stored faces
-      std::vector<Face*> m_Faces;
+      std::vector<Face*> m_faces;
       //	Assigned material
       Material *m_pMaterial;
       //	Number of stored indices.
@@ -242,11 +240,10 @@ namespace objfile
          memset(m_uiUVCoordinates, 0, sizeof(uint32) * AI_MAX_NUMBER_OF_TEXTURECOORDS);
       }
 
-
       ~Mesh()
       {
-         for (std::vector<Face*>::iterator it = m_Faces.begin();
-            it != m_Faces.end(); ++it)
+         for (std::vector<Face*>::iterator it = m_faces.begin();
+            it != m_faces.end(); ++it)
          {
             delete *it;
          }
@@ -274,11 +271,11 @@ namespace objfile
       //	Vector with all generated group
       std::vector<String_c> m_groupLib;
       //	Vector with all generated vertices
-      std::vector<Vector3f> m_vertices;
+      std::vector<Vector3f> m_pVertices;
       //	vector with all generated normals
-      std::vector<Vector3f> m_normals;
+      std::vector<Vector3f> m_pNormals;
       //	Group map
-      GroupMap m_Groups;
+      GroupMap m_groups;
       //	Group to face id assignment
       std::vector<uint32> *m_pGroupFaceIDs;
       //	Active group
@@ -322,10 +319,10 @@ namespace objfile
          }
          m_meshes.clear();
 
-         for (GroupMapIt it = m_Groups.begin(); it != m_Groups.end(); ++it) {
+         for (GroupMapIt it = m_groups.begin(); it != m_groups.end(); ++it) {
             delete it->second;
          }
-         m_Groups.clear();
+         m_groups.clear();
 
          for (std::map<String_c, Material*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
             delete it->second;

@@ -149,6 +149,7 @@
     <ClCompile Include="source\gfx\raw.cpp" />
     <ClCompile Include="source\gfx\vertexbuffer.cpp" />
     <ClCompile Include="source\gfx\vertexformat.cpp" />
+    <ClCompile Include="source\model\OBJFileImporter.cpp" />
     <ClCompile Include="source\model\OBJMTLImporter.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
     <ClCompile Include="source\opengl\ogldriver.cpp" />
@@ -204,13 +205,16 @@
     <ClInclude Include="source\gfx\vertexformat.hpp" />
     <ClInclude Include="source\gfx\vertexstructs.hpp" />
     <ClInclude Include="source\model\daeloader.hpp" />
+    <ClInclude Include="source\model\ImporterDesc.hpp" />
     <ClInclude Include="source\model\md5model.hpp" />
     <ClInclude Include="source\model\mesh2.hpp" />
     <ClInclude Include="source\model\OBJFile.hpp" />
+    <ClInclude Include="source\model\OBJFileImporter.hpp" />
     <ClInclude Include="source\model\OBJMTLImporter.hpp" />
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
     <ClInclude Include="source\opengl\ogldriver.hpp" />
+    <ClInclude Include="source\scene\scene.hpp" />
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />
     <ClInclude Include="source\shader\OGLShader.hpp" />
     <ClInclude Include="source\shader\shadertypes.hpp" />
@@ -218,6 +222,7 @@
     <ClInclude Include="source\win32\win32ctrl.hpp" />
     <ClInclude Include="source\win32\win32main.hpp" />
     <ClInclude Include="source\win32\win32timer.hpp" />
+    <ClInclude Include="XMLReader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

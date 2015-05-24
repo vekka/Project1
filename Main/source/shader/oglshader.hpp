@@ -32,25 +32,25 @@ namespace oglshader
       GLuint m_program;
       int32 m_totalShaders;
       //eShaderType m_type;
-      map<std::string, GLuint> m_attributeMap;
-      map<std::string, GLuint> m_uniformLocationMap;
+      map<String_c, GLuint> m_attributeMap;
+      map<String_c, GLuint> m_uniformLocationMap;
       enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER }; //tmp
       GLuint m_shaders[3];//0->vertexshader, 1->fragmentshader, 2->geometryshader //tmp
    public:
       GLSLShader();
       ~GLSLShader();
-      void Load(GLenum type, const std::string &filename);
-      GLuint operator[](const std::string &attribute);
-      GLuint operator()(const std::string &uniform);
+      void Load(GLenum type, const String_c &filename);
+      GLuint operator[](const String_c &attribute);
+      GLuint operator()(const String_c &uniform);
 
-      void AddUniform(const std::string &uniform);
+      void AddUniform(const String_c &uniform);
       void AddUniformData(const char *variableName, const void *_array, eVectorType type, int32 numElementsToModify);
       void AddUniformData(const char *variableName, const void *_array, eMatrixType type, int32 numMatrices, bool transposed = false);
       void AddUniformSampler(const char* variableName, eOpaqueType sampler);
 
       void Use();
       void Unuse();
-      void AddAttribute(const std::string &);
+      void AddAttribute(const String_c &);
       void DeleteProgram();
       void CreateAndLink();
       //void GetCompilationStatus(string &outStatus) const;

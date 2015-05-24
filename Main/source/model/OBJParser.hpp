@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <map>
 
 #include "mesh2.hpp"
-using mesh2::aiPrimitiveType;
+using mesh2::ePrimitiveType;
 
 #include "core/string/string.hpp"
 using core::string::String_c;
@@ -60,7 +60,7 @@ using core::math::Vector2f;
 using core::math::Point3f;
 using core::math::Vector3f;
 
-#include "ObjFile.hpp"
+#include "objfile.hpp"
 using objfile::Model;
 
 #include "core/fileio/file.hpp"
@@ -80,9 +80,9 @@ namespace model
        //   class Point2f;
        //}
        //class ObjFileImporter;
-       //class IOSystem;
+       //class File;
     
-       class ObjFileParser
+       class ObjParser
        {
        public:
           static const size_t BUFFERSIZE = 4096;
@@ -119,7 +119,7 @@ namespace model
           //	Stores the following 3d vector.
           void GetVector2(std::vector<Vector2f> &point2d_array);
           //	Stores the following face.
-          void GetFace(aiPrimitiveType type);
+          void GetFace(ePrimitiveType type);
           // Reads the material description.
           void GetMaterialDesc();
           //	Gets a comment.
@@ -148,9 +148,9 @@ namespace model
           void ReportErrorTokenInFace();
        public:
 
-          ObjFileParser(const File *file);
+          ObjParser(const File *file);
 
-          ~ObjFileParser();
+          ~ObjParser();
           objfile::Model *GetModel() const;
       };
        

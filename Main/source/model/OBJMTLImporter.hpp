@@ -56,7 +56,7 @@ namespace model
   namespace objmtlimporter
   {
     
-    //namespace ObjFile
+    //namespace objfile
     //{
     //struct Model;
     //struct Material;

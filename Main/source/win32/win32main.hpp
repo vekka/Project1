@@ -354,7 +354,7 @@ namespace win32window
    //   //virtual ~Win32Window();
    //   virtual bool Run();
    //   //virtual void Yield( vosid );
-   //   virtual void Sleep( const unsigned int timeMs, const bool pauseTimer );
+   //   virtual void Sleep( const uint32 timeMs, const bool pauseTimer );
    //
    //   //bool PostEventFromUser(const SEvent& event);
    //};

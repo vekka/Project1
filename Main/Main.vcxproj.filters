@@ -36,9 +36,6 @@
     <Filter Include="Source Files\Win32">
       <UniqueIdentifier>{960fac17-55fb-4092-b918-81269788d05c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\XmlReader">
-      <UniqueIdentifier>{093092df-9782-46a2-86b2-d1454e9054cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\SoundLib">
       <UniqueIdentifier>{8afad947-8243-42e5-a430-0fcd445508e2}</UniqueIdentifier>
     </Filter>
@@ -54,21 +51,6 @@
     <Filter Include="Source Files\ShaderLib\ShaderSources\VertexShaders">
       <UniqueIdentifier>{8fb845c0-de34-40e4-8ada-eec575125a39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GFX">
-      <UniqueIdentifier>{b3e68c5c-7f3f-40ab-a797-7805c0a5e826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GFX\ImageLib">
-      <UniqueIdentifier>{e2662702-6985-4ad1-9d77-18f3f81ad472}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GFX\PixelLib">
-      <UniqueIdentifier>{9042282d-7290-4fcd-8857-015fdb93c8ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GFX\TextureLib">
-      <UniqueIdentifier>{7b7bcc50-5d82-41f6-ac9c-48ef5c0abcef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GFX\BufferLib">
-      <UniqueIdentifier>{a3351615-3ba7-424d-9fa4-e99c2121980b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core\Algorithm">
       <UniqueIdentifier>{d64accc5-249f-4366-ae2e-ca548590663d}</UniqueIdentifier>
     </Filter>
@@ -80,6 +62,27 @@
     </Filter>
     <Filter Include="Source Files\Driver\OpenGL">
       <UniqueIdentifier>{7d5679aa-c035-4c1d-aeb4-6198bc968fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\XMLLib">
+      <UniqueIdentifier>{093092df-9782-46a2-86b2-d1454e9054cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GFX">
+      <UniqueIdentifier>{b3e68c5c-7f3f-40ab-a797-7805c0a5e826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GFX\ImageLib">
+      <UniqueIdentifier>{e2662702-6985-4ad1-9d77-18f3f81ad472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GFX\PixelLib">
+      <UniqueIdentifier>{9042282d-7290-4fcd-8857-015fdb93c8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GFX\TextureLib">
+      <UniqueIdentifier>{7b7bcc50-5d82-41f6-ac9c-48ef5c0abcef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GFX\BufferLib">
+      <UniqueIdentifier>{a3351615-3ba7-424d-9fa4-e99c2121980b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneLib">
+      <UniqueIdentifier>{ab887e45-1f8b-434f-a0fd-7c8e3f9f376e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -101,14 +104,11 @@
     <ClCompile Include="source\win32\win32console.cpp">
       <Filter>Source Files\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\gfx\raw.cpp">
-      <Filter>GFX\ImageLib</Filter>
+      <Filter>Source Files\GFX\ImageLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\bmp.cpp">
-      <Filter>GFX\ImageLib</Filter>
+      <Filter>Source Files\GFX\ImageLib</Filter>
     </ClCompile>
     <ClCompile Include="source\shader\glshadermaterialrenderer.cpp">
       <Filter>Source Files\ShaderLib</Filter>
@@ -123,22 +123,22 @@
       <Filter>Source Files\ShaderLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\hardwarebuffer.cpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\indexbuffer.cpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\vertexbuffer.cpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\color.cpp">
-      <Filter>GFX\PixelLib</Filter>
+      <Filter>Source Files\GFX\PixelLib</Filter>
     </ClCompile>
     <ClCompile Include="source\core\math\frustum.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\vertexformat.cpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
     <ClCompile Include="source\core\math\camera.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -159,6 +159,10 @@
       <Filter>Source Files\Driver\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="source\model\OBJMTLImporter.cpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="source\model\OBJFileImporter.cpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
@@ -239,10 +243,10 @@
       <Filter>Source Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\raw.hpp">
-      <Filter>GFX\ImageLib</Filter>
+      <Filter>Source Files\GFX\ImageLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\bmp.hpp">
-      <Filter>GFX\ImageLib</Filter>
+      <Filter>Source Files\GFX\ImageLib</Filter>
     </ClInclude>
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp">
       <Filter>Source Files\ShaderLib</Filter>
@@ -251,7 +255,7 @@
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\texturemanager.hpp">
-      <Filter>GFX\TextureLib</Filter>
+      <Filter>Source Files\GFX\TextureLib</Filter>
     </ClInclude>
     <ClInclude Include="source\win32\win32timer.hpp">
       <Filter>Source Files\Win32</Filter>
@@ -260,19 +264,19 @@
       <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\hardwarebuffer.hpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\indexbuffer.hpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\vertexbuffer.hpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\color.hpp">
-      <Filter>GFX\PixelLib</Filter>
+      <Filter>Source Files\GFX\PixelLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\pixelformat.hpp">
-      <Filter>GFX\PixelLib</Filter>
+      <Filter>Source Files\GFX\PixelLib</Filter>
     </ClInclude>
     <ClInclude Include="source\core\array.hpp">
       <Filter>Source Files\Core</Filter>
@@ -281,10 +285,10 @@
       <Filter>Source Files\Core\MathLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\vertexformat.hpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\vertexstructs.hpp">
-      <Filter>GFX\BufferLib</Filter>
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\core\math\camera.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -327,6 +331,18 @@
     </ClInclude>
     <ClInclude Include="source\opengl\ogldriver.hpp">
       <Filter>Source Files\Driver\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLReader.hpp">
+      <Filter>Source Files\Core\XMLLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\OBJFileImporter.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scene\scene.hpp">
+      <Filter>Source Files\SceneLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\ImporterDesc.hpp">
+      <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

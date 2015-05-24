@@ -3,17 +3,17 @@
 
 //#include <windows.h>
 //#define NOMINMAX
-
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dx11.lib")
-#pragma comment(lib, "d3dx10.lib")
-
-#include <D3D11.h>
-#include <d3dcommon.h>
-#include <d3dx10math.h>
-//#include <D3Dcompiler.h> 
-#include <dxgi.h>
+//
+//#pragma comment(lib, "dxgi.lib")
+//#pragma comment(lib, "d3d11.lib")
+//#pragma comment(lib, "d3dx11.lib")
+//#pragma comment(lib, "d3dx10.lib")
+//
+//#include <D3D11.h>
+//#include <d3dcommon.h>
+//#include <d3dx10math.h>
+////#include <D3Dcompiler.h> 
+//#include <dxgi.h>
 
 
 //

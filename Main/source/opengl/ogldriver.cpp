@@ -78,9 +78,9 @@ namespace ogldriver
       return true;
    }
 
-   void OGLDriver::SetClearColor()
+   void OGLDriver::SetClearColor(Vector4f &inColor)
    {
-      glClearColor(0.0, 0.0f, 0.0f, 0.0f);
+      glClearColor(inColor[0], inColor[1],inColor[2],inColor[3]);
    }
 
    void OGLDriver::SetViewportSize(float viewportWidth, float viewportHeight)
