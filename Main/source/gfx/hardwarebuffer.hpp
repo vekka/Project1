@@ -52,7 +52,7 @@ namespace hardwarebuffer
       int32 offset;
       eUsageFlag usageFlag;
       eAccessFlag accessFlag;
-      String_c format;
+      std::string format;
       eBufferBindingTarget bufferBindingTarget;
    public:
 

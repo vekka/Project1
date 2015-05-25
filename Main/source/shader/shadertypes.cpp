@@ -11,7 +11,7 @@ namespace oglshader
       case TYPE_BOOL: return "bool";
       case TYPE_BYTE: return "byte";
       case TYPE_SHORT: return "short";
-      case TYPE_INT: return "int";
+      case TYPE_INT: return "int32";
       case TYPE_FLOAT: return "float";
       case TYPE_DOUBLE: return "double";
       case TYPE_HALF_FLOAT: return "half";
@@ -59,7 +59,7 @@ namespace oglshader
       }
    }
 
-   int32 TypeSizeof(int type)
+   int32 TypeSizeof(int32 type)
    {
       switch (type)
       {
@@ -81,13 +81,13 @@ namespace oglshader
       case TYPE_FVEC4: return sizeof(float) * 4;
       case TYPE_IVEC2:
       case TYPE_UIVEC2:
-         return sizeof(int) * 2;
+         return sizeof(int32) * 2;
       case TYPE_IVEC3:
       case TYPE_UIVEC3:
-         return sizeof(int) * 3;
+         return sizeof(int32) * 3;
       case TYPE_IVEC4:
       case TYPE_UIVEC4:
-         return sizeof(int) * 4;
+         return sizeof(int32) * 4;
       case TYPE_BVEC2: return sizeof(bool) * 2;
       case TYPE_BVEC3: return sizeof(bool) * 3;
       case TYPE_BVEC4: return sizeof(bool) * 4;

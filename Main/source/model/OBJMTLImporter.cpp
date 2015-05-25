@@ -75,34 +75,34 @@ namespace model
   {
     
     // Material specific token
-    const String_c DiffuseTexture      = "map_Kd";
-    const String_c AmbientTexture      = "map_Ka";
-    const String_c SpecularTexture     = "map_Ks";
-    const String_c OpacityTexture      = "map_d";
-    const String_c EmmissiveTexture    = "map_emissive";
-    const String_c BumpTexture1        = "map_bump";
-    const String_c BumpTexture2        = "map_Bump";
-    const String_c BumpTexture3        = "bump";
-    const String_c NormalTexture       = "map_Kn";
-    const String_c DisplacementTexture = "disp";
-    const String_c SpecularityTexture  = "map_ns";
+    const std::string DiffuseTexture      = "map_Kd";
+    const std::string AmbientTexture      = "map_Ka";
+    const std::string SpecularTexture     = "map_Ks";
+    const std::string OpacityTexture      = "map_d";
+    const std::string EmmissiveTexture    = "map_emissive";
+    const std::string BumpTexture1        = "map_bump";
+    const std::string BumpTexture2        = "map_Bump";
+    const std::string BumpTexture3        = "bump";
+    const std::string NormalTexture       = "map_Kn";
+    const std::string DisplacementTexture = "disp";
+    const std::string SpecularityTexture  = "map_ns";
     
     // texture option specific token
-    const String_c BlendUOption		= "-blendu";
-    const String_c BlendVOption		= "-blendv";
-    const String_c BoostOption		= "-boost";
-    const String_c ModifyMapOption	= "-mm";
-    const String_c OffsetOption		= "-o";
-    const String_c ScaleOption		= "-s";
-    const String_c TurbulenceOption	= "-t";
-    const String_c ResolutionOption	= "-texres";
-    const String_c ClampOption		= "-clamp";
-    const String_c BumpOption			= "-bm";
-    const String_c ChannelOption		= "-imfchan";
-    const String_c TypeOption			= "-type";
+    const std::string BlendUOption		= "-blendu";
+    const std::string BlendVOption		= "-blendv";
+    const std::string BoostOption		= "-boost";
+    const std::string ModifyMapOption	= "-mm";
+    const std::string OffsetOption		= "-o";
+    const std::string ScaleOption		= "-s";
+    const std::string TurbulenceOption	= "-t";
+    const std::string ResolutionOption	= "-texres";
+    const std::string ClampOption		= "-clamp";
+    const std::string BumpOption			= "-bm";
+    const std::string ChannelOption		= "-imfchan";
+    const std::string TypeOption			= "-type";
     
     ObjMtlImporter::ObjMtlImporter(const std::vector<char> &buffer,
-                                           const String_c & /*strAbsPath*/,
+                                           const std::string & /*strAbsPath*/,
                                            objfile::Model *pModel) :
         m_dataIterator( buffer.begin() ),
         m_dataIteratorEndOfBuffer( buffer.end() ),
@@ -233,7 +233,7 @@ namespace model
         (*pColor)[IDX_RED] = r;
         
         // we have to check if color is default 0 with only one token
-        if( !IsLineEnd( *m_dataIterator ) ) {
+        if( !isLineEnd( *m_dataIterator ) ) {
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, g);
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, b);
         }
@@ -242,7 +242,7 @@ namespace model
         (*pColor)[IDX_BLUE] = b;
     }
     
-    void ObjMtlImporter::GetIlluminationModel( int &illum_model )
+    void ObjMtlImporter::GetIlluminationModel( int32 &illum_model )
     {
         m_dataIterator = CopyNextWord<ConstDataArrayIterator_t>( m_dataIterator, m_dataIteratorEndOfBuffer, m_buffer, BUFFERSIZE );
         illum_model = atoi(m_buffer);
@@ -256,25 +256,25 @@ namespace model
     
     void ObjMtlImporter::CreateMaterial()
     {	
-        String_c line( "" );
+        std::string line( "" );
         while( !IsLineEnd( *m_dataIterator ) ) {
             line += *m_dataIterator;
             ++m_dataIterator;
         }
         
-        std::vector<String_c> token;
-        //int32 String<T, TAlloc>::Tokenize(TContainer &ret, const T* const delimiter, const int32 count,
+        std::vector<std::string> token;
+        //int32 string<T, TAlloc>::Tokenize(TContainer &ret, const T* const delimiter, const int32 count,
            //const bool ignoreEmptyTokens, const bool keepSeparators) const
 
-        const uint32 numToken = line.Tokenize(token); //tokenize<String_c>( line, token, " " );
-        String_c name( "" );
+        const uint32 numToken = line.Tokenize(token); //tokenize<std::string>( line, token, " " );
+        std::string name( "" );
         if ( numToken == 1 ) {
             name = objparser::ObjParser::DEFAULT_MATERIAL_NAME;
         } else {
             name = token[1];
         }
     
-        std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find( name );
+        std::map<std::string, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find( name );
         if ( m_pModelInstance->m_materialMap.end() == it) {
             // New Material created
            m_pModelInstance->m_pCurrentMaterial = new objfile::Material();
@@ -288,7 +288,7 @@ namespace model
     }
     
     void ObjMtlImporter::GetTextureName() {
-        String_c *out( NULL );
+        std::string *out( NULL );
         int32 clampIndex = -1;
     
         const char *pPtr( &(*m_dataIterator) );
@@ -347,7 +347,7 @@ namespace model
         GetTextureOption(clamp);
         m_pModelInstance->m_pCurrentMaterial->clamp[clampIndex] = clamp;
     
-        String_c strTexture;
+        std::string strTexture;
         m_dataIterator = GetName<ConstDataArrayIterator_t>( m_dataIterator, m_dataIteratorEndOfBuffer, strTexture );
         *out = strTexture;
     }
@@ -376,7 +376,7 @@ namespace model
         {
             const char *pPtr( &(*m_dataIterator) );
             //skip option key and value
-            int skipToken = 1;
+            int32 skipToken = 1;
     
             if (!ASSIMP_strincmp(pPtr, ClampOption.CString(), ClampOption.GetSize()))
             {

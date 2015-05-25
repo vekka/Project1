@@ -3,8 +3,12 @@
 
 #include <Windows.h>
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
+
+#include <string>
+
+#include "core/BasicTypes.hpp"
 
 namespace win32console
 {
@@ -46,8 +50,8 @@ namespace win32console
          const uint32 bufferWidth, const uint32 bufferHeight, const bool hasInputHandle = true, const bool hasErrorHandle = true );
       void Destroy( void );
       bool IsEnabled( void ) const;
-      bool SetCaption( const String_c &caption );
-      void GetCaption( String_c & ) const;
+      bool SetCaption( const std::string &caption );
+      void GetCaption( std::string & ) const;
       bool UpdateDimension( const uint32 width, const uint32 height );
       void GetDimension( uint32 &width, uint32 &height ) const;
       void UpdatePosition( const uint32 newXPos, const uint32 newYPos );

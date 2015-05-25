@@ -47,6 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using mesh2::PRIMITIVE_TYPE_LINE;
 using mesh2::PRIMITIVE_TYPE_POINT;
 
+#include "core/CharTypes.hpp"
 using core::SkipToken;
 
 //#include "ObjFileMtlImporter.h"
@@ -86,9 +87,9 @@ namespace model
    namespace objparser
    {
 
-      const String_c ObjParser::DEFAULT_MATERIAL_NAME = "default_material_name";
+      const std::string ObjParser::DEFAULT_MATERIAL_NAME = "default_material_name";
 
-      ObjParser::ObjParser(const File *file) :
+      ObjParser::ObjParser(std::vector<char> &data, const std::string &strModelName, const File *file) :
          //m_dataIterator(inData.begin()),
          //m_dataIteratorEndOfBuffer(inData.end()),
          m_pModelInstance(NULL),
@@ -96,10 +97,10 @@ namespace model
       {
          assert(file->IsOpen());
 
-         file->CopyToBuffer(m_data);
+         //file->CopyToBuffer(m_data);
 
-         m_dataIterator = m_data.begin();
-         m_dataIteratorEndOfBuffer = m_data.end();
+         m_dataIterator = data.begin();
+         m_dataIteratorEndOfBuffer = data.end();
 
          fill_n(m_buffer, BUFFERSIZE, 0);
 
@@ -493,12 +494,12 @@ namespace model
          }
 
          // Get name
-         String_c strName(pStart, &(*m_dataIterator));
-         if (strName.IsEmpty())
+         std::string strName(pStart, &(*m_dataIterator));
+         if (strName.empty())
             return;
 
          // Search for material
-         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strName);
+         std::map<std::string, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strName);
          if (it == m_pModelInstance->m_materialMap.end())
          {
             // Not found, use default material
@@ -551,8 +552,8 @@ namespace model
          }
 
          // Check for existence
-         const String_c strMatName(pStart, &(*m_dataIterator));
-         //String_c strMatName(pStart, &(*m_dataIterator));
+         const std::string strMatName(pStart, &(*m_dataIterator));
+         //std::string strMatName(pStart, &(*m_dataIterator));
 
          //IOStream *pFile = m_pIO->Open(strMatName);
          File file;
@@ -587,11 +588,11 @@ namespace model
          }
 
          const char *pStart = &(*m_dataIterator);
-         String_c strMat(pStart, *m_dataIterator);
+         std::string strMat(pStart, *m_dataIterator);
          while (m_dataIterator != m_dataIterator && IsSpaceOrNewLine(*m_dataIterator)) {
             ++m_dataIterator;
          }
-         std::map<String_c, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strMat);
+         std::map<std::string, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strMat);
          if (it == m_pModelInstance->m_materialMap.end())
          {
             // Show a warning, if material was not found
@@ -611,10 +612,10 @@ namespace model
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
       }
 
-      int32 ObjParser::GetMaterialIndex(const String_c &strMaterialName)
+      int32 ObjParser::GetMaterialIndex(const std::string &strMaterialName)
       {
          int32 mat_index = -1;
-         if (strMaterialName.IsEmpty()) {
+         if (strMaterialName.empty()) {
             return mat_index;
          }
          for (size_t index = 0; index < m_pModelInstance->m_materialLib.size(); ++index)
@@ -631,7 +632,7 @@ namespace model
       //	Getter for a group name.  
       void ObjParser::GetGroupName()
       {
-         String_c strGroupName;
+         std::string strGroupName;
 
          m_dataIterator = GetName<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, strGroupName);
          if (IsEndOfBuffer(m_dataIterator, m_dataIteratorEndOfBuffer)) {
@@ -692,8 +693,8 @@ namespace model
             ++m_dataIterator;
          }
 
-         String_c strObjectName(pStart, &(*m_dataIterator));
-         if (!strObjectName.IsEmpty())
+         std::string strObjectName(pStart, &(*m_dataIterator));
+         if (!strObjectName.empty())
          {
             // Reset current object
             m_pModelInstance->m_pCurrent = NULL;
@@ -719,7 +720,7 @@ namespace model
       }
 
       //	Creates a new object instance
-      void ObjParser::CreateObject(const String_c &strObjectName)
+      void ObjParser::CreateObject(const std::string &strObjectName)
       {
          assert(NULL != m_pModelInstance);
          //assert( !strObjectName.empty() );
@@ -733,7 +734,7 @@ namespace model
          if (m_pModelInstance->m_pCurrentMaterial)
          {
             m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex =
-               GetMaterialIndex(m_pModelInstance->m_pCurrentMaterial->MaterialName.begin());
+               GetMaterialIndex(m_pModelInstance->m_pCurrentMaterial->MaterialName);
             m_pModelInstance->m_pCurrentMesh->m_pMaterial = m_pModelInstance->m_pCurrentMaterial;
          }
       }
@@ -756,7 +757,7 @@ namespace model
       }
 
       //	Returns true, if a new mesh must be created.
-      bool ObjParser::NeedsNewMesh(const String_c &rMaterialName)
+      bool ObjParser::NeedsNewMesh(const std::string &rMaterialName)
       {
          if (m_pModelInstance->m_pCurrentMesh == 0)
          {

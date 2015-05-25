@@ -344,6 +344,12 @@
     <ClInclude Include="source\model\ImporterDesc.hpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\memory\scopedptr.hpp">
+      <Filter>Source Files\Core\MemoryLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\string\stringext.hpp">
+      <Filter>Source Files\Core\StringLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

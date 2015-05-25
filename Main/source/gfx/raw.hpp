@@ -27,8 +27,8 @@ private:
    uint32 rawImgSize;
    uint32 numPixels;
    Allocator<byte> allocator;
-   // int palette ?
-   // int numMipMaps;
+   // int32 palette ?
+   // int32 numMipMaps;
    PixelFormat pixelFormat;
 public:
    RawImage( void );
@@ -44,7 +44,7 @@ public:
 
    // convert to the actual Pixel Format
    void Convert1BitToThis( const byte *in, const uint32 linepad, const bool flip = false );
-   void Convert4BitToThis( const byte *in, const int *palette, const uint32 linepad, const bool flip = false );
+   void Convert4BitToThis( const byte *in, const int32 *palette, const uint32 linepad, const bool flip = false );
 };
 
 inline void RawImage::SetDimensions( const uint32 width, const uint32 height )

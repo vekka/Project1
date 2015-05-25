@@ -48,8 +48,8 @@ returned by ASSIMP: Mesh, Face and Bone data structures.
 
 #include "core/BasicTypes.hpp"
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
 #include "core/math/matrix4.hpp"
 using core::math::Matrix4f;
@@ -249,7 +249,7 @@ extern "C" {
       struct Bone
       {
          //! The name of the bone. 
-         String_c m_name;
+         std::string m_name;
 
          //! The number of vertices affected by this bone
          //! The maximum value for this member is #AI_MAX_BONE_WEIGHTS.
@@ -611,7 +611,7 @@ extern "C" {
          *      partitioning.
          *   - Vertex animations refer to meshes by their names.
          **/
-         String_c m_name;
+         std::string m_name;
 
 
          /** NOT CURRENTLY IN USE. The number of attachment meshes */

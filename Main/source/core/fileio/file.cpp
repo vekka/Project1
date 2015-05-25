@@ -1,6 +1,8 @@
 #include "core/fileio/file.hpp"
 
-using core::string::String_c;
+//using core::string::String_c;
+
+#include <assert.h>
 
 namespace core
 {
@@ -13,14 +15,14 @@ namespace core
          isOpen = false;
       }
 
-      bool File::Open(const String_c &path, const bool readAsBinary, const eFileMode mode, const bool update)
+      bool File::Open(const std::string &path, const bool readAsBinary, const eFileMode mode, const bool update)
       {
          assert(FMODE_READ || FMODE_WRITE || FMODE_APPEND /* || FMODE_READWRITE */);
 
          this->mode = mode;
          this->path = path;
          this->readAsBinary = readAsBinary;
-         String_c strMode;
+         std::string strMode;
 
          switch (mode)
          {
@@ -36,11 +38,11 @@ namespace core
          }
 
          if (update)
-            strMode = strMode.Append('+');
+            strMode += '+';
          if (readAsBinary)
-            strMode = strMode.Append('b');
+            strMode += 'b';
 
-         errno_t err = fopen_s(&stream, path.CString(), strMode.CString());
+         errno_t err = fopen_s(&stream, path.c_str(), strMode.c_str());
          if (err != 0)
             return false;
 
@@ -54,7 +56,7 @@ namespace core
       }
 
       // TODO fix me one day
-      //String_c &File::GetFilePath() const
+      //std::string &File::GetFilePath() const
       //{
       //   assert( isOpen );
       //
@@ -62,10 +64,10 @@ namespace core
       //}
 
       //! get the filename extension from a file path
-      //String_c &File::GetFileNameExtension()
+      //std::string &File::GetFileNameExtension()
       //{
-      // //  String_c dest;
-      //	//int endPos = path.find_last_of ( '.' );
+      // //  std::string dest;
+      //	//int32 endPos = path.find_last_of ( '.' );
       //	//if ( endPos < 0 )
       //	//	dest = "";
       //	//else
@@ -105,7 +107,7 @@ namespace core
          isOpen = false;
       }
 
-      bool File::ReadLine(String_c &lineOut, const bool includeNewLine, const uint32 offset, const int32 length, const bool relative) const
+      bool File::ReadLine(std::string &lineOut, const bool includeNewLine, const uint32 offset, const int32 length, const bool relative) const
       {
          assert(isOpen);
 
@@ -124,17 +126,23 @@ namespace core
 
          lineOut = str;
          if (!includeNewLine)
-            lineOut.RemoveChars("\n\r");
+         {
+            size_t idx = 0;
+            while (std::string::npos != (idx = lineOut.find_first_of("/n/r")))
+            {
+               lineOut.erase(idx);
+            }
+         }
 
          delete[] str;
          return true;
       }
 
-      File &File::operator<<(const String_c &str)
+      File &File::operator<<(const std::string &str)
       {
          assert(isOpen/* && mode != FMODE_READ*/);
 
-         fputs(str.CString(), stream);
+         fputs(str.c_str(), stream);
          return *this;
       }
 
@@ -146,12 +154,12 @@ namespace core
          return *this;
       }
 
-      File &File::operator<<(const int32 &i)
+      File &File::operator<<(const int32 &i) // string constructor take no integer
       {
          assert(isOpen/* && mode != FMODE_READ*/);
 
-         String_c integerStr(i);
-         fputs(integerStr.CString(), stream);
+         //std::string integerStr(i);
+         //fputs(integerStr.c_str(), stream);
          return *this;
       }
 

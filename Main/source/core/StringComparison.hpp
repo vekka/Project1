@@ -160,7 +160,7 @@ namespace assimp	{
    *  @param b Second string
    *  @return 0 if a == b
    */
-   inline int32 ASSIMP_stricmp(const String_c& a, const String_c& b)
+   inline int32 ASSIMP_stricmp(const std::string& a, const std::string& b)
    {
       int32 i = (int32)b.length() - (int32)a.length();
       return (i ? i : ASSIMP_stricmp(a.c_str(), b.c_str()));

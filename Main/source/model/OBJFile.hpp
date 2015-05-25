@@ -80,9 +80,9 @@ namespace objfile
       //!	Pointer to assigned material
       Material *m_pMaterial;
 
-      //!	\param	pVertices	Pointer to assigned vertex indexbuffer
-      //!	\param	pNormals	Pointer to assigned normals indexbuffer
-      //!	\param	pTexCoords	Pointer to assigned texture indexbuffer
+      //!	\param	m_pVertices	Pointer to assigned vertex indexbuffer
+      //!	\param	m_pNormals	Pointer to assigned normals indexbuffer
+      //!	\param	m_pTexCoords	Pointer to assigned texture indexbuffer
 
    //public:
 
@@ -112,19 +112,17 @@ namespace objfile
       }
    };
 
-   // ------------------------------------------------------------------------------------------------
-   //!	\struct	Object
-   //!	\brief	Stores all objects of an objfile object definition
+   //	Stores all objects of an objfile object definition
    struct Object
    {
-      enum ObjectType
+      enum eObjectType
       {
-         ObjType,
-         GroupType
+         OBJTYPE,
+         GROUPTYPE
       };
 
       //!	Object name
-      String_c m_strObjName;
+      std::string m_strObjName;
       //!	Transformation matrix, stored in OpenGL format
       Matrix4f m_Transformation;
       //!	All sub-objects referenced by this object
@@ -154,18 +152,18 @@ namespace objfile
    struct Material
    {
       //!	Name of material description
-      String_c MaterialName;
+      std::string MaterialName;
 
       //!	Texture names
-      String_c texture;
-      String_c textureSpecular;
-      String_c textureAmbient;
-      String_c textureEmissive;
-      String_c textureBump;
-      String_c textureNormal;
-      String_c textureSpecularity;
-      String_c textureOpacity;
-      String_c textureDisp;
+      std::string texture;
+      std::string textureSpecular;
+      std::string textureAmbient;
+      std::string textureEmissive;
+      std::string textureBump;
+      std::string textureNormal;
+      std::string textureSpecularity;
+      std::string textureOpacity;
+      std::string textureDisp;
       enum eTextureType
       {
          TextureDiffuseType ,
@@ -253,11 +251,11 @@ namespace objfile
    // data structure to store all obj-specific model datas
    struct Model
    {
-      typedef std::map<String_c, std::vector<uint32>* > GroupMap;
-      typedef std::map<String_c, std::vector<uint32>* >::iterator GroupMapIt;
-      typedef std::map<String_c, std::vector<uint32>* >::const_iterator ConstGroupMapIt;
+      typedef std::map<std::string, std::vector<uint32>* > GroupMap;
+      typedef std::map<std::string, std::vector<uint32>* >::iterator GroupMapIt;
+      typedef std::map<std::string, std::vector<uint32>* >::const_iterator ConstGroupMapIt;
 
-      String_c m_modelName;
+      std::string m_modelName;
       //	List ob assigned objects
       std::vector<Object*> m_objects;
       //	Pointer to current object
@@ -267,9 +265,9 @@ namespace objfile
       //	Pointer to default material
       objfile::Material *m_pDefaultMaterial;
       //	Vector with all generated materials
-      std::vector<String_c> m_materialLib;
+      std::vector<std::string> m_materialLib;
       //	Vector with all generated group
-      std::vector<String_c> m_groupLib;
+      std::vector<std::string> m_groupLib;
       //	Vector with all generated vertices
       std::vector<Vector3f> m_pVertices;
       //	vector with all generated normals
@@ -279,7 +277,7 @@ namespace objfile
       //	Group to face id assignment
       std::vector<uint32> *m_pGroupFaceIDs;
       //	Active group
-      String_c m_strActiveGroup;
+      std::string m_strActiveGroup;
       //	Vector with generated texture coordinates
       //std::vector<Vector2f> m_textureCoord2;
       std::vector<Vector3f> m_textureCoord;
@@ -288,7 +286,7 @@ namespace objfile
 
       std::vector<Mesh*> m_meshes;
 
-      std::map<String_c, Material*> m_materialMap;
+      std::map<std::string, Material*> m_materialMap;
 
       Model() :
          m_modelName(""),
@@ -324,7 +322,7 @@ namespace objfile
          }
          m_groups.clear();
 
-         for (std::map<String_c, Material*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
+         for (std::map<std::string, Material*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
             delete it->second;
          }
       }

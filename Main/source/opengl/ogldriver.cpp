@@ -53,7 +53,7 @@ namespace ogldriver
       if (error != GLEW_OK)
          return false;
 
-      int attributes[] = {
+      int32 attributes[] = {
          WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
          WGL_CONTEXT_MINOR_VERSION_ARB, 4,
          WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
@@ -70,7 +70,7 @@ namespace ogldriver
       else
          hRC = tempOpenglContext;
 
-      int glVersion[2] = { -1, -1 };
+      int32 glVersion[2] = { -1, -1 };
 
       glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
       glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
@@ -86,7 +86,7 @@ namespace ogldriver
    void OGLDriver::SetViewportSize(float viewportWidth, float viewportHeight)
    {
       RECT rect;
-      int width, height;
+      int32 width, height;
 
       GetClientRect(m_hWnd, &rect);
       width = rect.right;

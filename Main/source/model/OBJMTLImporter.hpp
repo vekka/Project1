@@ -41,8 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <vector>
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
 #include "gfx/color.hpp"
 using gfx::color::Colorf;
@@ -72,7 +72,7 @@ namespace model
        typedef std::vector<char>::const_iterator ConstDataArrayIterator_t;
     private:
 
-    	String_c m_strAbsPath;
+    	std::string m_strAbsPath;
     	//	Data iterator showing to the current position in data buffer
     	/*DataArrayIterator_t m_dataIterator;*/
       ConstDataArrayIterator_t m_dataIterator;
@@ -104,7 +104,7 @@ namespace model
     	void GetTextureOption(bool &clamp);    	
     
     public:
-    	ObjMtlImporter( const std::vector<char> &buffer, const String_c &strAbsPath, objfile::Model *pModel ); 	
+    	ObjMtlImporter( const std::vector<char> &buffer, const std::string &strAbsPath, objfile::Model *pModel ); 	
     	~ObjMtlImporter();
     };
   

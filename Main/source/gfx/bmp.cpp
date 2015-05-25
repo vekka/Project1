@@ -7,14 +7,14 @@ bool BMPFile::ReadBMP( void )
 	//	return false;
 	//}
 
-  // for (int row = header.height - 1; row >= 0; row--)
+  // for (int32 row = header.height - 1; row >= 0; row--)
   // {
   //    //pixelBuffer = data + row*header.width*4;
 
-  //    for (int column = 0; column < header.width; column++)
+  //    for (int32 column = 0; column < header.width; column++)
 		//{
   //       byte red, green, blue, alpha;
-		//	int palIndex;
+		//	int32 palIndex;
 		//	unsigned short shortPixel;
 		//	switch ( header.bitsPerPixel )
 		//	{
@@ -119,7 +119,7 @@ bool BMPFile::ReadBMP( void )
 //   //rawImage.SetDimensions(header.width, header.height);
 //
 //	//rawImage.numPixels = header.width * header.height; // calculate in raw
-//   int rawImgSize = header.width * header.height * 4;
+//   int32 rawImgSize = header.width * header.height * 4;
 //
 //   //byte	*pixelBuffer;
 //   //data = new byte[rawImgSize];

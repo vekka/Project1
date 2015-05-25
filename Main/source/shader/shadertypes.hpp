@@ -85,7 +85,7 @@ namespace oglshader
       { "bool", 4, TYPE_BOOL },
       { "byte", 4, TYPE_BYTE },
       { "short", 5, TYPE_SHORT },
-      { "int", 3, TYPE_INT },
+      { "int32", 3, TYPE_INT },
       { "float", 5, TYPE_FLOAT },
       { "double", 6, TYPE_DOUBLE },
       { "half", 4, TYPE_HALF_FLOAT }, // NOTE: not an actual GLSL type
@@ -132,7 +132,7 @@ namespace oglshader
       //{ NULL, 0, 0 },
    };
 
-   int32 TypeSizeof(int type);
+   int32 TypeSizeof(int32 type);
    const char *const GetTypeString(int32 type);
    int32 GetNumElements(int32 type);
 

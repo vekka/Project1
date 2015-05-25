@@ -30,7 +30,7 @@ class BMPFile: public File
 {
 private:
 	 // use rawimage class for storing pixeldata
-	/*int	row, column;*/
+	/*int32	row, column;*/
 	//byte	*bufferPtr;
 	int32	length;
 	Header header;

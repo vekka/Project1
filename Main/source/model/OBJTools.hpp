@@ -48,8 +48,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //#include "ParsingUtils.h"
 #include <vector>
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
 using core::IsSpaceOrNewLine;
 
@@ -138,7 +138,7 @@ namespace objtools
    *	@return	Current-iterator with new position
    */
    template<typename TChar>
-   inline TChar GetName(TChar it, TChar end, String_c &name)
+   inline TChar GetName(TChar it, TChar end, std::string &name)
    {
       name = "";
       if (IsEndOfBuffer(it, end)) {
@@ -160,7 +160,7 @@ namespace objtools
       while (&(*it) < pStart) {
          ++it;
       }
-      String_c strName(pStart, &(*it));
+      std::string strName(pStart, &(*it));
       if (strName.IsEmpty())
          return it;
       else
@@ -211,7 +211,7 @@ namespace objtools
    }
 
    /**	@brief	Will perform a simple tokenize.
-   *	@param	str			String to tokenize.
+   *	@param	str			string to tokenize.
    *	@param	tokens		Array with tokens, will be empty if no token was found.
    *	@param	delimiters	Delimiter for tokenize.
    *	@return	Number of found token.

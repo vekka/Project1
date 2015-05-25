@@ -48,15 +48,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using model::objparser::ObjParser;
 
 #include "OBJFile.hpp"
-//#include <boost/scoped_ptr.hpp>
+using objfile::Material;
+#include "../core/memory/scopedptr.hpp"
+using core::memory::ScopedPtr;
+
 //#include "../include/assimp/Importer.hpp"
 #include "../scene/scene.hpp"
 #include "ImporterDesc.hpp"
+
+using mesh2::Face;
+
+using scene::Node;
+using mesh2::PRIMITIVE_TYPE_LINE;
+using mesh2::PRIMITIVE_TYPE_POLYGON;
+using mesh2::PRIMITIVE_TYPE_POINT;
+using mesh2::PRIMITIVE_TYPE_TRIANGLE;
 //#include "../include/assimp/ai_assert.h"
 //#include "../include/assimp/DefaultLogger.hpp"
 
 #include "../core/fileio/filesys.hpp"
 using core::filesys::HasExtension;
+//using core::filesys::
 
 static const eImporterDesc desc = {
    "Wavefront Object Importer",
@@ -79,7 +91,7 @@ namespace objfileimporter
    using namespace std;
 
    ObjFileImporter::ObjFileImporter() :
-      m_Buffer(),
+      m_pBuffer(),
       m_pRootObject(NULL),
       m_strAbsPath("")
    {
@@ -101,8 +113,9 @@ namespace objfileimporter
       }
       else //Check file Header
       {
-         static const char *pTokens[] = { "mtllib", "usemtl", "v ", "vt ", "vn ", "o ", "g ", "s ", "f " };
-         return SearchFileHeaderForToken(pFile, fileName, pTokens, 9);
+         //static const char *pTokens[] = { "mtllib", "usemtl", "v ", "vt ", "vn ", "o ", "g ", "s ", "f " };
+         //return SearchFileHeaderForToken(pFile, fileName, pTokens, 9);
+         return true;
       }
    }
 
@@ -112,60 +125,61 @@ namespace objfileimporter
    }
 
    //	Obj-file import implementation
-   void ObjFileImporter::InternReadFile(const String_c &pFile, Scene* pScene, File* pFile)
+   void ObjFileImporter::InternReadFile(const std::string &pFileName, Scene* pScene, File* pFile)
    {
-      // Read file into memory
-      const String_c mode = "rb";
-      boost::scoped_ptr<IOStream> file(pFile->Open(pFile, mode));
-      if (!file.get()) {
-         throw DeadlyImportError("Failed to open file " + pFile + ".");
+     
+      pFile->Open(pFileName, true);
+      ScopedPtr<File> file(pFile);
+      if (!file.Get()) {
+         //throw DeadlyImportError("Failed to open file " + pFile + ".");
       }
 
       // Get the file-size and validate it, throwing an exception when fails
-      size_t fileSize = file->FileSize();
+      size_t fileSize = file->GetSize();
       if (fileSize < ObjMinSize) {
-         throw DeadlyImportError("OBJ-file is too small.");
+         //throw DeadlyImportError("OBJ-file is too small.");
       }
 
       // Allocate buffer and read file into it
-      TextFileToBuffer(file.get(), m_Buffer);
+      //TextFileToBuffer(file.Get(), m_pBuffer);
+      file->CopyToBuffer(m_pBuffer);
 
       // Get the model name
-      String_c  strModelName;
-      String_c::size_type pos = pFile.find_last_of("\\/");
-      if (pos != String_c::npos)
+      std::string strModelName;
+      std::string::size_type pos = pFileName.find_last_of("\\/");
+      if (pos != std::string::npos)
       {
-         strModelName = pFile.substr(pos + 1, pFile.size() - pos - 1);
+         strModelName = pFileName.substr(pos + 1, pFileName.size() - pos - 1);
       }
       else
       {
-         strModelName = pFile;
+         strModelName = pFileName;
       }
 
       // process all '\'
-      std::vector<char> ::iterator iter = m_Buffer.begin();
-      while (iter != m_Buffer.end())
+      std::vector<char> ::iterator iter = m_pBuffer.begin();
+      while (iter != m_pBuffer.end())
       {
          if (*iter == '\\')
          {
             // remove '\'
-            iter = m_Buffer.erase(iter);
+            iter = m_pBuffer.erase(iter);
             // remove next character
             while (*iter == '\r' || *iter == '\n')
-               iter = m_Buffer.erase(iter);
+               iter = m_pBuffer.erase(iter);
          }
          else
             ++iter;
       }
 
       // parse the file into a temporary representation
-      ObjParser parser(m_Buffer, strModelName, pFile);
+      ObjParser parser(m_pBuffer, strModelName, pFile);
 
       // And create the proper return structures out of it
       CreateDataFromImport(parser.GetModel(), pScene);
 
       // Clean up allocated storage for the next import 
-      m_Buffer.clear();
+      m_pBuffer.clear();
    }
 
    // ------------------------------------------------------------------------------------------------
@@ -176,11 +190,11 @@ namespace objfileimporter
       }
 
       // Create the root node of the scene
-      pScene->mRootNode = new Node;
-      if (!pModel->m_ModelName.empty())
+      pScene->m_pRootNode = new Node;
+      if (!pModel->m_modelName.empty())
       {
          // Set the name of the scene
-         pScene->mRootNode->mName.Set(pModel->m_ModelName);
+         pScene->m_pRootNode->m_name = pModel->m_modelName;
       }
       else
       {
@@ -190,23 +204,23 @@ namespace objfileimporter
 
       // Create nodes for the whole scene	
       std::vector<Mesh*> MeshArray;
-      for (size_t index = 0; index < pModel->m_Objects.size(); index++)
+      for (size_t index = 0; index < pModel->m_objects.size(); index++)
       {
-         CreateNodes(pModel, pModel->m_Objects[index], pScene->mRootNode, pScene, MeshArray);
+         CreateNodes(pModel, pModel->m_objects[index], pScene->m_pRootNode, pScene, MeshArray);
       }
 
       // Create mesh pointer buffer for this scene
-      if (pScene->mNumMeshes > 0)
+      if (pScene->m_numMeshes > 0)
       {
-         pScene->mMeshes = new Mesh*[MeshArray.size()];
+         pScene->m_ppMeshes = new Mesh*[MeshArray.size()];
          for (size_t index = 0; index < MeshArray.size(); index++)
          {
-            pScene->mMeshes[index] = MeshArray[index];
+            pScene->m_ppMeshes[index] = MeshArray[index];
          }
       }
 
       // Create all materials
-      createMaterials(pModel, pScene);
+      CreateMaterials(pModel, pScene);
    }
 
    // ------------------------------------------------------------------------------------------------
@@ -224,18 +238,18 @@ namespace objfileimporter
       const size_t oldMeshSize = MeshArray.size();
       Node *pNode = new Node;
 
-      pNode->mName = pObject->m_strObjName;
+      pNode->m_name = pObject->m_strObjName;
 
       // If we have a parent node, store it
       if (pParent != NULL) {
-         appendChildToParentNode(pParent, pNode);
+         AppendChildToParentNode(pParent, pNode);
       }
 
       for (size_t i = 0; i< pObject->m_meshes.size(); i++)
       {
          uint32 meshId = pObject->m_meshes[i];
-         Mesh *pMesh = createTopology(pModel, pObject, meshId);
-         if (pMesh && pMesh->mNumFaces > 0) {
+         Mesh *pMesh = CreateTopology(pModel, pObject, meshId);
+         if (pMesh && pMesh->m_numFaces > 0) {
             MeshArray.push_back(pMesh);
          }
       }
@@ -244,23 +258,23 @@ namespace objfileimporter
       if (!pObject->m_SubObjects.empty())
       {
          size_t numChilds = pObject->m_SubObjects.size();
-         pNode->mNumChildren = static_cast<uint32>(numChilds);
-         pNode->mChildren = new Node*[numChilds];
-         pNode->mNumMeshes = 1;
-         pNode->mMeshes = new uint32[1];
+         pNode->m_numChildren = static_cast<uint32>(numChilds);
+         pNode->m_ppChildren = new Node*[numChilds];
+         pNode->m_numMeshes = 1;
+         pNode->m_ppMeshes = new uint32[1];
       }
 
       // Set mesh instances into scene- and node-instances
       const size_t meshSizeDiff = MeshArray.size() - oldMeshSize;
       if (meshSizeDiff > 0)
       {
-         pNode->mMeshes = new uint32[meshSizeDiff];
-         pNode->mNumMeshes = static_cast<uint32>(meshSizeDiff);
+         pNode->m_ppMeshes = new uint32[meshSizeDiff];
+         pNode->m_numMeshes = static_cast<uint32>(meshSizeDiff);
          size_t index = 0;
          for (size_t i = oldMeshSize; i < MeshArray.size(); i++)
          {
-            pNode->mMeshes[index] = pScene->mNumMeshes;
-            pScene->mNumMeshes++;
+            pNode->m_ppMeshes[index] = pScene->m_numMeshes;
+            pScene->m_numMeshes++;
             index++;
          }
       }
@@ -270,7 +284,7 @@ namespace objfileimporter
 
    // ------------------------------------------------------------------------------------------------
    //	Create topology data
-   Mesh *ObjFileImporter::createTopology(const objfile::Model* pModel, const objfile::Object* pData,
+   Mesh *ObjFileImporter::CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
       uint32 meshIndex)
    {
       // Checking preconditions
@@ -287,80 +301,80 @@ namespace objfileimporter
       }
       ai_assert(NULL != pObjMesh);
       Mesh* pMesh = new Mesh;
-      for (size_t index = 0; index < pObjMesh->m_Faces.size(); index++)
+      for (size_t index = 0; index < pObjMesh->m_faces.size(); index++)
       {
-         objfile::Face *const inp = pObjMesh->m_Faces[index];
+         objfile::Face *const inp = pObjMesh->m_faces[index];
          ai_assert(NULL != inp);
 
-         if (inp->m_PrimitiveType == aiPrimitiveType_LINE) {
-            pMesh->mNumFaces += inp->m_pVertices->size() - 1;
-            pMesh->mPrimitiveTypes |= aiPrimitiveType_LINE;
+         if (inp->m_primitiveType == PRIMITIVE_TYPE_LINE) {
+            pMesh->m_numFaces += inp->m_pVertexIndices->size() - 1;
+            pMesh->m_primitiveTypes |= PRIMITIVE_TYPE_LINE;
          }
-         else if (inp->m_PrimitiveType == aiPrimitiveType_POINT) {
-            pMesh->mNumFaces += inp->m_pVertices->size();
-            pMesh->mPrimitiveTypes |= aiPrimitiveType_POINT;
+         else if (inp->m_primitiveType == PRIMITIVE_TYPE_POINT) {
+            pMesh->m_numFaces += inp->m_pVertexIndices->size();
+            pMesh->m_primitiveTypes |= PRIMITIVE_TYPE_POINT;
          }
          else {
-            ++pMesh->mNumFaces;
-            if (inp->m_pVertices->size() > 3) {
-               pMesh->mPrimitiveTypes |= aiPrimitiveType_POLYGON;
+            ++pMesh->m_numFaces;
+            if (inp->m_pVertexIndices->size() > 3) {
+               pMesh->m_primitiveTypes |= PRIMITIVE_TYPE_POLYGON;
             }
             else {
-               pMesh->mPrimitiveTypes |= aiPrimitiveType_TRIANGLE;
+               pMesh->m_primitiveTypes |= PRIMITIVE_TYPE_POLYGON;
             }
          }
       }
 
       uint32 uiIdxCount(0u);
-      if (pMesh->mNumFaces > 0)
+      if (pMesh->m_numFaces > 0)
       {
-         pMesh->mFaces = new aiFace[pMesh->mNumFaces];
+         pMesh->m_pFaces = new Face[pMesh->m_numFaces];
          if (pObjMesh->m_uiMaterialIndex != objfile::Mesh::NoMaterial)
          {
-            pMesh->mMaterialIndex = pObjMesh->m_uiMaterialIndex;
+            pMesh->m_materialIndex = pObjMesh->m_uiMaterialIndex;
          }
 
          uint32 outIndex(0);
 
          // Copy all data from all stored meshes
-         for (size_t index = 0; index < pObjMesh->m_Faces.size(); index++)
+         for (size_t index = 0; index < pObjMesh->m_faces.size(); index++)
          {
-            objfile::Face* const inp = pObjMesh->m_Faces[index];
-            if (inp->m_PrimitiveType == aiPrimitiveType_LINE) {
-               for (size_t i = 0; i < inp->m_pVertices->size() - 1; ++i) {
-                  aiFace& f = pMesh->mFaces[outIndex++];
-                  uiIdxCount += f.mNumIndices = 2;
-                  f.mIndices = new uint32[2];
+            objfile::Face* const inp = pObjMesh->m_faces[index];
+            if (inp->m_primitiveType == PRIMITIVE_TYPE_LINE) {
+               for (size_t i = 0; i < inp->m_pVertexIndices->size() - 1; ++i) {
+                  Face& f = pMesh->m_pFaces[outIndex++];
+                  uiIdxCount += f.m_numIndices = 2;
+                  f.m_pIndexArray = new uint32[2];
                }
                continue;
             }
-            else if (inp->m_PrimitiveType == aiPrimitiveType_POINT) {
-               for (size_t i = 0; i < inp->m_pVertices->size(); ++i) {
-                  aiFace& f = pMesh->mFaces[outIndex++];
-                  uiIdxCount += f.mNumIndices = 1;
-                  f.mIndices = new uint32[1];
+            else if (inp->m_primitiveType == PRIMITIVE_TYPE_POINT) {
+               for (size_t i = 0; i < inp->m_pVertexIndices->size(); ++i) {
+                  Face& f = pMesh->m_pFaces[outIndex++];
+                  uiIdxCount += f.m_numIndices = 1;
+                  f.m_pIndexArray = new uint32[1];
                }
                continue;
             }
 
-            aiFace *pFace = &pMesh->mFaces[outIndex++];
-            const uint32 uiNumIndices = (uint32)pObjMesh->m_Faces[index]->m_pVertices->size();
-            uiIdxCount += pFace->mNumIndices = (uint32)uiNumIndices;
-            if (pFace->mNumIndices > 0) {
-               pFace->mIndices = new uint32[uiNumIndices];
+            Face *pFace = &pMesh->m_pFaces[outIndex++];
+            const uint32 uiNumIndices = (uint32)pObjMesh->m_faces[index]->m_pVertexIndices->size();
+            uiIdxCount += pFace->m_numIndices = (uint32)uiNumIndices;
+            if (pFace->m_numIndices > 0) {
+               pFace->m_pIndexArray = new uint32[uiNumIndices];
             }
          }
       }
 
       // Create mesh vertices
-      createVertexArray(pModel, pData, meshIndex, pMesh, uiIdxCount);
+      CreateVertexArray(pModel, pData, meshIndex, pMesh, uiIdxCount);
 
       return pMesh;
    }
 
    // ------------------------------------------------------------------------------------------------
    //	Creates a vertex array
-   void ObjFileImporter::createVertexArray(const objfile::Model* pModel,
+   void ObjFileImporter::CreateVertexArray(const objfile::Model* pModel,
       const objfile::Object* pCurrentObject,
       uint32 uiMeshIndex,
       Mesh* pMesh,
@@ -401,55 +415,57 @@ namespace objfileimporter
          objfile::Face *pSourceFace = pObjMesh->m_faces[index];
 
          // Copy all index arrays
-         for (size_t vertexIndex = 0, outVertexIndex = 0; vertexIndex < pSourceFace->m_pVertices->size(); vertexIndex++)
+         for (size_t vertexIndex = 0, outVertexIndex = 0; vertexIndex < pSourceFace->m_pVertexIndices->size(); vertexIndex++)
          {
-            const uint32 vertex = pSourceFace->m_pVertices->at(vertexIndex);
-            if (vertex >= pModel->m_pVertices.size())
-               throw DeadlyImportError("OBJ: vertex index out of range");
+            const uint32 vertex = pSourceFace->m_pVertexIndices->at(vertexIndex);
+
+            // Where is DeadlyImportError?
+       /*     if (vertex >= pModel->m_pVertices.size())
+               throw DeadlyImportError("OBJ: vertex index out of range");*/
 
             pMesh->m_pVertices[newIndex] = pModel->m_pVertices[vertex];
 
             // Copy all normals 
-            if (!pModel->m_pNormals.empty() && vertexIndex < pSourceFace->m_pNormals->size())
+            if (!pModel->m_pNormals.empty() && vertexIndex < pSourceFace->m_pNormalIndices->size())
             {
-               const uint32 normal = pSourceFace->m_pNormals->at(vertexIndex);
-               if (normal >= pModel->m_pNormals.size())
-                  throw DeadlyImportError("OBJ: vertex normal index out of range");
+               const uint32 normal = pSourceFace->m_pNormalIndices->at(vertexIndex);
+  /*             if (normal >= pModel->m_pNormals.size())
+                  throw DeadlyImportError("OBJ: vertex normal index out of range");*/
 
                pMesh->m_pNormals[newIndex] = pModel->m_pNormals[normal];
             }
 
             // Copy all texture coordinates
-            if (!pModel->m_pTextureCoord.empty() && vertexIndex < pSourceFace->m_pTexturCoords->size())
+            if (!pModel->m_textureCoord.empty() && vertexIndex < pSourceFace->m_pTexCoordIndices->size())
             {
-               const uint32 tex = pSourceFace->m_pTexturCoords->at(vertexIndex);
-               ai_assert(tex < pModel->m_pTextureCoord.size());
+               const uint32 tex = pSourceFace->m_pTexCoordIndices->at(vertexIndex);
+               ai_assert(tex < pModel->m_textureCoord.size());
 
-               if (tex >= pModel->m_pTextureCoord.size())
-                  throw DeadlyImportError("OBJ: texture coordinate index out of range");
+               //if (tex >= pModel->m_textureCoord.size())
+               //   throw DeadlyImportError("OBJ: texture coordinate index out of range");
 
-               const Vector3f &coord3d = pModel->m_pTextureCoord[tex];
-               pMesh->mTextureCoords[0][newIndex] = Vector3f(coord3d.x, coord3d.y, coord3d.z);
+               const Vector3f &coord3d = pModel->m_textureCoord[tex];
+               pMesh->m_pTextureCoords[0][newIndex] = Vector3f(coord3d[0], coord3d[1], coord3d[2]);
             }
 
             ai_assert(pMesh->m_numVertices > newIndex);
 
             // Get destination face
-            aiFace *pDestFace = &pMesh->mFaces[outIndex];
+            Face *pDestFace = &pMesh->m_pFaces[outIndex];
 
-            const bool last = (vertexIndex == pSourceFace->m_pVertices->size() - 1);
-            if (pSourceFace->m_PrimitiveType != aiPrimitiveType_LINE || !last)
+            const bool last = (vertexIndex == pSourceFace->m_pVertexIndices->size() - 1);
+            if (pSourceFace->m_primitiveType != PRIMITIVE_TYPE_LINE || !last)
             {
-               pDestFace->mIndices[outVertexIndex] = newIndex;
+               pDestFace->m_pIndexArray[outVertexIndex] = newIndex;
                outVertexIndex++;
             }
 
-            if (pSourceFace->m_PrimitiveType == aiPrimitiveType_POINT)
+            if (pSourceFace->m_primitiveType == PRIMITIVE_TYPE_POINT)
             {
                outIndex++;
                outVertexIndex = 0;
             }
-            else if (pSourceFace->m_PrimitiveType == aiPrimitiveType_LINE)
+            else if (pSourceFace->m_primitiveType == PRIMITIVE_TYPE_LINE)
             {
                outVertexIndex = 0;
 
@@ -459,18 +475,18 @@ namespace objfileimporter
                if (vertexIndex) {
                   if (!last) {
                      pMesh->m_pVertices[newIndex + 1] = pMesh->m_pVertices[newIndex];
-                     if (!pSourceFace->m_pNormals->empty() && !pModel->m_pNormals.empty()) {
+                     if (!pSourceFace->m_pNormalIndices->empty() && !pModel->m_pNormals.empty()) {
                         pMesh->m_pNormals[newIndex + 1] = pMesh->m_pNormals[newIndex];
                      }
-                     if (!pModel->m_pTextureCoord.empty()) {
+                     if (!pModel->m_textureCoord.empty()) {
                         for (size_t i = 0; i < pMesh->GetNumUVChannels(); i++) {
-                           pMesh->mTextureCoords[i][newIndex + 1] = pMesh->mTextureCoords[i][newIndex];
+                           pMesh->m_pTextureCoords[i][newIndex + 1] = pMesh->m_pTextureCoords[i][newIndex];
                         }
                      }
                      ++newIndex;
                   }
 
-                  pDestFace[-1].mIndices[1] = newIndex;
+                  pDestFace[-1].m_pIndexArray[1] = newIndex;
                }
             }
             else if (last) {
@@ -483,7 +499,7 @@ namespace objfileimporter
 
    // ------------------------------------------------------------------------------------------------
    //	Counts all stored meshes 
-   void ObjFileImporter::countObjects(const std::vector<objfile::Object*> &rObjects, int &iNumMeshes)
+   void ObjFileImporter::CountObjects(const std::vector<objfile::Object*> &rObjects, int32 &iNumMeshes)
    {
       iNumMeshes = 0;
       if (rObjects.empty())
@@ -496,23 +512,25 @@ namespace objfileimporter
       {
          if (!(*it)->m_SubObjects.empty())
          {
-            countObjects((*it)->m_SubObjects, iNumMeshes);
+            CountObjects((*it)->m_SubObjects, iNumMeshes);
          }
       }
    }
 
+   // this member is missing ....addTextureMappingModeProperty
+
    // ------------------------------------------------------------------------------------------------
    //	 Add clamp mode property to material if necessary 
-   void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int clampMode)
+   void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int32 clampMode)
    {
       ai_assert(NULL != mat);
-      mat->AddProperty<int>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
-      mat->AddProperty<int>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
+      mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
+      mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
    }
 
    // ------------------------------------------------------------------------------------------------
    //	Creates the material 
-   void ObjFileImporter::createMaterials(const objfile::Model* pModel, Scene* pScene)
+   void ObjFileImporter::CreateMaterials(const objfile::Model* pModel, Scene* pScene)
    {
       ai_assert(NULL != pScene);
       if (NULL == pScene)
@@ -529,19 +547,19 @@ namespace objfileimporter
       for (uint32 matIndex = 0; matIndex < numMaterials; matIndex++)
       {
          // Store material name
-         std::map<String_c, objfile::Material*>::const_iterator it;
+         std::map<std::string, objfile::Material*>::const_iterator it;
          it = pModel->m_MaterialMap.find(pModel->m_MaterialLib[matIndex]);
 
          // No material found, use the default material
          if (pModel->m_MaterialMap.end() == it)
             continue;
 
-         aiMaterial* mat = new aiMaterial;
-         objfile::Material *pCurrentMaterial = (*it).second;
+         Material* mat = new Material;
+         Material *pCurrentMaterial = (*it).second;
          mat->AddProperty(&pCurrentMaterial->MaterialName, AI_MATKEY_NAME);
 
          // convert illumination model
-         int sm = 0;
+         int32 sm = 0;
          switch (pCurrentMaterial->illumination_model)
          {
          case 0:
@@ -558,7 +576,7 @@ namespace objfileimporter
             DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
          }
 
-         mat->AddProperty<int>(&sm, 1, AI_MATKEY_SHADING_MODEL);
+         mat->AddProperty<int32>(&sm, 1, AI_MATKEY_SHADING_MODEL);
 
          // multiplying the specular exponent with 2 seems to yield better results
          pCurrentMaterial->shineness *= 4.f;
@@ -661,7 +679,7 @@ namespace objfileimporter
 
    // ------------------------------------------------------------------------------------------------
    //	Appends this node to the parent node
-   void ObjFileImporter::appendChildToParentNode(Node *pParent, Node *pChild)
+   void ObjFileImporter::AppendChildToParentNode(Node *pParent, Node *pChild)
    {
       // Checking preconditions
       ai_assert(NULL != pParent);

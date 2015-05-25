@@ -52,6 +52,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <algorithm>
 
+#include <assert.h>
+
+#include <cctype>
+
 //#ifdef __unix__
 //#include <sys/param.h>
 //#include <stdlib.h>
@@ -63,9 +67,9 @@ namespace core
    namespace filesys
    {
 
-      bool Exists(const char* pFile)
+      bool Exists(const char* pFileName)
       {
-         FILE* file = ::fopen(pFile, "rb");
+         FILE* file = ::fopen(pFileName, "rb");
          if (!file)
             return false;
 
@@ -87,9 +91,9 @@ namespace core
 
       //// ------------------------------------------------------------------------------------------------
       //// Closes the given file and releases all resources associated with it.
-      //void FileSys::Close(IOStream* pFile)
+      //void FileSys::Close(IOStream* pFileName)
       //{
-      //   delete pFile;
+      //   delete pFileName;
       //}
 
       // ------------------------------------------------------------------------------------------------
@@ -103,7 +107,7 @@ namespace core
 //#endif
 //      }
 //
-      //bool FileSys::ComparePaths(const String_c &one, const String_c &second) const
+      //bool FileSys::ComparePaths(const std::string &one, const std::string &second) const
       //{
       //   return (one == second);
       //}
@@ -217,6 +221,60 @@ namespace core
          std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower); // thanks to Andy Maloney for the hint
          return ret;
       }
+
+      //bool SearchFileHeaderForToken(File* pFile,
+      //   const std::string &pFileName,
+      //   const char** tokens,
+      //   uint32 numTokens,
+      //   uint32 searchBytes /* = 200 */,
+      //   bool tokensSol /* false */)
+      //{
+      //   assert(NULL != tokens && 0 != numTokens && 0 != searchBytes);
+      //   if (!pFile)
+      //      return false;
+
+      //   //boost::scoped_ptr<IOStream> pStream(pFile->Open(pFileName));
+      //   pFile->Open(pFileName);
+
+      //   if (pStream.get())	{
+      //      // read 200 characters from the file
+      //      boost::scoped_array<char> _buffer(new char[searchBytes + 1 /* for the '\0' */]);
+      //      char* buffer = _buffer.get();
+
+      //      const uint32 read = pStream->Read(buffer, 1, searchBytes);
+      //      if (!read)
+      //         return false;
+
+      //      for (uint32 i = 0; i < read; ++i)
+      //         buffer[i] = ::tolower(buffer[i]);
+
+      //      // It is not a proper handling of unicode files here ...
+      //      // ehm ... but it works in most cases.
+      //      char* cur = buffer, *cur2 = buffer, *end = &buffer[read];
+      //      while (cur != end)	{
+      //         if (*cur)
+      //            *cur2++ = *cur;
+      //         ++cur;
+      //      }
+      //      *cur2 = '\0';
+
+      //      for (uint32 i = 0; i < numTokens; ++i)	{
+      //         assert(NULL != tokens[i]);
+
+
+      //         const char* r = strstr(buffer, tokens[i]);
+      //         if (!r)
+      //            continue;
+      //         // We got a match, either we don't care where it is, or it happens to
+      //         // be in the beginning of the file / line
+      //         if (!tokensSol || r == buffer || r[-1] == '\r' || r[-1] == '\n') {
+      //            //DefaultLogger::get()->debug(std::string("Found positive match for header keyword: ") + tokens[i]);
+      //            return true;
+      //         }
+      //      }
+      //   }
+      //   return false;
+      //}
 
    } // namespace filesys
 

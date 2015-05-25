@@ -1,7 +1,7 @@
 #include <Windows.h>
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
 namespace win32keyboard
 {
@@ -240,14 +240,14 @@ namespace win32window
 
       HWND GetWindowHandle() const;
       HMENU GetMenuHandle() const;
-      const String_c &GetCaption() const;
+      const std::string &GetCaption() const;
 
       bool IsFullScreen() const;
 
       HINSTANCE GetInstance() const;
 
-      bool SetCaption(const String_c &);
-      void GetCaption(String_c &) const;
+      bool SetCaption(const std::string &);
+      void GetCaption(std::string &) const;
       void SetPosition(const uint32 newXPos, const uint32 newYPos);
       void GetPosition(uint32 &) const;
       //void SetDimension( const Dimension2u dimension );
@@ -306,7 +306,7 @@ namespace win32window
    //
    //   bool CreateDriver();
    //   void HandleSystemMessages();
-   //   String_c &GetWindowsVersion();
+   //   std::string &GetWindowsVersion();
    //   void Resize();
    //public:
    //   Win32Window();
@@ -314,7 +314,7 @@ namespace win32window
    //   void UnregisterWindowClass();
    //
    //   //----------- mutators
-   //   virtual bool SetCaption( const String_c & );
+   //   virtual bool SetCaption( const std::string & );
    //   virtual void SetFocus();
    //   virtual void SetClientExtent( const Dimension2u newExtent );
    //   virtual void SetResizable( const bool resizable );
@@ -323,7 +323,7 @@ namespace win32window
    //   virtual bool IsActive() const;
    //   virtual bool IsFocused() const;
    //   virtual bool IsMinimized() const;
-   //   virtual String_c &GetCaption() const;
+   //   virtual std::string &GetCaption() const;
    //   virtual Dimension2u GetClientExtent() const;
    //   void GetVideoModeList(); // TODO: list
    //

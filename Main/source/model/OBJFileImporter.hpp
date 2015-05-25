@@ -53,8 +53,8 @@ struct Node;
 #include "../core/fileio/file.hpp"
 using core::fileio::File;
 
-#include "../core/string/string.hpp"
-using core::string::String_c;
+//#include "../core/string/string.hpp"
+//using core::string::String_c;
 
 #include "OBJFile.hpp"
 
@@ -84,45 +84,45 @@ namespace objfileimporter
    private:
 
       //! \brief	Appends the supported extension.
-      //const ImporterDesc* GetInfo() const;
+      const eImporterDesc* GetInfo() const;
      
       //TODO: implement later, we need the scene.h code here
-      //void InternReadFile(const String_c &filePath, Scene* pScene, File* pFile);
+      void InternReadFile(const std::string &filePath, Scene* pScene, File* pFile);
 
-      //!	\brief	Create the data from imported content.
+      // Create the data from imported content.
       void CreateDataFromImport(const objfile::Model* pModel, Scene* pScene);
 
       // Creates all nodes stored in imported content.
       Node *CreateNodes(const objfile::Model* pModel, const objfile::Object* pData,
          Node *pParent, Scene* pScene, std::vector<mesh2::Mesh*> &MeshArray);
 
-      //!	\brief	Creates topology data like faces and meshes for the geometry.
-      mesh2::Mesh *createTopology(const objfile::Model* pModel, const objfile::Object* pData,
+      // Creates topology data like faces and meshes for the geometry.
+      mesh2::Mesh *CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
          uint32 uiMeshIndex);
 
       //!	\brief	Creates vertices from model.
-      void createVertexArray(const objfile::Model* pModel, const objfile::Object* pCurrentObject,
+      void CreateVertexArray(const objfile::Model* pModel, const objfile::Object* pCurrentObject,
          uint32 uiMeshIndex, mesh2::Mesh* pMesh, uint32 numIndices);
 
       //!	\brief	Object counter helper method.
-      void countObjects(const std::vector<objfile::Object*> &rObjects, int &iNumMeshes);
+      void CountObjects(const std::vector<objfile::Object*> &rObjects, int32 &iNumMeshes);
 
       //!	\brief	Material creation.
-      void createMaterials(const objfile::Model* pModel, Scene* pScene);
+      void CreateMaterials(const objfile::Model* pModel, Scene* pScene);
 
       ///	@brief  Adds special property for the used texture mapping mode of the model.
-      //void addTextureMappingModeProperty(Material* mat, aiTextureType type, int clampMode = 1);
+      //void addTextureMappingModeProperty(Material* mat, aiTextureType type, int32 clampMode = 1);
 
       //!	\brief	Appends a child node to a parent node and updates the data structures.
-      void appendChildToParentNode(Node *pParent, Node *pChild);
+      void AppendChildToParentNode(Node *pParent, Node *pChild);
 
    private:
-      //!	Data buffer
-      std::vector<char> m_Buffer;
-      //!	Pointer to root object instance
+      //	Data buffer
+      std::vector<char> m_pBuffer;
+      //	Pointer to root object instance
       objfile::Object *m_pRootObject;
-      //!	Absolute pathname of model in file system
-      String_c m_strAbsPath;
+      //	Absolute pathname of model in file system
+      std::string m_strAbsPath;
    };
 
 } // namespace objfileimporter

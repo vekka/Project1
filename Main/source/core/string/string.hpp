@@ -23,6 +23,9 @@ in the jpeglib, the zlib and libPng for further informations.
 
 // TODO: make << operator for stream, (cout etc.)
 
+// TODO: make this interface to be a superset of std::string interface, i.e. this custom string class should have an extended functionality
+// of std::string. Optionally see stringext.hpp for inherited functionality from std 
+
 #ifndef _STRING_HPP_INCLUDED_
 #define _STRING_HPP_INCLUDED_
 
@@ -44,7 +47,7 @@ namespace core
    {
 
       template <typename T, typename TAlloc = Allocator<T>>
-      class String
+      class string
       {
       private:
          T* m_strArray;
@@ -58,25 +61,25 @@ namespace core
          typedef T* iterator;
          typedef const T* const_iterator;
 
-         String();
-         String(const String &other);
-         template <typename B> String(const B* const c, const uint32 length);
-         template <typename B> String(const B* const c);
-         explicit String(const int32 number);
-         explicit String(const float number);
-         template <typename TInputIterator> String(const TInputIterator first, const TInputIterator last);
-         //template <typename TInputIterator> String(const TInputIterator first, const TInputIterator last);
+         string();
+         string(const string &other);
+         template <typename B> string(const B* const c, const uint32 length);
+         template <typename B> string(const B* const c);
+         explicit string(const int32 number);
+         explicit string(const float number);
+         template <typename TInputIterator> string(const TInputIterator first, const TInputIterator last);
+         //template <typename TInputIterator> string(const TInputIterator first, const TInputIterator last);
 
          iterator begin();
          const_iterator begin() const;
          iterator end();
          const_iterator end() const;
 
-         ~String();
+         ~string();
 
-         String &operator=(const String &other);
-         template <typename B> String &operator=(const B* const c);
-         String &operator=(const int32 number);
+         string &operator=(const string &other);
+         template <typename B> string &operator=(const B* const c);
+         string &operator=(const int32 number);
 
          int32 StringToInt() const; // return the first int32 value in a string or return INT32_MAX if not found
          float StringToFloat() const; // return the first float value in a string or return FLOAT_MAX if not found
@@ -92,62 +95,63 @@ namespace core
          const T* CString() const;
 
          bool operator==(const T* const str) const;
-         bool operator==(const String &other) const;
+         bool operator==(const string &other) const;
          bool operator==(const int32 number) const;
-         bool operator<(const String &other) const;
-         bool operator>(const String &other) const;
-         bool operator<=(const String &other) const;
-         bool operator>=(const String &other) const;
+         bool operator<(const string &other) const;
+         bool operator>(const string &other) const;
+         bool operator<=(const string &other) const;
+         bool operator>=(const string &other) const;
          bool operator!=(const T* const str) const;
-         bool operator!=(const String &other) const;
+         bool operator!=(const string &other) const;
 
          bool EqualSubstr(const uint32 index1, const uint32 index2, const T* const str);
 
-         String &Erase(const uint32 index1, const uint32 index2); // erase index2-index1 number of char from index1 inclusive
+         string &Erase(const uint32 index1, const uint32 index2); // erase index2-index1 number of char from index1 inclusive
 
          void Trim(const bool left = true, const bool right = true);
 
-         String &RemoveChars(const String &chars);
-         bool EqualsN(const String &other, const uint32 n) const;
+         string &RemoveChars(const string &chars);
+         bool EqualsN(const string &other, const uint32 n) const;
          bool EqualsN(const T* const str, const uint32 n) const;
-         String &ToUpper();
-         String &ToLower();
+         string &ToUpper();
+         string &ToLower();
 
-         String &Append(const T character);
-         String &Append(const T* const other, const uint32 length = 0xffffffff);
-         String &Append(const String &other);
+         string &Append(const T character);
+         string &Append(const T* const other, const uint32 length = 0xffffffff);
+         string &Append(const string &other);
 
-         String operator+(const String &other) const;
-         String &operator+=(const char character);
+         string operator+(const string &other) const;
+         string &operator+=(const char character);
 
-         int32 FindFirst(const T c) const;
-         int32 FindFirstNotOf(const T c) const;
-         int32 FindFirstNotOf(const String<T, TAlloc> &chars) const;
-         int32 FindLast(const T c) const;
-         int32 FindLastNotOf(const T c) const;
-         int32 FindLastNotOf(const String<T, TAlloc> &chars) const;
+         int32 find_first_of(const T c) const;
+         int32 find_first_not_of(const T c) const;
+         int32 find_first_not_of(const string<T, TAlloc> &chars) const;
+         int32 find_last_of(const T c) const;
+         int32 find_last_not_of(const T c) const;
+         int32 find_last_not_of(const string<T, TAlloc> &chars) const;
+
          int32 FindNext(const T c, const uint32 startPos) const;
          int32 FindNextNumber(const uint32 startPos) const;
 
          template <typename TContainer> int32 Tokenize(TContainer &ret, const T* const delimiter = " \t\r\n", const int32 count = 1,
             const bool ignoreEmptyTokens = true, const bool keepSeparators = false) const;
-         String SubString(const uint32 begin, const uint32 length, const bool makeLower = false) const;
-         String operator()(const uint32 index1, const uint32 index2);
-         String operator()(const uint32 index);
+         string SubString(const uint32 begin, const uint32 length, const bool makeLower = false) const;
+         string operator()(const uint32 index1, const uint32 index2);
+         string operator()(const uint32 index);
          void Reserve(const uint32 count);
 
-         //friend std::ostream &operator<<( std::ostream &out, const String &str )
+         //friend std::ostream &operator<<( std::ostream &out, const string &str )
          //{
          //   out << str->m_strArray;
          //   return out;
          //}
       };
 
-      typedef String<char> String_c;
-      typedef String<wchar_t> String_w;
+      typedef string<char> String_c;
+      typedef string<wchar_t> String_w;
 
       template <typename T, typename TAlloc>
-      void String<T, TAlloc>::Reallocate(const uint32 newSize)
+      void string<T, TAlloc>::Reallocate(const uint32 newSize)
       {
          T* old_array = m_strArray;
 
@@ -165,21 +169,21 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc>::String() : m_allocated(1), m_used(1)
+      inline string<T, TAlloc>::string() : m_allocated(1), m_used(1)
       {
          m_strArray = m_allocator.Allocate(1);
          m_strArray[0] = 0;
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc>::String(const String<T, TAlloc> &other) : m_strArray(NULL), m_allocated(0), m_used(0)
+      inline string<T, TAlloc>::string(const string<T, TAlloc> &other) : m_strArray(NULL), m_allocated(0), m_used(0)
       {
          *this = other;
       }
 
       template <typename T, typename TAlloc>
       template <typename B>
-      String<T, TAlloc>::String(const B* const c, const uint32 length) : m_strArray(NULL), m_allocated(0), m_used(0)
+      string<T, TAlloc>::string(const B* const c, const uint32 length) : m_strArray(NULL), m_allocated(0), m_used(0)
       {
          if (!c)
          {
@@ -199,13 +203,13 @@ namespace core
 
       template <typename T, typename TAlloc>
       template <typename B>
-      String<T, TAlloc>::String(const B* const c) : m_strArray(NULL), m_allocated(0), m_used(0)
+      string<T, TAlloc>::string(const B* const c) : m_strArray(NULL), m_allocated(0), m_used(0)
       {
          *this = c;
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc>::String(const int32 number) : m_strArray(NULL), m_allocated(0), m_used(0)
+      inline string<T, TAlloc>::string(const int32 number) : m_strArray(NULL), m_allocated(0), m_used(0)
       {
          int32 num = number;
          // store if negative and make positive
@@ -252,7 +256,7 @@ namespace core
 
       // not complete
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc>::String(const float number) : m_strArray(NULL), m_allocated(0), m_used(0)
+      inline string<T, TAlloc>::string(const float number) : m_strArray(NULL), m_allocated(0), m_used(0)
       {
          int32 intNum = (int32)number;
 
@@ -311,7 +315,7 @@ namespace core
 
       template <typename T, typename TAlloc>
       template <typename TInputIterator>
-      inline String<T, TAlloc>::String(const TInputIterator first, const TInputIterator last)
+      inline string<T, TAlloc>::string(const TInputIterator first, const TInputIterator last)
       {
          int32 length = 0;
          TInputIterator _first = first;
@@ -336,7 +340,7 @@ namespace core
 
       //template <typename T, typename TAlloc>
       //template <typename TInputIterator>
-      //inline String<T, TAlloc>::String(const TInputIterator first, const TInputIterator last)
+      //inline string<T, TAlloc>::string(const TInputIterator first, const TInputIterator last)
       //{
       //   int32 i = 0;
       //   int32 _first = first;
@@ -348,37 +352,37 @@ namespace core
       //}
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc>::~String()
+      inline string<T, TAlloc>::~string()
       {
          m_allocator.Free(m_strArray);
       }
 
       template <typename T, typename TAlloc>
-      inline typename String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::begin()
+      inline typename string<typename T, typename TAlloc>::iterator string<typename T, typename TAlloc>::begin()
       {
          return m_strArray;
       }
 
       template <typename T, typename TAlloc>
-      inline typename String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::begin() const
+      inline typename string<typename T, typename TAlloc>::const_iterator string<typename T, typename TAlloc>::begin() const
       {
          return m_strArray;
       }
 
       template <typename T, typename TAlloc>
-      inline typename String<typename T, typename TAlloc>::iterator String<typename T, typename TAlloc>::end()
+      inline typename string<typename T, typename TAlloc>::iterator string<typename T, typename TAlloc>::end()
       {
          return m_strArray + m_used;
       }
 
       template <typename T, typename TAlloc>
-      inline typename String<typename T, typename TAlloc>::const_iterator String<typename T, typename TAlloc>::end() const
+      inline typename string<typename T, typename TAlloc>::const_iterator string<typename T, typename TAlloc>::end() const
       {
          return m_strArray + m_used;
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator==(const T* const str) const
+      bool string<T, TAlloc>::operator==(const T* const str) const
       {
          if (!str)
             return false;
@@ -394,7 +398,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator==(const String<T, TAlloc> &other) const
+      bool string<T, TAlloc>::operator==(const string<T, TAlloc> &other) const
       {
          for (int32 i = 0; m_strArray[i] && other.m_strArray[i]; i++)
             if (m_strArray[i] != other.m_strArray[i])
@@ -404,9 +408,9 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator==(const int32 number) const
+      bool string<T, TAlloc>::operator==(const int32 number) const
       {
-         String_c str(number);
+         std::string str(number);
 
          int32 i;
          for (i = 0; m_strArray[i] && str[i]; i++)
@@ -419,7 +423,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator<(const String &other) const
+      bool string<T, TAlloc>::operator<(const string &other) const
       {
          for (int32 i = 0; m_strArray[i] && other.m_strArray[i]; i++)
          {
@@ -432,7 +436,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator>(const String &other) const
+      bool string<T, TAlloc>::operator>(const string &other) const
       {
          for (int32 i = 0; m_strArray[i] && other.m_strArray[i]; i++)
          {
@@ -445,7 +449,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator<=(const String &other) const
+      bool string<T, TAlloc>::operator<=(const string &other) const
       {
          for (int32 i = 0; m_strArray[i] && other.m_strArray[i]; i++)
          {
@@ -458,7 +462,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator>=(const String &other) const
+      bool string<T, TAlloc>::operator>=(const string &other) const
       {
          for (int32 i = 0; m_strArray[i] && other.m_strArray[i]; i++)
          {
@@ -471,45 +475,45 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator!=(const T* const str) const
+      bool string<T, TAlloc>::operator!=(const T* const str) const
       {
          return !(*this == str);
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::operator!=(const String<T, TAlloc> &other) const
+      bool string<T, TAlloc>::operator!=(const string<T, TAlloc> &other) const
       {
          return !(*this == other);
       }
 
       template <typename T, typename TAlloc>
-      inline T String<T, TAlloc>::operator[](const uint32 index) const
+      inline T string<T, TAlloc>::operator[](const uint32 index) const
       {
          assert(index < m_used);
          return m_strArray[index];
       }
 
       template <typename T, typename TAlloc>
-      inline T &String<T, TAlloc>::operator[](const uint32 index)
+      inline T &string<T, TAlloc>::operator[](const uint32 index)
       {
          assert(index < m_used);
          return m_strArray[index];
       }
 
       template <typename T, typename TAlloc>
-      inline bool String<T, TAlloc>::IsEmpty() const
+      inline bool string<T, TAlloc>::IsEmpty() const
       {
          return (m_used == 1);
       }
 
       template <typename T, typename TAlloc>
-      inline uint32 String<T, TAlloc>::GetSize() const
+      inline uint32 string<T, TAlloc>::GetSize() const
       {
          return m_used - 1;
       }
 
       template <typename T, typename TAlloc>
-      inline int32 String<T, TAlloc>::StringToInt() const
+      inline int32 string<T, TAlloc>::StringToInt() const
       {
          int32 index;
          if ((index = FindNextNumber(0)) != -1)
@@ -518,7 +522,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline float String<T, TAlloc>::StringToFloat() const
+      inline float string<T, TAlloc>::StringToFloat() const
       {
          int32 index;
          if ((index = FindNextNumber(0)) != -1)
@@ -527,20 +531,20 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline char String<T, TAlloc>::GetLastChar() const
+      inline char string<T, TAlloc>::GetLastChar() const
       {
          return m_strArray[m_used - 2];
       }
 
       template <typename T, typename TAlloc>
-      inline const T* String<T, TAlloc>::CString() const
+      inline const T* string<T, TAlloc>::CString() const
       {
          return m_strArray;
       }
 
       template <typename T, typename TAlloc>
       template <typename B>
-      String<T, TAlloc> &String<T, TAlloc>::operator=(const B* const c)
+      string<T, TAlloc> &string<T, TAlloc>::operator=(const B* const c)
       {
          if (!c)
          {
@@ -587,10 +591,10 @@ namespace core
 
       // TODO: not well-functioned yet
       template <typename T, typename TAlloc>
-      void String<T, TAlloc>::Trim(const bool left, const bool right)
+      void string<T, TAlloc>::Trim(const bool left, const bool right)
       {
-         int32 leftIdx = FindFirstNotOf(" \t\r");
-         int32 rightIdx = FindLastNotOf(" \t\r");
+         int32 leftIdx = find_first_not_of(" \t\r");
+         int32 rightIdx = find_last_not_of(" \t\r");
 
          if (m_used == 1)
             return;
@@ -603,7 +607,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::Erase(const uint32 index1, const uint32 index2)
+      string<T, TAlloc> &string<T, TAlloc>::Erase(const uint32 index1, const uint32 index2)
       {
          assert(index1 < m_used && index2 < m_used);
 
@@ -631,7 +635,7 @@ namespace core
 
       // not working yet
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::EqualSubstr(const uint32 index1, const uint32 index2, const T* const str)
+      bool string<T, TAlloc>::EqualSubstr(const uint32 index1, const uint32 index2, const T* const str)
       {
          assert(index1 < m_used && index2 < m_used);
 
@@ -660,7 +664,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::EqualsN(const String<T, TAlloc> &other, const uint32 n) const
+      bool string<T, TAlloc>::EqualsN(const string<T, TAlloc> &other, const uint32 n) const
       {
          uint32 i;
          for (i = 0; m_strArray[i] && other[i] && i < n; i++)
@@ -673,7 +677,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      bool String<T, TAlloc>::EqualsN(const T* const str, const uint32 n) const
+      bool string<T, TAlloc>::EqualsN(const T* const str, const uint32 n) const
       {
          if (!str)
             return false;
@@ -688,7 +692,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc> &String<T, TAlloc>::ToLower()
+      inline string<T, TAlloc> &string<T, TAlloc>::ToLower()
       {
          for (int32 i = 0; m_strArray[i]; i++)
             m_strArray[i] = _ToLower(m_strArray[i]);
@@ -697,13 +701,13 @@ namespace core
 
       // TODO: implement later
       //template <typename T, typename TAlloc>
-      //String<T, TAlloc> &String<T, TAlloc>::operator=( const float number )
+      //string<T, TAlloc> &string<T, TAlloc>::operator=( const float number )
       //{
       //   return *this;
       //}
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc> &String<T, TAlloc>::ToUpper()
+      inline string<T, TAlloc> &string<T, TAlloc>::ToUpper()
       {
          for (int32 i = 0; m_strArray[i]; i++)
             m_strArray[i] = _ToUpper(m_strArray[i]);
@@ -711,7 +715,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc> &String<T, TAlloc>::Append(const T character)
+      inline string<T, TAlloc> &string<T, TAlloc>::Append(const T character)
       {
          if (m_used + 1 > m_allocated)
             Reallocate(m_used + 1);
@@ -725,7 +729,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::Append(const T* const other, const uint32 length)
+      string<T, TAlloc> &string<T, TAlloc>::Append(const T* const other, const uint32 length)
       {
          if (!other)
             return *this;
@@ -755,7 +759,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::Append(const String<T, TAlloc> &other)
+      string<T, TAlloc> &string<T, TAlloc>::Append(const string<T, TAlloc> &other)
       {
          if (other.GetSize() == 0)
             return *this;
@@ -775,16 +779,16 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc> String<T, TAlloc>::operator+(const String<T, TAlloc> &other) const
+      inline string<T, TAlloc> string<T, TAlloc>::operator+(const string<T, TAlloc> &other) const
       {
-         String<T, TAlloc> str(*this);
+         string<T, TAlloc> str(*this);
          str.Append(other);
 
          return str;
       }
 
       template <typename T, typename TAlloc>
-      inline String<T, TAlloc> &String<T, TAlloc>::operator+=(const char character)
+      inline string<T, TAlloc> &string<T, TAlloc>::operator+=(const char character)
       {
          // Append the given string into a new string
 
@@ -802,14 +806,14 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::operator=(const int32 number)
+      string<T, TAlloc> &string<T, TAlloc>::operator=(const int32 number)
       {
-         *this = String<T, TAlloc>(number);
+         *this = string<T, TAlloc>(number);
          return *this;
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::RemoveChars(const String<T, TAlloc> &chars)
+      string<T, TAlloc> &string<T, TAlloc>::RemoveChars(const string<T, TAlloc> &chars)
       {
          if (chars.GetSize() == 0)
             return *this;
@@ -843,7 +847,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> &String<T, TAlloc>::operator=(const String<T, TAlloc> &other)
+      string<T, TAlloc> &string<T, TAlloc>::operator=(const string<T, TAlloc> &other)
       {
          if (this == &other)
             return *this;
@@ -864,7 +868,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindFirst(const T c) const
+      int32 string<T, TAlloc>::find_first_of(const T c) const
       {
          for (uint32 i = 0; i < m_used - 1; i++)
          {
@@ -876,7 +880,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindFirstNotOf(const T character) const
+      int32 string<T, TAlloc>::find_first_not_of(const T character) const
       {
          if (m_used == 1)
             return -1;
@@ -891,7 +895,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindFirstNotOf(const String<T, TAlloc> &chars) const
+      int32 string<T, TAlloc>::find_first_not_of(const string<T, TAlloc> &chars) const
       {
          // TODO: some test fix? case : findfirstnotof "", string = ""
          if (chars.GetSize() == 0)
@@ -901,7 +905,7 @@ namespace core
          for (int32 i = 0; i < m_used - 1; i++)
          {
             {
-               if (chars.FindFirst(m_strArray[i]) == -1)
+               if (chars.find_first_of(m_strArray[i]) == -1)
                   return i;
             }
          }
@@ -910,7 +914,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindLast(const T c) const
+      int32 string<T, TAlloc>::find_last_of(const T c) const
       {
          for (int32 i = m_used - 2; i >= 0; i--)
          {
@@ -922,7 +926,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindLastNotOf(const T c) const
+      int32 string<T, TAlloc>::find_last_not_of(const T c) const
       {
          for (int32 i = m_used - 2; i >= 0; i--)
          {
@@ -934,7 +938,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindLastNotOf(const String<T, TAlloc> &chars) const
+      int32 string<T, TAlloc>::find_last_not_of(const string<T, TAlloc> &chars) const
       {
          // TODO: some test fix? case : findfirstnotof "", string = ""
          if (chars.GetSize() == 0)
@@ -944,7 +948,7 @@ namespace core
 
          for (int32 i = m_used - 2; i >= 0; i--)
          {
-            if (chars.FindFirst(m_strArray[i]) == -1)
+            if (chars.find_first_of(m_strArray[i]) == -1)
                return i;
          }
 
@@ -952,7 +956,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindNext(const T c, const uint32 startPos) const
+      int32 string<T, TAlloc>::FindNext(const T c, const uint32 startPos) const
       {
          for (uint32 i = startPos; i < m_used - 1; i++)
          {
@@ -965,7 +969,7 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      int32 String<T, TAlloc>::FindNextNumber(const uint32 startPos) const
+      int32 string<T, TAlloc>::FindNextNumber(const uint32 startPos) const
       {
          for (uint32 i = startPos; i < m_used - 1; i++)
          {
@@ -984,7 +988,7 @@ namespace core
 
       template <typename T, typename TAlloc>
       template <typename TContainer>
-      int32 String<T, TAlloc>::Tokenize(TContainer &ret, const T* const delimiter, const int32 count,
+      int32 string<T, TAlloc>::Tokenize(TContainer &ret, const T* const delimiter, const int32 count,
          const bool ignoreEmptyTokens, const bool keepSeparators) const
       {
          if (!delimiter)
@@ -1002,7 +1006,7 @@ namespace core
                {
                   if ((!ignoreEmptyTokens || i - lastpos != 0) &&
                      !lastWasSeparator)
-                     ret.push_back(String<T, TAlloc>(&m_strArray[lastpos], i - lastpos));
+                     ret.push_back(string<T, TAlloc>(&m_strArray[lastpos], i - lastpos));
                   foundSeparator = true;
                   lastpos = (keepSeparators ? i : i + 1);
                   break;
@@ -1011,24 +1015,24 @@ namespace core
             lastWasSeparator = foundSeparator;
          }
          if ((m_used - 1) > lastpos)
-            ret.push_back(String<T, TAlloc>(&m_strArray[lastpos], (m_used - 1) - lastpos));
+            ret.push_back(string<T, TAlloc>(&m_strArray[lastpos], (m_used - 1) - lastpos));
          return ret.size() - oldSize;
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> String<T, TAlloc>::SubString(const uint32 begin, const uint32 length, const bool makeLower) const
+      string<T, TAlloc> string<T, TAlloc>::SubString(const uint32 begin, const uint32 length, const bool makeLower) const
       {
          uint32 size = m_used - 1;
          uint32 len = length;
          // if start after string
          // or no proper substring length
          if ((len <= 0) || (begin >= size))
-            return String<T, TAlloc>("", 0);
+            return string<T, TAlloc>("", 0);
          // clamp length to maximal value
          if ((len + begin) > size)
             len = size - begin;
 
-         String<T, TAlloc> out;
+         string<T, TAlloc> out;
          out.Reserve(len + 1);
 
          uint32 i;
@@ -1050,19 +1054,19 @@ namespace core
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> String<T, TAlloc>::operator()(const uint32 index1, const uint32 index2)
+      string<T, TAlloc> string<T, TAlloc>::operator()(const uint32 index1, const uint32 index2)
       {
          return SubString(index1, index2 - index1);
       }
 
       template <typename T, typename TAlloc>
-      String<T, TAlloc> String<T, TAlloc>::operator()(const uint32 index)
+      string<T, TAlloc> string<T, TAlloc>::operator()(const uint32 index)
       {
          return SubString(index, this->GetSize());
       }
 
       template <typename T, typename TAlloc>
-      void String<T, TAlloc>::Reserve(const uint32 count)
+      void string<T, TAlloc>::Reserve(const uint32 count)
       {
          if (count < m_allocated)
             return;

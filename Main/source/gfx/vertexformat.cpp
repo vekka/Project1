@@ -133,7 +133,7 @@ Vertex::~Vertex()
 //{
 //}
 //
-//Vertex::Vertex( const String_c &formatDescriptor )
+//Vertex::Vertex( const std::string &formatDescriptor )
 //{
 //   this->formatDescriptor = formatDescriptor;
 //}

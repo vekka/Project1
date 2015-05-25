@@ -1,6 +1,6 @@
 #include "win32main.hpp"
 
-using core::string::String_c;
+//using core::string::String_c;
 
 using win32window::Win32Window;
 
@@ -183,7 +183,7 @@ namespace win32window
       isResized = false;
    }
 
-   bool Win32Window::SetCaption(const String_c &caption)
+   bool Win32Window::SetCaption(const std::string &caption)
    {
       return (bool)(SetWindowTextA(hWnd, caption.CString()) != 0);
    }
@@ -193,7 +193,7 @@ namespace win32window
       return isResized;
    }
 
-   void Win32Window::GetCaption(String_c &caption) const
+   void Win32Window::GetCaption(std::string &caption) const
    {
       char buffer[512];
       int32 strLen = GetWindowTextA(hWnd, buffer, 512);
@@ -348,15 +348,15 @@ namespace win32window
    {
    }
 
-   void Win32Window::Win32Cursor::GetPosition(int &xPos, int &yPos) const
+   void Win32Window::Win32Cursor::GetPosition(int32 &xPos, int32 &yPos) const
    {
    }
 
-   void Win32Window::Win32Cursor::GetRelativePosition(int &xPos, int &yPos) const
+   void Win32Window::Win32Cursor::GetRelativePosition(int32 &xPos, int32 &yPos) const
    {
    }
 
-   void Win32Window::Win32Cursor::OnResize(const int &sizeX, const int &sizeY)
+   void Win32Window::Win32Cursor::OnResize(const int32 &sizeX, const int32 &sizeY)
    {
    }
 
@@ -1195,7 +1195,7 @@ namespace win32window
    //	return false;
    //}
    //
-   //bool Win32Window::SetCaption( const String_c &caption )
+   //bool Win32Window::SetCaption( const std::string &caption )
    //{
    //   return (bool)SetWindowTextA( hWnd, caption.CString() );
    //}
@@ -1205,15 +1205,15 @@ namespace win32window
    //   ::SetFocus( hWnd );
    //}
    //
-   //String_c &Win32Window::GetCaption() const
+   //std::string &Win32Window::GetCaption() const
    //{
    //	char buffer[512];
    //	int32 strLen = GetWindowTextA(hWnd, buffer, 512);
    //
    //	if(strLen==0)
-   //		return String_c("");
+   //		return std::string("");
    //
-   //   return String_c(buffer);
+   //   return std::string(buffer);
    //}
    //
    //bool Win32Window::IsActive() const

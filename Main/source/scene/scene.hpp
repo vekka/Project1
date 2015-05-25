@@ -90,7 +90,7 @@ namespace scene
       * surrounded by @verbatim <> @endverbatim e.g.
       *  @verbatim<DummyRootNode> @endverbatim.
       */
-      String_c m_name;
+      std::string m_name;
 
       /** The transformation relative to the node's parent. */
       Matrix4f m_transformation;
@@ -130,7 +130,7 @@ namespace scene
       {
       }
 
-      Node(const String_c &name)
+      Node(const std::string &name)
          // set all members to zero by default
          : m_name(name)
          , m_pParentNode(NULL)
@@ -164,21 +164,21 @@ namespace scene
       *  @param name Name to search for
       *  @return NULL or a valid Node if the search was successful.
       */
-      inline const Node* FindNode(const String_c &name) const
+      inline const Node* FindNode(const std::string &name) const
       {
-         return FindNode(name.CString());
+         return FindNode(name);
       }
 
 
-      inline Node* FindNode(const String_c& name)
+      inline Node* FindNode(const std::string& name)
       {
-         return FindNode(name.CString());
+         return FindNode(name);
       }
 
 
-      inline const Node* FindNode(const char* name) const
+      inline const Node* FindNode(const std::string &name) const
       {
-         if (!::strcmp(m_name.CString(), name))
+         if (!std::strcmp((const*)m_name, name))
             return this;
          for (uint32 i = 0; i < m_numChildren; ++i)
          {
@@ -191,9 +191,9 @@ namespace scene
          return NULL;
       }
 
-      inline Node* FindNode(const char* name)
+      inline Node* FindNode(const std::string &name)
       {
-         if (!::strcmp(m_name.CString(), name))
+         if (!strcmp((const*)m_name, name))
             return this;
          for (uint32 i = 0; i < m_numChildren; ++i)
          {

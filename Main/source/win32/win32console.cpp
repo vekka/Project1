@@ -61,13 +61,13 @@ namespace win32console
       return true;
    }
 
-   bool Win32Console::SetCaption(const String_c &caption)
+   bool Win32Console::SetCaption(const std::string &caption)
    {
       assert(created);
       return (bool)(SetConsoleTitle(caption.CString()) != 0);
    }
 
-   void Win32Console::GetCaption(String_c &caption) const
+   void Win32Console::GetCaption(std::string &caption) const
    {
       assert(created);
 

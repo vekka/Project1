@@ -51,7 +51,7 @@ namespace core
 
       typedef Plane<float> Plane_f;
       typedef Plane<double> Plane_d;
-      typedef Plane<int> Plane_i;
+      typedef Plane<int32> Plane_i;
 
       template <class T>
       inline Plane<T>::Plane()

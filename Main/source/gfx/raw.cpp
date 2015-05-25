@@ -70,7 +70,7 @@ void RawImage::Convert1BitToThis( const byte *in, const uint32 linepad, const bo
 
    for (uint32 y = 0; y < height; y++)
    {
-      int shift = 7;
+      int32 shift = 7;
       if (flip)
          data -= width;
 
@@ -93,7 +93,7 @@ void RawImage::Convert1BitToThis( const byte *in, const uint32 linepad, const bo
    }
 }
 
-//void RawImage::Convert1BitToA1R5G5B5( const unsigned char* in, const int linepad, bool const flip )
+//void RawImage::Convert1BitToA1R5G5B5( const unsigned char* in, const int32 linepad, bool const flip )
 //{
 //	if (!in || !data)
 //		return;
@@ -101,13 +101,13 @@ void RawImage::Convert1BitToThis( const byte *in, const uint32 linepad, const bo
 //	if (flip)
 //		data += width * height;
 //
-//	for (int y = 0; y < height; y++)
+//	for (int32 y = 0; y < height; y++)
 //	{
-//		int shift = 7;
+//		int32 shift = 7;
 //		if (flip)
 //			data -= width;
 //
-//		for (int x=0; x<width; ++x)
+//		for (int32 x=0; x<width; ++x)
 //		{
 //			data[x] = *in>>shift & 0x01 ? (short)0xffff : (short)0x8000;
 //

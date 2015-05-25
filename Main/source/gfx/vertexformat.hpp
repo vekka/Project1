@@ -4,7 +4,7 @@
 #include "core/math/vector2.hpp"
 #include "core/math/vector3.hpp"
 #include "color.hpp"
-#include "core/string/string.hpp"
+//#include "core/string/string.hpp"
 
 #include <vector>
 using namespace std;
@@ -207,13 +207,13 @@ public:
 //   bool hasColor;
 //   bool hasTangent;
 //   void updateDirty();
-//   String_c formatDescriptor;
+//   std::string formatDescriptor;
 //   uint32 texCoordCount;
 //   uint32 sizeInBytes;
 //   vector<VertexComponent> components; // list of components for each vertex
 //public:
 //   Vertex();
-//   Vertex( const String_c &formatDescription );
+//   Vertex( const std::string &formatDescription );
 //   Vertex( const Vertex &other );
 //   void Append( const Vertex &other, const int32 streamIndex = -1 );
 //   void Clear();

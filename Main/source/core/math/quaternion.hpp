@@ -12,7 +12,7 @@ namespace core
 	namespace math
 	{
 	
-	//extern const int W;
+	//extern const int32 W;
 	
 	template <class T>
 	class Quaternion
@@ -115,14 +115,14 @@ namespace core
 	}
 	
 	template <class T>
-	inline T Quaternion<T>::operator[]( const int index ) const
+	inline T Quaternion<T>::operator[]( const int32 index ) const
 	{
 		assert( ( index >= 0 ) && ( index < 4 ) );
 		return (&x)[index];
 	}
 	
 	template <class T>
-	inline T &Quaternion<T>::operator[]( const int index )
+	inline T &Quaternion<T>::operator[]( const int32 index )
 	{
 		assert( ( index >= 0 ) && ( index < 4 ) );
 		return (&x)[index];
@@ -261,7 +261,7 @@ namespace core
 	//{
 	//   Matrix3 rot;
 	//
-	//   for (int col = 0; iCol < 3; iCol++)
+	//   for (int32 col = 0; iCol < 3; iCol++)
 	//   {
 	//      rot[0][col] = akAxis[col].x;
 	//      rot[1][col] = akAxis[col].y;

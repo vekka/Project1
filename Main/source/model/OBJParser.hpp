@@ -49,8 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mesh2.hpp"
 using mesh2::ePrimitiveType;
 
-#include "core/string/string.hpp"
-using core::string::String_c;
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
 #include "core/math/vector2.hpp"
 using core::math::Point2f;
@@ -86,7 +86,7 @@ namespace model
        {
        public:
           static const size_t BUFFERSIZE = 4096;
-          static const String_c DEFAULT_MATERIAL_NAME;
+          static const std::string DEFAULT_MATERIAL_NAME;
 
           typedef std::vector<char> DataArray_t;
           typedef std::vector<char>::iterator DataArrayIterator_t;
@@ -99,7 +99,7 @@ namespace model
           objfile::Model *m_pModelInstance;
           uint32 m_currentLine;
 
-          std::vector<char> m_data;
+          //std::vector<char> m_data;
           
           // helper buffer
           char m_buffer[BUFFERSIZE];
@@ -135,20 +135,20 @@ namespace model
           // Gets the group number and resolution from file.
           void GetGroupNumberAndResolution();
           // Returns the index of the material. Is -1 if not material was found.
-          int32 GetMaterialIndex(const String_c &strMaterialName);
+          int32 GetMaterialIndex(const std::string &strMaterialName);
           // Parse object name
           void GetObjectName();
           // Creates a new object.
-          void CreateObject(const String_c &strObjectName);
+          void CreateObject(const std::string &strObjectName);
           //	Creates a new mesh.
           void CreateMesh();
           //	Returns true, if a new mesh instance must be created.
-          bool NeedsNewMesh(const String_c &rMaterialName);
+          bool NeedsNewMesh(const std::string &rMaterialName);
           //	Error report in token
           void ReportErrorTokenInFace();
        public:
 
-          ObjParser(const File *file);
+          ObjParser::ObjParser(std::vector<char> &data, const std::string &strModelName, const File *file);
 
           ~ObjParser();
           objfile::Model *GetModel() const;

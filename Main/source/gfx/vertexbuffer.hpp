@@ -126,7 +126,7 @@ public:
 //
 //    glGenBuffers(1, &handle);
 //    glBindBuffer(bufferBindingTarget, handle);
-//    for (int i = 0; i < m_count; i++)
+//    for (int32 i = 0; i < m_count; i++)
 //     {
 //        glEnableVertexAttribArray(i);
 //     }

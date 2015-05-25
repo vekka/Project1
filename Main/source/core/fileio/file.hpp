@@ -1,9 +1,10 @@
 #ifndef _FILE_HPP_INCLUDED_
 #define _FILE_HPP_INCLUDED_
 
-#include "core/string/string.hpp"
+//#include "core/string/string.hpp"
+//using core::string::String_c;
 
-using core::string::String_c;
+#include "core/BasicTypes.hpp"
 
 #include <vector>
 using std::vector;
@@ -26,7 +27,7 @@ namespace core
       {
       protected:
          FILE *stream;
-         String_c path;
+         std::string path;
          eFileMode mode;
          bool readAsBinary;
          bool isOpen;
@@ -34,11 +35,11 @@ namespace core
       public:
          File();
          virtual ~File(void);
-         bool Open(const String_c &path, const bool readAsBinary = false, const eFileMode mode = FMODE_READ, const bool update = false);
+         bool Open(const std::string &path, const bool readAsBinary = false, const eFileMode mode = FMODE_READ, const bool update = false);
          bool IsOpen() const { return isOpen; }
-         String_c GetFilePath() const { return path; }
+         std::string GetFilePath() const { return path; }
          void Close();
-         //String_c &GetFileNameExtension();
+         //std::string &GetFileNameExtension();
 
          // copy whole file content into a buffer and rewind the file pointer, the buffer need to be preallocated
          template <typename TCharType> bool CopyToBuffer(TCharType *bufferOut) const;
@@ -50,10 +51,10 @@ namespace core
          bool Seek(const uint32 finalPos, const bool relative) const;
 
          // read a line from file and the file pointer advances, or read line from an offset, -1 means only advance ptr
-         bool ReadLine(String_c &lineOut, const bool includeNewLine = true, const uint32 offset = -1, const int32 length = 256, const bool relative = false) const;
+         bool ReadLine(std::string &lineOut, const bool includeNewLine = true, const uint32 offset = -1, const int32 length = 256, const bool relative = false) const;
          //bool WriteLine(
 
-         File &operator<<(const String_c &str);
+         File &operator<<(const std::string &str);
          File &operator<<(const char &c);
          File &operator<<(const int32 &i);
 
