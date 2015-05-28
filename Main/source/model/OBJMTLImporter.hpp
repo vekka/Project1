@@ -49,6 +49,7 @@ using gfx::color::Colorf;
 
 #include "OBJParser.hpp"
 using core::IsLineEnd;
+using core::IsSpaceOrNewLine;
 
 namespace model
 {

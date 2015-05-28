@@ -52,11 +52,16 @@ using objtools::GetFloat;
 using objtools::CopyNextWord;
 using objtools::GetName;
 using objtools::IsEndOfBuffer;
+using objtools::tokenize;
+using core::IsLineEnd;
+
 
 using gfx::color::IDX_RED;
 using gfx::color::IDX_BLUE;
 using gfx::color::IDX_GREEN;
 using gfx::color::IDX_ALPHA;
+
+
 
 //#include "ObjFileData.h"
 #include "../core/fast_atof.hpp"
@@ -233,7 +238,7 @@ namespace model
         (*pColor)[IDX_RED] = r;
         
         // we have to check if color is default 0 with only one token
-        if( !isLineEnd( *m_dataIterator ) ) {
+        if( !IsLineEnd( *m_dataIterator ) ) {
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, g);
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, b);
         }
@@ -266,7 +271,7 @@ namespace model
         //int32 string<T, TAlloc>::Tokenize(TContainer &ret, const T* const delimiter, const int32 count,
            //const bool ignoreEmptyTokens, const bool keepSeparators) const
 
-        const uint32 numToken = line.Tokenize(token); //tokenize<std::string>( line, token, " " );
+        const uint32 numToken = tokenize<std::string>(line, token, " "); //tokenize<std::string>line.Tokenize(token);
         std::string name( "" );
         if ( numToken == 1 ) {
             name = objparser::ObjParser::DEFAULT_MATERIAL_NAME;
@@ -292,49 +297,49 @@ namespace model
         int32 clampIndex = -1;
     
         const char *pPtr( &(*m_dataIterator) );
-        if ( !ASSIMP_strincmp( pPtr, DiffuseTexture.CString(), DiffuseTexture.GetSize() ) ) {
+        if ( !ASSIMP_strincmp( pPtr, DiffuseTexture.c_str(), DiffuseTexture.size() ) ) {
             // Diffuse texture
             out = & m_pModelInstance->m_pCurrentMaterial->texture;
             clampIndex = objfile::Material::TextureDiffuseType;
         }
-        else if (!ASSIMP_strincmp(pPtr, AmbientTexture.CString(), AmbientTexture.GetSize() ) ) {
+        else if (!ASSIMP_strincmp(pPtr, AmbientTexture.c_str(), AmbientTexture.size())) {
             // Ambient texture
             out = & m_pModelInstance->m_pCurrentMaterial->textureAmbient;
             clampIndex = objfile::Material::TextureAmbientType;
         }
-        else if (!ASSIMP_strincmp(pPtr, SpecularTexture.CString(), SpecularTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, SpecularTexture.c_str(), SpecularTexture.size())) {
             // Specular texture
             out = & m_pModelInstance->m_pCurrentMaterial->textureSpecular;
             clampIndex = objfile::Material::TextureSpecularType;
         }
-        else if (!ASSIMP_strincmp(pPtr, OpacityTexture.CString(), OpacityTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, OpacityTexture.c_str(), OpacityTexture.size())) {
             // Opacity texture
             out = & m_pModelInstance->m_pCurrentMaterial->textureOpacity;
             clampIndex = objfile::Material::TextureOpacityType;
         }
-        else if (!ASSIMP_strincmp(pPtr, EmmissiveTexture.CString(), EmmissiveTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, EmmissiveTexture.c_str(), EmmissiveTexture.size())) {
             // Emissive texture
             out = & m_pModelInstance->m_pCurrentMaterial->textureEmissive;
             clampIndex = objfile::Material::TextureEmissiveType;
         }
-        else if (!ASSIMP_strincmp(pPtr, BumpTexture1.CString(), BumpTexture1.GetSize()) ||
-           !ASSIMP_strincmp(pPtr, BumpTexture2.CString(), BumpTexture2.GetSize()) ||
-           !ASSIMP_strincmp(pPtr, BumpTexture3.CString(), BumpTexture3.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, BumpTexture1.c_str(), BumpTexture1.size()) ||
+           !ASSIMP_strincmp(pPtr, BumpTexture2.c_str(), BumpTexture2.size()) ||
+           !ASSIMP_strincmp(pPtr, BumpTexture3.c_str(), BumpTexture3.size())) {
             // Bump texture 
             out = & m_pModelInstance->m_pCurrentMaterial->textureBump;
             clampIndex = objfile::Material::TextureBumpType;
         }
-        else if (!ASSIMP_strincmp(pPtr, NormalTexture.CString(), NormalTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, NormalTexture.c_str(), NormalTexture.size())) {
             // Normal map
             out = & m_pModelInstance->m_pCurrentMaterial->textureNormal;
             clampIndex = objfile::Material::TextureNormalType;
         }
-        else if (!ASSIMP_strincmp(pPtr, DisplacementTexture.CString(), DisplacementTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, DisplacementTexture.c_str(), DisplacementTexture.size())) {
             // Displacement texture
             out = &m_pModelInstance->m_pCurrentMaterial->textureDisp;
             clampIndex = objfile::Material::TextureDispType;
         }
-        else if (!ASSIMP_strincmp(pPtr, SpecularityTexture.CString(), SpecularityTexture.GetSize())) {
+        else if (!ASSIMP_strincmp(pPtr, SpecularityTexture.c_str(), SpecularityTexture.size())) {
             // Specularity scaling (glossiness)
             out = & m_pModelInstance->m_pCurrentMaterial->textureSpecularity;
             clampIndex = objfile::Material::TextureSpecularityType;
@@ -378,7 +383,7 @@ namespace model
             //skip option key and value
             int32 skipToken = 1;
     
-            if (!ASSIMP_strincmp(pPtr, ClampOption.CString(), ClampOption.GetSize()))
+            if (!ASSIMP_strincmp(pPtr, ClampOption.c_str(), ClampOption.size()))
             {
                 ConstDataArrayIterator_t it = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
                 char value[3];
@@ -390,23 +395,23 @@ namespace model
     
                 skipToken = 2;
             }
-            else if (  !ASSIMP_strincmp(pPtr, BlendUOption.CString(), BlendUOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, BlendVOption.CString(), BlendVOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, BoostOption.CString(), BoostOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, ResolutionOption.CString(), ResolutionOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, BumpOption.CString(), BumpOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, ChannelOption.CString(), ChannelOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, TypeOption.CString(), TypeOption.GetSize()))
+            else if (!ASSIMP_strincmp(pPtr, BlendUOption.c_str(), BlendUOption.size())
+               || !ASSIMP_strincmp(pPtr, BlendVOption.c_str(), BlendVOption.size())
+               || !ASSIMP_strincmp(pPtr, BoostOption.c_str(), BoostOption.size())
+               || !ASSIMP_strincmp(pPtr, ResolutionOption.c_str(), ResolutionOption.size())
+               || !ASSIMP_strincmp(pPtr, BumpOption.c_str(), BumpOption.size())
+               || !ASSIMP_strincmp(pPtr, ChannelOption.c_str(), ChannelOption.size())
+               || !ASSIMP_strincmp(pPtr, TypeOption.c_str(), TypeOption.size()))
             {
                 skipToken = 2;
             }
-            else if (!ASSIMP_strincmp(pPtr, ModifyMapOption.CString(), ModifyMapOption.GetSize()))
+            else if (!ASSIMP_strincmp(pPtr, ModifyMapOption.c_str(), ModifyMapOption.size()))
             {
                 skipToken = 3;
             }
-            else if (!ASSIMP_strincmp(pPtr, OffsetOption.CString(), OffsetOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, ScaleOption.CString(), ScaleOption.GetSize())
-               || !ASSIMP_strincmp(pPtr, TurbulenceOption.CString(), TurbulenceOption.GetSize())
+            else if (!ASSIMP_strincmp(pPtr, OffsetOption.c_str(), OffsetOption.size())
+               || !ASSIMP_strincmp(pPtr, ScaleOption.c_str(), ScaleOption.size())
+               || !ASSIMP_strincmp(pPtr, TurbulenceOption.c_str(), TurbulenceOption.size())
                     )
             {
                 skipToken = 4;

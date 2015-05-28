@@ -199,7 +199,7 @@ namespace objfileimporter
       else
       {
          // This is a fatal error, so break down the application
-         ai_assert(false);
+         assert(false);
       }
 
       // Create nodes for the whole scene	
@@ -229,7 +229,7 @@ namespace objfileimporter
       Node *pParent, Scene* pScene,
       std::vector<Mesh*> &MeshArray)
    {
-      ai_assert(NULL != pModel);
+      assert(NULL != pModel);
       if (NULL == pObject) {
          return NULL;
       }
@@ -288,7 +288,7 @@ namespace objfileimporter
       uint32 meshIndex)
    {
       // Checking preconditions
-      ai_assert(NULL != pModel);
+      assert(NULL != pModel);
 
       if (NULL == pData) {
          return NULL;
@@ -299,12 +299,12 @@ namespace objfileimporter
       if (!pObjMesh) {
          return NULL;
       }
-      ai_assert(NULL != pObjMesh);
+      assert(NULL != pObjMesh);
       Mesh* pMesh = new Mesh;
       for (size_t index = 0; index < pObjMesh->m_faces.size(); index++)
       {
          objfile::Face *const inp = pObjMesh->m_faces[index];
-         ai_assert(NULL != inp);
+         assert(NULL != inp);
 
          if (inp->m_primitiveType == PRIMITIVE_TYPE_LINE) {
             pMesh->m_numFaces += inp->m_pVertexIndices->size() - 1;
@@ -381,7 +381,7 @@ namespace objfileimporter
       uint32 numIndices)
    {
       // Checking preconditions
-      ai_assert(NULL != pCurrentObject);
+      assert(NULL != pCurrentObject);
 
       // Break, if no faces are stored in object
       if (pCurrentObject->m_meshes.empty())
@@ -439,7 +439,7 @@ namespace objfileimporter
             if (!pModel->m_textureCoord.empty() && vertexIndex < pSourceFace->m_pTexCoordIndices->size())
             {
                const uint32 tex = pSourceFace->m_pTexCoordIndices->at(vertexIndex);
-               ai_assert(tex < pModel->m_textureCoord.size());
+               assert(tex < pModel->m_textureCoord.size());
 
                //if (tex >= pModel->m_textureCoord.size())
                //   throw DeadlyImportError("OBJ: texture coordinate index out of range");
@@ -448,7 +448,7 @@ namespace objfileimporter
                pMesh->m_pTextureCoords[0][newIndex] = Vector3f(coord3d[0], coord3d[1], coord3d[2]);
             }
 
-            ai_assert(pMesh->m_numVertices > newIndex);
+            assert(pMesh->m_numVertices > newIndex);
 
             // Get destination face
             Face *pDestFace = &pMesh->m_pFaces[outIndex];
@@ -521,46 +521,48 @@ namespace objfileimporter
 
    // ------------------------------------------------------------------------------------------------
    //	 Add clamp mode property to material if necessary 
-   void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int32 clampMode)
-   {
-      ai_assert(NULL != mat);
-      mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
-      mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
-   }
+   //void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int32 clampMode)
+   //{
+   //   ai_assert(NULL != mat);
+   //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
+   //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
+   //}
 
    // ------------------------------------------------------------------------------------------------
    //	Creates the material 
    void ObjFileImporter::CreateMaterials(const objfile::Model* pModel, Scene* pScene)
    {
-      ai_assert(NULL != pScene);
+      assert(NULL != pScene);
       if (NULL == pScene)
          return;
 
-      const uint32 numMaterials = (uint32)pModel->m_MaterialLib.size();
-      pScene->mNumMaterials = 0;
-      if (pModel->m_MaterialLib.empty()) {
+      const uint32 numMaterials = (uint32)pModel->m_materialLib.size();
+      pScene->m_numMaterials = 0;
+      if (pModel->m_materialLib.empty()) {
          DefaultLogger::get()->debug("OBJ: no materials specified");
          return;
       }
 
-      pScene->mMaterials = new aiMaterial*[numMaterials];
+      pScene->mMaterials = new Material*[numMaterials];
       for (uint32 matIndex = 0; matIndex < numMaterials; matIndex++)
       {
          // Store material name
          std::map<std::string, objfile::Material*>::const_iterator it;
-         it = pModel->m_MaterialMap.find(pModel->m_MaterialLib[matIndex]);
+         it = pModel->m_materialMap.find(pModel->m_materialLib[matIndex]);
 
          // No material found, use the default material
-         if (pModel->m_MaterialMap.end() == it)
+         if (pModel->m_materialMap.end() == it)
             continue;
 
+     
          Material* mat = new Material;
          Material *pCurrentMaterial = (*it).second;
+         // AddProperty can be found in Assimp file called material.inl(several versions, must be overloaded...)
          mat->AddProperty(&pCurrentMaterial->MaterialName, AI_MATKEY_NAME);
 
          // convert illumination model
          int32 sm = 0;
-         switch (pCurrentMaterial->illumination_model)
+         switch (pCurrentMaterial->illuminationModel)
          {
          case 0:
             sm = aiShadingMode_NoShading;
@@ -674,7 +676,7 @@ namespace objfileimporter
       }
 
       // Test number of created materials.
-      ai_assert(pScene->mNumMaterials == numMaterials);
+      assert(pScene->m_numMaterials == numMaterials);
    }
 
    // ------------------------------------------------------------------------------------------------
@@ -682,32 +684,32 @@ namespace objfileimporter
    void ObjFileImporter::AppendChildToParentNode(Node *pParent, Node *pChild)
    {
       // Checking preconditions
-      ai_assert(NULL != pParent);
-      ai_assert(NULL != pChild);
+      assert(NULL != pParent);
+      assert(NULL != pChild);
 
       // Assign parent to child
-      pChild->mParent = pParent;
+      pChild->m_pParentNode = pParent;
 
       // If already children was assigned to the parent node, store them in a 
       std::vector<Node*> temp;
-      if (pParent->mChildren != NULL)
+      if (pParent->m_ppChildren != NULL)
       {
-         ai_assert(0 != pParent->mNumChildren);
-         for (size_t index = 0; index < pParent->mNumChildren; index++)
+         assert(0 != pParent->m_numChildren);
+         for (size_t index = 0; index < pParent->m_numChildren; index++)
          {
-            temp.push_back(pParent->mChildren[index]);
+            temp.push_back(pParent->m_ppChildren[index]);
          }
-         delete[] pParent->mChildren;
+         delete[] pParent->m_ppChildren;
       }
 
       // Copy node instances into parent node
-      pParent->mNumChildren++;
-      pParent->mChildren = new Node*[pParent->mNumChildren];
-      for (size_t index = 0; index < pParent->mNumChildren - 1; index++)
+      pParent->m_numChildren++;
+      pParent->m_ppChildren = new Node*[pParent->m_numChildren];
+      for (size_t index = 0; index < pParent->m_numChildren - 1; index++)
       {
-         pParent->mChildren[index] = temp[index];
+         pParent->m_ppChildren[index] = temp[index];
       }
-      pParent->mChildren[pParent->mNumChildren - 1] = pChild;
+      pParent->m_ppChildren[pParent->m_numChildren - 1] = pChild;
    }
 
    // ------------------------------------------------------------------------------------------------

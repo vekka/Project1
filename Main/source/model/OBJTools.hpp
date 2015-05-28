@@ -50,6 +50,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //#include "core/string/string.hpp"
 //using core::string::String_c;
+#include "core/charTypes.hpp"
 
 using core::IsSpaceOrNewLine;
 
@@ -216,6 +217,32 @@ namespace objtools
    *	@param	delimiters	Delimiter for tokenize.
    *	@return	Number of found token.
    */
+
+   template<class string_type>
+   unsigned int tokenize(const string_type& str, std::vector<string_type>& tokens,
+      const string_type& delimiters)
+   {
+      // Skip delimiters at beginning.
+      typename string_type::size_type lastPos = str.find_first_not_of(delimiters, 0);
+
+      // Find first "non-delimiter".
+      typename string_type::size_type pos = str.find_first_of(delimiters, lastPos);
+      while (string_type::npos != pos || string_type::npos != lastPos)
+      {
+         // Found a token, add it to the vector.
+         string_type tmp = str.substr(lastPos, pos - lastPos);
+         if (!tmp.empty() && ' ' != tmp[0])
+            tokens.push_back(tmp);
+
+         // Skip delimiters.  Note the "not_of"
+         lastPos = str.find_first_not_of(delimiters, pos);
+
+         // Find next "non-delimiter"
+         pos = str.find_first_of(delimiters, lastPos);
+      }
+
+      return static_cast<unsigned int>(tokens.size());
+   }
 
 } // namespace objtools
 
