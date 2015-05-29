@@ -96,7 +96,7 @@ extern "C" {
 
 
 #ifndef SWIG
-      _aiTextureOp_Force32Bit = INT_MAX
+      _aiTextureOp_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -127,7 +127,7 @@ extern "C" {
       aiTextureMapMode_Mirror = 0x2,
 
 #ifndef SWIG
-      _aiTextureMapMode_Force32Bit = INT_MAX
+      _aiTextureMapMode_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -167,7 +167,7 @@ extern "C" {
 
 
 #ifndef SWIG
-      _aiTextureMapping_Force32Bit = INT_MAX
+      _aiTextureMapping_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -282,7 +282,7 @@ extern "C" {
 
 
 #ifndef SWIG
-      _aiTextureType_Force32Bit = INT_MAX
+      _aiTextureType_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -355,7 +355,7 @@ extern "C" {
 
 
 #ifndef SWIG
-      _aiShadingMode_Force32Bit = INT_MAX
+      _aiShadingMode_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -396,7 +396,7 @@ extern "C" {
       aiTextureFlags_IgnoreAlpha = 0x4,
 
 #ifndef SWIG
-      _aiTextureFlags_Force32Bit = INT_MAX
+      _aiTextureFlags_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -440,7 +440,7 @@ extern "C" {
       // in future versions ...
 
 #ifndef SWIG
-      _aiBlendMode_Force32Bit = INT_MAX
+      _aiBlendMode_Force32Bit = INT32_MAX
 #endif
    };
 

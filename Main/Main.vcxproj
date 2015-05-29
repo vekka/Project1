@@ -150,6 +150,7 @@
     <ClCompile Include="source\gfx\vertexbuffer.cpp" />
     <ClCompile Include="source\gfx\vertexformat.cpp" />
     <ClCompile Include="source\model\material.hpp" />
+    <ClCompile Include="source\model\materialSystem.cpp" />
     <ClCompile Include="source\model\OBJFileImporter.cpp" />
     <ClCompile Include="source\model\OBJMTLImporter.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="source\gfx\vertexstructs.hpp" />
     <ClInclude Include="source\model\daeloader.hpp" />
     <ClInclude Include="source\model\ImporterDesc.hpp" />
+    <ClInclude Include="source\model\materialSystem.hpp" />
     <ClInclude Include="source\model\md5model.hpp" />
     <ClInclude Include="source\model\mesh2.hpp" />
     <ClInclude Include="source\model\OBJFile.hpp" />

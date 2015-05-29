@@ -168,6 +168,9 @@
     <ClCompile Include="source\model\material.hpp">
       <Filter>Source Files\MeshLib</Filter>
     </ClCompile>
+    <ClCompile Include="source\model\materialSystem.cpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
@@ -352,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="source\core\xml\XMLReader.hpp">
       <Filter>Source Files\Core\XMLLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\materialSystem.hpp">
+      <Filter>Source Files\MeshLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
