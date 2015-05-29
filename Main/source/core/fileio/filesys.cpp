@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "filesys.hpp"
 
 //#include "../include/assimp/DefaultLogger.hpp"
-//#include "../include/assimp/ai_assert.h"
+//#include "../include/assimp/assert.h"
 #include <stdlib.h>
 
 #include <algorithm>

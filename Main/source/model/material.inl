@@ -50,10 +50,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::GetTexture(aiTextureType type,
-   unsigned int  index,
+   uint32  index,
    C_STRUCT aiString* path,
    aiTextureMapping* mapping	/*= NULL*/,
-   unsigned int* uvindex		/*= NULL*/,
+   uint32* uvindex		/*= NULL*/,
    float* blend				   /*= NULL*/,
    aiTextureOp* op				/*= NULL*/,
    aiTextureMapMode* mapmode	/*= NULL*/) const
@@ -62,22 +62,22 @@ inline aiReturn aiMaterial::GetTexture(aiTextureType type,
 }
 
 // ---------------------------------------------------------------------------
-inline unsigned int aiMaterial::GetTextureCount(aiTextureType type) const
+inline uint32 aiMaterial::GetTextureCount(aiTextureType type) const
 {
    return ::aiGetMaterialTextureCount(this, type);
 }
 
 // ---------------------------------------------------------------------------
 template <typename Type>
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, Type* pOut,
-   unsigned int* pMax) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, Type* pOut,
+   uint32* pMax) const
 {
-   unsigned int iNum = pMax ? *pMax : 1;
+   uint32 iNum = pMax ? *pMax : 1;
 
-   const aiMaterialProperty* prop;
+   const MaterialProperty* prop;
    const aiReturn ret = ::aiGetMaterialProperty(this, pKey, type, idx,
-      (const aiMaterialProperty**)&prop);
+      (const MaterialProperty**)&prop);
    if (AI_SUCCESS == ret)	{
 
       if (prop->mDataLength < sizeof(Type)*iNum) {
@@ -99,12 +99,12 @@ inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
 
 // ---------------------------------------------------------------------------
 template <typename Type>
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, Type& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, Type& pOut) const
 {
-   const aiMaterialProperty* prop;
+   const MaterialProperty* prop;
    const aiReturn ret = ::aiGetMaterialProperty(this, pKey, type, idx,
-      (const aiMaterialProperty**)&prop);
+      (const MaterialProperty**)&prop);
    if (AI_SUCCESS == ret)	{
 
       if (prop->mDataLength < sizeof(Type)) {
@@ -121,40 +121,40 @@ inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
 }
 
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, float* pOut,
-   unsigned int* pMax) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, float* pOut,
+   uint32* pMax) const
 {
    return ::aiGetMaterialFloatArray(this, pKey, type, idx, pOut, pMax);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, int* pOut,
-   unsigned int* pMax) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, int* pOut,
+   uint32* pMax) const
 {
    return ::aiGetMaterialIntegerArray(this, pKey, type, idx, pOut, pMax);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, float& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, float& pOut) const
 {
    return aiGetMaterialFloat(this, pKey, type, idx, &pOut);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, int& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, int& pOut) const
 {
    return aiGetMaterialInteger(this, pKey, type, idx, &pOut);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, aiColor4D& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, aiColor4D& pOut) const
 {
    return aiGetMaterialColor(this, pKey, type, idx, &pOut);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, aiColor3D& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, aiColor3D& pOut) const
 {
    aiColor4D c;
    const aiReturn ret = aiGetMaterialColor(this, pKey, type, idx, &c);
@@ -162,14 +162,14 @@ inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
    return ret;
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, aiString& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, aiString& pOut) const
 {
    return aiGetMaterialString(this, pKey, type, idx, &pOut);
 }
 // ---------------------------------------------------------------------------
-inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
-   unsigned int idx, aiUVTransform& pOut) const
+inline aiReturn aiMaterial::Get(const char* pKey, uint32 type,
+   uint32 idx, aiUVTransform& pOut) const
 {
    return aiGetMaterialUVTransform(this, pKey, type, idx, &pOut);
 }
@@ -178,10 +178,10 @@ inline aiReturn aiMaterial::Get(const char* pKey, unsigned int type,
 // ---------------------------------------------------------------------------
 template<class TYPE>
 aiReturn aiMaterial::AddProperty(const TYPE* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(TYPE),
@@ -190,10 +190,10 @@ aiReturn aiMaterial::AddProperty(const TYPE* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const float* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(float),
@@ -202,10 +202,10 @@ inline aiReturn aiMaterial::AddProperty(const float* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const aiUVTransform* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiUVTransform),
@@ -214,10 +214,10 @@ inline aiReturn aiMaterial::AddProperty(const aiUVTransform* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const aiColor4D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiColor4D),
@@ -226,10 +226,10 @@ inline aiReturn aiMaterial::AddProperty(const aiColor4D* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const aiColor3D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiColor3D),
@@ -238,10 +238,10 @@ inline aiReturn aiMaterial::AddProperty(const aiColor3D* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const aiVector3D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiVector3D),
@@ -250,10 +250,10 @@ inline aiReturn aiMaterial::AddProperty(const aiVector3D* pInput,
 
 // ---------------------------------------------------------------------------
 inline aiReturn aiMaterial::AddProperty(const int* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(int),
@@ -270,10 +270,10 @@ inline aiReturn aiMaterial::AddProperty(const int* pInput,
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<float>(const float* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(float),
@@ -283,10 +283,10 @@ inline aiReturn aiMaterial::AddProperty<float>(const float* pInput,
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<aiUVTransform>(const aiUVTransform* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiUVTransform),
@@ -296,10 +296,10 @@ inline aiReturn aiMaterial::AddProperty<aiUVTransform>(const aiUVTransform* pInp
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<aiColor4D>(const aiColor4D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiColor4D),
@@ -309,10 +309,10 @@ inline aiReturn aiMaterial::AddProperty<aiColor4D>(const aiColor4D* pInput,
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<aiColor3D>(const aiColor3D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiColor3D),
@@ -322,10 +322,10 @@ inline aiReturn aiMaterial::AddProperty<aiColor3D>(const aiColor3D* pInput,
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<aiVector3D>(const aiVector3D* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(aiVector3D),
@@ -335,10 +335,10 @@ inline aiReturn aiMaterial::AddProperty<aiVector3D>(const aiVector3D* pInput,
 // ---------------------------------------------------------------------------
 template<>
 inline aiReturn aiMaterial::AddProperty<int>(const int* pInput,
-   const unsigned int pNumValues,
+   const uint32 pNumValues,
    const char* pKey,
-   unsigned int type,
-   unsigned int index)
+   uint32 type,
+   uint32 index)
 {
    return AddBinaryProperty((const void*)pInput,
       pNumValues * sizeof(int),

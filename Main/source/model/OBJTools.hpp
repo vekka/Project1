@@ -219,7 +219,7 @@ namespace objtools
    */
 
    template<class string_type>
-   unsigned int tokenize(const string_type& str, std::vector<string_type>& tokens,
+   uint32 tokenize(const string_type& str, std::vector<string_type>& tokens,
       const string_type& delimiters)
    {
       // Skip delimiters at beginning.
@@ -241,7 +241,7 @@ namespace objtools
          pos = str.find_first_of(delimiters, lastPos);
       }
 
-      return static_cast<unsigned int>(tokens.size());
+      return static_cast<uint32>(tokens.size());
    }
 
 } // namespace objtools

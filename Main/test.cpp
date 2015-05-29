@@ -53,11 +53,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
    File file;
-   file.Open("assets/testObjects/monkey.obj");
-   ObjParser obj(&file);
-   Model *monkey;
 
-   monkey = obj.GetModel();
 
    Mesh mesh;
 
@@ -129,34 +125,34 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
    shader.Unuse();
   
-   uint32 cubeIndices[2904], x = 0;
+   //uint32 cubeIndices[2904], x = 0;
 
-   uint32 arrayPos = 0;
-   for (int32 face = 0; face < monkey->m_pCurrentMesh->m_faces.size(); face++)
-   {
-      cubeIndices[arrayPos] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](0);
-      cubeIndices[arrayPos + 1] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](1);
-      cubeIndices[arrayPos + 2] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](2);
-      arrayPos+=3;
-   }
+   //uint32 arrayPos = 0;
+   //for (int32 face = 0; face < monkey->m_pCurrentMesh->m_faces.size(); face++)
+   //{
+   //   cubeIndices[arrayPos] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](0);
+   //   cubeIndices[arrayPos + 1] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](1);
+   //   cubeIndices[arrayPos + 2] = monkey->m_pCurrentMesh->m_faces[face]->m_pVertexIndices->operator[](2);
+   //   arrayPos+=3;
+   //}
 
-   float *test = &(monkey->m_pVertices[0][0]);
-   GLsizeiptr size = monkey->m_pVertices.size() * sizeof(Vector3f);
+   //float *test = &(monkey->m_pVertices[0][0]);
+   //GLsizeiptr size = monkey->m_pVertices.size() * sizeof(Vector3f);
 
-   glGenBuffers(1, &vboVerticesID);
-   glGenBuffers(1, &vboIndicesID);
-   /////////////////////////////////////
-   glGenVertexArrays(1, &vaoID);
-   glBindVertexArray(vaoID);
-   
-   glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-   glBufferData(GL_ARRAY_BUFFER, size, (void*)test, GL_STATIC_DRAW);
+   //glGenBuffers(1, &vboVerticesID);
+   //glGenBuffers(1, &vboIndicesID);
+   ///////////////////////////////////////
+   //glGenVertexArrays(1, &vaoID);
+   //glBindVertexArray(vaoID);
+   //
+   //glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
+   //glBufferData(GL_ARRAY_BUFFER, size, (void*)test, GL_STATIC_DRAW);
  
   
-   glEnableVertexAttribArray(shader["vVertex"]);
-   glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (const GLvoid*)0);
+   //glEnableVertexAttribArray(shader["vVertex"]);
+   //glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (const GLvoid*)0);
 
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
+   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, monkey->m_pCurrentMesh->m_faces.size() * 3 * sizeof(uint32), (const void*)monkey->m_pCurrentMesh->, GL_STATIC_DRAW);
 
   // Process the messages

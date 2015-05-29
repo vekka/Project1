@@ -174,12 +174,12 @@ inline int32 GetTrailingBit( const int64 value )
 
 // TODO:
 
-// uint64_t RoundUpToPowerOfTwo(uint32_t value)
+// uint64_t RoundUpToPowerOfTwo(uint32  value)
 // {
     // if (value > 0)
     // {
         // int32_t leading = GetLeadingBit(value);
-        // uint32_t mask = (1 << leading);
+        // uint32  mask = (1 << leading);
         // if ((value & ~mask) == 0)
         // {
             // // value is a power of two

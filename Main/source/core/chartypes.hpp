@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _CHARTYPES_HPP_INCLUDED_
 
 #include "BasicTypes.hpp"
+#include "StringComparison.hpp"
 
 #if (_MSC_VER >= 1300)
    typedef __int8 utf8;
@@ -126,6 +127,57 @@ namespace core
    {
       SkipSpaces(&in);
       while (!IsSpaceOrNewLine(*in))++in;
+   }
+
+   template <class char_t>
+   inline bool TokenMatch(char_t*& in, const char* token, uint32 len)
+   {
+      if (!::strncmp(token, in, len) && IsSpaceOrNewLine(in[len])) {
+         if (in[len] != '\0') {
+            in += len + 1;
+         }
+         else {
+            // If EOF after the token make sure we don't go past end of buffer
+            in += len;
+         }
+         return true;
+      }
+
+      return false;
+   }
+
+   template <class char_t>
+   inline bool GetNextLine(const char_t*& buffer, char_t out[BufferSize])
+   {
+      if ((char_t)'\0' == *buffer) 
+      {
+         return false;
+      }
+
+      char* _out = out;
+      char* const end = _out + BufferSize;
+      while (!IsLineEnd(*buffer) && _out < end) 
+      {
+         *_out++ = *buffer++;
+      }
+      *_out = (char_t)'\0';
+
+      while (IsLineEnd(*buffer) && '\0' != *buffer) 
+      {
+         ++buffer;
+      }
+
+      return true;
+   }
+
+   inline bool TokenMatchI(const char*& in, const char* token, uint32 len)
+   {
+      if (!ASSIMP_strincmp(token, in, len) && IsSpaceOrNewLine(in[len])) 
+      {
+         in += len + 1;
+         return true;
+      }
+      return false;
    }
 
    template<typename TChar>

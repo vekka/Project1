@@ -191,7 +191,7 @@ extern "C" {
       /** Dummy value.
       *
       *  No texture, but the value to be used as 'texture semantic'
-      *  (#aiMaterialProperty::mSemantic) for all material properties
+      *  (#MaterialProperty::mSemantic) for all material properties
       *  *not* related to textures.
       */
       aiTextureType_NONE = 0x0,
@@ -557,7 +557,7 @@ extern "C" {
    *  @endcode
    *  @see aiMaterial
    */
-   struct aiMaterialProperty
+   struct MaterialProperty
    {
       /** Specifies the name of the property (key)
       *  Keys are generally case insensitive.
@@ -568,17 +568,17 @@ extern "C" {
       * For non-texture properties, this member is always 0
       * (or, better-said, #aiTextureType_NONE).
       */
-      unsigned int mSemantic;
+      uint32 mSemantic;
 
       /** Textures: Specifies the index of the texture.
       *  For non-texture properties, this member is always 0.
       */
-      unsigned int mIndex;
+      uint32 mIndex;
 
       /**	Size of the buffer mData is pointing to, in bytes.
       *  This value may not be 0.
       */
-      unsigned int mDataLength;
+      uint32 mDataLength;
 
       /** Type information for the property.
       *
@@ -596,7 +596,7 @@ extern "C" {
 
 #ifdef __cplusplus
 
-      aiMaterialProperty()
+      MaterialProperty()
          : mSemantic(0)
          , mIndex(0)
          , mDataLength(0)
@@ -605,7 +605,7 @@ extern "C" {
       {
       }
 
-      ~aiMaterialProperty()	{
+      ~MaterialProperty()	{
          delete[] mData;
       }
 
@@ -653,14 +653,14 @@ public:
    * NULL is a valid value for this parameter.
    */
    template <typename Type>
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, Type* pOut, unsigned int* pMax) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, Type* pOut, uint32* pMax) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, int* pOut, unsigned int* pMax) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, int* pOut, uint32* pMax) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, float* pOut, unsigned int* pMax) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, float* pOut, uint32* pMax) const;
 
    // -------------------------------------------------------------------
    /** @brief Retrieve a Type value with a specific key
@@ -673,34 +673,34 @@ public:
    * @param pOut Reference to receive the output value
    */
    template <typename Type>
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, Type& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, Type& pOut) const;
 
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, int& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, int& pOut) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, float& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, float& pOut) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, aiString& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, aiString& pOut) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, aiColor3D& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, aiColor3D& pOut) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, aiColor4D& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, aiColor4D& pOut) const;
 
-   aiReturn Get(const char* pKey, unsigned int type,
-      unsigned int idx, aiUVTransform& pOut) const;
+   aiReturn Get(const char* pKey, uint32 type,
+      uint32 idx, aiUVTransform& pOut) const;
 
    // -------------------------------------------------------------------
    /** Get the number of textures for a particular texture type.
    *  @param type Texture type to check for
    *  @return Number of textures for this type.
    *  @note A texture can be easily queried using #GetTexture() */
-   unsigned int GetTextureCount(aiTextureType type) const;
+   uint32 GetTextureCount(aiTextureType type) const;
 
    // -------------------------------------------------------------------
    /** Helper function to get all parameters pertaining to a
@@ -731,10 +731,10 @@ public:
    */
    // -------------------------------------------------------------------
    aiReturn GetTexture(aiTextureType type,
-      unsigned int  index,
+      uint32  index,
       C_STRUCT aiString* path,
       aiTextureMapping* mapping = NULL,
-      unsigned int* uvindex = NULL,
+      uint32* uvindex = NULL,
       float* blend = NULL,
       aiTextureOp* op = NULL,
       aiTextureMapMode* mapmode = NULL) const;
@@ -754,10 +754,10 @@ public:
    *  @param index Set by the AI_MATKEY_XXX macro
    *  @param pType Type information hint */
    aiReturn AddBinaryProperty(const void* pInput,
-      unsigned int pSizeInBytes,
+      uint32 pSizeInBytes,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       aiPropertyTypeInfo pType);
 
    // ------------------------------------------------------------------------------
@@ -770,8 +770,8 @@ public:
    *  @param index Set by the AI_MATKEY_XXX macro */
    aiReturn AddProperty(const aiString* pInput,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    // ------------------------------------------------------------------------------
    /** @brief Add a property with a given key to the material structure
@@ -782,46 +782,46 @@ public:
    *  @param index Set by the AI_MATKEY_XXX macro  */
    template<class TYPE>
    aiReturn AddProperty(const TYPE* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const aiVector3D* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const aiColor3D* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const aiColor4D* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const int* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const float* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    aiReturn AddProperty(const aiUVTransform* pInput,
-      unsigned int pNumValues,
+      uint32 pNumValues,
       const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    // ------------------------------------------------------------------------------
    /** @brief Remove a given key from the list.
@@ -831,8 +831,8 @@ public:
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro  */
    aiReturn RemoveProperty(const char* pKey,
-      unsigned int type = 0,
-      unsigned int index = 0);
+      uint32 type = 0,
+      uint32 index = 0);
 
    // ------------------------------------------------------------------------------
    /** @brief Removes all properties from the material.
@@ -852,13 +852,13 @@ public:
 #endif
 
    /** List of all material properties loaded. */
-   C_STRUCT aiMaterialProperty** mProperties;
+   C_STRUCT MaterialProperty** mProperties;
 
    /** Number of properties in the data base */
-   unsigned int mNumProperties;
+   uint32 mNumProperties;
 
    /** Storage allocated */
-   unsigned int mNumAllocated;
+   uint32 mNumAllocated;
 };
 
 // Go back to extern "C" again
@@ -1307,15 +1307,15 @@ extern "C" {
    * @param type Specifies the type of the texture to be retrieved (
    *    e.g. diffuse, specular, height map ...)
    * @param index Index of the texture to be retrieved.
-   * @param pPropOut Pointer to receive a pointer to a valid aiMaterialProperty
+   * @param pPropOut Pointer to receive a pointer to a valid MaterialProperty
    *        structure or NULL if the key has not been found. */
    // ---------------------------------------------------------------------------
    ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
       const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int  index,
-      const C_STRUCT aiMaterialProperty** pPropOut);
+      uint32 type,
+      uint32  index,
+      const C_STRUCT MaterialProperty** pPropOut);
 
    // ---------------------------------------------------------------------------
    /** @brief Retrieve an array of float values with a specific key
@@ -1325,7 +1325,7 @@ extern "C" {
    * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse texture)
    * @code
    * aiUVTransform trafo;
-   * unsigned int max = sizeof(aiUVTransform);
+   * uint32 max = sizeof(aiUVTransform);
    * if (AI_SUCCESS != aiGetMaterialFloatArray(mat, AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE,0),
    *    (float*)&trafo, &max) || sizeof(aiUVTransform) != max)
    * {
@@ -1346,10 +1346,10 @@ extern "C" {
    ASSIMP_API C_ENUM aiReturn aiGetMaterialFloatArray(
       const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       float* pOut,
-      unsigned int* pMax);
+      uint32* pMax);
 
 
 #ifdef __cplusplus
@@ -1375,11 +1375,11 @@ extern "C" {
    // ---------------------------------------------------------------------------
    inline aiReturn aiGetMaterialFloat(const aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       float* pOut)
    {
-      return aiGetMaterialFloatArray(pMat, pKey, type, index, pOut, (unsigned int*)0x0);
+      return aiGetMaterialFloatArray(pMat, pKey, type, index, pOut, (uint32*)0x0);
    }
 
 #else 
@@ -1398,10 +1398,10 @@ extern "C" {
    * See the sample for aiGetMaterialFloatArray for more information.*/
    ASSIMP_API C_ENUM aiReturn aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int  type,
-      unsigned int  index,
+      uint32  type,
+      uint32  index,
       int* pOut,
-      unsigned int* pMax);
+      uint32* pMax);
 
 
 #ifdef __cplusplus
@@ -1413,11 +1413,11 @@ extern "C" {
    // ---------------------------------------------------------------------------
    inline aiReturn aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       int* pOut)
    {
-      return aiGetMaterialIntegerArray(pMat, pKey, type, index, pOut, (unsigned int*)0x0);
+      return aiGetMaterialIntegerArray(pMat, pKey, type, index, pOut, (uint32*)0x0);
    }
 
 #else 
@@ -1437,8 +1437,8 @@ extern "C" {
    // ---------------------------------------------------------------------------
    ASSIMP_API C_ENUM aiReturn aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       C_STRUCT aiColor4D* pOut);
 
 
@@ -1449,8 +1449,8 @@ extern "C" {
    // ---------------------------------------------------------------------------
    ASSIMP_API C_ENUM aiReturn aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       C_STRUCT aiUVTransform* pOut);
 
 
@@ -1461,8 +1461,8 @@ extern "C" {
    // ---------------------------------------------------------------------------
    ASSIMP_API C_ENUM aiReturn aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
-      unsigned int type,
-      unsigned int index,
+      uint32 type,
+      uint32 index,
       C_STRUCT aiString* pOut);
 
    // ---------------------------------------------------------------------------
@@ -1472,7 +1472,7 @@ extern "C" {
    *  @return Number of textures for this type.
    *  @note A texture can be easily queried using #aiGetMaterialTexture() */
    // ---------------------------------------------------------------------------
-   ASSIMP_API unsigned int aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API uint32 aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
       C_ENUM aiTextureType type);
 
    // ---------------------------------------------------------------------------
@@ -1512,25 +1512,25 @@ extern "C" {
 #ifdef __cplusplus
    ASSIMP_API aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
       aiTextureType type,
-      unsigned int  index,
+      uint32  index,
       aiString* path,
       aiTextureMapping* mapping = NULL,
-      unsigned int* uvindex = NULL,
+      uint32* uvindex = NULL,
       float* blend = NULL,
       aiTextureOp* op = NULL,
       aiTextureMapMode* mapmode = NULL,
-      unsigned int* flags = NULL);
+      uint32* flags = NULL);
 #else
    C_ENUM aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
       C_ENUM aiTextureType type,
-      unsigned int  index,
+      uint32  index,
       C_STRUCT aiString* path,
       C_ENUM aiTextureMapping* mapping	/*= NULL*/,
-      unsigned int* uvindex				/*= NULL*/,
+      uint32* uvindex				/*= NULL*/,
       float* blend						/*= NULL*/,
       C_ENUM aiTextureOp* op				/*= NULL*/,
       C_ENUM aiTextureMapMode* mapmode	/*= NULL*/,
-      unsigned int* flags                 /*= NULL*/);
+      uint32* flags                 /*= NULL*/);
 #endif // !#ifdef __cplusplus
 
 #ifdef __cplusplus

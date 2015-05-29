@@ -1,13 +1,15 @@
 /*
+---------------------------------------------------------------------------
 Open Asset Import Library (assimp)
-----------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 Copyright (c) 2006-2012, assimp team
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
-with or without modification, are permitted provided that the
-following conditions are met:
+with or without modification, are permitted provided that the following
+conditions are met:
 
 * Redistributions of source code must retain the above
 copyright notice, this list of conditions and the
@@ -34,38 +36,13 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-----------------------------------------------------------------------
+---------------------------------------------------------------------------
 */
 
-/** @file MaterialSystem.h
-*  Now that #MaterialHelper is gone, this file only contains some
-*  internal material utility functions.
+/* Helper macro to set a pointer to NULL in debug builds
 */
-#ifndef AI_MATERIALSYSTEM_H_INC
-#define AI_MATERIALSYSTEM_H_INC
-
-#include <stdint.h>
-#include <assert.h>
-#include "../core/BasicTypes.hpp"
-struct Material;
-
-namespace Assimp	{
-
-   // ------------------------------------------------------------------------------
-   /** Computes a hash (hopefully unique) from all material properties
-   *  The hash value reflects the current property state, so if you add any
-   *  property and call this method again, the resulting hash value will be
-   *  different. The hash is not persistent across different builds and platforms.
-   *
-   *  @param  includeMatName Set to 'true' to take all properties with
-   *    '?' as initial character in their name into account.
-   *    Currently #AI_MATKEY_NAME is the only example.
-   *  @return 32 Bit jash value for the material
-   */
-   uint32 ComputeMaterialHash(const Material* mat, bool includeMatName = false);
-
-
-} // ! namespace Assimp
-
-#endif //!! AI_MATERIALSYSTEM_H_INC
+#if (defined ASSIMP_BUILD_DEBUG)
+#	define AI_DEBUG_INVALIDATE_PTR(x) x = NULL;
+#else
+#	define AI_DEBUG_INVALIDATE_PTR(x)
+#endif

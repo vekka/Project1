@@ -6,6 +6,7 @@
 #include "../core/math/quaternion.hpp"
 #include "../core/fileio/file.hpp"
 
+using core::fileio::File;
 using core::math::Vector2f;
 using core::math::Vector3f;
 using core::math::Quaternion_f;
@@ -118,7 +119,7 @@ public:
    void FreeMesh();
    bool LoadAnim( const char *filename, MD5Anim *md5Anim );
    void Animate( const MD5Anim *, MD5AnimInfo *, double );
-   void InterpolateSkeletons( const MD5Joint *skelA, const MD5Joint *skelB, const int32 numJoints, const float interp, joint_t *out );
+   void InterpolateSkeletons( const MD5Joint *skelA, const MD5Joint *skelB, const int32 numJoints, const float interp, MD5Joint *out );
 };
 
 } // namespace md5

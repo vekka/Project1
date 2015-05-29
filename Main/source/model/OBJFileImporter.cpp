@@ -63,7 +63,7 @@ using mesh2::PRIMITIVE_TYPE_LINE;
 using mesh2::PRIMITIVE_TYPE_POLYGON;
 using mesh2::PRIMITIVE_TYPE_POINT;
 using mesh2::PRIMITIVE_TYPE_TRIANGLE;
-//#include "../include/assimp/ai_assert.h"
+//#include "../include/assimp/assert.h"
 //#include "../include/assimp/DefaultLogger.hpp"
 
 #include "../core/fileio/filesys.hpp"
@@ -523,7 +523,7 @@ namespace objfileimporter
    //	 Add clamp mode property to material if necessary 
    //void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int32 clampMode)
    //{
-   //   ai_assert(NULL != mat);
+   //   assert(NULL != mat);
    //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
    //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
    //}
