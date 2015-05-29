@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_MATERIAL_H_INC
 #define AI_MATERIAL_H_INC
 
-#include "types.h"
+#include "core/basictypes.hpp"
 
 #ifdef __cplusplus
 extern "C" {

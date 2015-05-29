@@ -196,6 +196,7 @@
     <ClInclude Include="source\core\StringComparison.hpp" />
     <ClInclude Include="source\core\string\string.hpp" />
     <ClInclude Include="source\core\string\stringext.hpp" />
+    <ClInclude Include="source\core\xml\XMLReader.hpp" />
     <ClInclude Include="source\direct3D\D3DDriver.hpp" />
     <ClInclude Include="source\gfx\bmp.hpp" />
     <ClInclude Include="source\gfx\color.hpp" />
@@ -225,10 +226,8 @@
     <ClInclude Include="source\win32\win32ctrl.hpp" />
     <ClInclude Include="source\win32\win32main.hpp" />
     <ClInclude Include="source\win32\win32timer.hpp" />
-    <ClInclude Include="XMLReader.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="source\model\material.inl" />
     <None Include="source\shader\glsl\fragment\shader.frag" />
     <None Include="source\shader\glsl\fragment\triangle.frag" />

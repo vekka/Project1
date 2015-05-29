@@ -335,9 +335,6 @@
     <ClInclude Include="source\opengl\ogldriver.hpp">
       <Filter>Source Files\Driver\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="XMLReader.hpp">
-      <Filter>Source Files\Core\XMLLib</Filter>
-    </ClInclude>
     <ClInclude Include="source\model\OBJFileImporter.hpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClInclude>
@@ -353,9 +350,11 @@
     <ClInclude Include="source\core\string\stringext.hpp">
       <Filter>Source Files\Core\StringLib</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\xml\XMLReader.hpp">
+      <Filter>Source Files\Core\XMLLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="source\shader\glsl\vertex\shader.vert">
       <Filter>Source Files\ShaderLib\ShaderSources\VertexShaders</Filter>
     </None>
