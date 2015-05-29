@@ -47,8 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OBJParser.hpp"
 using model::objparser::ObjParser;
 
-#include "OBJFile.hpp"
-using objfile::Material;
+
 #include "../core/memory/scopedptr.hpp"
 using core::memory::ScopedPtr;
 
@@ -538,10 +537,10 @@ namespace objfileimporter
 
       const uint32 numMaterials = (uint32)pModel->m_materialLib.size();
       pScene->m_numMaterials = 0;
-      if (pModel->m_materialLib.empty()) {
-         DefaultLogger::get()->debug("OBJ: no materials specified");
-         return;
-      }
+      //if (pModel->m_materialLib.empty()) {
+      //   DefaultLogger::get()->debug("OBJ: no materials specified");
+      //   return;
+      //}
 
       pScene->mMaterials = new Material*[numMaterials];
       for (uint32 matIndex = 0; matIndex < numMaterials; matIndex++)
@@ -575,7 +574,7 @@ namespace objfileimporter
             break;
          default:
             sm = aiShadingMode_Gouraud;
-            DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
+         //   DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
          }
 
          mat->AddProperty<int32>(&sm, 1, AI_MATKEY_SHADING_MODEL);

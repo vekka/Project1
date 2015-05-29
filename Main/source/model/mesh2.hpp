@@ -46,7 +46,7 @@ returned by ASSIMP: Mesh, Face and Bone data structures.
 #ifndef _MESH2_HPP_INCLUDED_
 #define _MESH2_HPP_INCLUDED_
 
-#include "core/BasicTypes.hpp"
+#include "../core/BasicTypes.hpp"
 
 //#include "core/string/string.hpp"
 //using core::string::String_c;

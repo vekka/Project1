@@ -231,6 +231,7 @@
     <ClInclude Include="source\win32\win32timer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="source\model\material.inl" />
     <None Include="source\shader\glsl\fragment\shader.frag" />
     <None Include="source\shader\glsl\fragment\triangle.frag" />

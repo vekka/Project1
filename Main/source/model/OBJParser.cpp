@@ -50,22 +50,17 @@ using mesh2::PRIMITIVE_TYPE_POINT;
 #include "core/CharTypes.hpp"
 using core::SkipToken;
 
-//#include "ObjFileMtlImporter.h"
-//#include "ObjTools.h"
-
 #include "OBJTools.hpp"
 using objtools::SkipLine;
 using objtools::GetNextWord;
-
-#include "core/fast_atof.hpp"
 using assimp::fast_atof;
 
 #include "OBJFile.hpp"
+using objfile::Model;
 
 #include "OBJMTLImporter.hpp"
 using model::objmtlimporter::ObjMtlImporter;
 
-#include "OBJTools.hpp"
 using objtools::GetName;
 using objtools::IsEndOfBuffer;
 using objtools::CopyNextWord;

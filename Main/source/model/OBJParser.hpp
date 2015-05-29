@@ -60,8 +60,6 @@ using core::math::Vector2f;
 using core::math::Point3f;
 using core::math::Vector3f;
 
-#include "objfile.hpp"
-using objfile::Model;
 
 #include "core/fileio/file.hpp"
 using core::fileio::File;

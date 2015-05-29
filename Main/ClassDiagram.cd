@@ -1,0 +1,1488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Dae" Collapsed="true">
+    <Position X="35" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\daeloader.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Allocator&lt;T&gt;" Collapsed="true">
+    <Position X="28" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEDAAAAAAAAgAAAAAAAAAAAIAIAAAAAAAAAAI=</HashCode>
+      <FileName>source\core\memory\allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PoolAllocator&lt;T, TAlloc&gt;" Collapsed="true">
+    <Position X="36.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEDAAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAAAI=</HashCode>
+      <FileName>source\core\memory\allocator.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RefCounterBase" Collapsed="true">
+    <Position X="5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAIAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAgBAAAAA=</HashCode>
+      <FileName>source\core\memory\memory.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RefCounterPtr&lt;T&gt;" Collapsed="true">
+    <Position X="5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAABEAAAAAwAAAAAgAAAAAAAggACAAAA=</HashCode>
+      <FileName>source\core\memory\memory.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Win32Ctrl" Collapsed="true">
+    <Position X="29.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\win32\win32ctrl.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BMPFile" Collapsed="true">
+    <Position X="2" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABQAAAAAAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\bmp.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RawImage" Collapsed="true">
+    <Position X="38.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgIAIAEAAAAEAQAQAgAAQAAAAAACAIAAAgwAAABABA=</HashCode>
+      <FileName>source\gfx\raw.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="model::md5::MD5Mesh" Collapsed="true">
+    <Position X="4.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAQAACAAAAAAAABQAQCAABEAgACBAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="objfileimporter::ObjFileImporter" Collapsed="true">
+    <Position X="28" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABgIAAKAAAAAIAQAAAAAAAEAAAAQARAAoBQA=</HashCode>
+      <FileName>source\model\OBJFileImporter.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="model::objmtlimporter::ObjMtlImporter" Collapsed="true">
+    <Position X="29.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAIAgCQkIAAAAAAAAMAAQAgAAAAAAAAAACQgBBAAAAA=</HashCode>
+      <FileName>source\model\OBJMTLImporter.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="model::objparser::ObjParser" Collapsed="true">
+    <Position X="31.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAIEhQEACC4AAABFMQBQAiAQEAEQgAAAAAACAFAAAQ=</HashCode>
+      <FileName>source\model\OBJParser.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::Array&lt;T, TAlloc&gt;" Collapsed="true">
+    <Position X="29.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAQABEIAAIIIiAAAAgIQQQRACMEBAABAQAAwQAJBABI=</HashCode>
+      <FileName>source\core\array.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::AABBox&lt;T&gt;" Collapsed="true">
+    <Position X="21.25" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABBQAAAADAABAAAAAAgAYgAISAQCABAAABAEAABAAA=</HashCode>
+      <FileName>source\core\math\aabbox.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Dimension2&lt;T&gt;" Collapsed="true">
+    <Position X="7.25" Y="25.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAABAABAAAABQFAAQAAAAAAAQBgEEAAACA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Line2&lt;T&gt;" Collapsed="true">
+    <Position X="18.25" Y="29.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAABAAgAAAEAQAAAAAAAAAQAAAgQABAAAA=</HashCode>
+      <FileName>source\core\math\line2.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Line3&lt;T&gt;" Collapsed="true">
+    <Position X="21.25" Y="24.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAABAAgAAAEAYAAAAAAAAAQAAAgAABAAAA=</HashCode>
+      <FileName>source\core\math\line3.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Matrix4&lt;T&gt;" Collapsed="true">
+    <Position X="14.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAABAQgAABAIAEAAAAUAAQQEBACAAAgIgAgggAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Plane&lt;T&gt;" Collapsed="true">
+    <Position X="17.25" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABCAAAAAAAABAAAAAAAAYgAAEAAAAAEQgIAAAAAQAA=</HashCode>
+      <FileName>source\core\math\plane.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Point2&lt;T&gt;" Collapsed="true">
+    <Position X="15.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAhAAAAAAAAQAAQQGBAAAAAABgAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Point3&lt;T&gt;" Collapsed="true">
+    <Position X="12.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAhAAAAAAAAQAAQQEBAQAAAABgAQAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Polygon&lt;T&gt;" Collapsed="true">
+    <Position X="35" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEACA=</HashCode>
+      <FileName>source\core\math\polygon.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Quaternion&lt;T&gt;" Collapsed="true">
+    <Position X="3.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAQAARAEBAAAIAAhgAQAQAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Vector2&lt;T&gt;" Collapsed="true">
+    <Position X="15.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAABAAAAEAAACQBACIAAAKAAAAAgAAAkAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Vector3&lt;T&gt;" Collapsed="true">
+    <Position X="12.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAIAgAAQAEAAACQBACKAAACAAAAAgAAAkAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::Vector4&lt;T&gt;" Collapsed="true">
+    <Position X="10.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAEAABAAAEAAAAQBAQYEBAAAAAAhgAQAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="camera::AbstractCamera" Collapsed="true">
+    <Position X="2" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADQBEkAAASSAAAAICiCmIgEgACAAAkkAAoABCgAAgAg=</HashCode>
+      <FileName>source\core\math\camera.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="camera::FreeCamera" Collapsed="true">
+    <Position X="2" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAIAAAAAAAAAABAAUAEAIQAAAgIAIAAAAAI=</HashCode>
+      <FileName>source\core\math\camera.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::frustum::Frustum" Collapsed="true">
+    <Position X="36.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADYAIAAACASAEBAgAiCEQgUgAQAQAkgAAgBAAAAAAAk=</HashCode>
+      <FileName>source\core\math\frustum.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::math::`anonymous-namespace'::Matrix3&lt;T&gt;" Collapsed="true">
+    <Position X="3.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAABEAAEAIAAUAAAQEBACAAAgAgAAgAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::string::string&lt;T, TAlloc&gt;" Collapsed="true">
+    <Position X="14.25" Y="26.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgUBACSABAgACCk0AIAQRQaCEAAwAAAAQmAAIAAAI=</HashCode>
+      <FileName>source\core\string\string.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="stringext::stringext" Collapsed="true">
+    <Position X="31.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\string\stringext.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::fileio::File" Collapsed="true">
+    <Position X="3.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IABAAAAAAGAAJACACACCAAAAAAAGSAAACAAAACCAAEA=</HashCode>
+      <FileName>source\core\fileio\file.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::memory::ScopedPtr&lt;T&gt;" Collapsed="true">
+    <Position X="28" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIEAQAAAABAAACAAgAAAAABAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\memory\scopedptr.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="core::containers::vector::vector&lt;T&gt;" Collapsed="true">
+    <Position X="35" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gFAAACMigBBAgAAkgIcIAGAyAAsAQAIAASkgAAAIAgA=</HashCode>
+      <FileName>source\core\containers\_vector.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="win32console::Win32Console" Collapsed="true">
+    <Position X="28" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQIAGAAASAIAGQAQgEAQAAABAREAMAAAAAAAAEBAAg=</HashCode>
+      <FileName>source\win32\win32console.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="win32window::Win32Window" Collapsed="true">
+    <Position X="33.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QASAAAAIACIIAAUAUAIaoBAEDAAEAsAABoICSAEAEgA=</HashCode>
+      <FileName>source\win32\win32main.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="timer::Win32Timer" Collapsed="true">
+    <Position X="31.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIABAABBAAAAAAAAABABAAAACAAAAAgBACAQI=</HashCode>
+      <FileName>source\win32\win32timer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="oglshader::GLSLShader" Collapsed="true">
+    <Position X="38.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAggAAAAAAAiAgECAARAAAAAEEAAAAgARAAABQAAA=</HashCode>
+      <FileName>source\shader\OGLShader.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="oglshader::ShaderExecutable" Collapsed="true">
+    <Position X="29.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YIAAAgAAAgAAAAIAAAAAAAAAAIAAAEgAgAACQAAAAAI=</HashCode>
+      <FileName>source\shader\OGLShader.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ogldriver::OGLDriver" Collapsed="true">
+    <Position X="33.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CQACAAAAACAyAAAAAEAgAAIAQACEAAAgAQAAAACgAAA=</HashCode>
+      <FileName>source\opengl\ogldriver.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gfx::color::Colorf" Collapsed="true">
+    <Position X="33.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAACIACASIAIAAAACYBAggECAAAoEQAhgAAAAQA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gfx::color::ColorARGB16i" Collapsed="true">
+    <Position X="31.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAYgAMAAAAARIAAQACIAABCAgACAACAkAAAAAAAASA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="texture::TextureManager" Collapsed="true">
+    <Position X="33.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\texturemanager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="hardwarebuffer::HardwareBuffer" Collapsed="true">
+    <Position X="22.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAgAAEAAAICAAAABAACAAAAAAAAAAAAAAGABAAAAI=</HashCode>
+      <FileName>source\gfx\hardwarebuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ibo::IndexBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="22.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAEAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\indexbuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vbo::VertexBuffer&lt;TFace&gt;" Collapsed="true">
+    <Position X="19.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAQAgAAAAAgAAABBgAAAAAAAAAAAAAAAASAAAQAAAA=</HashCode>
+      <FileName>source\gfx\vertexbuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vertexformat::Vertex" Collapsed="true">
+    <Position X="36.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAEAABAAQAAAAAAAGAAQAAAAQAAgAAAiIAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexformat.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vertexstructs::Vertex" Collapsed="true">
+    <Position X="38.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexstructs.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="aiUVTransform" Collapsed="true">
+    <Position X="29.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAABAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MaterialProperty" Collapsed="true">
+    <Position X="31.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAIAAAAAMAAAABAIgAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="aiMaterial" Collapsed="true">
+    <Position X="28" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABAIACgAAAAABAQAAAAAAAAAAAAAA6AAAAgABAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="eImporterDesc" Collapsed="true">
+    <Position X="35" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAABABABAAAAAERAAAAAAAgAIAAEAAA=</HashCode>
+      <FileName>source\model\ImporterDesc.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Header" Collapsed="true">
+    <Position X="28" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEgAJAQIYJAAAAAAAAgAAgCAAAgAAAAAAiA=</HashCode>
+      <FileName>source\gfx\bmp.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5Joint" Collapsed="true">
+    <Position X="28" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAoAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5Weight" Collapsed="true">
+    <Position X="33.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAIACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5Vertex" Collapsed="true">
+    <Position X="31.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAIAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::Mesh" Collapsed="true">
+    <Position X="35" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QgAAAAAAAAAAAAAAgAIAIQAAgBAQQJAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5JointInfo" Collapsed="true">
+    <Position X="29.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAEAAAAAACAAAAAAAQ=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5BaseframeJoint" Collapsed="true">
+    <Position X="36.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5BoundingBox" Collapsed="true">
+    <Position X="38.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5Anim" Collapsed="true">
+    <Position X="33.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABIKAAAAAABAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="model::md5::MD5AnimInfo" Collapsed="true">
+    <Position X="35" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAgAAAAAACACAQAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="mesh2::Face" Collapsed="true">
+    <Position X="38.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABIAAAABQAAAAAABAAAAAAgAAAAAAA=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="mesh2::VertexWeight" Collapsed="true">
+    <Position X="33.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAIAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="mesh2::Bone" Collapsed="true">
+    <Position X="33.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAABAAASAAAAAAAAAAABAAAgAAAAAAAAA=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="mesh2::AnimMesh" Collapsed="true">
+    <Position X="31.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQEAAAAAAAAAAAAAAIAgAAERAAAAgIABAAgAAAg=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="mesh2::Mesh" Collapsed="true">
+    <Position X="36.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EKAYQQMAAAGAAMBAAAAAAAAgAAERAAIAgYABABgAAAg=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="objfile::Object" Collapsed="true">
+    <Position X="31.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAQAAAAAgAAQAAAAAQAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>source\model\OBJFile.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="objfile::Face" Collapsed="true">
+    <Position X="36.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAGAAQAAABAAAEAAABAAAAAAAAAACAAA=</HashCode>
+      <FileName>source\model\OBJFile.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="objfile::Material" Collapsed="true">
+    <Position X="29.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gECAABABBAAMAQAAAACBAAAAAIAAAgEAQBAwIAEAAAA=</HashCode>
+      <FileName>source\model\OBJFile.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="objfile::Mesh" Collapsed="true">
+    <Position X="38.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAMAAAEAQAAAAAAAAAAAAoAAAQCAAAAAAAA=</HashCode>
+      <FileName>source\model\OBJFile.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="objfile::Model" Collapsed="true">
+    <Position X="28" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAQAAgAIAAAAAAAUAAAAQCAAyAAEgAAgAAIAACgA=</HashCode>
+      <FileName>source\model\OBJFile.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="oglshader::ProgramID" Collapsed="true">
+    <Position X="33.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAABAAAAAAAAAAAAAAACAAABABAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\shader\OGLShader.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="oglshader::TypeAssociation" Collapsed="true">
+    <Position X="36.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAFACAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\shader\shadertypes.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vertexstructs::VertexPC&lt;T&gt;" Collapsed="true">
+    <Position X="38.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexstructs.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vertexstructs::VertexPNT&lt;T&gt;" Collapsed="true">
+    <Position X="29.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexstructs.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vertexstructs::VertexPN&lt;T&gt;" Collapsed="true">
+    <Position X="28" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexstructs.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="vertexstructs::VertexPT&lt;T&gt;" Collapsed="true">
+    <Position X="31.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexstructs.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="scene::Node" Collapsed="true">
+    <Position X="29.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAACAAAAAAAAAAAACAAAQEgAAAAQCAAAAEAAEA=</HashCode>
+      <FileName>source\scene\scene.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="scene::Scene" Collapsed="true">
+    <Position X="35" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAKEABAAAAgggCBAAAQQAAAAIAAAAgEAAAAAE=</HashCode>
+      <FileName>source\scene\scene.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="model::md5::triangle_t" Collapsed="true">
+    <Position X="7.25" Y="28.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\md5model.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="int8" Collapsed="true">
+    <Position X="31.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint8" Collapsed="true">
+    <Position X="3.25" Y="28.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="int16" Collapsed="true">
+    <Position X="28" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint16" Collapsed="true">
+    <Position X="33.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="int32" Collapsed="true">
+    <Position X="20.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint32" Collapsed="true">
+    <Position X="7.25" Y="30.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="byte" Collapsed="true">
+    <Position X="3.25" Y="30.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="int64" Collapsed="true">
+    <Position X="29.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint64" Collapsed="true">
+    <Position X="35" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\BasicTypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="utf8" Collapsed="true">
+    <Position X="28" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\chartypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="utf16" Collapsed="true">
+    <Position X="36.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\chartypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="utf32" Collapsed="true">
+    <Position X="38.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\chartypes.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::AABBox_i" Collapsed="true">
+    <Position X="24.25" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\aabbox.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::AABBox_f" Collapsed="true">
+    <Position X="23.25" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\aabbox.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::AABBox_d" Collapsed="true">
+    <Position X="21.25" Y="22" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\aabbox.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2s" Collapsed="true">
+    <Position X="10.25" Y="27.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2us" Collapsed="true">
+    <Position X="4.25" Y="27.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2i" Collapsed="true">
+    <Position X="10.25" Y="25.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2u" Collapsed="true">
+    <Position X="4.25" Y="25.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2f" Collapsed="true">
+    <Position X="7.25" Y="27.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Dimension2d" Collapsed="true">
+    <Position X="7.25" Y="23.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Line2f" Collapsed="true">
+    <Position X="21.25" Y="29.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\line2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Line2d" Collapsed="true">
+    <Position X="18.25" Y="31.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\line2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Line3f" Collapsed="true">
+    <Position X="24.25" Y="24.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\line3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Line3d" Collapsed="true">
+    <Position X="21.25" Y="26.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\line3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3s" Collapsed="true">
+    <Position X="6.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3i" Collapsed="true">
+    <Position X="0.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3us" Collapsed="true">
+    <Position X="0.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3u" Collapsed="true">
+    <Position X="6.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3f" Collapsed="true">
+    <Position X="0.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3d" Collapsed="true">
+    <Position X="3.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix3ld" Collapsed="true">
+    <Position X="3.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4s" Collapsed="true">
+    <Position X="17.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4i" Collapsed="true">
+    <Position X="17.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4us" Collapsed="true">
+    <Position X="11.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4u" Collapsed="true">
+    <Position X="17.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4f" Collapsed="true">
+    <Position X="11.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4d" Collapsed="true">
+    <Position X="14.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Matrix4ld" Collapsed="true">
+    <Position X="14.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Plane_f" Collapsed="true">
+    <Position X="20.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\plane.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Plane_d" Collapsed="true">
+    <Position X="20.25" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\plane.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Plane_i" Collapsed="true">
+    <Position X="17.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\plane.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2s" Collapsed="true">
+    <Position X="15.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2i" Collapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2us" Collapsed="true">
+    <Position X="12.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2u" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2f" Collapsed="true">
+    <Position X="18.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2d" Collapsed="true">
+    <Position X="22.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point2ld" Collapsed="true">
+    <Position X="21.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3s" Collapsed="true">
+    <Position X="12.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3i" Collapsed="true">
+    <Position X="15.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3us" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3u" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3f" Collapsed="true">
+    <Position X="12.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3d" Collapsed="true">
+    <Position X="6.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Point3ld" Collapsed="true">
+    <Position X="6.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\point3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_i" Collapsed="true">
+    <Position X="6.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_s" Collapsed="true">
+    <Position X="0.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_u" Collapsed="true">
+    <Position X="0.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_us" Collapsed="true">
+    <Position X="6.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_f" Collapsed="true">
+    <Position X="0.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_d" Collapsed="true">
+    <Position X="3.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Quaternion_ld" Collapsed="true">
+    <Position X="3.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\quaternion.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2s" Collapsed="true">
+    <Position X="9.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2i" Collapsed="true">
+    <Position X="18.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2us" Collapsed="true">
+    <Position X="15.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2u" Collapsed="true">
+    <Position X="21.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2f" Collapsed="true">
+    <Position X="12.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2d" Collapsed="true">
+    <Position X="18.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector2ld" Collapsed="true">
+    <Position X="15.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3s" Collapsed="true">
+    <Position X="9.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3i" Collapsed="true">
+    <Position X="6.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3us" Collapsed="true">
+    <Position X="12.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3u" Collapsed="true">
+    <Position X="9.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3f" Collapsed="true">
+    <Position X="16.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3d" Collapsed="true">
+    <Position X="9.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector3ld" Collapsed="true">
+    <Position X="9.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4s" Collapsed="true">
+    <Position X="10.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4i" Collapsed="true">
+    <Position X="13.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4us" Collapsed="true">
+    <Position X="13.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4u" Collapsed="true">
+    <Position X="7.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4f" Collapsed="true">
+    <Position X="13.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4d" Collapsed="true">
+    <Position X="10.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::math::Vector4ld" Collapsed="true">
+    <Position X="10.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::string::String_c" Collapsed="true">
+    <Position X="17.25" Y="26.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\string\string.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="core::string::String_w" Collapsed="true">
+    <Position X="14.25" Y="28.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\string\string.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="gfx::color::RGBA_t" Collapsed="true">
+    <Position X="23.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="gfx::color::ARGB_t" Collapsed="true">
+    <Position X="23.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="gfx::color::BGRA_t" Collapsed="true">
+    <Position X="20.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="gfx::color::ABGR_t" Collapsed="true">
+    <Position X="20.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ibo::IndexBuffer16" Collapsed="true">
+    <Position X="22.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\indexbuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ibo::IndexBuffer32" Collapsed="true">
+    <Position X="25.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\indexbuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="aiTextureOp" Collapsed="true">
+    <Position X="28" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CRAAAAAAAAAAAAAAAAAAAAAACCEAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiTextureMapMode" Collapsed="true">
+    <Position X="36.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAACAAAEAAAQAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiTextureMapping" Collapsed="true">
+    <Position X="38.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgIgAAAAAAAAAABAABAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiTextureType" Collapsed="true">
+    <Position X="29.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAiAISAAABAAAABAAAAAAAAAAEAJAAAAAAAAMA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiShadingMode" Collapsed="true">
+    <Position X="33.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAABAgAAAAAAQREIAACAAAAAAAAAAAAABAAAAAgA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiTextureFlags" Collapsed="true">
+    <Position X="35" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABCAAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiBlendMode" Collapsed="true">
+    <Position X="29.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAgAAAAAAAAAAAABAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="aiPropertyTypeInfo" Collapsed="true">
+    <Position X="31.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAEAECAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>source\model\material.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eImporterFlags" Collapsed="true">
+    <Position X="29.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAUBIAAAAA=</HashCode>
+      <FileName>source\model\ImporterDesc.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PixelFormat" Collapsed="true">
+    <Position X="31.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAGAAAAAAAAAAACAAAAAAAIAwADBA=</HashCode>
+      <FileName>source\gfx\raw.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ePixelFormat" Collapsed="true">
+    <Position X="36.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEgAGAEAAAAAAgAACAQBBABAKAwJJBA=</HashCode>
+      <FileName>source\gfx\pixelformat.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="mesh2::ePrimitiveType" Collapsed="true">
+    <Position X="38.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAIAAAAA=</HashCode>
+      <FileName>source\model\mesh2.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorDimension2" Collapsed="true">
+    <Position X="36.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAIAACAAAAAAAAAAAAAAACAAgAAAAAAA=</HashCode>
+      <FileName>source\core\math\dimension.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::__unnamed_enum_0060_1" Collapsed="true">
+    <Position X="28" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIYAE=</HashCode>
+      <FileName>source\core\math\mathcommon.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorMatrix3" Collapsed="true">
+    <Position X="38.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix3.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorMatrix4" Collapsed="true">
+    <Position X="28" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAACAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\matrix4.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eIntersectionRelation" Collapsed="true">
+    <Position X="31.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAABABAAAAAAAAAAAAEAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>source\core\math\plane.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorVector2" Collapsed="true">
+    <Position X="29.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAgAAAAAAAABAAAAAAQAAAAAAAAGAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector2.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorVector3" Collapsed="true">
+    <Position X="31.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAoAAAAAAAAACAAAAAABIAAAgAAAAEAAAA=</HashCode>
+      <FileName>source\core\math\vector3.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::eConstructorVector4" Collapsed="true">
+    <Position X="33.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\vector4.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="camera::eProjectionType" Collapsed="true">
+    <Position X="29.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>source\core\math\camera.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::frustum::eProjectionType" Collapsed="true">
+    <Position X="28" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>source\core\math\frustum.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::math::frustum::eFrustumPlanes" Collapsed="true">
+    <Position X="38.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YgAAAAQIAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\core\math\frustum.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="core::fileio::eFileMode" Collapsed="true">
+    <Position X="36.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAJAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>source\core\fileio\file.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="win32console::eBkgConsoleColor" Collapsed="true">
+    <Position X="33.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAoAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>source\win32\win32console.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="win32keyboard::eVirtualKey" Collapsed="true">
+    <Position X="28" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>VBASyaSCSCCZBSMLJCoJAollHwAIoAQAEFQBkgIAAEA=</HashCode>
+      <FileName>source\win32\win32main.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="oglshader::eShaderType" Collapsed="true">
+    <Position X="33.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAACAAAAAAAAAAAEAAAAQAAAAAAgAAA=</HashCode>
+      <FileName>source\shader\OGLShader.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="oglshader::eScalarType" Collapsed="true">
+    <Position X="31.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAAABAAIAEAASAAAAQAAAAAAAABAAAAAAAAQAA=</HashCode>
+      <FileName>source\shader\shadertypes.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="oglshader::eVectorType" Collapsed="true">
+    <Position X="36.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAIBCQBgA=</HashCode>
+      <FileName>source\shader\shadertypes.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="oglshader::eMatrixType" Collapsed="true">
+    <Position X="33.25" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACwAAAAAAAAABoAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\shader\shadertypes.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="oglshader::eOpaqueType" Collapsed="true">
+    <Position X="35" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAEAAAAAgAAAICCAAAAAAAAAAAAAgAAAAAQE=</HashCode>
+      <FileName>source\shader\shadertypes.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ogldriver::eZBuffer" Collapsed="true">
+    <Position X="29.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAgAAAAAAAAAAQACAAAAEACAAAAAEABAAAAAA=</HashCode>
+      <FileName>source\opengl\ogldriver.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="gfx::color::eIdxColorComponent" Collapsed="true">
+    <Position X="28" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAABAAQAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>source\gfx\color.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="hardwarebuffer::eUsageFlag" Collapsed="true">
+    <Position X="35" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAAAAAAAAAAAAIAAAAMAAAEAAAAEAAACAAgAAAA=</HashCode>
+      <FileName>source\gfx\hardwarebuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="hardwarebuffer::eAccessFlag" Collapsed="true">
+    <Position X="31.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\hardwarebuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="hardwarebuffer::eBufferBindingTarget" Collapsed="true">
+    <Position X="35" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAQAAAAAAgAAJgIAAAAAAgAAAAQAAAAAgAARE=</HashCode>
+      <FileName>source\gfx\hardwarebuffer.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vertexformat::eVertexFormat" Collapsed="true">
+    <Position X="38.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAACAAAAAAAAAAAAAAAAAAAAIIBAAAAAAAAAIAAA=</HashCode>
+      <FileName>source\gfx\vertexformat.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="vertexformat::eDataType" Collapsed="true">
+    <Position X="35" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACQAEAAAIBQAAAgACAAAAAAABCgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>source\gfx\vertexformat.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

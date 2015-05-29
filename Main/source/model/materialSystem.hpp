@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_MATERIALSYSTEM_H_INC
 #define AI_MATERIALSYSTEM_H_INC
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <assert.h>
 #include "../core/BasicTypes.hpp"
 struct Material;

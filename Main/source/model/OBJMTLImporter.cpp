@@ -45,6 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include "ObjMtlImporter.hpp"
 
+#include "OBJFile.hpp"
+
 #include "ObjTools.hpp"
 using objtools::SkipLine;
 using objtools::GetNextToken;
@@ -70,7 +72,7 @@ using gfx::color::IDX_ALPHA;
 using assimp::ASSIMP_strincmp;
 
 //#include "ParsingUtils.h"
-//#include "../include/assimp/material.h"
+#include "material.hpp"
 //#include "../include/assimp/DefaultLogger.hpp"
 
 

@@ -37,12 +37,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ----------------------------------------------------------------------
 */
-
 #ifndef _OBJFILEIMPORTER_HPP_INCLUDED_
 #define _OBJFILEIMPORTER_HPP_INCLUDED_
 
-//#include "BaseImporter.h"
-//#include "../include/assimp/material.h"
 #include <vector>
 
 #include "mesh2.hpp"
@@ -52,9 +49,6 @@ struct Node;
 
 #include "../core/fileio/file.hpp"
 using core::fileio::File;
-
-//#include "../core/string/string.hpp"
-//using core::string::String_c;
 
 #include "OBJFile.hpp"
 

@@ -379,5 +379,6 @@
     <None Include="source\model\material.inl">
       <Filter>Source Files\MeshLib</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
