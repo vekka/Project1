@@ -149,6 +149,7 @@
     <ClCompile Include="source\gfx\raw.cpp" />
     <ClCompile Include="source\gfx\vertexbuffer.cpp" />
     <ClCompile Include="source\gfx\vertexformat.cpp" />
+    <ClCompile Include="source\model\material.hpp" />
     <ClCompile Include="source\model\OBJFileImporter.cpp" />
     <ClCompile Include="source\model\OBJMTLImporter.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="source\model\material.inl" />
     <None Include="source\shader\glsl\fragment\shader.frag" />
     <None Include="source\shader\glsl\fragment\triangle.frag" />
     <None Include="source\shader\glsl\vertex\shader.vert" />

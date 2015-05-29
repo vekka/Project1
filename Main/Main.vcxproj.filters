@@ -165,6 +165,9 @@
     <ClCompile Include="source\model\OBJFileImporter.cpp">
       <Filter>Source Files\MeshLib\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="source\model\material.hpp">
+      <Filter>Source Files\MeshLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
@@ -364,6 +367,9 @@
     </None>
     <None Include="source\shader\glsl\fragment\triangle.frag">
       <Filter>Source Files\ShaderLib\ShaderSources\FragmentShaders</Filter>
+    </None>
+    <None Include="source\model\material.inl">
+      <Filter>Source Files\MeshLib</Filter>
     </None>
   </ItemGroup>
 </Project>
