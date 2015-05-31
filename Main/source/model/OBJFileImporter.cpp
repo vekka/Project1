@@ -47,15 +47,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OBJParser.hpp"
 using model::objparser::ObjParser;
 
+#include "OBJFile.hpp"
+using objfile::Material;
+
+#include "material.inl"
+
+
+using mesh2::Face;
 
 #include "../core/memory/scopedptr.hpp"
 using core::memory::ScopedPtr;
 
 //#include "../include/assimp/Importer.hpp"
 #include "../scene/scene.hpp"
-#include "ImporterDesc.hpp"
 
-using mesh2::Face;
+#include "ImporterDesc.hpp"
 
 using scene::Node;
 using mesh2::PRIMITIVE_TYPE_LINE;
@@ -542,7 +548,7 @@ namespace objfileimporter
       //   return;
       //}
 
-      pScene->mMaterials = new Material*[numMaterials];
+      pScene->m_ppMaterials = new Material*[numMaterials];
       for (uint32 matIndex = 0; matIndex < numMaterials; matIndex++)
       {
          // Store material name

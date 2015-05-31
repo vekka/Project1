@@ -195,6 +195,8 @@
     <ClInclude Include="source\core\memory\allocator.hpp" />
     <ClInclude Include="source\core\memory\memory.hpp" />
     <ClInclude Include="source\core\memory\scopedptr.hpp" />
+    <ClInclude Include="source\core\poppack1.hpp" />
+    <ClInclude Include="source\core\pushpack1.hpp" />
     <ClInclude Include="source\core\StringComparison.hpp" />
     <ClInclude Include="source\core\string\string.hpp" />
     <ClInclude Include="source\core\string\stringext.hpp" />

@@ -312,7 +312,7 @@ namespace scene
       * AI_SCENE_FLAGS_INCOMPLETE flag is not set there will always
       * be at least ONE material.
       */
-      //Material** m_ppMaterials;
+      Material** m_ppMaterials;
 
 
 

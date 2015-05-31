@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../core/chartypes.hpp"
 #include "materialSystem.hpp"
 #include "material.hpp"
-#include "../include/assimp/DefaultLogger.hpp"
+//#include "../include/assimp/DefaultLogger.hpp"
 #include "../core/macros.hpp"
 
 
@@ -57,7 +57,7 @@ using namespace Assimp;
 
 // ------------------------------------------------------------------------------------------------
 // Get a specific property from a material
-aiReturn aiGetMaterialProperty(const aiMaterial* pMat,
+int32 aiGetMaterialProperty(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
@@ -89,7 +89,7 @@ aiReturn aiGetMaterialProperty(const aiMaterial* pMat,
 
 // ------------------------------------------------------------------------------------------------
 // Get an array of floating-point values from the material.
-aiReturn aiGetMaterialFloatArray(const aiMaterial* pMat,
+int32 aiGetMaterialFloatArray(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
@@ -162,7 +162,7 @@ aiReturn aiGetMaterialFloatArray(const aiMaterial* pMat,
 
 // ------------------------------------------------------------------------------------------------
 // Get an array if integers from the material
-aiReturn aiGetMaterialIntegerArray(const aiMaterial* pMat,
+int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
@@ -234,14 +234,14 @@ aiReturn aiGetMaterialIntegerArray(const aiMaterial* pMat,
 
 // ------------------------------------------------------------------------------------------------
 // Get a color (3 or 4 floats) from the material
-aiReturn aiGetMaterialColor(const aiMaterial* pMat,
+int32 aiGetMaterialColor(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
    aiColor4D* pOut)
 {
    uint32 iMax = 4;
-   const aiReturn eRet = aiGetMaterialFloatArray(pMat, pKey, type, index, (float*)pOut, &iMax);
+   const int32 eRet = aiGetMaterialFloatArray(pMat, pKey, type, index, (float*)pOut, &iMax);
 
    // if no alpha channel is defined: set it to 1.0
    if (3 == iMax) {
@@ -253,7 +253,7 @@ aiReturn aiGetMaterialColor(const aiMaterial* pMat,
 
 // ------------------------------------------------------------------------------------------------
 // Get a aiUVTransform (4 floats) from the material
-aiReturn aiGetMaterialUVTransform(const aiMaterial* pMat,
+int32 aiGetMaterialUVTransform(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
@@ -265,7 +265,7 @@ aiReturn aiGetMaterialUVTransform(const aiMaterial* pMat,
 
 // ------------------------------------------------------------------------------------------------
 // Get a string from the material
-aiReturn aiGetMaterialString(const aiMaterial* pMat,
+int32 aiGetMaterialString(const aiMaterial* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
@@ -320,7 +320,7 @@ ASSIMP_API uint32 aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
 }
 
 // ------------------------------------------------------------------------------------------------
-aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
+int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
    aiTextureType type,
    uint32  index,
    C_STRUCT aiString* path,
@@ -400,7 +400,7 @@ void aiMaterial::Clear()
 }
 
 // ------------------------------------------------------------------------------------------------
-aiReturn aiMaterial::RemoveProperty(const char* pKey, uint32 type,
+int32 aiMaterial::RemoveProperty(const char* pKey, uint32 type,
    uint32 index
    )
 {
@@ -428,7 +428,7 @@ aiReturn aiMaterial::RemoveProperty(const char* pKey, uint32 type,
 }
 
 // ------------------------------------------------------------------------------------------------
-aiReturn aiMaterial::AddBinaryProperty(const void* pInput,
+int32 aiMaterial::AddBinaryProperty(const void* pInput,
    uint32 pSizeInBytes,
    const char* pKey,
    uint32 type,
@@ -499,7 +499,7 @@ aiReturn aiMaterial::AddBinaryProperty(const void* pInput,
 }
 
 // ------------------------------------------------------------------------------------------------
-aiReturn aiMaterial::AddProperty(const aiString* pInput,
+int32 aiMaterial::AddProperty(const aiString* pInput,
    const char* pKey,
    uint32 type,
    uint32 index)

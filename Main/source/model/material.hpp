@@ -47,6 +47,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AI_MATERIAL_H_INC
 
 #include "../core/BasicTypes.hpp"
+#include "../core/math/vector3.hpp"
+#include "../core/math/vector2.hpp"
+#include "../core/math/matrix3.hpp"
+#include "../core/math/matrix4.hpp"
+#include "../core/math/quaternion.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -445,7 +450,7 @@ extern "C" {
    };
 
 
-#include "./Compiler/pushpack1.h"
+#include "../core/pushpack1.hpp"
 
    // ---------------------------------------------------------------------------
    /** @brief Defines how an UV channel is transformed.
@@ -653,13 +658,13 @@ public:
    * NULL is a valid value for this parameter.
    */
    template <typename Type>
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, Type* pOut, uint32* pMax) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, int* pOut, uint32* pMax) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, float* pOut, uint32* pMax) const;
 
    // -------------------------------------------------------------------
@@ -673,26 +678,26 @@ public:
    * @param pOut Reference to receive the output value
    */
    template <typename Type>
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, Type& pOut) const;
 
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, int& pOut) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, float& pOut) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, aiString& pOut) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, aiColor3D& pOut) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, aiColor4D& pOut) const;
 
-   aiReturn Get(const char* pKey, uint32 type,
+   int32 Get(const char* pKey, uint32 type,
       uint32 idx, aiUVTransform& pOut) const;
 
    // -------------------------------------------------------------------
@@ -730,7 +735,7 @@ public:
    *    axis: UVW order (=XYZ)).
    */
    // -------------------------------------------------------------------
-   aiReturn GetTexture(aiTextureType type,
+   int32 GetTexture(aiTextureType type,
       uint32  index,
       C_STRUCT aiString* path,
       aiTextureMapping* mapping = NULL,
@@ -753,7 +758,7 @@ public:
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro
    *  @param pType Type information hint */
-   aiReturn AddBinaryProperty(const void* pInput,
+   int32 AddBinaryProperty(const void* pInput,
       uint32 pSizeInBytes,
       const char* pKey,
       uint32 type,
@@ -768,7 +773,7 @@ public:
    *  @param pKey Key/Usage of the property (AI_MATKEY_XXX)
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro */
-   aiReturn AddProperty(const aiString* pInput,
+   int32 AddProperty(const aiString* pInput,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
@@ -781,43 +786,43 @@ public:
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro  */
    template<class TYPE>
-   aiReturn AddProperty(const TYPE* pInput,
+   int32 AddProperty(const TYPE* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const aiVector3D* pInput,
+   int32 AddProperty(const aiVector3D* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const aiColor3D* pInput,
+   int32 AddProperty(const aiColor3D* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const aiColor4D* pInput,
+   int32 AddProperty(const aiColor4D* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const int* pInput,
+   int32 AddProperty(const int* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const float* pInput,
+   int32 AddProperty(const float* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   aiReturn AddProperty(const aiUVTransform* pInput,
+   int32 AddProperty(const aiUVTransform* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
@@ -830,7 +835,7 @@ public:
    *  @param pKey Key to be deleted
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro  */
-   aiReturn RemoveProperty(const char* pKey,
+   int32 RemoveProperty(const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
@@ -1310,7 +1315,7 @@ extern "C" {
    * @param pPropOut Pointer to receive a pointer to a valid MaterialProperty
    *        structure or NULL if the key has not been found. */
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
+   ASSIMP_API C_ENUM int32 aiGetMaterialProperty(
       const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
@@ -1343,7 +1348,7 @@ extern "C" {
    * @return Specifies whether the key has been found. If not, the output
    *   arrays remains unmodified and pMax is set to 0.*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialFloatArray(
+   ASSIMP_API C_ENUM int32 aiGetMaterialFloatArray(
       const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
@@ -1373,7 +1378,7 @@ extern "C" {
    * @return Specifies whether the key has been found. If not, the output
    *   float remains unmodified.*/
    // ---------------------------------------------------------------------------
-   inline aiReturn aiGetMaterialFloat(const aiMaterial* pMat,
+   inline int32 aiGetMaterialFloat(const aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1396,7 +1401,7 @@ extern "C" {
    *  from a material
    *
    * See the sample for aiGetMaterialFloatArray for more information.*/
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API C_ENUM int32 aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32  type,
       uint32  index,
@@ -1411,7 +1416,7 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information.*/
    // ---------------------------------------------------------------------------
-   inline aiReturn aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
+   inline int32 aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1435,7 +1440,7 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API C_ENUM int32 aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1447,7 +1452,7 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API C_ENUM int32 aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1459,7 +1464,7 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information.*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM aiReturn aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API C_ENUM int32 aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1510,7 +1515,7 @@ extern "C" {
    *  @return AI_SUCCESS on success, otherwise something else. Have fun.*/
    // ---------------------------------------------------------------------------
 #ifdef __cplusplus
-   ASSIMP_API aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
+   ASSIMP_API int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
       aiTextureType type,
       uint32  index,
       aiString* path,
@@ -1521,7 +1526,7 @@ extern "C" {
       aiTextureMapMode* mapmode = NULL,
       uint32* flags = NULL);
 #else
-   C_ENUM aiReturn aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
+   C_ENUM int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
       C_ENUM aiTextureType type,
       uint32  index,
       C_STRUCT aiString* path,
