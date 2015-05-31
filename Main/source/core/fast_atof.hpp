@@ -17,7 +17,7 @@
 
 #include <cmath>
 #include <limits>
-#include <stdint.h>
+
 #include <stdexcept>
 
 #include "StringComparison.hpp"

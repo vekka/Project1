@@ -46,12 +46,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_MATERIAL_H_INC
 #define AI_MATERIAL_H_INC
 
-#include "../core/BasicTypes.hpp"
+//#include "../core/BasicTypes.hpp"
 #include "../core/math/vector3.hpp"
 #include "../core/math/vector2.hpp"
+using core::math::Vector2f;
+using core::math::Vector3f;
+
+#include <string>
+
 #include "../core/math/matrix3.hpp"
 #include "../core/math/matrix4.hpp"
-#include "../core/math/quaternion.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -468,13 +472,13 @@ extern "C" {
       *
       *  The default value is (0|0).
       */
-      C_STRUCT aiVector2D mTranslation;
+      Vector2f mTranslation;
 
       /** Scaling on the u and v axes.
       *
       *  The default value is (1|1).
       */
-      C_STRUCT aiVector2D mScaling;
+     Vector2f mScaling;
 
       /** Rotation - in counter-clockwise direction.
       *
@@ -496,7 +500,7 @@ extern "C" {
 
    } PACK_STRUCT;
 
-#include "./Compiler/poppack1.h"
+#include "../core/poppack1.hpp"
 
    //! @cond AI_DOX_INCLUDE_INTERNAL
    // ---------------------------------------------------------------------------
@@ -538,7 +542,7 @@ extern "C" {
       *  compiler to map this enum to a 32 Bit integer.
       */
 #ifndef SWIG
-      _aiPTI_Force32Bit = INT_MAX
+      _aiPTI_Force32Bit = INT32_MAX
 #endif
    };
 
@@ -567,7 +571,7 @@ extern "C" {
       /** Specifies the name of the property (key)
       *  Keys are generally case insensitive.
       */
-      C_STRUCT aiString mKey;
+      std::string mKey;
 
       /** Textures: Specifies their exact usage semantic.
       * For non-texture properties, this member is always 0
@@ -592,7 +596,9 @@ extern "C" {
       * utilize proper type conversions.
       * (It's probably a hacky solution, but it works.)
       */
-      C_ENUM aiPropertyTypeInfo mType;
+
+      //I don't understand this one... help
+      enum aiPropertyTypeInfo mType;
 
       /**	Binary buffer to hold the property's value.
       * The size of the buffer is always mDataLength.
@@ -632,9 +638,9 @@ extern "C" {
 *  The library defines a set of standard keys (AI_MATKEY_XXX).
 */
 #ifdef __cplusplus
-struct ASSIMP_API aiMaterial
+struct Material
 #else
-struct aiMaterial
+struct Material
 #endif
 {
 
@@ -642,8 +648,8 @@ struct aiMaterial
 
 public:
 
-   aiMaterial();
-   ~aiMaterial();
+   Material();
+   Material();
 
    // -------------------------------------------------------------------
    /** @brief Retrieve an array of Type values with a specific key
@@ -737,7 +743,7 @@ public:
    // -------------------------------------------------------------------
    int32 GetTexture(aiTextureType type,
       uint32  index,
-      C_STRUCT aiString* path,
+      std::string aiString* path,
       aiTextureMapping* mapping = NULL,
       uint32* uvindex = NULL,
       float* blend = NULL,
@@ -773,7 +779,7 @@ public:
    *  @param pKey Key/Usage of the property (AI_MATKEY_XXX)
    *  @param type Set by the AI_MATKEY_XXX macro
    *  @param index Set by the AI_MATKEY_XXX macro */
-   int32 AddProperty(const aiString* pInput,
+   int32 AddProperty(const std::string* pInput,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
@@ -792,7 +798,7 @@ public:
       uint32 type = 0,
       uint32 index = 0);
 
-   int32 AddProperty(const aiVector3D* pInput,
+   int32 AddProperty(const Vector3f* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
@@ -850,7 +856,7 @@ public:
    *  @param pcDest Destination material
    *  @param pcSrc Source material
    */
-   static void CopyPropertyList(aiMaterial* pcDest,
+   static void CopyPropertyList(Material* pcDest,
       const aiMaterial* pcSrc);
 
 

@@ -218,11 +218,11 @@ int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
          if (a == iWrite - 1) {
             break;
          }
-         if (!IsSpace(*cur)) {
-            DefaultLogger::get()->error("Material property" + std::string(pKey) +
-               " is a string; failed to parse an integer array out of it.");
-            return AI_FAILURE;
-         }
+         //if (!IsSpace(*cur)) {
+         //   DefaultLogger::get()->error("Material property" + std::string(pKey) +
+         //      " is a string; failed to parse an integer array out of it.");
+         //   return AI_FAILURE;
+         //}
       }
 
       if (pMax) {
@@ -290,8 +290,8 @@ int32 aiGetMaterialString(const aiMaterial* pMat,
    }
    else {
       // TODO - implement lexical cast as well
-      DefaultLogger::get()->error("Material property" + std::string(pKey) +
-         " was found, but is no string");
+      //DefaultLogger::get()->error("Material property" + std::string(pKey) +
+      //   " was found, but is no string");
       return AI_FAILURE;
    }
    return AI_SUCCESS;

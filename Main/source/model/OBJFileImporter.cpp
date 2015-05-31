@@ -50,8 +50,7 @@ using model::objparser::ObjParser;
 #include "OBJFile.hpp"
 using objfile::Material;
 
-#include "material.inl"
-
+//#include "material.inl"
 
 using mesh2::Face;
 
