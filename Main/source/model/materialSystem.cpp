@@ -44,7 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
-#include "Hash.h"
+#include "../core/hash/Hash.hpp"
 #include "../core/fast_atof.hpp"
 #include "../core/chartypes.hpp"
 #include "materialSystem.hpp"

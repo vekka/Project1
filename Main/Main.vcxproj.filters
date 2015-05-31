@@ -368,6 +368,9 @@
     <ClInclude Include="source\core\poppack1.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\hash\hash.hpp">
+      <Filter>Source Files\Core\MathLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="source\shader\glsl\vertex\shader.vert">

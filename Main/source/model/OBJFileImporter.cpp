@@ -48,9 +48,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using model::objparser::ObjParser;
 
 #include "OBJFile.hpp"
-using objfile::Material;
 
 //#include "material.inl"
+#include "materialSystem.hpp"
+using namespace Assimp;
 
 using mesh2::Face;
 
@@ -558,8 +559,8 @@ namespace objfileimporter
          if (pModel->m_materialMap.end() == it)
             continue;
 
-     
-         Material* mat = new Material;
+         
+         aiMaterial* mat = new aiMaterial;
          Material *pCurrentMaterial = (*it).second;
          // AddProperty can be found in Assimp file called material.inl(several versions, must be overloaded...)
          mat->AddProperty(&pCurrentMaterial->MaterialName, AI_MATKEY_NAME);
