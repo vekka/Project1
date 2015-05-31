@@ -43,8 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *  @brief Defines the material system of the library
 */
 
-#ifndef AI_MATERIAL_H_INC
-#define AI_MATERIAL_H_INC
+#ifndef _MATERIAL_HPP_INCLUDED_
+#define _MATERIAL_HPP_INCLUDED_
 
 //#include "../core/BasicTypes.hpp"
 #include "../core/math/vector3.hpp"
@@ -56,10 +56,6 @@ using core::math::Vector3f;
 
 #include "../core/math/matrix3.hpp"
 #include "../core/math/matrix4.hpp"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
    // Name for default materials (2nd is used if meshes have UV coords)
 #define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
@@ -83,29 +79,29 @@ extern "C" {
    *  @endcode
    *  where 'diffContrib' is the intensity of the incoming light for that pixel.
    */
-   enum aiTextureOp
+   enum eTextureOperation
    {
       /** T = T1 * T2 */
-      aiTextureOp_Multiply = 0x0,
+      TEXTURE_OPER_MULT,
 
       /** T = T1 + T2 */
-      aiTextureOp_Add = 0x1,
+      TEXTURE_OPER_ADD,
 
       /** T = T1 - T2 */
-      aiTextureOp_Subtract = 0x2,
+      TEXTURE_OPER_SUB,
 
       /** T = T1 / T2 */
-      aiTextureOp_Divide = 0x3,
+      TEXTURE_OPER_DIV,
 
       /** T = (T1 + T2) - (T1 * T2) */
-      aiTextureOp_SmoothAdd = 0x4,
+      TEXTURE_OPER_SMOOTH_ADD,
 
       /** T = T1 + (T2-0.5) */
-      aiTextureOp_SignedAdd = 0x5,
+      TEXTURE_OPER_SIGNED_ADD,
 
 
 #ifndef SWIG
-      _aiTextureOp_Force32Bit = INT32_MAX
+      TEXTURE_OPER_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -114,29 +110,29 @@ extern "C" {
    *
    *  Commonly refered to as 'wrapping mode'.
    */
-   enum aiTextureMapMode
+   enum eTextureMapMode
    {
       /** A texture coordinate u|v is translated to u%1|v%1
       */
-      aiTextureMapMode_Wrap = 0x0,
+      TEXTURE_MAPMODE_WRAP,
 
       /** Texture coordinates outside [0...1]
       *  are clamped to the nearest valid value.
       */
-      aiTextureMapMode_Clamp = 0x1,
+      TEXTURE_MAPMODE_CLAMP,
 
       /** If the texture coordinates for a pixel are outside [0...1]
       *  the texture is not applied to that pixel
       */
-      aiTextureMapMode_Decal = 0x3,
+      TEXTURE_MAPMODE_DECAL,
 
       /** A texture coordinate u|v becomes u%1|v%1 if (u-(u%1))%2 is zero and
       *  1-(u%1)|1-(v%1) otherwise
       */
-      aiTextureMapMode_Mirror = 0x2,
+      TEXTURE_MAPMODE_MIRROR,
 
 #ifndef SWIG
-      _aiTextureMapMode_Force32Bit = INT32_MAX
+      TEXTURE_MAPMODE_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -149,7 +145,7 @@ extern "C" {
    *  how the mapping should look like (e.g spherical) is given.
    *  See the #AI_MATKEY_MAPPING property for more details.
    */
-   enum aiTextureMapping
+   enum eTextureMapping
    {
       /** The mapping coordinates are taken from an UV channel.
       *
@@ -157,26 +153,26 @@ extern "C" {
       *  the texture coordinates are to be taken from (remember,
       *  meshes can have more than one UV channel).
       */
-      aiTextureMapping_UV = 0x0,
+      TEXTURE_MAP_UV,
 
       /** Spherical mapping */
-      aiTextureMapping_SPHERE = 0x1,
+      TEXTURE_MAP_SPHERE,
 
       /** Cylindrical mapping */
-      aiTextureMapping_CYLINDER = 0x2,
+      TEXTURE_MAP_CYLINDER,
 
       /** Cubic mapping */
-      aiTextureMapping_BOX = 0x3,
+      TEXTURE_MAP_BOX,
 
       /** Planar mapping */
-      aiTextureMapping_PLANE = 0x4,
+      TEXTURE_MAP_PLANE,
 
       /** Undefined mapping. Have fun. */
-      aiTextureMapping_OTHER = 0x5,
+      TEXTURE_MAP_OTHER,
 
 
 #ifndef SWIG
-      _aiTextureMapping_Force32Bit = INT32_MAX
+      TEXTURE_MAP_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -195,7 +191,7 @@ extern "C" {
    *  and the artists working on models have to conform to this specification,
    *  regardless which 3D tool they're using.
    */
-   enum aiTextureType
+   enum eTextureType
    {
       /** Dummy value.
       *
@@ -203,36 +199,36 @@ extern "C" {
       *  (#MaterialProperty::mSemantic) for all material properties
       *  *not* related to textures.
       */
-      aiTextureType_NONE = 0x0,
+      TEXTURE_TYPE_NONE,
 
 
 
       /** The texture is combined with the result of the diffuse
       *  lighting equation.
       */
-      aiTextureType_DIFFUSE = 0x1,
+      TEXTURE_TYPE_DIFFUSE,
 
       /** The texture is combined with the result of the specular
       *  lighting equation.
       */
-      aiTextureType_SPECULAR = 0x2,
+      TEXTURE_TYPE_SPECULAR,
 
       /** The texture is combined with the result of the ambient
       *  lighting equation.
       */
-      aiTextureType_AMBIENT = 0x3,
+      TEXTURE_TYPE_AMBIENT,
 
       /** The texture is added to the result of the lighting
       *  calculation. It isn't influenced by incoming light.
       */
-      aiTextureType_EMISSIVE = 0x4,
+      TEXTURE_TYPE_EMISSIVE,
 
       /** The texture is a height map.
       *
       *  By convention, higher gray-scale values stand for
       *  higher elevations from the base height.
       */
-      aiTextureType_HEIGHT = 0x5,
+      TEXTURE_TYPE_HEIGHT,
 
       /** The texture is a (tangent space) normal-map.
       *
@@ -240,7 +236,7 @@ extern "C" {
       *  normal maps. Assimp does (intentionally) not
       *  distinguish here.
       */
-      aiTextureType_NORMALS = 0x6,
+      TEXTURE_TYPE_NORMALS,
 
       /** The texture defines the glossiness of the material.
       *
@@ -249,21 +245,21 @@ extern "C" {
       *  function defined to map the linear color values in the
       *  texture to a suitable exponent. Have fun.
       */
-      aiTextureType_SHININESS = 0x7,
+      TEXTURE_TYPE_SHININESS,
 
       /** The texture defines per-pixel opacity.
       *
       *  Usually 'white' means opaque and 'black' means
       *  'transparency'. Or quite the opposite. Have fun.
       */
-      aiTextureType_OPACITY = 0x8,
+      TEXTURE_TYPE_OPACITY,
 
       /** Displacement texture
       *
       *  The exact purpose and format is application-dependent.
       *  Higher color values stand for higher vertex displacements.
       */
-      aiTextureType_DISPLACEMENT = 0x9,
+      TEXTURE_TYPE_DISPLACEMENT,
 
       /** Lightmap texture (aka Ambient Occlusion)
       *
@@ -272,14 +268,14 @@ extern "C" {
       *  scaling value for the final color value of a pixel. Its
       *  intensity is not affected by incoming light.
       */
-      aiTextureType_LIGHTMAP = 0xA,
+      TEXTURE_TYPE_LIGHTMAP,
 
       /** Reflection texture
       *
       * Contains the color of a perfect mirror reflection.
       * Rarely used, almost never for real-time applications.
       */
-      aiTextureType_REFLECTION = 0xB,
+      TEXTURE_TYPE_REFLECTION,
 
       /** Unknown texture
       *
@@ -287,11 +283,11 @@ extern "C" {
       *  above is considered to be 'unknown'. It is still imported,
       *  but is excluded from any further postprocessing.
       */
-      aiTextureType_UNKNOWN = 0xC,
+      TEXTURE_TYPE_UNKNOWN,
 
 
 #ifndef SWIG
-      _aiTextureType_Force32Bit = INT32_MAX
+      TEXTURE_TYPE_FORCE32BIT = INT32_MAX
 #endif
    };
 
