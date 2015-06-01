@@ -57,6 +57,9 @@ using core::math::Vector3f;
 #include "../core/math/matrix3.hpp"
 #include "../core/math/matrix4.hpp"
 
+#include "../gfx/color.hpp"
+using gfx::color::Colorf;
+
    // Name for default materials (2nd is used if meshes have UV coords)
 #define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
 
