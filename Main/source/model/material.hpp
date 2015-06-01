@@ -63,6 +63,8 @@ using gfx::color::Colorf;
    // Name for default materials (2nd is used if meshes have UV coords)
 #define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
 
+namespace material
+{
    // ---------------------------------------------------------------------------
    /** @brief Defines how the Nth texture of a specific type is combined with
    *  the result of all previous layers.
@@ -667,7 +669,7 @@ public:
    int32 Get(const char* pKey, uint32 type, uint32 idx, float& pOut) const;
    int32 Get(const char* pKey, uint32 type, uint32 idx, aiString& pOut) const;
    int32 Get(const char* pKey, uint32 type, uint32 idx, aiColor3D& pOut) const;
-   int32 Get(const char* pKey, uint32 type, uint32 idx, aiColor4D& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, Colorf& pOut) const;
    int32 Get(const char* pKey, uint32 type, uint32 idx, UVTransform& pOut) const;
 
    // -------------------------------------------------------------------
@@ -820,20 +822,16 @@ public:
    *  @param pcDest Destination material
    *  @param pcSrc Source material
    */
-   static void CopyPropertyList(Material* pcDest,
-      const aiMaterial* pcSrc);
-
-
-#endif
+   static void CopyPropertyList(Material* pcDest, const aiMaterial* pcSrc);
 
    /** List of all material properties loaded. */
-   MaterialProperty** mProperties;
+   MaterialProperty** m_ppProperties;
 
    /** Number of properties in the data base */
-   uint32 mNumProperties;
+   uint32 m_NumProperties;
 
    /** Storage allocated */
-   uint32 mNumAllocated;
+   uint32 m_NumAllocated;
 };
 
 #define AI_MATKEY_NAME "?mat.name",0,0
@@ -1479,6 +1477,8 @@ public:
       aiTextureMapMode* mapmode = NULL,
       uint32* flags = NULL);
 }
+
+} // namespace material
 
 #include "material.inl"
 
