@@ -305,62 +305,62 @@ using core::math::Vector3f;
    *  most common implementation matches the original rendering results of the
    *  3D modeller which wrote a particular model as closely as possible.
    */
-   enum aiShadingMode
+   enum eShadingMode
    {
       /** Flat shading. Shading is done on per-face base,
       *  diffuse only. Also known as 'faceted shading'.
       */
-      aiShadingMode_Flat = 0x1,
+      SHADING_MODE_FLAT,
 
       /** Simple Gouraud shading.
       */
-      aiShadingMode_Gouraud = 0x2,
+      SHADING_MODE_GOURAUD,
 
       /** Phong-Shading -
       */
-      aiShadingMode_Phong = 0x3,
+      SHADING_MODE_PHONG,
 
       /** Phong-Blinn-Shading
       */
-      aiShadingMode_Blinn = 0x4,
+      SHADING_MODE_BLINN,
 
       /** Toon-Shading per pixel
       *
       *  Also known as 'comic' shader.
       */
-      aiShadingMode_Toon = 0x5,
+      SHADING_MODE_TOON,
 
       /** OrenNayar-Shading per pixel
       *
       *  Extension to standard Lambertian shading, taking the
       *  roughness of the material into account
       */
-      aiShadingMode_OrenNayar = 0x6,
+      SHADING_MODE_ORENNAYAR,
 
       /** Minnaert-Shading per pixel
       *
       *  Extension to standard Lambertian shading, taking the
       *  "darkness" of the material into account
       */
-      aiShadingMode_Minnaert = 0x7,
+      SHADING_MODE_MINNAERT,
 
       /** CookTorrance-Shading per pixel
       *
       *  Special shader for metallic surfaces.
       */
-      aiShadingMode_CookTorrance = 0x8,
+      SHADING_MODE_COOKTORRANCE,
 
       /** No shading at all. Constant light influence of 1.0.
       */
-      aiShadingMode_NoShading = 0x9,
+      SHADING_MODE_NOSHADING,
 
       /** Fresnel shading
       */
-      aiShadingMode_Fresnel = 0xa,
+      SHADING_MODE_FRESNEL,
 
 
 #ifndef SWIG
-      _aiShadingMode_Force32Bit = INT32_MAX
+      SHADING_MODE_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -376,11 +376,11 @@ using core::math::Vector3f;
    *
    *  This corresponds to the #AI_MATKEY_TEXFLAGS property.
    */
-   enum aiTextureFlags
+   enum eTextureFlags
    {
       /** The texture's color values have to be inverted (componentwise 1-n)
       */
-      aiTextureFlags_Invert = 0x1,
+      TEXTURE_FLAGS_INVERT = 1,
 
       /** Explicit request to the application to process the alpha channel
       *  of the texture.
@@ -391,17 +391,17 @@ using core::math::Vector3f;
       *  define this, it is left to the application to decide whether
       *  the texture alpha channel - if any - is evaluated or not.
       */
-      aiTextureFlags_UseAlpha = 0x2,
+      TEXTURE_FLAGS_USEALPHA = 2,
 
       /** Explicit request to the application to ignore the alpha channel
       *  of the texture.
       *
       *  Mutually exclusive with #aiTextureFlags_UseAlpha.
       */
-      aiTextureFlags_IgnoreAlpha = 0x4,
+      TEXTURE_FLAGS_IGNOREALPHA = 4,
 
 #ifndef SWIG
-      _aiTextureFlags_Force32Bit = INT32_MAX
+      TEXTURE_FLAGS_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -422,7 +422,7 @@ using core::math::Vector3f;
    *  calculation.<br>
    *  This corresponds to the #AI_MATKEY_BLEND_FUNC property.
    */
-   enum aiBlendMode
+   enum eBlendMode
    {
       /**
       *  Formula:
@@ -430,7 +430,7 @@ using core::math::Vector3f;
       *  SourceColor*SourceAlpha + DestColor*(1-SourceAlpha)
       *  @endcode
       */
-      aiBlendMode_Default = 0x0,
+      BLEND_MODE_DEFAULT,
 
       /** Additive blending
       *
@@ -439,13 +439,13 @@ using core::math::Vector3f;
       *  SourceColor*1 + DestColor*1
       *  @endcode
       */
-      aiBlendMode_Additive = 0x1,
+      BLEND_MODE_ADDITIVE,
 
       // we don't need more for the moment, but we might need them
       // in future versions ...
 
 #ifndef SWIG
-      _aiBlendMode_Force32Bit = INT32_MAX
+      BLEND_MODE_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -462,19 +462,19 @@ using core::math::Vector3f;
    *  we keep separate scaling/translation/rotation values to make it
    *  easier to process and optimize UV transformations internally.
    */
-   struct aiUVTransform
+   struct UVTransform
    {
       /** Translation on the u and v axes.
       *
       *  The default value is (0|0).
       */
-      Vector2f mTranslation;
+      Vector2f m_translation;
 
       /** Scaling on the u and v axes.
       *
       *  The default value is (1|1).
       */
-     Vector2f mScaling;
+     Vector2f m_scaling;
 
       /** Rotation - in counter-clockwise direction.
       *
@@ -482,17 +482,12 @@ using core::math::Vector3f;
       *  rotation center is 0.5f|0.5f. The default value
       *  0.f.
       */
-      float mRotation;
+      float m_rotation;
 
-
-#ifdef __cplusplus
-      aiUVTransform()
-         : mScaling(1.f, 1.f)
-         , mRotation(0.f)
+      UVTransform() : m_scaling(1.f, 1.f), m_rotation(0.f)
       {
-         // nothing to be done here ...
+      	// nothing to be done here
       }
-#endif
 
    } PACK_STRUCT;
 
@@ -503,7 +498,7 @@ using core::math::Vector3f;
    /** @brief A very primitive RTTI system for the contents of material
    *  properties.
    */
-   enum aiPropertyTypeInfo
+   enum ePropertyTypeInfo
    {
       /** Array of single-precision (32 Bit) floats
       *
@@ -511,14 +506,14 @@ using core::math::Vector3f;
       *  aiMaterial::Get()) to query properties stored in floating-point format.
       *  The material system performs the type conversion automatically.
       */
-      aiPTI_Float = 0x1,
+      PROPERTY_TYPE_INFO_FLOAT = 0x1,
 
       /** The material property is an aiString.
       *
       *  Arrays of strings aren't possible, aiGetMaterialString() (or the
       *  C++-API aiMaterial::Get()) *must* be used to query a string property.
       */
-      aiPTI_String = 0x3,
+      PROPERTY_TYPE_INFO_STRING = 0x3,
 
       /** Array of (32 Bit) integers
       *
@@ -526,19 +521,19 @@ using core::math::Vector3f;
       *  aiMaterial::Get()) to query properties stored in integer format.
       *  The material system performs the type conversion automatically.
       */
-      aiPTI_Integer = 0x4,
+      PROPERTY_TYPE_INFO_INTEGER = 0x4,
 
 
       /** Simple binary buffer, content undefined. Not convertible to anything.
       */
-      aiPTI_Buffer = 0x5,
+      PROPERTY_TYPE_INFO_BINARY_BUFFER = 0x5,
 
 
       /** This value is not used. It is just there to force the
       *  compiler to map this enum to a 32 Bit integer.
       */
 #ifndef SWIG
-      _aiPTI_Force32Bit = INT32_MAX
+      PROPERTY_TYPE_INFO_FORCE32BIT = INT32_MAX
 #endif
    };
 
@@ -567,23 +562,23 @@ using core::math::Vector3f;
       /** Specifies the name of the property (key)
       *  Keys are generally case insensitive.
       */
-      std::string mKey;
+      std::string m_key;
 
       /** Textures: Specifies their exact usage semantic.
       * For non-texture properties, this member is always 0
       * (or, better-said, #aiTextureType_NONE).
       */
-      uint32 mSemantic;
+      uint32 m_semantic;
 
       /** Textures: Specifies the index of the texture.
       *  For non-texture properties, this member is always 0.
       */
-      uint32 mIndex;
+      uint32 m_index;
 
       /**	Size of the buffer mData is pointing to, in bytes.
       *  This value may not be 0.
       */
-      uint32 mDataLength;
+      uint32 m_dataLength;
 
       /** Type information for the property.
       *
@@ -594,37 +589,29 @@ using core::math::Vector3f;
       */
 
       //I don't understand this one... help
-      enum aiPropertyTypeInfo mType;
+      ePropertyTypeInfo m_type;
 
       /**	Binary buffer to hold the property's value.
       * The size of the buffer is always mDataLength.
       */
-      char* mData;
-
-#ifdef __cplusplus
+      char* m_data;
 
       MaterialProperty()
-         : mSemantic(0)
-         , mIndex(0)
-         , mDataLength(0)
-         , mType(aiPTI_Float)
-         , mData(NULL)
+         : mSemantic(0),
+         mIndex(0),
+         mDataLength(0),
+         mType(aiPTI_Float),
+         mData(NULL)
       {
       }
 
-      ~MaterialProperty()	{
-         delete[] mData;
+      ~MaterialProperty()
+      {
+         delete[] m_data;
       }
-
-#endif
    };
    //! @endcond
 
-#ifdef __cplusplus
-} // We need to leave the "C" block here to allow template member functions
-#endif
-
-// ---------------------------------------------------------------------------
 /** @brief Data structure for a material
 *
 *  Material data is stored using a key-value structure. A single key-value
@@ -633,18 +620,10 @@ using core::math::Vector3f;
 *  have to stick with the aiMaterialGetXXX family of unbound functions.
 *  The library defines a set of standard keys (AI_MATKEY_XXX).
 */
-#ifdef __cplusplus
+
 struct Material
-#else
-struct Material
-#endif
 {
-
-#ifdef __cplusplus
-
 public:
-
-   Material();
    Material();
 
    // -------------------------------------------------------------------
@@ -680,27 +659,13 @@ public:
    * @param pOut Reference to receive the output value
    */
    template <typename Type>
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, Type& pOut) const;
-
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, int& pOut) const;
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, float& pOut) const;
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, aiString& pOut) const;
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, aiColor3D& pOut) const;
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, aiColor4D& pOut) const;
-
-   int32 Get(const char* pKey, uint32 type,
-      uint32 idx, aiUVTransform& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, Type& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, int32 &pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, float& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, aiString& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, aiColor3D& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, aiColor4D& pOut) const;
+   int32 Get(const char* pKey, uint32 type, uint32 idx, UVTransform& pOut) const;
 
    // -------------------------------------------------------------------
    /** Get the number of textures for a particular texture type.
@@ -740,11 +705,11 @@ public:
    int32 GetTexture(aiTextureType type,
       uint32  index,
       std::string aiString* path,
-      aiTextureMapping* mapping = NULL,
+      eTextureMapping* mapping = NULL,
       uint32* uvindex = NULL,
       float* blend = NULL,
-      aiTextureOp* op = NULL,
-      aiTextureMapMode* mapmode = NULL) const;
+      eTextureOperation* op = NULL,
+      eTextureMapMode* mapmode = NULL) const;
 
 
    // Setters
@@ -765,7 +730,7 @@ public:
       const char* pKey,
       uint32 type,
       uint32 index,
-      aiPropertyTypeInfo pType);
+      ePropertyTypeInfo pType);
 
    // ------------------------------------------------------------------------------
    /** @brief Add a string property with a given key and type info to the
@@ -812,19 +777,19 @@ public:
       uint32 type = 0,
       uint32 index = 0);
 
-   int32 AddProperty(const int* pInput,
+   int32 AddProperty(const int32 *pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   int32 AddProperty(const float* pInput,
+   int32 AddProperty(const float *pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
       uint32 index = 0);
 
-   int32 AddProperty(const aiUVTransform* pInput,
+   int32 AddProperty(const UVTransform* pInput,
       uint32 pNumValues,
       const char* pKey,
       uint32 type = 0,
@@ -859,7 +824,7 @@ public:
 #endif
 
    /** List of all material properties loaded. */
-   C_STRUCT MaterialProperty** mProperties;
+   MaterialProperty** mProperties;
 
    /** Number of properties in the data base */
    uint32 mNumProperties;
@@ -868,12 +833,6 @@ public:
    uint32 mNumAllocated;
 };
 
-// Go back to extern "C" again
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-   // ---------------------------------------------------------------------------
 #define AI_MATKEY_NAME "?mat.name",0,0
 #define AI_MATKEY_TWOSIDED "$mat.twosided",0,0
 #define AI_MATKEY_SHADING_MODEL "$mat.shadingm",0,0
@@ -1317,12 +1276,12 @@ extern "C" {
    * @param pPropOut Pointer to receive a pointer to a valid MaterialProperty
    *        structure or NULL if the key has not been found. */
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM int32 aiGetMaterialProperty(
-      const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialProperty(
+      const aiMaterial* pMat,
       const char* pKey,
       uint32 type,
-      uint32  index,
-      const C_STRUCT MaterialProperty** pPropOut);
+      uint32 index,
+      const MaterialProperty** pPropOut);
 
    // ---------------------------------------------------------------------------
    /** @brief Retrieve an array of float values with a specific key
@@ -1350,18 +1309,14 @@ extern "C" {
    * @return Specifies whether the key has been found. If not, the output
    *   arrays remains unmodified and pMax is set to 0.*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM int32 aiGetMaterialFloatArray(
-      const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialFloatArray(
+      const aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
       float* pOut,
       uint32* pMax);
 
-
-#ifdef __cplusplus
-
-   // ---------------------------------------------------------------------------
    /** @brief Retrieve a single float property with a specific key from the material.
    *
    * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
@@ -1403,22 +1358,19 @@ extern "C" {
    *  from a material
    *
    * See the sample for aiGetMaterialFloatArray for more information.*/
-   ASSIMP_API C_ENUM int32 aiGetMaterialIntegerArray(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
       const char* pKey,
       uint32  type,
       uint32  index,
       int* pOut,
       uint32* pMax);
 
-
-#ifdef __cplusplus
-
    // ---------------------------------------------------------------------------
    /** @brief Retrieve an integer property with a specific key from a material
    *
    * See the sample for aiGetMaterialFloat for more information.*/
    // ---------------------------------------------------------------------------
-   inline int32 aiGetMaterialInteger(const C_STRUCT aiMaterial* pMat,
+   inline int32 aiGetMaterialInteger(const aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
@@ -1442,11 +1394,11 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM int32 aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialColor(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
-      C_STRUCT aiColor4D* pOut);
+      aiColor4D* pOut);
 
 
    // ---------------------------------------------------------------------------
@@ -1454,23 +1406,21 @@ extern "C" {
    *
    * See the sample for aiGetMaterialFloat for more information*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM int32 aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialUVTransform(const C_STRUCT aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
-      C_STRUCT aiUVTransform* pOut);
-
-
+      UVTransform* pOut);
    // ---------------------------------------------------------------------------
    /** @brief Retrieve a string from the material property table
    *
    * See the sample for aiGetMaterialFloat for more information.*/
    // ---------------------------------------------------------------------------
-   ASSIMP_API C_ENUM int32 aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
+   ASSIMP_API int32 aiGetMaterialString(const aiMaterial* pMat,
       const char* pKey,
       uint32 type,
       uint32 index,
-      C_STRUCT aiString* pOut);
+      aiString* pOut);
 
    // ---------------------------------------------------------------------------
    /** Get the number of textures for a particular texture type.
@@ -1479,8 +1429,7 @@ extern "C" {
    *  @return Number of textures for this type.
    *  @note A texture can be easily queried using #aiGetMaterialTexture() */
    // ---------------------------------------------------------------------------
-   ASSIMP_API uint32 aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
-      C_ENUM aiTextureType type);
+   ASSIMP_API uint32 aiGetMaterialTextureCount(const aiMaterial* pMat, aiTextureType type);
 
    // ---------------------------------------------------------------------------
    /** @brief Helper function to get all values pertaining to a particular
@@ -1516,7 +1465,6 @@ extern "C" {
    *  @param[out] flags Receives the the texture flags.
    *  @return AI_SUCCESS on success, otherwise something else. Have fun.*/
    // ---------------------------------------------------------------------------
-#ifdef __cplusplus
    ASSIMP_API int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
       aiTextureType type,
       uint32  index,
@@ -1527,20 +1475,6 @@ extern "C" {
       aiTextureOp* op = NULL,
       aiTextureMapMode* mapmode = NULL,
       uint32* flags = NULL);
-#else
-   C_ENUM int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
-      C_ENUM aiTextureType type,
-      uint32  index,
-      C_STRUCT aiString* path,
-      C_ENUM aiTextureMapping* mapping	/*= NULL*/,
-      uint32* uvindex				/*= NULL*/,
-      float* blend						/*= NULL*/,
-      C_ENUM aiTextureOp* op				/*= NULL*/,
-      C_ENUM aiTextureMapMode* mapmode	/*= NULL*/,
-      uint32* flags                 /*= NULL*/);
-#endif // !#ifdef __cplusplus
-
-#ifdef __cplusplus
 }
 
 #include "material.inl"
