@@ -148,13 +148,12 @@ namespace objfile
       }
    };
 
-   //!	\brief	Data structure to store all material specific data
-   struct Material
+   // Data structure to store all material specific data
+   struct ObjMaterial
    {
-      //!	Name of material description
-      std::string MaterialName;
+      std::string m_materialName;
 
-      //!	Texture names
+      // texture names
       std::string texture;
       std::string textureSpecular;
       std::string textureAmbient;
@@ -164,50 +163,48 @@ namespace objfile
       std::string textureSpecularity;
       std::string textureOpacity;
       std::string textureDisp;
+     
       enum eTextureType
       {
-         TextureDiffuseType ,
-         TextureSpecularType,
-         TextureAmbientType,
-         TextureEmissiveType,
-         TextureBumpType,
-         TextureNormalType,
-         TextureSpecularityType,
-         TextureOpacityType,
-         TextureDispType,
-         TextureTypeCount
+         TEXTURE_TYPE_DIFFUSE,
+         TEXTURE_TYPE_SPECULAR,
+         TEXTURE_TYPE_AMBIENT,
+         TEXTURE_TYPE_EMISSIVE,
+         TEXTURE_TYPE_BUMP,
+         TEXTURE_TYPE_NORMAL,
+         TEXTURE_TYPE_SPECULARITY,
+         TEXTURE_TYPE_OPACITY,
+         TEXTURE_TYPE_DISP,
+         
+         TEXTURE_TYPE_COUNT
       };
 
-      bool clamp[TextureTypeCount];
+      bool m_clamp[TEXTURE_TYPE_COUNT];
 
-      Colorf ambientColor;
-      Colorf diffuseColor;
-      Colorf specularColor;
-      Colorf emissiveColor;
+      Color4f m_ambientColor;
+      Color4f m_diffuseColor;
+      Color4f m_specularColor;
+      Color4f m_emissiveColor;
 
-      float alpha;
+      float m_alpha;
 
-      float shineness;
+      float m_shineness;
 
-      int32 illuminationModel;
+      int32 m_illuminationModel;
 
-      float indexOfRefraction;
+      float m_indexOfRefraction;
 
-      Material()
-         : diffuseColor(0.6f, 0.6f, 0.6f)
-         , alpha(1.f)
-         , shineness(0.0f)
-         , illuminationModel(1)
-         , indexOfRefraction(1.f)
+      ObjMaterial()
+         : m_diffuseColor(0.6f, 0.6f, 0.6f)
+         , m_alpha(1.f)
+         , m_shineness(0.0f)
+         , m_illuminationModel(1)
+         , m_indexOfRefraction(1.f)
       {
-         for (size_t i = 0; i < TextureTypeCount; ++i)
+         for (size_t i = 0; i < TEXTURE_TYPE_COUNT; i++)
          {
-            clamp[i] = false;
+            m_clamp[i] = false;
          }
-      }
-
-      ~Material()
-      {
       }
    };
 

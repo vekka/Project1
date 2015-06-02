@@ -22,7 +22,7 @@
 
 #include "StringComparison.hpp"
 
-namespace assimp
+namespace core
 {
 
    const double fast_atof_table[16] = {  // we write [16] here instead of [] to work around a swig bug
@@ -45,9 +45,7 @@ namespace assimp
    };
 
 
-   // ------------------------------------------------------------------------------------
    // Convert a string in decimal format to a number
-   // ------------------------------------------------------------------------------------
    inline uint32 strtoul10(const char* in, const char** out = 0)
    {
       uint32 value = 0;
@@ -65,9 +63,7 @@ namespace assimp
       return value;
    }
 
-   // ------------------------------------------------------------------------------------
    // Convert a string in octal format to a number
-   // ------------------------------------------------------------------------------------
    inline uint32 strtoul8(const char* in, const char** out = 0)
    {
       uint32 value = 0;
@@ -85,9 +81,7 @@ namespace assimp
       return value;
    }
 
-   // ------------------------------------------------------------------------------------
    // Convert a string in hex format to a number
-   // ------------------------------------------------------------------------------------
    inline uint32 strtoul16(const char* in, const char** out = 0)
    {
       uint32 value = 0;
@@ -114,10 +108,8 @@ namespace assimp
       return value;
    }
 
-   // ------------------------------------------------------------------------------------
    // Convert just one hex digit
    // Return value is UINT_MAX if the input character is not a hex digit.
-   // ------------------------------------------------------------------------------------
    inline uint32 HexDigitToDecimal(char in)
    {
       uint32 out = UINT_MAX;
@@ -134,18 +126,13 @@ namespace assimp
       return out;
    }
 
-   // ------------------------------------------------------------------------------------
    // Convert a hex-encoded octet (2 characters, i.e. df or 1a).
-   // ------------------------------------------------------------------------------------
-   inline uint8_t HexOctetToDecimal(const char* in)
+   inline uint8 HexOctetToDecimal(const char* in)
    {
-      return ((uint8_t)HexDigitToDecimal(in[0]) << 4) + (uint8_t)HexDigitToDecimal(in[1]);
+      return ((uint8)HexDigitToDecimal(in[0]) << 4) + (uint8)HexDigitToDecimal(in[1]);
    }
 
-
-   // ------------------------------------------------------------------------------------
    // signed variant of strtoul10
-   // ------------------------------------------------------------------------------------
    inline int32 strtol10(const char* in, const char** out = 0)
    {
       bool inv = (*in == '-');
@@ -159,12 +146,10 @@ namespace assimp
       return value;
    }
 
-   // ------------------------------------------------------------------------------------
    // Parse a C++-like integer literal - hex and oct prefixes.
    // 0xNNNN - hex
    // 0NNN   - oct
    // NNN    - dec
-   // ------------------------------------------------------------------------------------
    inline uint32 strtoul_cppstyle(const char* in, const char** out = 0)
    {
       if ('0' == in[0])
@@ -174,14 +159,12 @@ namespace assimp
       return strtoul10(in, out);
    }
 
-   // ------------------------------------------------------------------------------------
    // Special version of the function, providing higher accuracy and safety
    // It is mainly used by fast_atof to prevent ugly and unwanted integer overflows.
-   // ------------------------------------------------------------------------------------
-   inline uint64_t strtoul10_64(const char* in, const char** out = 0, uint32* max_inout = 0)
+   inline uint64 strtoul10_64(const char* in, const char** out = 0, uint32* max_inout = 0)
    {
       uint32 cur = 0;
-      uint64_t value = 0;
+      uint64 value = 0;
 
       if (*in < '0' || *in > '9')
          throw std::invalid_argument(std::string("The string \"") + in + "\" cannot be converted into a value.");
@@ -192,7 +175,7 @@ namespace assimp
          if (*in < '0' || *in > '9')
             break;
 
-         const uint64_t new_value = (value * 10) + (*in - '0');
+         const uint64 new_value = (value * 10) + (*in - '0');
 
          if (new_value < value) /* numeric overflow, we rely on you */
             throw std::overflow_error(std::string("Converting the string \"") + in + "\" into a value resulted in overflow.");
@@ -222,9 +205,7 @@ namespace assimp
       return value;
    }
 
-   // ------------------------------------------------------------------------------------
    // signed variant of strtoul10_64
-   // ------------------------------------------------------------------------------------
    inline int64 strtol10_64(const char* in, const char** out = 0, uint32* max_inout = 0)
    {
       bool inv = (*in == '-');
@@ -239,18 +220,16 @@ namespace assimp
    }
 
 
-   // Number of relevant decimals for floating-point parsing.
+// Number of relevant decimals for floating-point parsing.
 #define AI_FAST_ATOF_RELAVANT_DECIMALS 15
 
-   // ------------------------------------------------------------------------------------
    //! Provides a fast function for converting a string into a float,
    //! about 6 times faster than atof in win32.
    // If you find any bugs, please send them to me, niko (at) irrlicht3d.org.
-   // ------------------------------------------------------------------------------------
-   template <typename Real>
-   inline const char* fast_atoreal_move(const char* c, Real& out, bool check_comma = true)
+   template <typename RealType>
+   inline const char* fast_atoreal_move(const char* c, RealType &out, bool check_comma = true)
    {
-      Real f = 0;
+      RealType f = 0;
 
       bool inv = (*c == '-');
       if (inv || *c == '+') {
@@ -341,7 +320,6 @@ namespace assimp
       return c;
    }
 
-   // ------------------------------------------------------------------------------------
    // The same but more human.
    inline float fast_atof(const char* c)
    {
@@ -349,7 +327,6 @@ namespace assimp
       fast_atoreal_move<float>(c, ret);
       return ret;
    }
-
 
    inline float fast_atof(const char* c, const char** cout)
    {
@@ -366,7 +343,6 @@ namespace assimp
 
       return ret;
    }
-
 
    inline double fast_atod(const char* c)
    {
@@ -392,6 +368,6 @@ namespace assimp
       return ret;
    }
 
-} // end of namespace Assimp
+} // namespace core
 
 #endif

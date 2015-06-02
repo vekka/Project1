@@ -232,7 +232,7 @@ namespace model
         }
     }
     
-    void ObjMtlImporter::GetColorRGBA( Colorf *pColor )
+    void ObjMtlImporter::GetColorRGBA( Color4f *pColor )
     {
         assert( NULL != pColor );
         

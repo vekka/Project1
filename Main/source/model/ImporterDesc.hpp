@@ -39,14 +39,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/** @file importerdesc.h
-*  @brief #eImporterFlags, eImporterDesc implementation.
-*/
 #ifndef _IMPORTERDESC_HPP_INCLUDED_
 #define _IMPORTERDESC_HPP_INCLUDED_
 
 #include "../core/BasicTypes.hpp"
-
 
 /** Mixed set of flags for #eImporterDesc, indicating some features
 *  common to many importers*/

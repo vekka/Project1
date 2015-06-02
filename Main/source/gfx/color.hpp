@@ -10,10 +10,6 @@ namespace gfx
 
    namespace color
    {
-      enum eIdxColorComponent
-      {
-         IDX_RED, IDX_GREEN, IDX_BLUE, IDX_ALPHA
-      };
 
       inline uint16 CreateA1R5G5B5(uint16 r, uint16 g, uint16 b, uint16 a = 0xFF)
       {
@@ -118,134 +114,8 @@ namespace gfx
       typedef int32 BGRA_t;
       typedef int32 ABGR_t;
 
-      class Colorf
-      {
-      private:
-         float r, g, b, a;
-      public:
-         static const Colorf ZERO;
-         static const Colorf ONE;
-         static const Colorf BLACK;
-         static const Colorf WHITE;
-         static const Colorf RED;
-         static const Colorf GREEN;
-         static const Colorf BLUE;
-
-         explicit Colorf(float red = 1.0f, float green = 1.0f, float blue = 1.0f, float alpha = 1.0f)
-            : r(red), g(green), b(blue), a(alpha) {}
-
-         bool operator==(const Colorf &other) const;
-         bool operator!=(const Colorf &other) const;
-         float operator[](const eIdxColorComponent index) const;
-         float &operator[](const eIdxColorComponent index);
-         Colorf operator+(const Colorf &color) const;
-         Colorf &operator+=(const Colorf &other);
-         Colorf operator-(const Colorf &other) const;
-         Colorf &operator-=(const Colorf &other);
-         Colorf operator*(const float scalar) const;
-         Colorf &operator*=(const float scalar);
-         Colorf operator*(const Colorf &other) const;
-         Colorf operator/(const float scalar) const;
-         Colorf &operator/=(const float scalar);
-         Colorf operator/(const Colorf &other) const;
-
-         RGBA_t GetAsRGBA() const;
-         ARGB_t GetAsARGB() const;
-         BGRA_t GetAsBGRA() const;
-         ABGR_t GetAsABGR() const;
-
-         void SetAsRGBA(const RGBA_t color);
-         void SetAsARGB(const ARGB_t color);
-         void SetAsBGRA(const BGRA_t color);
-         void SetAsABGR(const ABGR_t color);
-
-         void SetHSB(const float hue, const float saturation, const float brightness);
-         void GetHSB(float* hue, float* saturation, float* brightness) const;
-      };
-
-      inline float Colorf::operator[](const eIdxColorComponent index) const
-      {
-         assert(index < 4);
-         return *(&r + index);
-      }
-
-      inline float &Colorf::operator[](const eIdxColorComponent index)
-      {
-         assert(index < 4);
-         return *(&r + index);
-      }
-
-      inline Colorf Colorf::operator+(const Colorf &other) const
-      {
-         return Colorf(r + other.r, g + other.g, b + other.b, a + other.a);
-      }
-
-      inline Colorf &Colorf::operator+=(const Colorf &other)
-      {
-         r += other.r;
-         g += other.g;
-         b += other.b;
-         a += other.a;
-         return *this;
-      }
-
-      inline Colorf Colorf::operator-(const Colorf &other) const
-      {
-         return Colorf(r - other.r, g - other.g, b - other.b, a - other.a);
-      }
-
-      inline Colorf &Colorf::operator-=(const Colorf &other)
-      {
-         r -= other.r;
-         g -= other.g;
-         b -= other.b;
-         a -= other.a;
-         return *this;
-      }
-
-      inline Colorf Colorf::operator*(const float scalar) const
-      {
-         return Colorf(scalar * r, scalar * g, scalar * b, scalar * a);
-      }
-
-      inline Colorf &Colorf::operator*=(const float scalar)
-      {
-         r *= scalar;
-         g *= scalar;
-         b *= scalar;
-         a *= scalar;
-         return *this;
-      }
-
-      inline Colorf Colorf::operator*(const Colorf &other) const
-      {
-         return Colorf(r * other.r, g * other.g, b * other.b, a * other.a);
-      }
-
-      inline Colorf Colorf::operator/(const float scalar) const
-      {
-         assert(scalar != 0.0);
-
-         float inv = 1.0f / scalar;
-         return Colorf(r * inv, g * inv, b * inv, a * inv);
-      }
-
-      inline Colorf &Colorf::operator/=(const float scalar)
-      {
-         assert(scalar != 0.0);
-
-         float inv = 1.0f / scalar;
-         r *= inv;
-         g *= inv;
-         b *= inv;
-         a *= inv;
-         return *this;
-      }
-
-      inline Colorf Colorf::operator/(const Colorf &other) const
-      {
-         return Colorf(r / other.r, g / other.g, b / other.b, a / other.a);
-      }
+      typedef int32 RGB_t;
+      typedef int32 BGR_t;
 
       class ColorARGB16i
       {

@@ -287,7 +287,7 @@
       <FileName>source\opengl\ogldriver.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="gfx::color::Colorf" Collapsed="true">
+  <Class Name="gfx::color::Color4f" Collapsed="true">
     <Position X="33.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAAAACIACASIAIAAAACYBAggECAAAoEQAhgAAAAQA=</HashCode>
@@ -343,7 +343,7 @@
       <FileName>source\gfx\vertexstructs.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Struct Name="aiUVTransform" Collapsed="true">
+  <Struct Name="UVTransform" Collapsed="true">
     <Position X="29.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEAAAAABAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
@@ -357,7 +357,7 @@
       <FileName>source\model\material.hpp</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="aiMaterial" Collapsed="true">
+  <Struct Name="Material" Collapsed="true">
     <Position X="28" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACABAIACgAAAAABAQAAAAAAAAAAAAAA6AAAAgABAAAA=</HashCode>
@@ -1267,7 +1267,7 @@
       <FileName>source\model\material.hpp</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="aiPropertyTypeInfo" Collapsed="true">
+  <Enum Name="ePropertyTypeInfo" Collapsed="true">
     <Position X="31.5" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAgAAEAECAAAAAAAAAAAAAAAAAEAAA=</HashCode>
@@ -1442,7 +1442,7 @@
       <FileName>source\opengl\ogldriver.hpp</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="gfx::color::eIdxColorComponent" Collapsed="true">
+  <Enum Name="gfx::color::eIdxColor4Component" Collapsed="true">
     <Position X="28" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAAAAAAAAABAAQAAAAAAAAAAAAAAIAAA=</HashCode>

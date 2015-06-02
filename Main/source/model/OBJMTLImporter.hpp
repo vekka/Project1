@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //using core::string::String_c;
 
 #include "gfx/color.hpp"
-using gfx::color::Colorf;
+using gfx::color::Color4f;
 
 #include "OBJParser.hpp"
 using core::IsLineEnd;
@@ -93,7 +93,7 @@ namespace model
     	//	Load the whole material description
     	void Load();
     	//	Get color data.
-    	void GetColorRGBA( Colorf *pColor);
+    	void GetColorRGBA( Color4f *pColor);
     	//	Get illumination model from loaded data
     	void GetIlluminationModel( int32 &illum_model );
     	//	Gets a float value from data.	

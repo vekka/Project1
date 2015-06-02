@@ -49,16 +49,17 @@ using model::objparser::ObjParser;
 
 #include "OBJFile.hpp"
 
-//#include "material.inl"
-#include "materialSystem.hpp"
-using namespace Assimp;
-
 using mesh2::Face;
 
 #include "../core/memory/scopedptr.hpp"
 using core::memory::ScopedPtr;
 
-//#include "../include/assimp/Importer.hpp"
+#include "material.hpp"
+using material::Material;
+using material::SHADING_MODE_NOSHADING;
+using material::SHADING_MODE_GOURAUD;
+using material::SHADING_MODE_PHONG;
+
 #include "../scene/scene.hpp"
 
 #include "ImporterDesc.hpp"
@@ -502,7 +503,6 @@ namespace objfileimporter
       }
    }
 
-   // ------------------------------------------------------------------------------------------------
    //	Counts all stored meshes 
    void ObjFileImporter::CountObjects(const std::vector<objfile::Object*> &rObjects, int32 &iNumMeshes)
    {
@@ -524,16 +524,14 @@ namespace objfileimporter
 
    // this member is missing ....addTextureMappingModeProperty
 
-   // ------------------------------------------------------------------------------------------------
    //	 Add clamp mode property to material if necessary 
-   //void ObjFileImporter::addTextureMappingModeProperty(aiMaterial* mat, aiTextureType type, int32 clampMode)
+   //void ObjFileImporter::addTextureMappingModeProperty(Material* mat, aiTextureType type, int32 clampMode)
    //{
    //   assert(NULL != mat);
    //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
    //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
    //}
 
-   // ------------------------------------------------------------------------------------------------
    //	Creates the material 
    void ObjFileImporter::CreateMaterials(const objfile::Model* pModel, Scene* pScene)
    {
@@ -559,27 +557,26 @@ namespace objfileimporter
          if (pModel->m_materialMap.end() == it)
             continue;
 
-         
-         aiMaterial* mat = new aiMaterial;
+         Material* mat = new Material;
          Material *pCurrentMaterial = (*it).second;
          // AddProperty can be found in Assimp file called material.inl(several versions, must be overloaded...)
-         mat->AddProperty(&pCurrentMaterial->MaterialName, AI_MATKEY_NAME);
+         mat->AddProperty(&pCurrentMaterial->mMaterialName, AI_MATKEY_NAME);
 
          // convert illumination model
          int32 sm = 0;
          switch (pCurrentMaterial->illuminationModel)
          {
          case 0:
-            sm = aiShadingMode_NoShading;
+            sm = SHADING_MODE_NOSHADING;
             break;
          case 1:
-            sm = aiShadingMode_Gouraud;
+            sm = SHADING_MODE_GOURAUD;
             break;
          case 2:
-            sm = aiShadingMode_Phong;
+            sm = SHADING_MODE_PHONG;
             break;
          default:
-            sm = aiShadingMode_Gouraud;
+            sm = SHADING_MODE_GOURAUD;
          //   DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
          }
 

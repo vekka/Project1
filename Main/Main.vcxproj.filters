@@ -84,6 +84,9 @@
     <Filter Include="Source Files\SceneLib">
       <UniqueIdentifier>{ab887e45-1f8b-434f-a0fd-7c8e3f9f376e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\Hash">
+      <UniqueIdentifier>{c7942d85-1278-4d13-ab01-63916af4406a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core\fileio\filesys.cpp">
@@ -170,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="source\model\materialSystem.cpp">
       <Filter>Source Files\MeshLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\color4f.cpp">
+      <Filter>Source Files\GFX\PixelLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\color3f.cpp">
+      <Filter>Source Files\GFX\PixelLib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,8 +377,14 @@
     <ClInclude Include="source\core\poppack1.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="source\gfx\color4f.hpp">
+      <Filter>Source Files\GFX\PixelLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\color3f.hpp">
+      <Filter>Source Files\GFX\PixelLib</Filter>
+    </ClInclude>
     <ClInclude Include="source\core\hash\hash.hpp">
-      <Filter>Source Files\Core\MathLib</Filter>
+      <Filter>Source Files\Core\Hash</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

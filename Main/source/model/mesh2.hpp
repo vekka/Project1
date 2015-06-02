@@ -58,7 +58,7 @@ using core::math::Matrix4f;
 using core::math::Vector3f;
 
 #include "gfx/color.hpp"
-using gfx::color::Colorf;
+using gfx::color::Color4f;
 
 #include <string.h>
 
@@ -377,7 +377,7 @@ extern "C" {
          Vector3f* m_pBiTangets;
 
          /** Replacement for Mesh::m_pColors */
-         Colorf* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
+         Color4f* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
          /** Replacement for Mesh::m_pTextureCoords */
          Vector3f* m_pTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
@@ -557,7 +557,7 @@ extern "C" {
          * colors per vertex. NULL if not present. Each array is
          * m_numVertices in size if present.
          */
-         Colorf* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
+         Color4f* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
          /** Vertex texture coords, also known as UV channels.
          * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per

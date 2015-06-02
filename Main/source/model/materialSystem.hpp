@@ -47,10 +47,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //#include <stdint.h>
 #include <assert.h>
-#include "../core/BasicTypes.hpp"
-struct Material;
 
-namespace Assimp	{
+#include "material.hpp"
+using material::Material;
+using material::MaterialProperty;
 
    // ------------------------------------------------------------------------------
    /** Computes a hash (hopefully unique) from all material properties
@@ -63,9 +63,7 @@ namespace Assimp	{
    *    Currently #AI_MATKEY_NAME is the only example.
    *  @return 32 Bit jash value for the material
    */
-   uint32 ComputeMaterialHash(const Material* mat, bool includeMatName = false);
+uint32 ComputeMaterialHash(const Material* mat, bool includeMatName = false);
 
-
-} // ! namespace Assimp
 
 #endif //!! AI_MATERIALSYSTEM_H_INC

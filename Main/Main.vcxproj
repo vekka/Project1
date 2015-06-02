@@ -144,6 +144,8 @@
     <ClCompile Include="source\direct3D\D3DDriver.cpp" />
     <ClCompile Include="source\gfx\bmp.cpp" />
     <ClCompile Include="source\gfx\color.cpp" />
+    <ClCompile Include="source\gfx\color3f.cpp" />
+    <ClCompile Include="source\gfx\color4f.cpp" />
     <ClCompile Include="source\gfx\hardwarebuffer.cpp" />
     <ClCompile Include="source\gfx\indexbuffer.cpp" />
     <ClCompile Include="source\gfx\raw.cpp" />
@@ -205,6 +207,8 @@
     <ClInclude Include="source\direct3D\D3DDriver.hpp" />
     <ClInclude Include="source\gfx\bmp.hpp" />
     <ClInclude Include="source\gfx\color.hpp" />
+    <ClInclude Include="source\gfx\color3f.hpp" />
+    <ClInclude Include="source\gfx\color4f.hpp" />
     <ClInclude Include="source\gfx\hardwarebuffer.hpp" />
     <ClInclude Include="source\gfx\indexbuffer.hpp" />
     <ClInclude Include="source\gfx\pixelformat.hpp" />

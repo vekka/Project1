@@ -38,30 +38,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ----------------------------------------------------------------------
 */
 
-/** @file  MaterialSystem.cpp
-*  @brief Implementation of the material system of the library
-*/
-
-
-
 #include "../core/hash/Hash.hpp"
 #include "../core/fast_atof.hpp"
 #include "../core/chartypes.hpp"
+
 #include "materialSystem.hpp"
-#include "material.hpp"
+
 //#include "../include/assimp/DefaultLogger.hpp"
 #include "../core/macros.hpp"
 
+#include "../core/fast_atof.hpp"
 
-using namespace Assimp;
+#include <algorithm>
 
-// ------------------------------------------------------------------------------------------------
-// Get a specific property from a material
-int32 aiGetMaterialProperty(const aiMaterial* pMat,
-   const char* pKey,
-   uint32 type,
-   uint32 index,
-   const MaterialProperty** pPropOut)
+int32 GetMaterialProperty(const Material* pMat, const char* pKey, uint32 type, uint32 index, const MaterialProperty **pPropOut)
 {
    assert(pMat != NULL);
    assert(pKey != NULL);
@@ -71,62 +61,56 @@ int32 aiGetMaterialProperty(const aiMaterial* pMat,
    *  could be improved by hashing, but it's possibly
    *  no worth the effort (we're bound to C structures,
    *  thus std::map or derivates are not applicable. */
-   for (uint32 i = 0; i < pMat->mNumProperties; ++i) {
-      MaterialProperty* prop = pMat->mProperties[i];
+   for (uint32 i = 0; i < pMat->m_NumProperties; ++i) {
+      MaterialProperty* prop = pMat->m_ppProperties[i];
 
       if (prop /* just for safety ... */
-         && 0 == strcmp(prop->mKey.data, pKey)
-         && (UINT_MAX == type || prop->mSemantic == type) /* UINT_MAX is a wildcard, but this is undocumented :-) */
-         && (UINT_MAX == index || prop->mIndex == index))
+         && 0 == strcmp(prop->m_key.data, pKey)
+         && (UINT_MAX == type || prop->m_semantic == type) /* UINT_MAX is a wildcard, but this is undocumented :-) */
+         && (UINT_MAX == index || prop->m_index == index))
       {
-         *pPropOut = pMat->mProperties[i];
-         return AI_SUCCESS;
+         *pPropOut = pMat->m_ppProperties[i];
+         return 0;
       }
    }
    *pPropOut = NULL;
-   return AI_FAILURE;
+   return -1;
 }
 
-// ------------------------------------------------------------------------------------------------
 // Get an array of floating-point values from the material.
-int32 aiGetMaterialFloatArray(const aiMaterial* pMat,
-   const char* pKey,
-   uint32 type,
-   uint32 index,
-   float* pOut,
-   uint32* pMax)
+int32 GetMaterialFloatArray(const Material* pMat, const char* pKey, uint32 type, uint32 index, float* pOut, uint32* pMax)
 {
    assert(pOut != NULL);
    assert(pMat != NULL);
 
    const MaterialProperty* prop;
-   aiGetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
+   GetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
    if (!prop) {
-      return AI_FAILURE;
+      return -1;
    }
 
    // data is given in floats, simply copy it
    uint32 iWrite = 0;
-   if (aiPTI_Float == prop->mType || aiPTI_Buffer == prop->mType)	{
-      iWrite = prop->mDataLength / sizeof(float);
+   if (material::PROPERTY_TYPE_INFO_FLOAT == prop->m_type || material::PROPERTY_TYPE_INFO_BINARY_BUFFER == prop->m_type)	{
+      iWrite = prop->m_dataLength / sizeof(float);
       if (pMax) {
          iWrite = std::min(*pMax, iWrite);;
       }
       for (uint32 a = 0; a < iWrite; ++a)	{
-         pOut[a] = static_cast<float> (reinterpret_cast<float*>(prop->mData)[a]);
+         pOut[a] = static_cast<float> (reinterpret_cast<float*>(prop->m_data)[a]);
       }
       if (pMax) {
          *pMax = iWrite;
       }
    }
    // data is given in ints, convert to float
-   else if (aiPTI_Integer == prop->mType)	{
-      iWrite = prop->mDataLength / sizeof(int32_t);
+   else if (material::PROPERTY_TYPE_INFO_INTEGER == prop->m_type)	{
+      iWrite = prop->m_dataLength / sizeof(int32_t);
       if (pMax) {
          iWrite = std::min(*pMax, iWrite);;
       }
       for (uint32 a = 0; a < iWrite; ++a)	{
-         pOut[a] = static_cast<float> (reinterpret_cast<int32_t*>(prop->mData)[a]);
+         pOut[a] = static_cast<float> (reinterpret_cast<int32_t*>(prop->m_data)[a]);
       }
       if (pMax) {
          *pMax = iWrite;
@@ -138,68 +122,61 @@ int32 aiGetMaterialFloatArray(const aiMaterial* pMat,
          iWrite = *pMax;
       }
       // strings are zero-terminated with a 32 bit length prefix, so this is safe
-      const char* cur = prop->mData + 4;
-      assert(prop->mDataLength >= 5 && !prop->mData[prop->mDataLength - 1]);
-      for (uint32 a = 0;; ++a) {
-         cur = fast_atoreal_move<float>(cur, pOut[a]);
+      const char* cur = prop->m_data + 4;
+      assert(prop->m_dataLength >= 5 && !prop->m_data[prop->m_dataLength - 1]);
+      for (uint32 a = 0;; a++) {
+         cur = core::fast_atoreal_move<float>(cur, pOut[a]);
          if (a == iWrite - 1) {
             break;
          }
          //if (!IsSpace(*cur)) {
          //   DefaultLogger::get()->error("Material property" + std::string(pKey) +
          //      " is a string; failed to parse a float array out of it.");
-         //   return AI_FAILURE;
-         }
+         //   return -1;
+         //}
       }
 
       if (pMax) {
          *pMax = iWrite;
       }
    }
-   return AI_SUCCESS;
-
+   return 0;
 }
 
-// ------------------------------------------------------------------------------------------------
 // Get an array if integers from the material
-int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
-   const char* pKey,
-   uint32 type,
-   uint32 index,
-   int* pOut,
-   uint32* pMax)
+int32 GetMaterialIntegerArray(const Material *pMat, const char* pKey, uint32 type, uint32 index, int32* pOut, uint32* pMax)
 {
    assert(pOut != NULL);
    assert(pMat != NULL);
 
    const MaterialProperty* prop;
-   aiGetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
+   GetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
    if (!prop) {
-      return AI_FAILURE;
+      return -1;
    }
 
    // data is given in ints, simply copy it
    uint32 iWrite = 0;
-   if (aiPTI_Integer == prop->mType || aiPTI_Buffer == prop->mType)	{
-      iWrite = prop->mDataLength / sizeof(int32_t);
+   if (material::PROPERTY_TYPE_INFO_INTEGER == prop->m_type || material::PROPERTY_TYPE_INFO_BINARY_BUFFER == prop->m_type)	{
+      iWrite = prop->m_dataLength / sizeof(int32_t);
       if (pMax) {
          iWrite = std::min(*pMax, iWrite);;
       }
       for (uint32 a = 0; a < iWrite; ++a) {
-         pOut[a] = static_cast<int>(reinterpret_cast<int32_t*>(prop->mData)[a]);
+         pOut[a] = static_cast<int32>(reinterpret_cast<int32_t*>(prop->m_data)[a]);
       }
       if (pMax) {
          *pMax = iWrite;
       }
    }
-   // data is given in floats convert to int 
-   else if (aiPTI_Float == prop->mType)	{
-      iWrite = prop->mDataLength / sizeof(float);
+   // data is given in floats convert to int32 
+   else if (material::PROPERTY_TYPE_INFO_FLOAT == prop->m_type)	{
+      iWrite = prop->m_dataLength / sizeof(float);
       if (pMax) {
          iWrite = std::min(*pMax, iWrite);;
       }
       for (uint32 a = 0; a < iWrite; ++a) {
-         pOut[a] = static_cast<int>(reinterpret_cast<float*>(prop->mData)[a]);
+         pOut[a] = static_cast<int32>(reinterpret_cast<float*>(prop->m_data)[a]);
       }
       if (pMax) {
          *pMax = iWrite;
@@ -211,17 +188,17 @@ int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
          iWrite = *pMax;
       }
       // strings are zero-terminated with a 32 bit length prefix, so this is safe
-      const char* cur = prop->mData + 4;
-      assert(prop->mDataLength >= 5 && !prop->mData[prop->mDataLength - 1]);
-      for (uint32 a = 0;; ++a) {
-         pOut[a] = strtol10(cur, &cur);
+      const char* cur = prop->m_data + 4;
+      assert(prop->m_dataLength >= 5 && !prop->m_data[prop->m_dataLength - 1]);
+      for (uint32 a = 0;; a++) {
+         pOut[a] = core::strtol10(cur, &cur);
          if (a == iWrite - 1) {
             break;
          }
          //if (!IsSpace(*cur)) {
          //   DefaultLogger::get()->error("Material property" + std::string(pKey) +
          //      " is a string; failed to parse an integer array out of it.");
-         //   return AI_FAILURE;
+         //   return -1;
          //}
       }
 
@@ -229,16 +206,15 @@ int32 aiGetMaterialIntegerArray(const aiMaterial* pMat,
          *pMax = iWrite;
       }
    }
-   return AI_SUCCESS;
+   return 0;
 }
 
-// ------------------------------------------------------------------------------------------------
 // Get a color (3 or 4 floats) from the material
-int32 aiGetMaterialColor(const aiMaterial* pMat,
+int32 GetMaterialColor(const Material* pMat,
    const char* pKey,
    uint32 type,
    uint32 index,
-   aiColor4D* pOut)
+   Color4f* pOut)
 {
    uint32 iMax = 4;
    const int32 eRet = aiGetMaterialFloatArray(pMat, pKey, type, index, (float*)pOut, &iMax);
@@ -251,189 +227,169 @@ int32 aiGetMaterialColor(const aiMaterial* pMat,
    return eRet;
 }
 
-// ------------------------------------------------------------------------------------------------
-// Get a aiUVTransform (4 floats) from the material
-int32 aiGetMaterialUVTransform(const aiMaterial* pMat,
-   const char* pKey,
-   uint32 type,
-   uint32 index,
-   aiUVTransform* pOut)
+// Get a UVTransform (4 floats) from the material
+int32 GetMaterialUVTransform(const Material* pMat, const char* pKey, uint32 type, uint32 index, material::UVTransform* pOut)
 {
    uint32 iMax = 4;
    return  aiGetMaterialFloatArray(pMat, pKey, type, index, (float*)pOut, &iMax);
 }
 
-// ------------------------------------------------------------------------------------------------
 // Get a string from the material
-int32 aiGetMaterialString(const aiMaterial* pMat,
-   const char* pKey,
-   uint32 type,
-   uint32 index,
-   aiString* pOut)
+int32 GetMaterialString(const Material* pMat, const char* pKey, uint32 type, uint32 index, std::string &pOut)
 {
-   assert(pOut != NULL);
+   assert(!pOut.empty());
 
    const MaterialProperty* prop;
-   aiGetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
+   GetMaterialProperty(pMat, pKey, type, index, (const MaterialProperty**)&prop);
    if (!prop) {
-      return AI_FAILURE;
+      return -1;
    }
 
-   if (aiPTI_String == prop->mType) {
-      assert(prop->mDataLength >= 5);
+   if (material::PROPERTY_TYPE_INFO_STRING == prop->m_type) {
+      assert(prop->m_dataLength >= 5);
 
       // The string is stored as 32 but length prefix followed by zero-terminated UTF8 data
-      pOut->length = static_cast<uint32>(*reinterpret_cast<uint32 *>(prop->mData));
+      pOut.length = static_cast<uint32>(*reinterpret_cast<uint32 *>(prop->m_data));
 
-      assert(pOut->length + 1 + 4 == prop->mDataLength && !prop->mData[prop->mDataLength - 1]);
-      memcpy(pOut->data, prop->mData + 4, pOut->length + 1);
+      assert(pOut.length + 1 + 4 == prop->m_dataLength && !prop->m_data[prop->m_dataLength - 1]);
+      memcpy(pOut.data, prop->m_data + 4, pOut.length + 1);
    }
    else {
       // TODO - implement lexical cast as well
       //DefaultLogger::get()->error("Material property" + std::string(pKey) +
       //   " was found, but is no string");
-      return AI_FAILURE;
+      return -1;
    }
-   return AI_SUCCESS;
+   return 0;
 }
 
-// ------------------------------------------------------------------------------------------------
 // Get the number of textures on a particular texture stack
-ASSIMP_API uint32 aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
-   C_ENUM aiTextureType type)
+uint32 GetMaterialTextureCount(const Material* pMat, material::eTextureType type)
 {
    assert(pMat != NULL);
 
    /* Textures are always stored with ascending indices (ValidateDS provides a check, so we don't need to do it again) */
    uint32 max = 0;
-   for (uint32 i = 0; i < pMat->mNumProperties; ++i) {
-      MaterialProperty* prop = pMat->mProperties[i];
+   for (uint32 i = 0; i < pMat->m_NumProperties; ++i) {
+      MaterialProperty* prop = pMat->m_ppProperties[i];
 
       if (prop /* just a sanity check ... */
-         && 0 == strcmp(prop->mKey.data, _AI_MATKEY_TEXTURE_BASE)
-         && prop->mSemantic == type) {
+         && 0 == strcmp(prop->m_key.data, material::MATERIAL_KEYNAME_TEXTURE_BASE)
+         && prop->m_semantic == type) {
 
-         max = std::max(max, prop->mIndex + 1);
+         max = std::max(max, prop->m_index + 1);
       }
    }
    return max;
 }
 
-// ------------------------------------------------------------------------------------------------
-int32 aiGetMaterialTexture(const C_STRUCT aiMaterial* mat,
-   aiTextureType type,
-   uint32  index,
-   C_STRUCT aiString* path,
-   aiTextureMapping* _mapping	/*= NULL*/,
+int32 GetMaterialTexture(const Material* mat,
+   material::eTextureType type,
+   uint32 index,
+   std::string &path,
+   material::eTextureMapping* _mapping	/*= NULL*/,
    uint32* uvindex		/*= NULL*/,
    float* blend				/*= NULL*/,
-   aiTextureOp* op				/*= NULL*/,
-   aiTextureMapMode* mapmode	/*= NULL*/,
+   material::eTextureOperation* op				/*= NULL*/,
+   material::eTextureMapMode* mapmode	/*= NULL*/,
    uint32* flags         /*= NULL*/
    )
 {
-   assert(NULL != mat && NULL != path);
+   assert(NULL != mat && !path.empty());
 
    // Get the path to the texture
-   if (AI_SUCCESS != aiGetMaterialString(mat, AI_MATKEY_TEXTURE(type, index), path))	{
-      return AI_FAILURE;
+   if (0 != GetMaterialString(mat, material::MATERIAL_KEYNAME_TEXTURE_BASE, type, index, path))	{
+      return -1;
    }
    // Determine mapping type 
-   aiTextureMapping mapping = aiTextureMapping_UV;
-   aiGetMaterialInteger(mat, AI_MATKEY_MAPPING(type, index), (int*)&mapping);
+   material::eTextureMapping mapping = material::TEXTURE_MAP_UV;
+   GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPING_BASE, type, index, (int32*)&mapping);
    if (_mapping)
       *_mapping = mapping;
 
    // Get UV index 
-   if (aiTextureMapping_UV == mapping && uvindex)	{
-      aiGetMaterialInteger(mat, AI_MATKEY_UVWSRC(type, index), (int*)uvindex);
+   if (material::TEXTURE_MAP_UV == mapping && uvindex)	{
+      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_UVWSRC_BASE, type, index, (int32*)uvindex);
    }
    // Get blend factor 
    if (blend)	{
-      aiGetMaterialFloat(mat, AI_MATKEY_TEXBLEND(type, index), blend);
+      aiGetMaterialFloat(mat, material::MATERIAL_KEYNAME_TEXBLEND_BASE, type, index, blend);
    }
    // Get texture operation 
    if (op){
-      aiGetMaterialInteger(mat, AI_MATKEY_TEXOP(type, index), (int*)op);
+      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXOP_BASE, type, index, (int32*)op);
    }
    // Get texture mapping modes
    if (mapmode)	{
-      aiGetMaterialInteger(mat, AI_MATKEY_MAPPINGMODE_U(type, index), (int*)&mapmode[0]);
-      aiGetMaterialInteger(mat, AI_MATKEY_MAPPINGMODE_V(type, index), (int*)&mapmode[1]);
+      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_U_BASE, type, index, (int32*)&mapmode[0]);
+      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_V_BASE, type, index, (int32*)&mapmode[1]);
    }
    // Get texture flags
    if (flags){
-      aiGetMaterialInteger(mat, AI_MATKEY_TEXFLAGS(type, index), (int*)flags);
+      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXFLAGS_BASE, type, index, (int32*)flags);
    }
-   return AI_SUCCESS;
+   return 0;
 }
 
-// ------------------------------------------------------------------------------------------------
-// Construction. Actually the one and only way to get an aiMaterial instance
-aiMaterial::aiMaterial()
+// Construction. Actually the one and only way to get an Material instance
+Material::Material()
 {
    // Allocate 5 entries by default
-   mNumProperties = 0;
-   mNumAllocated = 5;
-   mProperties = new MaterialProperty*[5];
+   m_NumProperties = 0;
+   m_NumAllocated = 5;
+   m_ppProperties = new MaterialProperty*[5];
 }
 
-// ------------------------------------------------------------------------------------------------
-aiMaterial::~aiMaterial()
+Material::~Material()
 {
    Clear();
 
-   delete[] mProperties;
+   delete[] m_ppProperties;
 }
 
-// ------------------------------------------------------------------------------------------------
-void aiMaterial::Clear()
+void Material::Clear()
 {
-   for (uint32 i = 0; i < mNumProperties; ++i)	{
+   for (uint32 i = 0; i < m_NumProperties; ++i)	{
       // delete this entry
-      delete mProperties[i];
-      AI_DEBUG_INVALIDATE_PTR(mProperties[i]);
+      delete m_ppProperties[i];
+      AI_DEBUG_INVALIDATE_PTR(m_ppProperties[i]);
    }
-   mNumProperties = 0;
+   m_NumProperties = 0;
 
    // The array remains allocated, we just invalidated its contents
 }
 
-// ------------------------------------------------------------------------------------------------
-int32 aiMaterial::RemoveProperty(const char* pKey, uint32 type,
-   uint32 index
-   )
+int32 Material::RemoveProperty(const char* pKey, uint32 type, uint32 index)
 {
    assert(NULL != pKey);
 
-   for (uint32 i = 0; i < mNumProperties; ++i) {
-      MaterialProperty* prop = mProperties[i];
+   for (uint32 i = 0; i < m_NumProperties; ++i) {
+      MaterialProperty* prop = m_ppProperties[i];
 
-      if (prop && !strcmp(prop->mKey.data, pKey) &&
-         prop->mSemantic == type && prop->mIndex == index)
+      if (prop && !strcmp(prop->m_key.data, pKey) &&
+         prop->m_semantic == type && prop->m_index == index)
       {
          // Delete this entry
-         delete mProperties[i];
+         delete m_ppProperties[i];
 
          // collapse the array behind --.
-         --mNumProperties;
-         for (uint32 a = i; a < mNumProperties; ++a)	{
-            mProperties[a] = mProperties[a + 1];
+         --m_NumProperties;
+         for (uint32 a = i; a < m_NumProperties; a++)	{
+            m_ppProperties[a] = m_ppProperties[a + 1];
          }
-         return AI_SUCCESS;
+         return 0;
       }
    }
 
-   return AI_FAILURE;
+   return -1;
 }
 
-// ------------------------------------------------------------------------------------------------
-int32 aiMaterial::AddBinaryProperty(const void* pInput,
+int32 Material::AddBinaryProperty(const void* pInput,
    uint32 pSizeInBytes,
    const char* pKey,
    uint32 type,
    uint32 index,
-   aiPropertyTypeInfo pType
+   ePropertyTypeInfo pType
    )
 {
    assert(pInput != NULL);
@@ -442,13 +398,13 @@ int32 aiMaterial::AddBinaryProperty(const void* pInput,
 
    // first search the list whether there is already an entry with this key
    uint32 iOutIndex = UINT_MAX;
-   for (uint32 i = 0; i < mNumProperties; ++i)	{
-      MaterialProperty* prop = mProperties[i];
+   for (uint32 i = 0; i < m_NumProperties; ++i)	{
+      MaterialProperty* prop = m_ppProperties[i];
 
-      if (prop /* just for safety */ && !strcmp(prop->mKey.data, pKey) &&
-         prop->mSemantic == type && prop->mIndex == index){
+      if (prop /* just for safety */ && !strcmp(prop->m_key.data, pKey) &&
+         prop->m_semantic == type && prop->m_index == index){
 
-         delete mProperties[i];
+         delete m_ppProperties[i];
          iOutIndex = i;
       }
    }
@@ -457,150 +413,144 @@ int32 aiMaterial::AddBinaryProperty(const void* pInput,
    MaterialProperty* pcNew = new MaterialProperty();
 
    // .. and fill it
-   pcNew->mType = pType;
-   pcNew->mSemantic = type;
-   pcNew->mIndex = index;
+   pcNew->m_type = pType;
+   pcNew->m_semantic = type;
+   pcNew->m_index = index;
 
-   pcNew->mDataLength = pSizeInBytes;
-   pcNew->mData = new char[pSizeInBytes];
-   memcpy(pcNew->mData, pInput, pSizeInBytes);
+   pcNew->m_dataLength = pSizeInBytes;
+   pcNew->m_data = new char[pSizeInBytes];
+   memcpy(pcNew->m_data, pInput, pSizeInBytes);
 
-   pcNew->mKey.length = ::strlen(pKey);
-   assert(MAXLEN > pcNew->mKey.length);
-   strcpy(pcNew->mKey.data, pKey);
+   pcNew->m_key.length = ::strlen(pKey);
+   //assert(MAXLEN > pcNew->m_key.length); // MAXLEN = ?
+   strcpy(pcNew->m_key.data, pKey);
 
    if (UINT_MAX != iOutIndex)	{
-      mProperties[iOutIndex] = pcNew;
-      return AI_SUCCESS;
+      m_ppProperties[iOutIndex] = pcNew;
+      return 0;
    }
 
    // resize the array ... double the storage allocated
-   if (mNumProperties == mNumAllocated)	{
-      const uint32 iOld = mNumAllocated;
-      mNumAllocated *= 2;
+   if (m_NumProperties == m_NumAllocated)	{
+      const uint32 iOld = m_NumAllocated;
+      m_NumAllocated *= 2;
 
       MaterialProperty** ppTemp;
       try {
-         ppTemp = new MaterialProperty*[mNumAllocated];
+         ppTemp = new MaterialProperty*[m_NumAllocated];
       }
       catch (std::bad_alloc&) {
-         return AI_OUTOFMEMORY;
+         return -3; // AI_OUTOFMEMORY;
       }
 
       // just copy all items over; then replace the old array
-      memcpy(ppTemp, mProperties, iOld * sizeof(void*));
+      memcpy(ppTemp, m_ppProperties, iOld * sizeof(void*));
 
-      delete[] mProperties;
-      mProperties = ppTemp;
+      delete[] m_ppProperties;
+      m_ppProperties = ppTemp;
    }
    // push back ...
-   mProperties[mNumProperties++] = pcNew;
-   return AI_SUCCESS;
+   m_ppProperties[m_NumProperties++] = pcNew;
+   return 0;
 }
 
-// ------------------------------------------------------------------------------------------------
-int32 aiMaterial::AddProperty(const aiString* pInput,
-   const char* pKey,
-   uint32 type,
-   uint32 index)
+int32 Material::AddProperty(const std::string &pInput, const char* pKey, uint32 type, uint32 index)
 {
    // We don't want to add the whole buffer .. write a 32 bit length
    // prefix followed by the zero-terminated UTF8 string.
    // (HACK) I don't want to break the ABI now, but we definitely
    // ought to change aiString::mLength to uint32  one day.
    if (sizeof(size_t) == 8) {
-      aiString copy = *pInput;
+      std::string copy = pInput;
       uint32 * s = reinterpret_cast<uint32 *>(&copy.length);
-      s[1] = static_cast<uint32 >(pInput->length);
+      s[1] = static_cast<uint32 >(pInput.size());
 
       return AddBinaryProperty(s + 1,
-         pInput->length + 1 + 4,
+         pInput.size() + 1 + 4,
          pKey,
          type,
          index,
-         aiPTI_String);
+         material::PROPERTY_TYPE_INFO_STRING);
    }
    assert(sizeof(size_t) == 4);
-   return AddBinaryProperty(pInput,
-      pInput->length + 1 + 4,
+   return AddBinaryProperty(&pInput,
+      pInput.size() + 1 + 4,
       pKey,
       type,
       index,
-      aiPTI_String);
+      material::PROPERTY_TYPE_INFO_STRING);
 }
 
-// ------------------------------------------------------------------------------------------------
-uint32 Assimp::ComputeMaterialHash(const aiMaterial* mat, bool includeMatName /*= false*/)
+uint32 ComputeMaterialHash(const Material* mat, bool includeMatName /*= false*/)
 {
    uint32  hash = 1503; // magic start value, chosen to be my birthday :-)
-   for (uint32 i = 0; i < mat->mNumProperties; ++i)	{
+   for (uint32 i = 0; i < mat->m_NumProperties; ++i)	{
       MaterialProperty* prop;
 
       // Exclude all properties whose first character is '?' from the hash
       // See doc for MaterialProperty.
-      if ((prop = mat->mProperties[i]) && (includeMatName || prop->mKey.data[0] != '?'))	{
+      if ((prop = mat->m_ppProperties[i]) && (includeMatName || prop->m_key.data[0] != '?'))	{
 
-         hash = SuperFastHash(prop->mKey.data, (uint32)prop->mKey.length, hash);
-         hash = SuperFastHash(prop->mData, prop->mDataLength, hash);
+         hash = core::SuperFastHash(prop->m_key.data, (uint32)prop->m_key.length, hash);
+         hash = core::SuperFastHash(prop->m_data, prop->m_dataLength, hash);
 
          // Combine the semantic and the index with the hash
-         hash = SuperFastHash((const char*)&prop->mSemantic, sizeof(uint32), hash);
-         hash = SuperFastHash((const char*)&prop->mIndex, sizeof(uint32), hash);
+         hash = core::SuperFastHash((const char*)&prop->m_semantic, sizeof(uint32), hash);
+         hash = core::SuperFastHash((const char*)&prop->m_index, sizeof(uint32), hash);
       }
    }
    return hash;
 }
 
-// ------------------------------------------------------------------------------------------------
-void aiMaterial::CopyPropertyList(aiMaterial* pcDest,
-   const aiMaterial* pcSrc
+void Material::CopyPropertyList(Material* pcDest,
+   const Material* pcSrc
    )
 {
    assert(NULL != pcDest);
    assert(NULL != pcSrc);
 
-   uint32 iOldNum = pcDest->mNumProperties;
-   pcDest->mNumAllocated += pcSrc->mNumAllocated;
-   pcDest->mNumProperties += pcSrc->mNumProperties;
+   uint32 iOldNum = pcDest->m_NumProperties;
+   pcDest->m_NumAllocated += pcSrc->m_NumAllocated;
+   pcDest->m_NumProperties += pcSrc->m_NumProperties;
 
-   MaterialProperty** pcOld = pcDest->mProperties;
-   pcDest->mProperties = new MaterialProperty*[pcDest->mNumAllocated];
+   MaterialProperty** pcOld = pcDest->m_ppProperties;
+   pcDest->m_ppProperties = new MaterialProperty*[pcDest->m_NumAllocated];
 
    if (iOldNum && pcOld)	{
       for (uint32 i = 0; i < iOldNum; ++i) {
-         pcDest->mProperties[i] = pcOld[i];
+         pcDest->m_ppProperties[i] = pcOld[i];
       }
 
       delete[] pcOld;
    }
-   for (uint32 i = iOldNum; i< pcDest->mNumProperties; ++i)	{
-      MaterialProperty* propSrc = pcSrc->mProperties[i];
+   for (uint32 i = iOldNum; i< pcDest->m_NumProperties; ++i)	{
+      MaterialProperty* propSrc = pcSrc->m_ppProperties[i];
 
       // search whether we have already a property with this name -> if yes, overwrite it
       MaterialProperty* prop;
       for (uint32 q = 0; q < iOldNum; ++q) {
-         prop = pcDest->mProperties[q];
-         if (prop /* just for safety */ && prop->mKey == propSrc->mKey && prop->mSemantic == propSrc->mSemantic
-            && prop->mIndex == propSrc->mIndex)	{
+         prop = pcDest->m_ppProperties[q];
+         if (prop /* just for safety */ && prop->m_key == propSrc->m_key && prop->m_semantic == propSrc->m_semantic
+            && prop->m_index == propSrc->m_index)	{
             delete prop;
 
             // collapse the whole array ...
-            memmove(&pcDest->mProperties[q], &pcDest->mProperties[q + 1], i - q);
+            memmove(&pcDest->m_ppProperties[q], &pcDest->m_ppProperties[q + 1], i - q);
             i--;
-            pcDest->mNumProperties--;
+            pcDest->m_NumProperties--;
          }
       }
 
       // Allocate the output property and copy the source property
-      prop = pcDest->mProperties[i] = new MaterialProperty();
-      prop->mKey = propSrc->mKey;
-      prop->mDataLength = propSrc->mDataLength;
-      prop->mType = propSrc->mType;
-      prop->mSemantic = propSrc->mSemantic;
-      prop->mIndex = propSrc->mIndex;
+      prop = pcDest->m_ppProperties[i] = new MaterialProperty();
+      prop->m_key = propSrc->m_key;
+      prop->m_dataLength = propSrc->m_dataLength;
+      prop->m_type = propSrc->m_type;
+      prop->m_semantic = propSrc->m_semantic;
+      prop->m_index = propSrc->m_index;
 
-      prop->mData = new char[propSrc->mDataLength];
-      memcpy(prop->mData, propSrc->mData, prop->mDataLength);
+      prop->m_data = new char[propSrc->m_dataLength];
+      memcpy(prop->m_data, propSrc->m_data, prop->m_dataLength);
    }
    return;
 }
