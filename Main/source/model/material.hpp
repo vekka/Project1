@@ -60,82 +60,51 @@ using core::math::Vector3f;
 #include "../gfx/color.hpp"
 using gfx::color::Colorf;
 
-   // Name for default materials (2nd is used if meshes have UV coords)
-#define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
-
 namespace material
 {
-   // ---------------------------------------------------------------------------
-   /** @brief Defines how the Nth texture of a specific type is combined with
-   *  the result of all previous layers.
-   *
-   *  Example (left: key, right: value): <br>
-   *  @code
-   *  DiffColor0     - gray
-   *  DiffTextureOp0 - aiTextureOpMultiply
-   *  DiffTexture0   - tex1.png
-   *  DiffTextureOp0 - aiTextureOpAdd
-   *  DiffTexture1   - tex2.png
-   *  @endcode
-   *  Written as equation, the final diffuse term for a specific pixel would be:
-   *  @code
-   *  diffFinal = DiffColor0 * sampleTex(DiffTexture0,UV0) +
-   *     sampleTex(DiffTexture1,UV0) * diffContrib;
-   *  @endcode
-   *  where 'diffContrib' is the intensity of the incoming light for that pixel.
-   */
+   // Name for default materials (2nd is used if meshes have UV coords)
+   const char *DEFAULT_MATERIAL_NAME = "DefaultMaterial";
+
+   // Defines how the Nth texture of a specific type is combined with
+   //  the result of all previous layers.
+   //
+   //  Example (left: key, right: value): <br>
+   //  @code
+   //  DiffColor0     - gray
+   //  DiffTextureOp0 - aiTextureOpMultiply
+   //  DiffTexture0   - tex1.png
+   //  DiffTextureOp0 - aiTextureOpAdd
+   //  DiffTexture1   - tex2.png
+   //  @endcode
+   //  Written as equation, the final diffuse term for a specific pixel would be:
+   //  @code
+   //  diffFinal = DiffColor0 * sampleTex(DiffTexture0,UV0) +
+   //     sampleTex(DiffTexture1,UV0) * diffContrib;
+   //  @endcode
+   //  where 'diffContrib' is the intensity of the incoming light for that pixel.
+
    enum eTextureOperation
    {
-      /** T = T1 * T2 */
-      TEXTURE_OPER_MULT,
-
-      /** T = T1 + T2 */
-      TEXTURE_OPER_ADD,
-
-      /** T = T1 - T2 */
-      TEXTURE_OPER_SUB,
-
-      /** T = T1 / T2 */
-      TEXTURE_OPER_DIV,
-
-      /** T = (T1 + T2) - (T1 * T2) */
-      TEXTURE_OPER_SMOOTH_ADD,
-
-      /** T = T1 + (T2-0.5) */
-      TEXTURE_OPER_SIGNED_ADD,
-
-
+      TEXTURE_OPER_MULT, // T = T1 * T2
+      TEXTURE_OPER_ADD, // T = T1 + T2
+      TEXTURE_OPER_SUB, // T = T1 - T2
+      TEXTURE_OPER_DIV, // T = T1 / T2
+      TEXTURE_OPER_SMOOTH_ADD, // T = (T1 + T2) - (T1 * T2)
+      TEXTURE_OPER_SIGNED_ADD, // T = T1 + (T2-0.5)
 #ifndef SWIG
       TEXTURE_OPER_FORCE32BIT = INT32_MAX
 #endif
    };
 
-   // ---------------------------------------------------------------------------
-   /** @brief Defines how UV coordinates outside the [0...1] range are handled.
-   *
-   *  Commonly refered to as 'wrapping mode'.
-   */
+   // Defines how UV coordinates outside the [0...1] range are handled.
+   //  Commonly refered to as 'wrapping mode'.
+
    enum eTextureMapMode
    {
-      /** A texture coordinate u|v is translated to u%1|v%1
-      */
-      TEXTURE_MAPMODE_WRAP,
-
-      /** Texture coordinates outside [0...1]
-      *  are clamped to the nearest valid value.
-      */
-      TEXTURE_MAPMODE_CLAMP,
-
-      /** If the texture coordinates for a pixel are outside [0...1]
-      *  the texture is not applied to that pixel
-      */
-      TEXTURE_MAPMODE_DECAL,
-
-      /** A texture coordinate u|v becomes u%1|v%1 if (u-(u%1))%2 is zero and
-      *  1-(u%1)|1-(v%1) otherwise
-      */
-      TEXTURE_MAPMODE_MIRROR,
-
+      TEXTURE_MAPMODE_WRAP, // A texture coordinate u|v is translated to u%1|v%1
+      TEXTURE_MAPMODE_CLAMP, // Texture coordinates outside [0...1] are clamped to the nearest valid value.
+      TEXTURE_MAPMODE_DECAL, // If the texture pixel coords are outside [0...1] the texture is not applied to that pixel
+      TEXTURE_MAPMODE_MIRROR, // A texture coord u|v becomes u%1|v%1 if (u-(u%1))%2 is 0 and 1-(u%1)|1-(v%1) otherwise
 #ifndef SWIG
       TEXTURE_MAPMODE_FORCE32BIT = INT32_MAX
 #endif
@@ -152,30 +121,18 @@ namespace material
    */
    enum eTextureMapping
    {
-      /** The mapping coordinates are taken from an UV channel.
-      *
-      *  The #AI_MATKEY_UVWSRC key specifies from which UV channel
-      *  the texture coordinates are to be taken from (remember,
-      *  meshes can have more than one UV channel).
-      */
+      // The mapping coordinates are taken from an UV channel.
+      //
+      //  The #AI_MATKEY_UVWSRC key specifies from which UV channel
+      //  the texture coordinates are to be taken from (remember,
+      //  meshes can have more than one UV channel).
+      
       TEXTURE_MAP_UV,
-
-      /** Spherical mapping */
-      TEXTURE_MAP_SPHERE,
-
-      /** Cylindrical mapping */
-      TEXTURE_MAP_CYLINDER,
-
-      /** Cubic mapping */
-      TEXTURE_MAP_BOX,
-
-      /** Planar mapping */
-      TEXTURE_MAP_PLANE,
-
-      /** Undefined mapping. Have fun. */
-      TEXTURE_MAP_OTHER,
-
-
+      TEXTURE_MAP_SPHERE, // Spherical mapping
+      TEXTURE_MAP_CYLINDER, // Cylindrical mapping
+      TEXTURE_MAP_BOX, // Cubic mapping
+      TEXTURE_MAP_PLANE, // Planar mapping
+      TEXTURE_MAP_OTHER, // Undefined mapping. Have fun.
 #ifndef SWIG
       TEXTURE_MAP_FORCE32BIT = INT32_MAX
 #endif
