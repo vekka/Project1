@@ -105,12 +105,8 @@ namespace material
       TEXTURE_MAPMODE_CLAMP, // Texture coordinates outside [0...1] are clamped to the nearest valid value.
       TEXTURE_MAPMODE_DECAL, // If the texture pixel coords are outside [0...1] the texture is not applied to that pixel
       TEXTURE_MAPMODE_MIRROR, // A texture coord u|v becomes u%1|v%1 if (u-(u%1))%2 is 0 and 1-(u%1)|1-(v%1) otherwise
-#ifndef SWIG
-      TEXTURE_MAPMODE_FORCE32BIT = INT32_MAX
-#endif
    };
 
-   // ---------------------------------------------------------------------------
    /** @brief Defines how the mapping coords for a texture are generated.
    *
    *  Real-time applications typically require full UV coordinates, so the use of
@@ -133,9 +129,6 @@ namespace material
       TEXTURE_MAP_BOX, // Cubic mapping
       TEXTURE_MAP_PLANE, // Planar mapping
       TEXTURE_MAP_OTHER, // Undefined mapping. Have fun.
-#ifndef SWIG
-      TEXTURE_MAP_FORCE32BIT = INT32_MAX
-#endif
    };
 
    // ---------------------------------------------------------------------------
@@ -162,82 +155,24 @@ namespace material
       *  *not* related to textures.
       */
       TEXTURE_TYPE_NONE,
+      TEXTURE_TYPE_DIFFUSE, // texture is combined with the result of the diffuse lighting equation
+      TEXTURE_TYPE_SPECULAR, // texture is combined with the result of the specular lighting equation
+      TEXTURE_TYPE_AMBIENT, // texture is combined with the result of the ambient lighting equation
+      TEXTURE_TYPE_EMISSIVE, // texture is added to the result of the lighting calculation. no influence by incoming light
+      TEXTURE_TYPE_HEIGHTMAP, // texture is a height map. higher gray-scale values stand for higher elevations from the base height
+      TEXTURE_TYPE_NORMALS, // texture is a (tangent space) normal-map. intentionally no dinstinction between the different conventions
+      TEXTURE_TYPE_SHININESS, // texture defines the glossiness of the material. exp of (phong) lighting equation
+      TEXTURE_TYPE_OPACITY, // texture defines per-pixel opacity. Usually 'white' means opaque and 'black' means 'transparency'
+      TEXTURE_TYPE_DISPLACEMENT, // purpose and format is application-dependent. higher col values = higher vert displacements
 
-
-
-      /** The texture is combined with the result of the diffuse
-      *  lighting equation.
-      */
-      TEXTURE_TYPE_DIFFUSE,
-
-      /** The texture is combined with the result of the specular
-      *  lighting equation.
-      */
-      TEXTURE_TYPE_SPECULAR,
-
-      /** The texture is combined with the result of the ambient
-      *  lighting equation.
-      */
-      TEXTURE_TYPE_AMBIENT,
-
-      /** The texture is added to the result of the lighting
-      *  calculation. It isn't influenced by incoming light.
-      */
-      TEXTURE_TYPE_EMISSIVE,
-
-      /** The texture is a height map.
-      *
-      *  By convention, higher gray-scale values stand for
-      *  higher elevations from the base height.
-      */
-      TEXTURE_TYPE_HEIGHT,
-
-      /** The texture is a (tangent space) normal-map.
-      *
-      *  Again, there are several conventions for tangent-space
-      *  normal maps. Assimp does (intentionally) not
-      *  distinguish here.
-      */
-      TEXTURE_TYPE_NORMALS,
-
-      /** The texture defines the glossiness of the material.
-      *
-      *  The glossiness is in fact the exponent of the specular
-      *  (phong) lighting equation. Usually there is a conversion
-      *  function defined to map the linear color values in the
-      *  texture to a suitable exponent. Have fun.
-      */
-      TEXTURE_TYPE_SHININESS,
-
-      /** The texture defines per-pixel opacity.
-      *
-      *  Usually 'white' means opaque and 'black' means
-      *  'transparency'. Or quite the opposite. Have fun.
-      */
-      TEXTURE_TYPE_OPACITY,
-
-      /** Displacement texture
-      *
-      *  The exact purpose and format is application-dependent.
-      *  Higher color values stand for higher vertex displacements.
-      */
-      TEXTURE_TYPE_DISPLACEMENT,
-
-      /** Lightmap texture (aka Ambient Occlusion)
-      *
+      /*
       *  Both 'Lightmaps' and dedicated 'ambient occlusion maps' are
       *  covered by this material property. The texture contains a
       *  scaling value for the final color value of a pixel. Its
       *  intensity is not affected by incoming light.
       */
-      TEXTURE_TYPE_LIGHTMAP,
-
-      /** Reflection texture
-      *
-      * Contains the color of a perfect mirror reflection.
-      * Rarely used, almost never for real-time applications.
-      */
-      TEXTURE_TYPE_REFLECTION,
+      TEXTURE_TYPE_LIGHTMAP, // aka Ambient Occlusion
+      TEXTURE_TYPE_REFLECTION, // contains the color of a perfect mirror reflection. rarely used, almost never for real-time applications.
 
       /** Unknown texture
       *
@@ -246,11 +181,6 @@ namespace material
       *  but is excluded from any further postprocessing.
       */
       TEXTURE_TYPE_UNKNOWN,
-
-
-#ifndef SWIG
-      TEXTURE_TYPE_FORCE32BIT = INT32_MAX
-#endif
    };
 
 #define AI_TEXTURE_TYPE_MAX  aiTextureType_UNKNOWN
@@ -361,14 +291,8 @@ namespace material
       *  Mutually exclusive with #aiTextureFlags_UseAlpha.
       */
       TEXTURE_FLAGS_IGNOREALPHA = 4,
-
-#ifndef SWIG
-      TEXTURE_FLAGS_FORCE32BIT = INT32_MAX
-#endif
    };
 
-
-   // ---------------------------------------------------------------------------
    /** @brief Defines alpha-blend flags.
    *
    *  If you're familiar with OpenGL or D3D, these flags aren't new to you.
@@ -405,10 +329,6 @@ namespace material
 
       // we don't need more for the moment, but we might need them
       // in future versions ...
-
-#ifndef SWIG
-      BLEND_MODE_FORCE32BIT = INT32_MAX
-#endif
    };
 
 
@@ -489,14 +409,6 @@ namespace material
       /** Simple binary buffer, content undefined. Not convertible to anything.
       */
       PROPERTY_TYPE_INFO_BINARY_BUFFER = 0x5,
-
-
-      /** This value is not used. It is just there to force the
-      *  compiler to map this enum to a 32 Bit integer.
-      */
-#ifndef SWIG
-      PROPERTY_TYPE_INFO_FORCE32BIT = INT32_MAX
-#endif
    };
 
    // ---------------------------------------------------------------------------
