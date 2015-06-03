@@ -61,7 +61,7 @@ namespace objfile
  
    struct Object;
    struct Face;
-   struct Material;
+   struct ObjMaterial;
 
    // data structure for a simple obj-face, describes discredit,l.ation and materials
    struct Face
@@ -78,7 +78,7 @@ namespace objfile
       IndexList *m_pNormalIndices;
       IndexList *m_pTexCoordIndices;
       //!	Pointer to assigned material
-      Material *m_pMaterial;
+      ObjMaterial *m_pMaterial;
 
       //!	\param	m_pVertices	Pointer to assigned vertex indexbuffer
       //!	\param	m_pNormals	Pointer to assigned normals indexbuffer
@@ -171,10 +171,10 @@ namespace objfile
          TEXTURE_TYPE_AMBIENT,
          TEXTURE_TYPE_EMISSIVE,
          TEXTURE_TYPE_BUMP,
-         TEXTURE_TYPE_NORMAL,
-         TEXTURE_TYPE_SPECULARITY,
+         TEXTURE_TYPE_NORMALS,
+         TEXTURE_TYPE_SHININESS,
          TEXTURE_TYPE_OPACITY,
-         TEXTURE_TYPE_DISP,
+         TEXTURE_TYPE_DISPLACEMENT,
          
          TEXTURE_TYPE_COUNT
       };
@@ -216,7 +216,7 @@ namespace objfile
       //	Array with pointer to all stored faces
       std::vector<Face*> m_faces;
       //	Assigned material
-      Material *m_pMaterial;
+      ObjMaterial *m_pMaterial;
       //	Number of stored indices.
       uint32 m_uiNumIndices;
       // Number of UV
@@ -258,9 +258,9 @@ namespace objfile
       //	Pointer to current object
       objfile::Object *m_pCurrent;
       //	Pointer to current material
-      objfile::Material *m_pCurrentMaterial;
+      objfile::ObjMaterial *m_pCurrentMaterial;
       //	Pointer to default material
-      objfile::Material *m_pDefaultMaterial;
+      objfile::ObjMaterial *m_pDefaultMaterial;
       //	Vector with all generated materials
       std::vector<std::string> m_materialLib;
       //	Vector with all generated group
@@ -283,7 +283,7 @@ namespace objfile
 
       std::vector<Mesh*> m_meshes;
 
-      std::map<std::string, Material*> m_materialMap;
+      std::map<std::string, ObjMaterial*> m_materialMap;
 
       Model() :
          m_modelName(""),
@@ -319,7 +319,7 @@ namespace objfile
          }
          m_groups.clear();
 
-         for (std::map<std::string, Material*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
+         for (std::map<std::string, ObjMaterial*>::iterator it = m_materialMap.begin(); it != m_materialMap.end(); ++it) {
             delete it->second;
          }
       }

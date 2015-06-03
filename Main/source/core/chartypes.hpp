@@ -52,6 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace core
 {
+   static const uint32 BUFFERSIZE = 4096;
 
    template <typename TChar>
    inline uint8 CharToInt(TChar x)
@@ -132,7 +133,7 @@ namespace core
    template <class char_t>
    inline bool TokenMatch(char_t*& in, const char* token, uint32 len)
    {
-      if (!::strncmp(token, in, len) && IsSpaceOrNewLine(in[len])) {
+      if (!strncmp(token, in, len) && IsSpaceOrNewLine(in[len])) {
          if (in[len] != '\0') {
             in += len + 1;
          }
@@ -147,7 +148,7 @@ namespace core
    }
 
    template <class char_t>
-   inline bool GetNextLine(const char_t*& buffer, char_t out[BufferSize])
+   inline bool GetNextLine(const char_t*& buffer, char_t out[BUFFERSIZE])
    {
       if ((char_t)'\0' == *buffer) 
       {
@@ -172,7 +173,7 @@ namespace core
 
    inline bool TokenMatchI(const char*& in, const char* token, uint32 len)
    {
-      if (!ASSIMP_strincmp(token, in, len) && IsSpaceOrNewLine(in[len])) 
+      if (!strncmp(token, in, len) && IsSpaceOrNewLine(in[len])) 
       {
          in += len + 1;
          return true;

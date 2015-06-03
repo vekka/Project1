@@ -1,5 +1,7 @@
 #include <stdarg.h>
 
+#include <assert.h>
+
 #include "win32console.hpp"
 
 namespace win32console
@@ -64,7 +66,7 @@ namespace win32console
    bool Win32Console::SetCaption(const std::string &caption)
    {
       assert(created);
-      return (bool)(SetConsoleTitle(caption.CString()) != 0);
+      return (bool)(SetConsoleTitle(caption.c_str()) != 0);
    }
 
    void Win32Console::GetCaption(std::string &caption) const
@@ -72,10 +74,10 @@ namespace win32console
       assert(created);
 
       char buffer[512];
-      int32 strLen = GetConsoleTitle(buffer, 512);
+      /*int32 strLen = */GetConsoleTitle(buffer, 512);
 
-      if (strLen == 0)
-         caption = NULL;
+      //if (strLen == 0)
+      //   caption = NULL;
 
       caption = buffer;
    }

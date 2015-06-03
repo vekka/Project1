@@ -70,13 +70,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace core
 {
 
-   inline uint32 SuperFastHash(const char * data, uint32 len = 0, uint32 hash = 0)
+   inline uint32 SuperFastHash(const char *data, uint32 len = 0, uint32 hash = 0)
    {
       uint32 tmp;
       int32 rem;
 
-      if (!data) return 0;
-      if (!len)len = (uint32_t)::strlen(data);
+      if (!data)
+         return 0;
+      if (!len)len = (uint32)::strlen(data);
 
       rem = len & 3;
       len >>= 2;

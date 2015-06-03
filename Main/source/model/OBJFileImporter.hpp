@@ -66,20 +66,14 @@ namespace objfileimporter
 
    class ObjFileImporter
    {
-   public:
-      ObjFileImporter();
-      ~ObjFileImporter();
-
-   public:
-      /// \brief	Returns whether the class can handle the format of the given file. 
-      /// \remark	See BaseImporter::CanRead() for details.
-      bool CanRead(const std::string &fileName, File* file, bool checkSig) const;
-
    private:
+      std::vector<char> m_pDataBuffer;
+      objfile::Object *m_pRootObject;
+      
+      std::string m_strAbsPath; //	Absolute pathname of model in file system
 
-      //! \brief	Appends the supported extension.
-      const eImporterDesc* GetInfo() const;
-     
+      const eImporterDesc* GetInfo() const; // Appends the supported extension.
+
       //TODO: implement later, we need the scene.h code here
       void InternReadFile(const std::string &filePath, Scene* pScene, File* pFile);
 
@@ -94,29 +88,29 @@ namespace objfileimporter
       mesh2::Mesh *CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
          uint32 uiMeshIndex);
 
-      //!	\brief	Creates vertices from model.
-      void CreateVertexArray(const objfile::Model* pModel, const objfile::Object* pCurrentObject,
+      void CreateVertexArrayFromModel(const objfile::Model* pModel, const objfile::Object* pCurrentObject,
          uint32 uiMeshIndex, mesh2::Mesh* pMesh, uint32 numIndices);
 
-      //!	\brief	Object counter helper method.
+      // Object counter helper method.
       void CountObjects(const std::vector<objfile::Object*> &rObjects, int32 &iNumMeshes);
 
-      //!	\brief	Material creation.
+      void ObjFileImporter::AddTextureMappingModeProperty(material::Material* mat, material::eTextureType type, int32 clampMode = 1);
+
+      //	Material creation.
       void CreateMaterials(const objfile::Model* pModel, Scene* pScene);
 
-      ///	@brief  Adds special property for the used texture mapping mode of the model.
+      // Adds special property for the used texture mapping mode of the model.
       //void addTextureMappingModeProperty(Material* mat, aiTextureType type, int32 clampMode = 1);
 
-      //!	\brief	Appends a child node to a parent node and updates the data structures.
+      //	Appends a child node to a parent node and updates the data structures.
       void AppendChildToParentNode(Node *pParent, Node *pChild);
 
-   private:
-      //	Data buffer
-      std::vector<char> m_pBuffer;
-      //	Pointer to root object instance
-      objfile::Object *m_pRootObject;
-      //	Absolute pathname of model in file system
-      std::string m_strAbsPath;
+   public:
+      ObjFileImporter();
+      ~ObjFileImporter();
+      // Returns whether the class can handle the format of the given file. 
+      //	See BaseImporter::CanRead() for details.
+      bool CanRead(const std::string &fileName, File* file, bool checkSig) const;
    };
 
 } // namespace objfileimporter

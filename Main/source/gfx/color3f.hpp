@@ -114,9 +114,11 @@ namespace gfx
 
       inline Color3f Color3f::operator/(const Color3f &other) const
       {
-         return Color3f(r / other.r, g / other.g, b / other.b, a / other.a);
+         return Color3f(r / other.r, g / other.g, b / other.b);
       }
 
    } // namespace color4f
 
 } // namespace gfx
+
+#endif

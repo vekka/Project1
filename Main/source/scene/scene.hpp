@@ -65,7 +65,6 @@ namespace scene
    * Simple file formats don't support hierarchical structures - for these formats
    * the imported scene does consist of only a single root node without children.
    */
-   // -------------------------------------------------------------------------------
    struct Node
    {
       /** The name of the node.
@@ -95,20 +94,15 @@ namespace scene
       /** The transformation relative to the node's parent. */
       Matrix4f m_transformation;
 
-      /** Parent node. NULL if this node is the root node. */
-      Node* m_pParentNode;
+      Node* m_pParentNode; // NULL if root node
 
-      /** The number of child nodes of this node. */
       uint32 m_numChildren;
 
-      /** The child nodes of this node. NULL if m_numChildren is 0. */
-      Node** m_ppChildren;
+      Node** m_ppChildren; // NULL if no children
 
-      /** The number of meshes of this node. */
       uint32 m_numMeshes;
 
-      /** The meshes of this node. Each entry is an index into the mesh */
-      uint32* m_ppMeshes;
+      uint32* m_ppMeshes; // Each entry is an index into the mesh
 
       /** Metadata associated with this node or NULL if there is no metadata.
       *  Whether any metadata is generated depends on the source file format. See the
@@ -116,8 +110,7 @@ namespace scene
       * format. Importers that don't document any metadata don't write any.
       */
       //aiMetadata* mMetaData;
-      
-      /** Constructor */
+
       Node()
          // set all members to zero by default
          : m_name("")
@@ -144,8 +137,7 @@ namespace scene
 
       ~Node()
       {
-         // delete all children recursively
-         // to make sure we won't crash if the data is invalid ...
+         // delete all children recursive to make sure we won't crash if the data is invalid ...
          if (m_ppChildren && m_numChildren)
          {
             for (uint32 a = 0; a < m_numChildren; a++)
@@ -166,19 +158,17 @@ namespace scene
       */
       inline const Node* FindNode(const std::string &name) const
       {
-         return FindNode(name);
+         return FindNode(name.c_str());
       }
-
 
       inline Node* FindNode(const std::string& name)
       {
-         return FindNode(name);
+         return FindNode(name.c_str());
       }
 
-
-      inline const Node* FindNode(const std::string &name) const
+      inline const Node* FindNode(const char *name) const
       {
-         if (!std::strcmp((const*)m_name, name))
+         if (!strcmp(m_name.c_str(), name) )
             return this;
          for (uint32 i = 0; i < m_numChildren; ++i)
          {
@@ -187,13 +177,13 @@ namespace scene
                return p;
             }
          }
-         // there is definitely no sub-node with this name
+
          return NULL;
       }
 
-      inline Node* FindNode(const std::string &name)
+      inline Node* FindNode(const char *name)
       {
-         if (!strcmp((const*)m_name, name))
+         if (!strcmp(m_name.c_str(), name))
             return this;
          for (uint32 i = 0; i < m_numChildren; ++i)
          {
@@ -202,27 +192,35 @@ namespace scene
                return p;
             }
          }
-         // there is definitely no sub-node with this name
+
          return NULL;
       }
    };
 
+   enum eSceneFlags
+   {
+       SCENE_FLAGS_INCOMPLETE = 1,
+       SCENE_FLAGS_VALIDATED = 2,
+       SCENE_FLAGS_VALIDATION_WARNING = 4,
+       SCENE_FLAGS_NON_VERBOSE_FORMAT = 8,
+       SCENE_FLAGS_TERRAIN = 16,
+   };
 
-   // -------------------------------------------------------------------------------
    /**
    * Specifies that the scene data structure that was imported is not complete.
    * This flag bypasses some internal validations and allows the import
    * of animation skeletons, material libraries or camera animation paths
    * using Assimp. Most applications won't support such data.
    */
-#define AI_SCENE_FLAGS_INCOMPLETE	0x1
+
+ // #define AI_SCENE_FLAGS_INCOMPLETE	0x1
 
    /**
    * This flag is set by the validation postprocess-step (aiPostProcess_ValidateDS)
    * if the validation is successful. In a validated scene you can be sure that
    * any cross references in the data structure (e.g. vertex indices) are valid.
    */
-#define AI_SCENE_FLAGS_VALIDATED	0x2
+//#define AI_SCENE_FLAGS_VALIDATED	0x2
 
    /**
    * This flag is set by the validation postprocess-step (aiPostProcess_ValidateDS)
@@ -232,7 +230,7 @@ namespace scene
    * In most cases you should still be able to use the import. This flag could
    * be useful for applications which don't capture Assimp's log output.
    */
-#define AI_SCENE_FLAGS_VALIDATION_WARNING  	0x4
+//#define AI_SCENE_FLAGS_VALIDATION_WARNING  	0x4
 
    /**
    * This flag is currently only set by the aiProcess_JoinIdenticalVertices step.
@@ -240,7 +238,7 @@ namespace scene
    * verbose format anymore. In the verbose format all vertices are unique,
    * no vertex is ever referenced by more than one face.
    */
-#define AI_SCENE_FLAGS_NON_VERBOSE_FORMAT  	0x8
+//#define AI_SCENE_FLAGS_NON_VERBOSE_FORMAT  	0x8
 
    /**
    * Denotes pure height-map terrain data. Pure terrains usually consist of quads,
@@ -254,10 +252,8 @@ namespace scene
    * as long as possible (typically you'll do the triangulation when you actually
    * need to render it).
    */
-#define AI_SCENE_FLAGS_TERRAIN 0x10
+// #define AI_SCENE_FLAGS_TERRAIN 0x10
 
-
-   // -------------------------------------------------------------------------------
    /** The root structure of the imported data.
    *
    *  Everything that was imported from the given file can be accessed from here.
@@ -265,30 +261,20 @@ namespace scene
    *  by the caller. You shouldn't want to instance it, nor should you ever try to
    *  delete a given scene on your own.
    */
-   // -------------------------------------------------------------------------------
+
    struct Scene
    {
-
-      /** Any combination of the AI_SCENE_FLAGS_XXX flags. By default
-      * this value is 0, no flags are set. Most applications will
-      * want to reject all scenes with the AI_SCENE_FLAGS_INCOMPLETE
-      * bit set.
-      */
-      uint32 m_flags;
+      eSceneFlags m_flags; // Most applications will want to reject all scenes with the AI_SCENE_FLAGS_INCOMPLETE
 
 
-      /** The root node of the hierarchy.
-      *
+      /*
       * There will always be at least the root node if the import
       * was successful (and no special flags have been set).
       * Presence of further nodes depends on the format and content
       * of the imported file.
       */
-        Node* m_pRootNode;
+      Node* m_pRootNode;
 
-
-
-      /** The number of meshes in the scene. */
       uint32 m_numMeshes;
 
       /** The array of meshes.
@@ -298,11 +284,8 @@ namespace scene
       * AI_SCENE_FLAGS_INCOMPLETE flag is not set there will always
       * be at least ONE material.
       */
-        Mesh** m_ppMeshes;
+      Mesh** m_ppMeshes;
 
-
-
-      /** The number of materials in the scene. */
       uint32 m_numMaterials;
 
       /** The array of materials.
@@ -312,21 +295,15 @@ namespace scene
       * AI_SCENE_FLAGS_INCOMPLETE flag is not set there will always
       * be at least ONE material.
       */
-      Material** m_ppMaterials;
+      material::Material** m_ppMaterials;
 
-
-
-      /** The number of animations in the scene. */
       uint32 m_numAnimations;
 
-      /** The array of animations.
-      *
+      /*
       * All animations imported from the given file are listed here.
       * The array is m_numAnimations in size.
       */
       //Animation** m_ppAnimations;
-
-
 
       /** The number of textures embedded into the file */
       uint32 m_numTextures;
@@ -339,11 +316,7 @@ namespace scene
       */
       //Texture** m_ppTextures;
 
-
-      /** The number of light sources in the scene. Light sources
-      * are fully optional, in most cases this attribute will be 0
-      */
-      uint32 m_numLights;
+      uint32 m_numLights; // light sources are fully optional, in most cases this is 0
 
       /** The array of light sources.
       *
@@ -356,10 +329,9 @@ namespace scene
       /** The number of cameras in the scene. Cameras
       * are fully optional, in most cases this attribute will be 0
       */
-      uint32 m_numCameras;
+      uint32 m_numCameras; // cameras are fully optional, in most cases this is 0
 
-      /** The array of cameras.
-      *
+      /*
       * All cameras imported from the given file are listed here.
       * The array is m_numCameras in size. The first camera in the
       * array (if existing) is the default camera view into
@@ -367,49 +339,40 @@ namespace scene
       */
        //Camera** m_ppCameras;
 
-      //! Default constructor - set everything to 0/NULL
-      /*ASSIMP_API*/ Scene();
+      Scene();
+      ~Scene();
 
-      //! Destructor
-      /*ASSIMP_API*/ ~Scene();
-
-      //! Check whether the scene contains meshes
-      //! Unless no special scene flags are set this will always be true.
+      // Unless no special scene flags are set this will always be true.
       inline bool HasMeshes() const
       {
          return m_ppMeshes != NULL && m_numMeshes > 0;
       }
 
-      //! Check whether the scene contains materials
-      //! Unless no special scene flags are set this will always be true.
+      // Unless no special scene flags are set this will always be true.
       inline bool HasMaterials() const
       {
          return false;
          //return m_ppMaterials != NULL && m_numMaterials > 0;
       }
 
-      //! Check whether the scene contains lights
       inline bool HasLights() const
       {
          return false;
          //return m_ppLights != NULL && m_numLights > 0;
       }
 
-      //! Check whether the scene contains textures
       inline bool HasTextures() const
       {
          return false;
          //return m_ppTextures != NULL && m_numTextures > 0;
       }
 
-      //! Check whether the scene contains cameras
       inline bool HasCameras() const
       {
          return false;
          //return m_ppCameras != NULL && m_numCameras > 0;
       }
 
-      //! Check whether the scene contains animations
       inline bool HasAnimations() const
       {
          return false;

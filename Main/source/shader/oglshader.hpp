@@ -31,7 +31,7 @@ namespace oglshader
    private:
       GLuint m_program;
       int32 m_totalShaders;
-      //eShaderType m_type;
+      //eShaderType m_propertyTypeInfo;
       map<std::string, GLuint> m_attributeMap;
       map<std::string, GLuint> m_uniformLocationMap;
       enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER }; //tmp

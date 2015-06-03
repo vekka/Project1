@@ -332,9 +332,6 @@
     <ClInclude Include="source\core\fast_atof.hpp">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\StringComparison.hpp">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="source\direct3D\D3DDriver.hpp">
       <Filter>Source Files\Driver\Direct3D</Filter>
     </ClInclude>
@@ -386,6 +383,9 @@
     <ClInclude Include="source\core\hash\hash.hpp">
       <Filter>Source Files\Core\Hash</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\StringComparison.hpp">
+      <Filter>Source Files\Core\StringLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="source\shader\glsl\vertex\shader.vert">
@@ -399,9 +399,6 @@
     </None>
     <None Include="source\shader\glsl\fragment\triangle.frag">
       <Filter>Source Files\ShaderLib\ShaderSources\FragmentShaders</Filter>
-    </None>
-    <None Include="source\model\material.inl">
-      <Filter>Source Files\MeshLib</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>

@@ -53,7 +53,7 @@ using core::SkipToken;
 #include "OBJTools.hpp"
 using objtools::SkipLine;
 using objtools::GetNextWord;
-using assimp::fast_atof;
+using core::fast_atof;
 
 #include "OBJFile.hpp"
 using objfile::Model;
@@ -104,8 +104,8 @@ namespace model
          m_pModelInstance->m_modelName = file->GetFilePath();
          
          // create default material and store it
-         m_pModelInstance->m_pDefaultMaterial = new objfile::Material();
-         m_pModelInstance->m_pDefaultMaterial->MaterialName = DEFAULT_MATERIAL_NAME;
+         m_pModelInstance->m_pDefaultMaterial = new objfile::ObjMaterial();
+         m_pModelInstance->m_pDefaultMaterial->m_materialName = DEFAULT_MATERIAL_NAME;
          m_pModelInstance->m_materialLib.push_back(DEFAULT_MATERIAL_NAME);
          m_pModelInstance->m_materialMap[DEFAULT_MATERIAL_NAME] = m_pModelInstance->m_pDefaultMaterial;
 
@@ -118,8 +118,6 @@ namespace model
          m_pModelInstance = NULL;
       }
 
-      // -------------------------------------------------------------------
-      //	Returns a pointer to the model instance.
       objfile::Model *ObjParser::GetModel() const
       {
          return m_pModelInstance;
@@ -494,7 +492,7 @@ namespace model
             return;
 
          // Search for material
-         std::map<std::string, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strName);
+         std::map<std::string, objfile::ObjMaterial*>::iterator it = m_pModelInstance->m_materialMap.find(strName);
          if (it == m_pModelInstance->m_materialMap.end())
          {
             // Not found, use default material
@@ -587,7 +585,7 @@ namespace model
          while (m_dataIterator != m_dataIterator && IsSpaceOrNewLine(*m_dataIterator)) {
             ++m_dataIterator;
          }
-         std::map<std::string, objfile::Material*>::iterator it = m_pModelInstance->m_materialMap.find(strMat);
+         std::map<std::string, objfile::ObjMaterial*>::iterator it = m_pModelInstance->m_materialMap.find(strMat);
          if (it == m_pModelInstance->m_materialMap.end())
          {
             // Show a warning, if material was not found
@@ -729,7 +727,7 @@ namespace model
          if (m_pModelInstance->m_pCurrentMaterial)
          {
             m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex =
-               GetMaterialIndex(m_pModelInstance->m_pCurrentMaterial->MaterialName);
+               GetMaterialIndex(m_pModelInstance->m_pCurrentMaterial->m_materialName);
             m_pModelInstance->m_pCurrentMesh->m_pMaterial = m_pModelInstance->m_pCurrentMaterial;
          }
       }

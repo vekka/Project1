@@ -39,8 +39,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-
-#ifndef ASSIMP_BUILD_NO_OBJ_IMPORTER
+//#ifndef ASSIMP_BUILD_NO_OBJ_IMPORTER
 
 //#include "FileSys.h"
 #include "OBJFileImporter.hpp"
@@ -55,7 +54,7 @@ using mesh2::Face;
 using core::memory::ScopedPtr;
 
 #include "material.hpp"
-using material::Material;
+using material::SHADING_MODE_FLAT;
 using material::SHADING_MODE_NOSHADING;
 using material::SHADING_MODE_GOURAUD;
 using material::SHADING_MODE_PHONG;
@@ -74,30 +73,28 @@ using mesh2::PRIMITIVE_TYPE_TRIANGLE;
 
 #include "../core/fileio/filesys.hpp"
 using core::filesys::HasExtension;
-//using core::filesys::
-
-static const eImporterDesc desc = {
-   "Wavefront Object Importer",
-   "",
-   "",
-   "surfaces not supported",
-   IMPORTERFLAGS_SUPPORT_TEXT_FLAVOUR,
-   0,
-   0,
-   0,
-   0,
-   "obj"
-};
-
-static const uint32 ObjMinSize = 16;
 
 namespace objfileimporter
 {
-
    using namespace std;
 
+   static const eImporterDesc desc = {
+      "Wavefront Object Importer",
+      "",
+      "",
+      "surfaces not supported",
+      IMPORTERFLAGS_SUPPORT_TEXT_FLAVOUR,
+      0,
+      0,
+      0,
+      0,
+      "obj"
+   };
+
+   static const uint32 ObjMinSize = 16;
+
    ObjFileImporter::ObjFileImporter() :
-      m_pBuffer(),
+      m_pDataBuffer(),
       m_pRootObject(NULL),
       m_strAbsPath("")
    {
@@ -147,8 +144,8 @@ namespace objfileimporter
       }
 
       // Allocate buffer and read file into it
-      //TextFileToBuffer(file.Get(), m_pBuffer);
-      file->CopyToBuffer(m_pBuffer);
+      //TextFileToBuffer(file.Get(), m_pDataBuffer);
+      file->CopyToBuffer(m_pDataBuffer);
 
       // Get the model name
       std::string strModelName;
@@ -163,32 +160,31 @@ namespace objfileimporter
       }
 
       // process all '\'
-      std::vector<char> ::iterator iter = m_pBuffer.begin();
-      while (iter != m_pBuffer.end())
+      std::vector<char> ::iterator iter = m_pDataBuffer.begin();
+      while (iter != m_pDataBuffer.end())
       {
          if (*iter == '\\')
          {
             // remove '\'
-            iter = m_pBuffer.erase(iter);
+            iter = m_pDataBuffer.erase(iter);
             // remove next character
             while (*iter == '\r' || *iter == '\n')
-               iter = m_pBuffer.erase(iter);
+               iter = m_pDataBuffer.erase(iter);
          }
          else
             ++iter;
       }
 
       // parse the file into a temporary representation
-      ObjParser parser(m_pBuffer, strModelName, pFile);
+      ObjParser parser(m_pDataBuffer, strModelName, pFile);
 
       // And create the proper return structures out of it
       CreateDataFromImport(parser.GetModel(), pScene);
 
       // Clean up allocated storage for the next import 
-      m_pBuffer.clear();
+      m_pDataBuffer.clear();
    }
 
-   // ------------------------------------------------------------------------------------------------
    //	Create the data from parsed obj-file
    void ObjFileImporter::CreateDataFromImport(const objfile::Model* pModel, Scene* pScene) {
       if (0L == pModel) {
@@ -225,11 +221,9 @@ namespace objfileimporter
          }
       }
 
-      // Create all materials
-      CreateMaterials(pModel, pScene);
+      CreateMaterials(pModel, pScene); // Create all materials
    }
 
-   // ------------------------------------------------------------------------------------------------
    //	Creates all nodes of the model
    Node *ObjFileImporter::CreateNodes(const objfile::Model* pModel, const objfile::Object* pObject,
       Node *pParent, Scene* pScene,
@@ -288,8 +282,6 @@ namespace objfileimporter
       return pNode;
    }
 
-   // ------------------------------------------------------------------------------------------------
-   //	Create topology data
    Mesh *ObjFileImporter::CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
       uint32 meshIndex)
    {
@@ -373,20 +365,17 @@ namespace objfileimporter
       }
 
       // Create mesh vertices
-      CreateVertexArray(pModel, pData, meshIndex, pMesh, uiIdxCount);
+      CreateVertexArrayFromModel(pModel, pData, meshIndex, pMesh, uiIdxCount);
 
       return pMesh;
    }
 
-   // ------------------------------------------------------------------------------------------------
-   //	Creates a vertex array
-   void ObjFileImporter::CreateVertexArray(const objfile::Model* pModel,
+   void ObjFileImporter::CreateVertexArrayFromModel(const objfile::Model* pModel,
       const objfile::Object* pCurrentObject,
       uint32 uiMeshIndex,
       Mesh* pMesh,
       uint32 numIndices)
    {
-      // Checking preconditions
       assert(NULL != pCurrentObject);
 
       // Break, if no faces are stored in object
@@ -522,15 +511,13 @@ namespace objfileimporter
       }
    }
 
-   // this member is missing ....addTextureMappingModeProperty
-
-   //	 Add clamp mode property to material if necessary 
-   //void ObjFileImporter::addTextureMappingModeProperty(Material* mat, aiTextureType type, int32 clampMode)
-   //{
-   //   assert(NULL != mat);
-   //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_U(type, 0));
-   //   mat->AddProperty<int32>(&clampMode, 1, AI_MATKEY_MAPPINGMODE_V(type, 0));
-   //}
+   //	 Add m_clamp mode property to material if necessary 
+   void ObjFileImporter::AddTextureMappingModeProperty(material::Material* mat, material::eTextureType type, int32 clampMode)
+   {
+      assert(NULL != mat);
+      mat->AddProperty<int32>(&clampMode, 1, material::MATERIAL_KEYNAME_MAPPINGMODE_U_BASE, type, 0);
+      mat->AddProperty<int32>(&clampMode, 1, material::MATERIAL_KEYNAME_MAPPINGMODE_V_BASE, type, 0);
+   }
 
    //	Creates the material 
    void ObjFileImporter::CreateMaterials(const objfile::Model* pModel, Scene* pScene)
@@ -546,25 +533,25 @@ namespace objfileimporter
       //   return;
       //}
 
-      pScene->m_ppMaterials = new Material*[numMaterials];
+      pScene->m_ppMaterials = new material::Material*[numMaterials];
       for (uint32 matIndex = 0; matIndex < numMaterials; matIndex++)
       {
          // Store material name
-         std::map<std::string, objfile::Material*>::const_iterator it;
+         std::map<std::string, objfile::ObjMaterial*>::const_iterator it;
          it = pModel->m_materialMap.find(pModel->m_materialLib[matIndex]);
 
          // No material found, use the default material
          if (pModel->m_materialMap.end() == it)
             continue;
 
-         Material* mat = new Material;
-         Material *pCurrentMaterial = (*it).second;
-         // AddProperty can be found in Assimp file called material.inl(several versions, must be overloaded...)
-         mat->AddProperty(&pCurrentMaterial->mMaterialName, AI_MATKEY_NAME);
+         material::Material* mat = new material::Material;
+         objfile::ObjMaterial *pCurrentMaterial = (*it).second;
+
+         mat->AddProperty(pCurrentMaterial->m_materialName, material::MATERIAL_KEY_NAME);
 
          // convert illumination model
          int32 sm = 0;
-         switch (pCurrentMaterial->illuminationModel)
+         switch (pCurrentMaterial->m_illuminationModel)
          {
          case 0:
             sm = SHADING_MODE_NOSHADING;
@@ -580,108 +567,107 @@ namespace objfileimporter
          //   DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
          }
 
-         mat->AddProperty<int32>(&sm, 1, AI_MATKEY_SHADING_MODEL);
+         mat->AddProperty<int32>(&sm, 1, material::MATERIAL_KEY_SHADING_MODEL);
 
          // multiplying the specular exponent with 2 seems to yield better results
-         pCurrentMaterial->shineness *= 4.f;
+         pCurrentMaterial->m_shineness *= 4.f;
 
          // Adding material colors
-         mat->AddProperty(&pCurrentMaterial->ambient, 1, AI_MATKEY_COLOR_AMBIENT);
-         mat->AddProperty(&pCurrentMaterial->diffuse, 1, AI_MATKEY_COLOR_DIFFUSE);
-         mat->AddProperty(&pCurrentMaterial->specular, 1, AI_MATKEY_COLOR_SPECULAR);
-         mat->AddProperty(&pCurrentMaterial->emissive, 1, AI_MATKEY_COLOR_EMISSIVE);
-         mat->AddProperty(&pCurrentMaterial->shineness, 1, AI_MATKEY_SHININESS);
-         mat->AddProperty(&pCurrentMaterial->alpha, 1, AI_MATKEY_OPACITY);
+         mat->AddProperty(&pCurrentMaterial->m_ambientColor, 1, material::MATERIAL_KEY_COLOR_AMBIENT);
+         mat->AddProperty(&pCurrentMaterial->m_diffuseColor, 1, material::MATERIAL_KEY_COLOR_DIFFUSE);
+         mat->AddProperty(&pCurrentMaterial->m_specularColor, 1, material::MATERIAL_KEY_COLOR_SPECULAR);
+         mat->AddProperty(&pCurrentMaterial->m_emissiveColor, 1, material::MATERIAL_KEY_COLOR_EMISSIVE);
+         mat->AddProperty(&pCurrentMaterial->m_shineness, 1, material::MATERIAL_KEY_SHININESS);
+         mat->AddProperty(&pCurrentMaterial->m_alpha, 1, material::MATERIAL_KEY_OPACITY);
 
          // Adding refraction index
-         mat->AddProperty(&pCurrentMaterial->ior, 1, AI_MATKEY_REFRACTI);
+         mat->AddProperty(&pCurrentMaterial->m_indexOfRefraction, 1, material::MATERIAL_KEY_REFRACTI);
 
          // Adding textures
          if (0 != pCurrentMaterial->texture.length)
          {
-            mat->AddProperty(&pCurrentMaterial->texture, AI_MATKEY_TEXTURE_DIFFUSE(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureDiffuseType])
+            mat->AddProperty(pCurrentMaterial->texture, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DIFFUSE, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_DIFFUSE])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_DIFFUSE);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_DIFFUSE);
             }
          }
 
          if (0 != pCurrentMaterial->textureAmbient.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureAmbient, AI_MATKEY_TEXTURE_AMBIENT(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureAmbientType])
+            mat->AddProperty(pCurrentMaterial->textureAmbient, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_AMBIENT, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_AMBIENT])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_AMBIENT);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_AMBIENT);
             }
          }
 
          if (0 != pCurrentMaterial->textureEmissive.length)
-            mat->AddProperty(&pCurrentMaterial->textureEmissive, AI_MATKEY_TEXTURE_EMISSIVE(0));
+            mat->AddProperty(pCurrentMaterial->textureEmissive, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_EMISSIVE, 0);
 
          if (0 != pCurrentMaterial->textureSpecular.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureSpecular, AI_MATKEY_TEXTURE_SPECULAR(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureSpecularType])
+            mat->AddProperty(pCurrentMaterial->textureSpecular, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SPECULAR, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_SPECULAR])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_SPECULAR);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_SPECULAR);
             }
          }
 
          if (0 != pCurrentMaterial->textureBump.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureBump, AI_MATKEY_TEXTURE_HEIGHT(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureBumpType])
+            mat->AddProperty(pCurrentMaterial->textureBump, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_HEIGHTMAP, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_BUMP])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_HEIGHT);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_HEIGHTMAP);
             }
          }
 
          if (0 != pCurrentMaterial->textureNormal.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureNormal, AI_MATKEY_TEXTURE_NORMALS(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureNormalType])
+            mat->AddProperty(pCurrentMaterial->textureNormal, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_NORMALS, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_NORMALS])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_NORMALS);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_NORMALS);
             }
          }
 
          if (0 != pCurrentMaterial->textureDisp.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureDisp, AI_MATKEY_TEXTURE_DISPLACEMENT(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureDispType])
+            mat->AddProperty(pCurrentMaterial->textureDisp, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DISPLACEMENT, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_DISPLACEMENT])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_DISPLACEMENT);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_DISPLACEMENT);
             }
          }
 
          if (0 != pCurrentMaterial->textureOpacity.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureOpacity, AI_MATKEY_TEXTURE_OPACITY(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureOpacityType])
+            mat->AddProperty(pCurrentMaterial->textureOpacity, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_OPACITY, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_OPACITY])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_OPACITY);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_OPACITY);
             }
          }
 
          if (0 != pCurrentMaterial->textureSpecularity.length)
          {
-            mat->AddProperty(&pCurrentMaterial->textureSpecularity, AI_MATKEY_TEXTURE_SHININESS(0));
-            if (pCurrentMaterial->clamp[objfile::Material::TextureSpecularityType])
+            mat->AddProperty(pCurrentMaterial->textureSpecularity, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SHININESS, 0);
+            if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_SHININESS])
             {
-               addTextureMappingModeProperty(mat, aiTextureType_SHININESS);
+               AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_SHININESS);
             }
          }
 
          // Store material property info in material array in scene
-         pScene->mMaterials[pScene->mNumMaterials] = mat;
-         pScene->mNumMaterials++;
+         pScene->m_ppMaterials[pScene->m_numMaterials] = mat;
+         pScene->m_numMaterials++;
       }
 
       // Test number of created materials.
       assert(pScene->m_numMaterials == numMaterials);
    }
 
-   // ------------------------------------------------------------------------------------------------
    //	Appends this node to the parent node
    void ObjFileImporter::AppendChildToParentNode(Node *pParent, Node *pChild)
    {
@@ -714,8 +700,6 @@ namespace objfileimporter
       pParent->m_ppChildren[pParent->m_numChildren - 1] = pChild;
    }
 
-   // ------------------------------------------------------------------------------------------------
+}	// namespace objfileimporter
 
-}	// Namespace Assimp
-
-#endif // !! ASSIMP_BUILD_NO_OBJ_IMPORTER
+//#endif // !! ASSIMP_BUILD_NO_OBJ_IMPORTER

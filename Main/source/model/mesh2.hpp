@@ -57,20 +57,14 @@ using core::math::Matrix4f;
 #include "core/math/vector3.hpp"
 using core::math::Vector3f;
 
-#include "gfx/color.hpp"
-using gfx::color::Color4f;
+#include "gfx/color4f.hpp"
+using gfx::color4f::Color4f;
 
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-   // ---------------------------------------------------------------------------
    // Limits. These values are required to match the settings Assimp was 
    // compiled against. Therfore, do not redefine them unless you build the 
    // library from source using the same definitions.
-   // ---------------------------------------------------------------------------
 
    /** @def AI_MAX_FACE_INDICES
    *  Maximum number of indices per face (polygon). */
@@ -148,8 +142,6 @@ extern "C" {
          // Pointer to the indices array. Size of the array is given in numIndices.
          uint32* m_pIndexArray;
 
-#ifdef __cplusplus
-
          Face()
             : m_numIndices(0)
             , m_pIndexArray(NULL)
@@ -206,7 +198,6 @@ extern "C" {
          {
             return !(*this == o);
          }
-#endif // __cplusplus
       }; // struct Face
 
 
@@ -222,8 +213,6 @@ extern "C" {
          //! The influence from all bones at one vertex amounts to 1.
          float mWeight;
 
-#ifdef __cplusplus
-
          //! Default constructor
          VertexWeight() { }
 
@@ -234,8 +223,6 @@ extern "C" {
             : mVertexId(pID), mWeight(pWeight)
          { /* nothing to do here */
          }
-
-#endif // __cplusplus
       };
 
 
@@ -260,8 +247,6 @@ extern "C" {
 
          //! Matrix that transforms from mesh space to bone space in bind pose
          Matrix4f mOffsetMatrix;
-
-#ifdef __cplusplus
 
          //! Default constructor
          Bone()
@@ -288,7 +273,6 @@ extern "C" {
          {
             delete[] mWeights;
          }
-#endif // __cplusplus
       };
 
 
@@ -392,8 +376,6 @@ extern "C" {
          */
          uint32 m_numVertices;
 
-#ifdef __cplusplus
-
          AnimMesh()
             : m_pVertices(NULL)
             , m_pNormals(NULL)
@@ -456,8 +438,6 @@ extern "C" {
          bool HasTextureCoords(uint32 pIndex) const	{
             return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : m_pTextureCoords[pIndex] != NULL;
          }
-
-#endif
       };
 
 
@@ -622,9 +602,6 @@ extern "C" {
          *  mesh'es vertex components (usually positions, normals). */
          AnimMesh** m_ppAnimMeshes;
 
-
-#ifdef __cplusplus
-
          //! Default constructor. Initializes all members to 0
          Mesh()
             : m_primitiveTypes(0)
@@ -753,16 +730,9 @@ extern "C" {
          {
             return m_ppBones != NULL && m_numBones > 0;
          }
-
-#endif // __cplusplus
       };
-
-
-#ifdef __cplusplus
-   }
 
 } // namespace mesh2
 
-#endif //! extern "C"
-#endif // __AI_MESH_H_INC
+#endif
 

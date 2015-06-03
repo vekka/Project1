@@ -129,3 +129,5 @@ namespace gfx
    } // namespace color4f
 
 } // namespace gfx
+
+#endif

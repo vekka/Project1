@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ASSIMP_itoa10
 ASSIMP_stricmp
-ASSIMP_strincmp
+strncmp
 
 These functions are not consistently available on all platforms,
 or the provided implementations behave too differently.
@@ -61,7 +61,6 @@ or the provided implementations behave too differently.
 
 namespace assimp	{
 
-   // -------------------------------------------------------------------------------
    /** @brief itoa with a fixed base 10
    * 'itoa' is not consistently available on all platforms so it is quite useful
    * to have a small replacement function here. No need to use a full sprintf()
@@ -110,7 +109,6 @@ namespace assimp	{
       return written - 1;
    }
 
-   // -------------------------------------------------------------------------------
    /** @brief itoa with a fixed base 10 (Secure template overload)
    *  The compiler should choose this function if he or she is able to determine the
    *  size of the array automatically.
@@ -121,7 +119,6 @@ namespace assimp	{
       return ASSIMP_itoa10(out, length, number);
    }
 
-   // -------------------------------------------------------------------------------
    /** @brief Helper function to do platform independent string comparison.
    *
    *  This is required since stricmp() is not consistently available on
@@ -153,7 +150,6 @@ namespace assimp	{
 #endif
    }
 
-   // -------------------------------------------------------------------------------
    /** @brief Case independent comparison of two std::strings
    *
    *  @param a First  string
@@ -166,7 +162,6 @@ namespace assimp	{
       return (i ? i : ASSIMP_stricmp(a.c_str(), b.c_str()));
    }
 
-   // -------------------------------------------------------------------------------
    /** @brief Helper function to do platform independent string comparison.
    *
    *  This is required since strincmp() is not consistently available on
@@ -178,7 +173,7 @@ namespace assimp	{
    *  @param n Macimum number of characters to compare
    *  @return 0 if the given strings are identical
    */
-   inline int32 ASSIMP_strincmp(const char *s1, const char *s2, uint32 n)
+   inline int32 ASSIMP_strncmp(const char *s1, const char *s2, uint32 n)
    {
       assert(NULL != s1 && NULL != s2);
       if (!n)return 0;
@@ -205,9 +200,7 @@ namespace assimp	{
 #endif
    }
 
-
-   // -------------------------------------------------------------------------------
-   /** @brief Evaluates an integer power
+   /**
    *
    * todo: move somewhere where it fits better in than here
    */

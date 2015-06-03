@@ -236,21 +236,21 @@ namespace core
          ++c;
       }
 
-      if ((c[0] == 'N' || c[0] == 'n') && ASSIMP_strincmp(c, "nan", 3) == 0)
+      if ((c[0] == 'N' || c[0] == 'n') && strncmp(c, "nan", 3) == 0)
       {
          out = std::numeric_limits<Real>::quiet_NaN();
          c += 3;
          return c;
       }
 
-      if ((c[0] == 'I' || c[0] == 'i') && ASSIMP_strincmp(c, "inf", 3) == 0)
+      if ((c[0] == 'I' || c[0] == 'i') && strncmp(c, "inf", 3) == 0)
       {
          out = std::numeric_limits<Real>::infinity();
          if (inv) {
             out = -out;
          }
          c += 3;
-         if ((c[0] == 'I' || c[0] == 'i') && ASSIMP_strincmp(c, "inity", 5) == 0)
+         if ((c[0] == 'I' || c[0] == 'i') && strncmp(c, "inity", 5) == 0)
          {
             c += 5;
          }

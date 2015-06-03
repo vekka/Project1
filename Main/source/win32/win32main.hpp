@@ -3,6 +3,10 @@
 //#include "core/string/string.hpp"
 //using core::string::String_c;
 
+#include <string>
+
+#include "core/BasicTypes.hpp"
+
 namespace win32keyboard
 {
 

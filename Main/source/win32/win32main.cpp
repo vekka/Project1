@@ -2,6 +2,8 @@
 
 //using core::string::String_c;
 
+#include <assert.h>
+
 using win32window::Win32Window;
 
 bool Win32Window::Win32Keyboard::keys[256];
@@ -185,7 +187,7 @@ namespace win32window
 
    bool Win32Window::SetCaption(const std::string &caption)
    {
-      return (bool)(SetWindowTextA(hWnd, caption.CString()) != 0);
+      return (bool)(SetWindowTextA(hWnd, caption.c_str()) != 0);
    }
 
    bool Win32Window::GetResizeFlag() const
@@ -196,10 +198,10 @@ namespace win32window
    void Win32Window::GetCaption(std::string &caption) const
    {
       char buffer[512];
-      int32 strLen = GetWindowTextA(hWnd, buffer, 512);
+      /*int32 strLen = */GetWindowTextA(hWnd, buffer, 512);
 
-      if (strLen == 0)
-         caption = NULL;
+      //if (strLen == 0)
+      //   caption = NULL;
 
       caption = buffer;
    }
