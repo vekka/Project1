@@ -9,9 +9,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\MeshLib">
-      <UniqueIdentifier>{f78c79cf-fbc1-4b0d-b7e5-3a27670ae021}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{d0b36446-db07-4cef-9ecc-1a342a425052}</UniqueIdentifier>
     </Filter>
@@ -29,9 +26,6 @@
     </Filter>
     <Filter Include="Source Files\Core\Containers">
       <UniqueIdentifier>{d1732eb0-6bba-4b52-b6d7-7528dcdb4eb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\MeshLib\Loaders">
-      <UniqueIdentifier>{9786d15a-790e-49c4-a4b4-59fabc49bc6a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Win32">
       <UniqueIdentifier>{960fac17-55fb-4092-b918-81269788d05c}</UniqueIdentifier>
@@ -86,6 +80,12 @@
     </Filter>
     <Filter Include="Source Files\Core\Hash">
       <UniqueIdentifier>{c7942d85-1278-4d13-ab01-63916af4406a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{f78c79cf-fbc1-4b0d-b7e5-3a27670ae021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model\Loaders">
+      <UniqueIdentifier>{9786d15a-790e-49c4-a4b4-59fabc49bc6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +150,7 @@
       <Filter>Source Files\ShaderLib</Filter>
     </ClCompile>
     <ClCompile Include="source\model\OBJParser.cpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="source\direct3D\D3DDriver.cpp">
       <Filter>Source Files\Driver\Direct3D</Filter>
@@ -162,17 +162,17 @@
       <Filter>Source Files\Driver\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="source\model\OBJMTLImporter.cpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="test.cpp" />
     <ClCompile Include="source\model\OBJFileImporter.cpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="source\model\material.hpp">
-      <Filter>Source Files\MeshLib</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="source\model\materialSystem.cpp">
-      <Filter>Source Files\MeshLib</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClCompile>
     <ClCompile Include="source\gfx\color4f.cpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
@@ -180,13 +180,16 @@
     <ClCompile Include="source\gfx\color3f.cpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
     </ClCompile>
+    <ClCompile Include="source\model\importer.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
-      <Filter>Source Files\MeshLib</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="source\model\daeloader.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\core\math\vector4.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -318,16 +321,16 @@
       <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
     <ClInclude Include="source\model\mesh2.hpp">
-      <Filter>Source Files\MeshLib</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="source\model\OBJParser.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\model\OBJFile.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\model\OBJTools.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\core\fast_atof.hpp">
       <Filter>Source Files\Core</Filter>
@@ -339,19 +342,19 @@
       <Filter>Source Files\Core\Containers</Filter>
     </ClInclude>
     <ClInclude Include="source\model\OBJMTLImporter.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\opengl\ogldriver.hpp">
       <Filter>Source Files\Driver\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="source\model\OBJFileImporter.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\scene\scene.hpp">
       <Filter>Source Files\SceneLib</Filter>
     </ClInclude>
     <ClInclude Include="source\model\ImporterDesc.hpp">
-      <Filter>Source Files\MeshLib\Loaders</Filter>
+      <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="source\core\memory\scopedptr.hpp">
       <Filter>Source Files\Core\MemoryLib</Filter>
@@ -363,7 +366,7 @@
       <Filter>Source Files\Core\XMLLib</Filter>
     </ClInclude>
     <ClInclude Include="source\model\materialSystem.hpp">
-      <Filter>Source Files\MeshLib</Filter>
+      <Filter>Source Files\Model</Filter>
     </ClInclude>
     <ClInclude Include="source\core\macros.hpp">
       <Filter>Source Files\Core</Filter>
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="source\core\StringComparison.hpp">
       <Filter>Source Files\Core\StringLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\model\importer.hpp">
+      <Filter>Source Files\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

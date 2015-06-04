@@ -102,13 +102,13 @@ using gfx::color4f::Color4f;
 #endif // !! AI_MAX_NUMBER_OF_COLOR_SETS
 
    /** @def AI_MAX_NUMBER_OF_TEXTURECOORDS
-   *  Supported number of texture coord sets (UV(W) channels) per mesh */
+   *  Supported number of m_texture coord sets (UV(W) channels) per mesh */
 
 #ifndef AI_MAX_NUMBER_OF_TEXTURECOORDS
 #	define AI_MAX_NUMBER_OF_TEXTURECOORDS 0x8
 #endif // !! AI_MAX_NUMBER_OF_TEXTURECOORDS
 
-   // ---------------------------------------------------------------------------
+   --------
    /** @brief A single face in a mesh, referring to multiple vertices.
    *
    * If m_numIndices is 3, we call the face 'triangle', for m_numIndices > 3
@@ -142,35 +142,22 @@ using gfx::color4f::Color4f;
          // Pointer to the indices array. Size of the array is given in numIndices.
          uint32* m_pIndexArray;
 
-         Face()
-            : m_numIndices(0)
-            , m_pIndexArray(NULL)
-         {
-         }
+         Face() : m_numIndices(0), m_pIndexArray(NULL) { }
 
-         ~Face()
-         {
-            delete[] m_pIndexArray;
-         }
+         ~Face() { delete[] m_pIndexArray; }
 
-         //! Copy constructor. Copy the index array
-         Face(const Face& o)
-            : m_pIndexArray(NULL)
-         {
-            *this = o;
-         }
+         Face(const Face &other) : m_pIndexArray(NULL) { *this = other; }
 
-         //! Assignment operator. Copy the index array
-         Face& operator = (const Face& o)
+         Face& operator=(const Face &other)
          {
-            if (&o == this)
+            if (&other == this)
                return *this;
 
             delete[] m_pIndexArray;
-            m_numIndices = o.m_numIndices;
+            m_numIndices = other.m_numIndices;
             if (m_numIndices) {
                m_pIndexArray = new uint32[m_numIndices];
-               ::memcpy(m_pIndexArray, o.m_pIndexArray, m_numIndices * sizeof(uint32));
+               ::memcpy(m_pIndexArray, other.m_pIndexArray, m_numIndices * sizeof(uint32));
             }
             else {
                m_pIndexArray = NULL;
@@ -178,32 +165,27 @@ using gfx::color4f::Color4f;
             return *this;
          }
 
-         //! Comparison operator. Checks whether the index array 
-         //! of two faces is identical
-         bool operator== (const Face& o) const
+         bool operator== (const Face &other) const
          {
-            if (m_pIndexArray == o.m_pIndexArray)return true;
-            else if (m_pIndexArray && m_numIndices == o.m_numIndices)
+            if (m_pIndexArray == other.m_pIndexArray)return true;
+            else if (m_pIndexArray && m_numIndices == other.m_numIndices)
             {
                for (uint32 i = 0; i < this->m_numIndices; ++i)
-                  if (m_pIndexArray[i] != o.m_pIndexArray[i])return false;
+                  if (m_pIndexArray[i] != other.m_pIndexArray[i])
+                     return false;
                return true;
             }
             return false;
          }
 
-         //! Inverse comparison operator. Checks whether the index 
-         //! array of two faces is NOT identical
-         bool operator != (const Face& o) const
+         bool operator != (const Face &other) const
          {
-            return !(*this == o);
+            return !(*this == other);
          }
       }; // struct Face
 
 
-      // ---------------------------------------------------------------------------
-      /** @brief A single influence of a bone on a vertex.
-      */
+      // A single influence of a bone on a vertex.
       struct VertexWeight
       {
          //! Index of the vertex which is influenced by the bone.
@@ -226,7 +208,6 @@ using gfx::color4f::Color4f;
       };
 
 
-      // ---------------------------------------------------------------------------
       /** @brief A single bone of a mesh.
       *
       *  A bone has a name by which it can be found in the frame hierarchy and by
@@ -276,7 +257,7 @@ using gfx::color4f::Color4f;
       };
 
 
-      // ---------------------------------------------------------------------------
+      --------
       /** @brief Enumerates the types of geometric primitives supported by Assimp.
       *
       *  @see Face Face data structure
@@ -330,7 +311,7 @@ using gfx::color4f::Color4f;
 
 
 
-      // ---------------------------------------------------------------------------
+      --------
       /** @brief NOT CURRENTLY IN USE. An AnimMesh is an attachment to an #Mesh stores per-vertex
       *  animations for a particular frame.
       *
@@ -433,7 +414,7 @@ using gfx::color4f::Color4f;
          }
 
          /** Check whether the anim mesh overrides a particular
-         * set of texture coordinates on his host mesh.
+         * set of m_texture coordinates on his host mesh.
          *  @param pIndex 0<index<AI_MAX_NUMBER_OF_TEXTURECOORDS */
          bool HasTextureCoords(uint32 pIndex) const	{
             return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : m_pTextureCoords[pIndex] != NULL;
@@ -441,14 +422,14 @@ using gfx::color4f::Color4f;
       };
 
 
-      // ---------------------------------------------------------------------------
+      --------
       /** @brief A mesh represents a geometry or model with a single material.
       *
       * It usually consists of a number of vertices and a series of primitives/faces
       * referencing the vertices. In addition there might be a series of bones, each
       * of them addressing a number of vertices with a certain weight. Vertex data
       * is presented in channels with each channel containing a single per-vertex
-      * information such as a set of texture coords or a normal vector.
+      * information such as a set of m_texture coords or a normal vector.
       * If a data pointer is non-null, the corresponding data stream is present.
       * From C++-programs you can also use the comfort functions Has*() to
       * test for the presence of various data streams.
@@ -511,7 +492,7 @@ using gfx::color4f::Color4f;
 
          /** Vertex tangents.
          * The tangent of a vertex points in the direction of the positive
-         * X texture axis. The array contains normalized vectors, NULL if
+         * X m_texture axis. The array contains normalized vectors, NULL if
          * not present. The array is m_numVertices in size. A mesh consisting
          * of points and lines only may not have normal vectors. Meshes with
          * mixed primitive types (i.e. lines and triangles) may have
@@ -525,7 +506,7 @@ using gfx::color4f::Color4f;
 
          /** Vertex bitangents.
          * The bitangent of a vertex points in the direction of the positive
-         * Y texture axis. The array contains normalized vectors, NULL if not
+         * Y m_texture axis. The array contains normalized vectors, NULL if not
          * present. The array is m_numVertices in size.
          * @note If the mesh contains tangents, it automatically also contains
          * bitangents.
@@ -539,7 +520,7 @@ using gfx::color4f::Color4f;
          */
          Color4f* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
-         /** Vertex texture coords, also known as UV channels.
+         /** Vertex m_texture coords, also known as UV channels.
          * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
          * vertex. NULL if not present. The array is m_numVertices in size.
          */
@@ -699,8 +680,8 @@ using gfx::color4f::Color4f;
                return m_pColors[pIndex] != NULL && m_numVertices > 0;
          }
 
-         //! Check whether the mesh contains a texture coordinate set
-         //! \param pIndex Index of the texture coordinates set
+         //! Check whether the mesh contains a m_texture coordinate set
+         //! \param pIndex Index of the m_texture coordinates set
          bool HasTextureCoords(uint32 pIndex) const
          {
             if (pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS)

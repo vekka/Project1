@@ -16,7 +16,7 @@ namespace vertexformat
 //   componentType = vertexComponentType;
 //   this->dataType = dataType;
 //
-//   if (componentType == 'T') // 2d texture contains two half_floats,floats, double... etc.
+//   if (componentType == 'T') // 2d m_texture contains two half_floats,floats, double... etc.
 //      size = GetDataTypeSizeInBytes(dataType) * 2;
 //   else
 //      size = GetDataTypeSizeInBytes(dataType) * 3;

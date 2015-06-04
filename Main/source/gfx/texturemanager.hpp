@@ -5,7 +5,7 @@
 
 #include "pixelformat.hpp"
 
-namespace texture
+namespace m_texture
 {
 
 class TextureManager
@@ -14,6 +14,6 @@ class TextureManager
 
 };
 
-} // namespace texture
+} // namespace m_texture
 
 #endif

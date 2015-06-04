@@ -89,14 +89,14 @@ namespace core
       //   return new DefaultIOStream(file, (std::string) strFile);
       //}
 
-      //// ------------------------------------------------------------------------------------------------
+      //-----------------------------
       //// Closes the given file and releases all resources associated with it.
       //void FileSys::Close(IOStream* pFileName)
       //{
       //   delete pFileName;
       //}
 
-      // ------------------------------------------------------------------------------------------------
+
       // Returns the operation specific directory separator
 //      char FileSys::GetDirectorySeparator() const
 //      {
@@ -120,7 +120,6 @@ namespace core
 #	define PATHLIMIT 4096
 #endif
 
-      // ------------------------------------------------------------------------------------------------
       // Convert a relative path into an absolute path
       inline void MakeAbsolutePath(const char* in, char* _out)
       {
@@ -140,7 +139,6 @@ namespace core
          }
       }
 
-      // ------------------------------------------------------------------------------------------------
       // FileSys's more specialized implementation
       bool ComparePaths(const char* one, const char* second)
       {

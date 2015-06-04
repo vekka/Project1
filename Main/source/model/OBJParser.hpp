@@ -60,9 +60,12 @@ using core::math::Vector2f;
 using core::math::Point3f;
 using core::math::Vector3f;
 
-
 #include "core/fileio/file.hpp"
 using core::fileio::File;
+
+#include "mesh2.hpp"
+
+#include "OBJFile.hpp"
 
 namespace model
 {

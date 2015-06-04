@@ -46,7 +46,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _SCENE_HPP_INCLUDED_
 
 //#include "types.h"
-//#include "texture.h"
+//#include "m_texture.h"
+
 #include "../model/mesh2.hpp"
 using mesh2::Mesh;
 //#include "light.h"
@@ -54,6 +55,8 @@ using mesh2::Mesh;
 //#include "material.h"
 //#include "anim.h"
 //#include "metadata.h"
+
+#include "material.hpp"
 
 namespace scene
 {
@@ -67,8 +70,7 @@ namespace scene
    */
    struct Node
    {
-      /** The name of the node.
-      *
+      /*
       * The name might be empty (length of zero) but all nodes which
       * need to be referenced by either bones or animations are named.
       * Multiple nodes may have the same name, except for nodes which are referenced
@@ -112,7 +114,6 @@ namespace scene
       //aiMetadata* mMetaData;
 
       Node()
-         // set all members to zero by default
          : m_name("")
          , m_pParentNode(NULL)
          , m_numChildren(0)
@@ -124,7 +125,6 @@ namespace scene
       }
 
       Node(const std::string &name)
-         // set all members to zero by default
          : m_name(name)
          , m_pParentNode(NULL)
          , m_numChildren(0)
@@ -225,7 +225,7 @@ namespace scene
    /**
    * This flag is set by the validation postprocess-step (aiPostProcess_ValidateDS)
    * if the validation is successful but some issues have been found.
-   * This can for example mean that a texture that does not exist is referenced
+   * This can for example mean that a m_texture that does not exist is referenced
    * by a material or that the bone weights for a vertex don't sum to 1.0 ... .
    * In most cases you should still be able to use the import. This flag could
    * be useful for applications which don't capture Assimp's log output.
@@ -288,8 +288,7 @@ namespace scene
 
       uint32 m_numMaterials;
 
-      /** The array of materials.
-      *
+      /*
       * Use the index given in each Mesh structure to access this
       * array. The array is m_numMaterials in size. If the
       * AI_SCENE_FLAGS_INCOMPLETE flag is not set there will always

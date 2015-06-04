@@ -2,14 +2,14 @@
 // This file is part of the "Irrlicht Engine" and the "irrXML" project.
 // For conditions of distribution and use, see copyright notice in irrlicht.h and irrXML.h
 
-// ------------------------------------------------------------------------------------
+-----------------
 // Original description: (Schrompf)
 // Adapted to the ASSIMP library because the builtin atof indeed takes AGES to parse a
 // float inside a large string. Before parsing, it does a strlen on the given point.
 // Changes:
 //  22nd October 08 (Aramis_acg): Added temporary cast to double, added strtoul10_64
 //     to ensure long numbers are handled correctly
-// ------------------------------------------------------------------------------------
+-----------------
 
 
 #ifndef __FAST_A_TO_F_H_INCLUDED__
@@ -238,14 +238,14 @@ namespace core
 
       if ((c[0] == 'N' || c[0] == 'n') && strncmp(c, "nan", 3) == 0)
       {
-         out = std::numeric_limits<Real>::quiet_NaN();
+         out = std::numeric_limits<RealType>::quiet_NaN();
          c += 3;
          return c;
       }
 
       if ((c[0] == 'I' || c[0] == 'i') && strncmp(c, "inf", 3) == 0)
       {
-         out = std::numeric_limits<Real>::infinity();
+         out = std::numeric_limits<RealType>::infinity();
          if (inv) {
             out = -out;
          }
@@ -267,7 +267,7 @@ namespace core
 
       if (*c != '.' && (!check_comma || c[0] != ','))
       {
-         f = static_cast<Real>(strtoul10_64(c, &c));
+         f = static_cast<RealType>(strtoul10_64(c, &c));
       }
 
       if ((*c == '.' || (check_comma && c[0] == ',')) && c[1] >= '0' && c[1] <= '9')
@@ -286,7 +286,7 @@ namespace core
          double pl = static_cast<double>(strtoul10_64(c, &c, &diff));
 
          pl *= fast_atof_table[diff];
-         f += static_cast<Real>(pl);
+         f += static_cast<RealType>(pl);
       }
       // For backwards compatibility: eat trailing dots, but not trailing commas.
       else if (*c == '.') {
@@ -306,11 +306,11 @@ namespace core
          // The reason float constants are used here is that we've seen cases where compilers
          // would perform such casts on compile-time constants at runtime, which would be
          // bad considering how frequently fast_atoreal_move<float> is called in Assimp.
-         Real exp = static_cast<Real>(strtoul10_64(c, &c));
+         RealType exp = static_cast<RealType>(strtoul10_64(c, &c));
          if (einv) {
             exp = -exp;
          }
-         f *= std::pow(static_cast<Real>(10.0), exp);
+         f *= std::pow(static_cast<RealType>(10.0), exp);
       }
 
       if (inv) {

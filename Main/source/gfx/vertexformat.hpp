@@ -176,7 +176,7 @@ private:
       }
    }
 public:
-   // format description is composed of characters used for vertex formats: e.g "PNT" for position, normal, texture, respectively
+   // format description is composed of characters used for vertex formats: e.g "PNT" for position, normal, m_texture, respectively
    // this inits shared (static) vars only, and should be called only once
    static void Init(/*const char *formatDescriptor,*/ eDataType dataType = DATATYPE_FLOAT​​);
 

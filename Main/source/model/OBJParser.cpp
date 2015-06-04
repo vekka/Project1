@@ -61,6 +61,8 @@ using objfile::Model;
 #include "OBJMTLImporter.hpp"
 using model::objmtlimporter::ObjMtlImporter;
 
+//#include "material.hpp"
+
 using objtools::GetName;
 using objtools::IsEndOfBuffer;
 using objtools::CopyNextWord;
@@ -84,18 +86,17 @@ namespace model
 
       const std::string ObjParser::DEFAULT_MATERIAL_NAME = "default_material_name";
 
+      const size_t ObjParser::BUFFERSIZE;
+
       ObjParser::ObjParser(std::vector<char> &data, const std::string &strModelName, const File *file) :
-         //m_dataIterator(inData.begin()),
-         //m_dataIteratorEndOfBuffer(inData.end()),
+         m_dataIterator(data.begin()),
+         m_dataIteratorEndOfBuffer(data.end()),
          m_pModelInstance(NULL),
          m_currentLine(0)
       {
          assert(file->IsOpen());
 
          //file->CopyToBuffer(m_data);
-
-         m_dataIterator = data.begin();
-         m_dataIteratorEndOfBuffer = data.end();
 
          fill_n(m_buffer, BUFFERSIZE, 0);
 
@@ -132,7 +133,7 @@ namespace model
          {
             switch (*m_dataIterator)
             {
-            case 'v': // Parse a vertex texture coordinate
+            case 'v': // Parse a vertex m_texture coordinate
             {
                ++m_dataIterator;
                if (*m_dataIterator == ' ' || *m_dataIterator == '\t') {
@@ -140,7 +141,7 @@ namespace model
                   GetVector3(m_pModelInstance->m_pVertices);
                }
                else if (*m_dataIterator == 't') {
-                  // read in texture coordinate ( 2D or 3D )
+                  // read in m_texture coordinate ( 2D or 3D )
                   m_dataIterator++;
                   GetVector(m_pModelInstance->m_textureCoord);
                }
@@ -258,7 +259,7 @@ namespace model
       void ObjParser::GetVector(std::vector<Vector3f> &point3d_array) {
          size_t numComponents(0);
          const char* tmp(&m_dataIterator[0]);
-         while (!IsLineEnd(*tmp)) {
+         while (!core::IsLineEnd(*tmp)) {
             if (!SkipSpaces(&tmp)) {
                break;
             }
@@ -347,7 +348,7 @@ namespace model
          {
             iStep = 1;
 
-            if (IsLineEnd(*pPtr))
+            if (core::IsLineEnd(*pPtr))
                break;
 
             if (*pPtr == '/')
@@ -357,7 +358,7 @@ namespace model
                }
                if (iPos == 0)
                {
-                  //if there are no texture coordinates in the file, but normals
+                  //if there are no m_texture coordinates in the file, but normals
                   if (!vt && vn) {
                      iPos = 1;
                      iStep++;
@@ -434,7 +435,7 @@ namespace model
             return;
          }
 
-         objfile::Face *face = new objfile::Face(pIndices, pNormalID, pTexID, type);
+         objfile::ObjFace *face = new objfile::ObjFace(pIndices, pNormalID, pTexID, type);
 
          // Set active material, if one set
          if (NULL != m_pModelInstance->m_pCurrentMaterial)
@@ -472,9 +473,11 @@ namespace model
          // So, we create a new object only if the current on is already initialized !
          if (m_pModelInstance->m_pCurrent != NULL &&
             (m_pModelInstance->m_pCurrent->m_meshes.size() > 1 ||
-            (m_pModelInstance->m_pCurrent->m_meshes.size() == 1 && m_pModelInstance->m_meshes[m_pModelInstance->m_pCurrent->m_meshes[0]]->m_faces.size() != 0))
-            )
+            (m_pModelInstance->m_pCurrent->m_meshes.size() == 1 &&
+            m_pModelInstance->m_meshes[m_pModelInstance->m_pCurrent->m_meshes[0]]->m_faces.size() != 0)))
+         {
             m_pModelInstance->m_pCurrent = NULL;
+         }
 
          // Get next data for material data
          m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
@@ -540,7 +543,7 @@ namespace model
          }
 
          const char *pStart = &(*m_dataIterator);
-         while (m_dataIterator != m_dataIteratorEndOfBuffer && !IsLineEnd(*m_dataIterator)) {
+         while (m_dataIterator != m_dataIteratorEndOfBuffer && !core::IsLineEnd(*m_dataIterator)) {
             ++m_dataIterator;
          }
 
@@ -568,7 +571,7 @@ namespace model
 
          // Importing the material library
 
-         ObjMtlImporter mtlImporter(buffer, strMatName, m_pModelInstance);
+         ObjMtlImporter mtlImporter(buffer, m_pModelInstance);
       }
 
       //	Set a new material definition as the current material.

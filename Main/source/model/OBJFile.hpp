@@ -48,45 +48,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using mesh2::ePrimitiveType;
 using mesh2::PRIMITIVE_TYPE_POLYGON;
 
-//namespace model
-//{
-//   namespace objparser
-//   {
-//      class ObjParser;
-//   };
-//};
-
 namespace objfile
 {
- 
    struct Object;
-   struct Face;
+   struct ObjFace;
    struct ObjMaterial;
 
    // data structure for a simple obj-face, describes discredit,l.ation and materials
-   struct Face
+   struct ObjFace
    {
    //protected:
       //friend void model::objparser::ObjParser::GetFace(ePrimitiveType type);
       
       typedef std::vector<uint32> IndexList;
 
-      //!	Primitive type
       ePrimitiveType m_primitiveType;
 
       IndexList *m_pVertexIndices;
       IndexList *m_pNormalIndices;
       IndexList *m_pTexCoordIndices;
-      //!	Pointer to assigned material
-      ObjMaterial *m_pMaterial;
 
-      //!	\param	m_pVertices	Pointer to assigned vertex indexbuffer
-      //!	\param	m_pNormals	Pointer to assigned normals indexbuffer
-      //!	\param	m_pTexCoords	Pointer to assigned texture indexbuffer
+      ObjMaterial *m_pMaterial;
 
    //public:
 
-      Face(std::vector<uint32> *pVertices,
+      ObjFace(std::vector<uint32> *pVertices,
          std::vector<uint32> *pNormals,
          std::vector<uint32> *pTexCoords,
          ePrimitiveType pt = PRIMITIVE_TYPE_POLYGON) :
@@ -99,7 +85,7 @@ namespace objfile
          // empty
       }
      
-      ~Face()
+      ~ObjFace()
       {
          delete m_pVertexIndices;
          m_pVertexIndices = NULL;
@@ -121,21 +107,14 @@ namespace objfile
          GROUPTYPE
       };
 
-      //!	Object name
       std::string m_strObjName;
       //!	Transformation matrix, stored in OpenGL format
       Matrix4f m_Transformation;
       //!	All sub-objects referenced by this object
       std::vector<Object*> m_SubObjects;
-      ///	Assigned meshes
       std::vector<uint32> m_meshes;
 
-      //!	\brief	Default constructor
-      Object() :
-         m_strObjName("")
-      {
-         // empty
-      }
+      Object() : m_strObjName("") { }
 
       ~Object()
       {
@@ -153,16 +132,16 @@ namespace objfile
    {
       std::string m_materialName;
 
-      // texture names
-      std::string texture;
+      // m_texture names
+      std::string m_texture;
       std::string textureSpecular;
-      std::string textureAmbient;
-      std::string textureEmissive;
-      std::string textureBump;
-      std::string textureNormal;
-      std::string textureSpecularity;
-      std::string textureOpacity;
-      std::string textureDisp;
+      std::string m_textureAmbient;
+      std::string m_textureEmissive;
+      std::string m_textureBump;
+      std::string m_textureNormal;
+      std::string m_textureSpecularity;
+      std::string m_textureOpacity;
+      std::string m_textureDisplacement;
      
       enum eTextureType
       {
@@ -214,7 +193,7 @@ namespace objfile
       static const uint32 NoMaterial = ~0u;
 
       //	Array with pointer to all stored faces
-      std::vector<Face*> m_faces;
+      std::vector<ObjFace*> m_faces;
       //	Assigned material
       ObjMaterial *m_pMaterial;
       //	Number of stored indices.
@@ -237,7 +216,7 @@ namespace objfile
 
       ~Mesh()
       {
-         for (std::vector<Face*>::iterator it = m_faces.begin();
+         for (std::vector<ObjFace*>::iterator it = m_faces.begin();
             it != m_faces.end(); ++it)
          {
             delete *it;
@@ -275,7 +254,7 @@ namespace objfile
       std::vector<uint32> *m_pGroupFaceIDs;
       //	Active group
       std::string m_strActiveGroup;
-      //	Vector with generated texture coordinates
+      //	Vector with generated m_texture coordinates
       //std::vector<Vector2f> m_textureCoord2;
       std::vector<Vector3f> m_textureCoord;
 

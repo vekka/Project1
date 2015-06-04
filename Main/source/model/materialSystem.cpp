@@ -53,6 +53,54 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace material
 {
+   const char *DEFAULT_MATERIAL_NAME = "DefaultMaterial";
+
+   static const char *MATERIAL_KEY_NAME = "?mat.name";
+   static const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
+   static const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
+   static const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
+   static const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
+   static const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
+   static const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
+   static const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
+   static const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
+   static const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
+   static const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
+   static const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
+   static const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
+   static const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
+   static const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
+   static const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
+   static const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
+   static const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
+
+   // pure key names for all m_texture-related properties
+   static const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
+   static const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
+   static const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
+   static const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
+   static const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
+   static const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
+   static const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
+   static const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
+   static const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
+   static const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
+
+   // atually the one and only way to get an Material instance
+   Material::Material()
+   {
+      // Allocate 5 entries by default
+      m_NumProperties = 0;
+      m_NumAllocated = 5;
+      m_ppProperties = new MaterialProperty*[5];
+   }
+
+   Material::~Material()
+   {
+      Clear();
+
+      delete[] m_ppProperties;
+   }
 
    int32 GetMaterialProperty(const Material* pMat, const char* pKey, uint32 type, uint32 index, const MaterialProperty **pPropOut)
    {
@@ -68,7 +116,7 @@ namespace material
          MaterialProperty* prop = pMat->GetProperty(i);
 
          if (prop /* just for safety ... */
-            && 0 == strcmp(prop->m_key.data, pKey)
+            && 0 == strcmp(prop->m_key.data(), pKey)
             && (UINT_MAX == type || prop->m_textureSemantic == type) /* UINT_MAX is a wildcard, but this is undocumented :-) */
             && (UINT_MAX == index || prop->m_textureIndex == index))
          {
@@ -237,7 +285,6 @@ namespace material
       return  GetMaterialFloatArray(pMat, pKey, type, index, (float*)pOut, &iMax);
    }
 
-   // Get a string from the material
    int32 GetMaterialString(const Material* pMat, const char* pKey, uint32 type, uint32 index, std::string &pOut)
    {
       assert(!pOut.empty());
@@ -252,10 +299,12 @@ namespace material
          assert(prop->m_dataNumBytes >= 5);
 
          // The string is stored as 32 but length prefix followed by zero-terminated UTF8 data
-         pOut.length = static_cast<uint32>(*reinterpret_cast<uint32 *>(prop->m_data));
-
-         assert(pOut.length + 1 + 4 == prop->m_dataNumBytes && !prop->m_data[prop->m_dataNumBytes - 1]);
-         memcpy(pOut.data, prop->m_data + 4, pOut.length + 1);
+         //pOut.length = static_cast<uint32>(*reinterpret_cast<uint32 *>(prop->m_data));
+         pOut.resize(static_cast<uint32>(*reinterpret_cast<uint32 *>(prop->m_data)));
+      
+         assert(pOut.size() + 1 + 4 == prop->m_dataNumBytes && !prop->m_data[prop->m_dataNumBytes - 1]);
+         //memcpy(pOut.data, prop->m_data + 4, pOut.length + 1);
+         pOut = prop->m_data + 4;
       }
       else {
          // TODO - implement lexical cast as well
@@ -266,7 +315,7 @@ namespace material
       return 0;
    }
 
-   // get the number of textures on a particular texture stack
+   // get the number of textures on a particular m_texture stack
    uint32 GetMaterialTextureCount(const Material* pMat, material::eTextureType type)
    {
       assert(pMat != NULL);
@@ -277,7 +326,7 @@ namespace material
          MaterialProperty* prop = pMat->GetProperty(i);
 
          if (prop /* just a sanity check ... */
-            && 0 == strcmp(prop->m_key.data, material::MATERIAL_KEYNAME_TEXTURE_BASE)
+            && 0 == strcmp(prop->m_key.data(), material::MATERIAL_KEYNAME_TEXTURE_BASE)
             && prop->m_textureSemantic == type) {
 
             max = std::max(max, prop->m_textureIndex + 1);
@@ -300,7 +349,7 @@ namespace material
    {
       assert(NULL != mat && !path.empty());
 
-      // Get the path to the texture
+      // Get the path to the m_texture
       if (0 != GetMaterialString(mat, material::MATERIAL_KEYNAME_TEXTURE_BASE, type, index, path))	{
          return -1;
       }
@@ -318,36 +367,20 @@ namespace material
       if (blend)	{
          GetMaterialFloat(mat, material::MATERIAL_KEYNAME_TEXBLEND_BASE, type, index, blend);
       }
-      // Get texture operation 
+      // Get m_texture operation 
       if (op){
          GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXOP_BASE, type, index, (int32*)op);
       }
-      // Get texture mapping modes
+      // Get m_texture mapping modes
       if (mapmode)	{
          GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_U_BASE, type, index, (int32*)&mapmode[0]);
          GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_V_BASE, type, index, (int32*)&mapmode[1]);
       }
-      // Get texture flags
+      // Get m_texture flags
       if (flags){
          GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXFLAGS_BASE, type, index, (int32*)flags);
       }
       return 0;
-   }
-
-   // Construction. Actually the one and only way to get an Material instance
-   Material::Material()
-   {
-      // Allocate 5 entries by default
-      m_NumProperties = 0;
-      m_NumAllocated = 5;
-      m_ppProperties = new MaterialProperty*[5];
-   }
-
-   Material::~Material()
-   {
-      Clear();
-
-      delete[] m_ppProperties;
    }
 
    void Material::Clear()
@@ -369,7 +402,7 @@ namespace material
       for (uint32 i = 0; i < m_NumProperties; ++i) {
          MaterialProperty* prop = m_ppProperties[i];
 
-         if (prop && !strcmp(prop->m_key.data, pKey) &&
+         if (prop && !strcmp(prop->m_key.data(), pKey) &&
             prop->m_textureSemantic == type && prop->m_textureIndex == index)
          {
             // Delete this entry
@@ -387,13 +420,8 @@ namespace material
       return -1;
    }
 
-   int32 Material::AddBinaryProperty(const void* pInput,
-      uint32 pSizeInBytes,
-      const char* pKey,
-      uint32 type,
-      uint32 index,
-      ePropertyTypeInfo pType
-      )
+   int32 Material::AddBinaryProperty(const void* pInput, uint32 pSizeInBytes, const char* pKey,
+      uint32 type, uint32 index, ePropertyTypeInfo pType)
    {
       assert(pInput != NULL);
       assert(pKey != NULL);
@@ -401,10 +429,11 @@ namespace material
 
       // first search the list whether there is already an entry with this key
       uint32 iOutIndex = UINT_MAX;
-      for (uint32 i = 0; i < m_NumProperties; ++i)	{
+      for (uint32 i = 0; i < m_NumProperties; i++)
+      {
          MaterialProperty* prop = m_ppProperties[i];
 
-         if (prop /* just for safety */ && !strcmp(prop->m_key.data, pKey) &&
+         if (prop /* just for safety */ && !strcmp(prop->m_key.data(), pKey) &&
             prop->m_textureSemantic == type && prop->m_textureIndex == index){
 
             delete m_ppProperties[i];
@@ -424,9 +453,11 @@ namespace material
       pcNew->m_data = new char[pSizeInBytes];
       memcpy(pcNew->m_data, pInput, pSizeInBytes);
 
-      pcNew->m_key.length = ::strlen(pKey);
+      //pcNew->m_key.length = strlen(pKey);
+      //pcNew->m_key.resize(strlen(pKey));
       //assert(MAXLEN > pcNew->m_key.length); // MAXLEN = ?
-      strcpy(pcNew->m_key.data, pKey);
+      //strcpy(pcNew->m_key.data, pKey);
+      pcNew->m_key = pKey;
 
       if (UINT_MAX != iOutIndex)	{
          m_ppProperties[iOutIndex] = pcNew;
@@ -465,7 +496,8 @@ namespace material
       // ought to change aiString::mLength to uint32  one day.
       if (sizeof(size_t) == 8) {
          std::string copy = pInput;
-         uint32 * s = reinterpret_cast<uint32 *>(&copy.length);
+         uint32 length = copy.size();
+         uint32 * s = reinterpret_cast<uint32 *>(&length);
          s[1] = static_cast<uint32>(pInput.size());
 
          return AddBinaryProperty(s + 1,
@@ -492,9 +524,9 @@ namespace material
 
          // Exclude all properties whose first character is '?' from the hash
          // See doc for MaterialProperty.
-         if ((prop = mat->GetProperty(i)) && (includeMatName || prop->m_key.data[0] != '?'))	{
+         if ((prop = mat->GetProperty(i)) && (includeMatName || prop->m_key[0] != '?'))	{
 
-            hash = core::SuperFastHash(prop->m_key.data, (uint32)prop->m_key.length, hash);
+            hash = core::SuperFastHash(prop->m_key.data(), (uint32)prop->m_key.size(), hash);
             hash = core::SuperFastHash(prop->m_data, prop->m_dataNumBytes, hash);
 
             // Combine the semantic and the index with the hash

@@ -54,12 +54,9 @@ using objtools::CopyNextWord;
 using objtools::GetName;
 using objtools::IsEndOfBuffer;
 using objtools::tokenize;
-using core::IsLineEnd;
 
 //#include "ObjFileData.h"
 #include "../core/fast_atof.hpp"
-
-#include "../core/StringComparison.hpp"
 
 //#include "ParsingUtils.h"
 #include "material.hpp"
@@ -84,7 +81,7 @@ namespace model
     const std::string DisplacementTexture = "disp";
     const std::string SpecularityTexture  = "map_ns";
 
-    // texture option specific token
+    // m_texture option specific token
     const std::string BlendUOption		= "-blendu";
     const std::string BlendVOption		= "-blendv";
     const std::string BoostOption		= "-boost";
@@ -98,9 +95,7 @@ namespace model
     const std::string ChannelOption		= "-imfchan";
     const std::string TypeOption			= "-type";
 
-    ObjMtlImporter::ObjMtlImporter(const std::vector<char> &buffer,
-                                           const std::string & /*strAbsPath*/,
-                                           objfile::Model *pModel) :
+    ObjMtlImporter::ObjMtlImporter(const std::vector<char> &buffer, objfile::Model *pModel) :
         m_dataIterator( buffer.begin() ),
         m_dataIteratorEndOfBuffer( buffer.end() ),
         m_pModelInstance( pModel ),
@@ -116,15 +111,17 @@ namespace model
         Load();
     }
 
+    const size_t ObjMtlImporter::BUFFERSIZE;
+
     ObjMtlImporter::~ObjMtlImporter()
     {
     }
 
-    ObjMtlImporter::ObjMtlImporter(const ObjMtlImporter & /* rOther */ )
+    ObjMtlImporter::ObjMtlImporter(const ObjMtlImporter &other )
     {
     }
 
-    ObjMtlImporter &ObjMtlImporter::operator=( const ObjMtlImporter & /*rOther */ )
+    ObjMtlImporter &ObjMtlImporter::operator=( const ObjMtlImporter &other )
     {
         return *this;
     }
@@ -230,7 +227,7 @@ namespace model
         pColor->r = r;
 
         // we have to check if color is default 0 with only one token
-        if( !IsLineEnd( *m_dataIterator ) ) {
+        if( !core::IsLineEnd( *m_dataIterator ) ) {
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, g);
            m_dataIterator = GetFloat<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, b);
         }
@@ -254,7 +251,7 @@ namespace model
     void ObjMtlImporter::CreateMaterial()
     {
         std::string line( "" );
-        while( !IsLineEnd( *m_dataIterator ) ) {
+        while( !core::IsLineEnd( *m_dataIterator ) ) {
             line += *m_dataIterator;
             ++m_dataIterator;
         }
@@ -266,7 +263,7 @@ namespace model
         const uint32 numToken = tokenize<std::string>(line, token, " "); //tokenize<std::string>line.Tokenize(token);
         std::string name( "" );
         if ( numToken == 1 ) {
-            name = objparser::ObjParser::DEFAULT_MATERIAL_NAME;
+            name = material::DEFAULT_MATERIAL_NAME;
         } else {
             name = token[1];
         }
@@ -291,53 +288,53 @@ namespace model
 
         const char *pPtr( &(*m_dataIterator) );
         if ( !strncmp( pPtr, DiffuseTexture.c_str(), DiffuseTexture.size() ) ) {
-            // Diffuse texture
-            out = & m_pModelInstance->m_pCurrentMaterial->texture;
+            // Diffuse m_texture
+            out = & m_pModelInstance->m_pCurrentMaterial->m_texture;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_DIFFUSE;
         }
         else if (!strncmp(pPtr, AmbientTexture.c_str(), AmbientTexture.size())) {
-            // Ambient texture
-            out = & m_pModelInstance->m_pCurrentMaterial->textureAmbient;
+            // Ambient m_texture
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureAmbient;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_AMBIENT;
         }
         else if (!strncmp(pPtr, SpecularTexture.c_str(), SpecularTexture.size())) {
-            // Specular texture
+            // Specular m_texture
             out = & m_pModelInstance->m_pCurrentMaterial->textureSpecular;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_SPECULAR;
         }
         else if (!strncmp(pPtr, OpacityTexture.c_str(), OpacityTexture.size())) {
-            // Opacity texture
-            out = & m_pModelInstance->m_pCurrentMaterial->textureOpacity;
+            // Opacity m_texture
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureOpacity;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_OPACITY;
         }
         else if (!strncmp(pPtr, EmmissiveTexture.c_str(), EmmissiveTexture.size())) {
-            // Emissive texture
-            out = & m_pModelInstance->m_pCurrentMaterial->textureEmissive;
+            // Emissive m_texture
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureEmissive;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_EMISSIVE;
         }
         else if (!strncmp(pPtr, BumpTexture1.c_str(), BumpTexture1.size()) ||
            !strncmp(pPtr, BumpTexture2.c_str(), BumpTexture2.size()) ||
            !strncmp(pPtr, BumpTexture3.c_str(), BumpTexture3.size())) {
-            // Bump texture
-            out = & m_pModelInstance->m_pCurrentMaterial->textureBump;
+            // Bump m_texture
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureBump;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_BUMP;
         }
         else if (!strncmp(pPtr, NormalTexture.c_str(), NormalTexture.size())) {
             // Normal map
-            out = & m_pModelInstance->m_pCurrentMaterial->textureNormal;
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureNormal;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_NORMALS;
         }
         else if (!strncmp(pPtr, DisplacementTexture.c_str(), DisplacementTexture.size())) {
-            // Displacement texture
-            out = &m_pModelInstance->m_pCurrentMaterial->textureDisp;
+            // Displacement m_texture
+            out = &m_pModelInstance->m_pCurrentMaterial->m_textureDisplacement;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_DISPLACEMENT;
         }
         else if (!strncmp(pPtr, SpecularityTexture.c_str(), SpecularityTexture.size())) {
             // Specularity scaling (glossiness)
-            out = & m_pModelInstance->m_pCurrentMaterial->textureSpecularity;
+            out = & m_pModelInstance->m_pCurrentMaterial->m_textureSpecularity;
             clampIndex = objfile::ObjMaterial::TEXTURE_TYPE_SHININESS;
         } else {
-            //DefaultLogger::get()->error("OBJ/MTL: Encountered unknown texture type");
+            //DefaultLogger::get()->error("OBJ/MTL: Encountered unknown m_texture type");
             return;
         }
 
@@ -353,7 +350,7 @@ namespace model
     /* Texture Option
      * /////////////////////////////////////////////////////////////////////////////
      * According to http://en.wikipedia.org/wiki/Wavefront_.obj_file#Texture_options
-     * Texture map statement can contains various texture option, for example:
+     * Texture map statement can contains various m_texture option, for example:
      *
      *	map_Ka -o 1 1 1 some.png
      *	map_Kd -clamp on some.png
@@ -367,7 +364,7 @@ namespace model
     {
         m_dataIterator = GetNextToken<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer);
 
-        //If there is any more texture option
+        //If there is any more m_texture option
         while (!IsEndOfBuffer(m_dataIterator, m_dataIteratorEndOfBuffer) && *m_dataIterator == '-')
         {
             const char *pPtr( &(*m_dataIterator) );

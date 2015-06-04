@@ -301,7 +301,7 @@
       <FileName>source\gfx\color.hpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="texture::TextureManager" Collapsed="true">
+  <Class Name="m_texture::TextureManager" Collapsed="true">
     <Position X="33.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -441,7 +441,7 @@
       <FileName>source\model\md5model.hpp</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="mesh2::Face" Collapsed="true">
+  <Struct Name="mesh2::ObjFace" Collapsed="true">
     <Position X="38.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAABIAAAABQAAAAAABAAAAAAgAAAAAAA=</HashCode>
@@ -483,7 +483,7 @@
       <FileName>source\model\OBJFile.hpp</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="objfile::Face" Collapsed="true">
+  <Struct Name="objfile::ObjFace" Collapsed="true">
     <Position X="36.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAGAAQAAABAAAEAAABAAAAAAAAAACAAA=</HashCode>

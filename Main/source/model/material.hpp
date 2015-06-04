@@ -68,9 +68,9 @@ namespace material
    //int32 GetMaterialFloatArray(const Material* pMat, const char *pKey, uint32 type, uint32 index, float* pOut, uint32* pMax);
 
    // Name for default materials (2nd is used if meshes have UV coords)
-   const char *DEFAULT_MATERIAL_NAME = "DefaultMaterial";
+   extern const char *DEFAULT_MATERIAL_NAME;
 
-   // Defines how the Nth texture of a specific type is combined with
+   // Defines how the Nth m_texture of a specific type is combined with
    //  the result of all previous layers.
    //
    //  Example (left: key, right: value): <br>
@@ -103,13 +103,13 @@ namespace material
 
    enum eTextureMapMode
    {
-      TEXTURE_MAPMODE_WRAP, // A texture coordinate u|v is translated to u%1|v%1
+      TEXTURE_MAPMODE_WRAP, // A m_texture coordinate u|v is translated to u%1|v%1
       TEXTURE_MAPMODE_CLAMP, // Texture coordinates outside [0...1] are clamped to the nearest valid value.
-      TEXTURE_MAPMODE_DECAL, // If the texture pixel coords are outside [0...1] the texture is not applied to that pixel
-      TEXTURE_MAPMODE_MIRROR // A texture coord u|v becomes u%1|v%1 if (u-(u%1))%2 is 0 and 1-(u%1)|1-(v%1) otherwise
+      TEXTURE_MAPMODE_DECAL, // If the m_texture pixel coords are outside [0...1] the m_texture is not applied to that pixel
+      TEXTURE_MAPMODE_MIRROR // A m_texture coord u|v becomes u%1|v%1 if (u-(u%1))%2 is 0 and 1-(u%1)|1-(v%1) otherwise
    };
 
-   /** @brief Defines how the mapping coords for a texture are generated.
+   /** @brief Defines how the mapping coords for a m_texture are generated.
    *
    *  Real-time applications typically require full UV coordinates, so the use of
    *  the aiProcess_GenUVCoords step is highly recommended. It generates proper
@@ -122,7 +122,7 @@ namespace material
       // The mapping coordinates are taken from an UV channel.
       //
       //  The #AI_MATKEY_UVWSRC key specifies from which UV channel
-      //  the texture coordinates are to be taken from (remember,
+      //  the m_texture coordinates are to be taken from (remember,
       //  meshes can have more than one UV channel).
 
       TEXTURE_MAP_UV,
@@ -133,14 +133,14 @@ namespace material
       TEXTURE_MAP_OTHER // Undefined mapping. Have fun.
    };
 
-   /** Defines the purpose of a texture
+   /** Defines the purpose of a m_texture
    *
    *  This is a very difficult topic. Different 3D packages support different
-   *  kinds of textures. For very common texture types, such as bumpmaps, the
+   *  kinds of textures. For very common m_texture types, such as bumpmaps, the
    *  rendering results depend on implementation details in the rendering
-   *  pipelines of these applications. Assimp loads all texture references from
-   *  the model file and tries to determine which of the predefined texture
-   *  types below is the best choice to match the original use of the texture
+   *  pipelines of these applications. Assimp loads all m_texture references from
+   *  the model file and tries to determine which of the predefined m_texture
+   *  types below is the best choice to match the original use of the m_texture
    *  as closely as possible.<br>
    *
    *  In content pipelines you'll usually define how textures have to be handled,
@@ -151,33 +151,33 @@ namespace material
    {
       /** Dummy value.
       *
-      *  No texture, but the value to be used as 'texture semantic'
+      *  No m_texture, but the value to be used as 'm_texture semantic'
       *  (#MaterialProperty::m_textureSemantic) for all material properties
       *  *not* related to textures.
       */
       TEXTURE_TYPE_NONE,
-      TEXTURE_TYPE_DIFFUSE, // texture is combined with the result of the diffuse lighting equation
-      TEXTURE_TYPE_SPECULAR, // texture is combined with the result of the specular lighting equation
-      TEXTURE_TYPE_AMBIENT, // texture is combined with the result of the ambient lighting equation
-      TEXTURE_TYPE_EMISSIVE, // texture is added to the result of the lighting calculation. no influence by incoming light
-      TEXTURE_TYPE_HEIGHTMAP, // texture is a height map. higher gray-scale values stand for higher elevations from the base height
-      TEXTURE_TYPE_NORMALS, // texture is a (tangent space) normal-map. intentionally no dinstinction between the different conventions
-      TEXTURE_TYPE_SHININESS, // texture defines the glossiness of the material. exp of (phong) lighting equation
-      TEXTURE_TYPE_OPACITY, // texture defines per-pixel opacity. Usually 'white' means opaque and 'black' means 'transparency'
+      TEXTURE_TYPE_DIFFUSE, // m_texture is combined with the result of the diffuse lighting equation
+      TEXTURE_TYPE_SPECULAR, // m_texture is combined with the result of the specular lighting equation
+      TEXTURE_TYPE_AMBIENT, // m_texture is combined with the result of the ambient lighting equation
+      TEXTURE_TYPE_EMISSIVE, // m_texture is added to the result of the lighting calculation. no influence by incoming light
+      TEXTURE_TYPE_HEIGHTMAP, // m_texture is a height map. higher gray-scale values stand for higher elevations from the base height
+      TEXTURE_TYPE_NORMALS, // m_texture is a (tangent space) normal-map. intentionally no dinstinction between the different conventions
+      TEXTURE_TYPE_SHININESS, // m_texture defines the glossiness of the material. exp of (phong) lighting equation
+      TEXTURE_TYPE_OPACITY, // m_texture defines per-pixel opacity. Usually 'white' means opaque and 'black' means 'transparency'
       TEXTURE_TYPE_DISPLACEMENT, // purpose and format is application-dependent. higher col values = higher vert displacements
 
       /*
       *  Both 'Lightmaps' and dedicated 'ambient occlusion maps' are
-      *  covered by this material property. The texture contains a
+      *  covered by this material property. The m_texture contains a
       *  scaling value for the final color value of a pixel. Its
       *  intensity is not affected by incoming light.
       */
       TEXTURE_TYPE_LIGHTMAP, // aka Ambient Occlusion
       TEXTURE_TYPE_REFLECTION, // contains the color of a perfect mirror reflection. rarely used, almost never for real-time applications.
 
-      /** Unknown texture
+      /** Unknown m_texture
       *
-      *  A texture reference that does not match any of the definitions
+      *  A m_texture reference that does not match any of the definitions
       *  above is considered to be 'unknown'. It is still imported,
       *  but is excluded from any further postprocessing.
       */
@@ -210,7 +210,7 @@ namespace material
       SHADING_MODE_FRESNEL
    };
 
-   /* Defines some mixed flags for a particular texture.
+   /* Defines some mixed flags for a particular m_texture.
    *
    *  Usually you'll instruct your cg artists how textures have to look like ...
    *  and how they will be processed in your application. However, if you use
@@ -222,21 +222,21 @@ namespace material
    */
    enum eTextureFlags
    {
-      TEXTURE_FLAGS_INVERT = 1, // the texture's color values have to be inverted (componentwise 1-n)
+      TEXTURE_FLAGS_INVERT = 1, // the m_texture's color values have to be inverted (componentwise 1-n)
 
       /* Explicit request to the application to process the alpha channel
-      *  of the texture.
+      *  of the m_texture.
       *
       *  Mutually exclusive with #aiTextureFlags_IgnoreAlpha. These
       *  flags are set if the library can say for sure that the alpha
       *  channel is used/is not used. If the model format does not
       *  define this, it is left to the application to decide whether
-      *  the texture alpha channel - if any - is evaluated or not.
+      *  the m_texture alpha channel - if any - is evaluated or not.
       */
       TEXTURE_FLAGS_USEALPHA = 2,
 
       /** Explicit request to the application to ignore the alpha channel
-      *  of the texture.
+      *  of the m_texture.
       *
       *  Mutually exclusive with #aiTextureFlags_UseAlpha.
       */
@@ -340,8 +340,8 @@ namespace material
    struct MaterialProperty
    {
       std::string m_key; // name of the property (key), generally case insensitive
-      uint32 m_textureSemantic; // exact usage semantic of a texture, for non-texture properties, this is always 0
-      uint32 m_textureIndex;  // for non-texture properties, this member is always 0
+      uint32 m_textureSemantic; // exact usage semantic of a m_texture, for non-m_texture properties, this is always 0
+      uint32 m_textureIndex;  // for non-m_texture properties, this member is always 0
       uint32 m_dataNumBytes; // this value may not be 0
 
       /* Defines the data layout inside the data buffer. This is used
@@ -371,6 +371,22 @@ namespace material
          delete[] m_data;
       }
    };
+
+
+   class Material;
+
+   int32 GetMaterialTexture(const Material* mat,
+      eTextureType type,
+      uint32  index,
+      std::string &path,
+      eTextureMapping* mapping = NULL,
+      uint32* uvindex = NULL,
+      float* blend = NULL,
+      eTextureOperation* op = NULL,
+      eTextureMapMode* mapmode = NULL,
+      uint32* flags = NULL);
+
+   uint32 GetMaterialTextureCount(const Material* pMat, eTextureType type);
 
 /* Data structure for a material
 *
@@ -420,9 +436,9 @@ namespace material
       /* Retrieve a Type value with a specific key from the material
       *
       * @param pKey Key to search for. One of the MATERIAL_KEYNAME_XXX constants.
-      * @param type Specifies the type of the texture to be retrieved (
+      * @param type Specifies the type of the m_texture to be retrieved (
       *    e.g. diffuse, specular, height map ...)
-      * @param idx Index of the texture to be retrieved.
+      * @param idx Index of the m_texture to be retrieved.
       * @param pOut Reference to receive the output value
       */
       template <typename Type>
@@ -434,17 +450,17 @@ namespace material
       int32 Get(const char* pKey, uint32 type, uint32 textureIdx, Color4f &pOut) const;
       int32 Get(const char* pKey, uint32 type, uint32 textureIdx, UVTransform &pOut) const;
 
-      /** Get the number of textures for a particular texture type.
+      /** Get the number of textures for a particular m_texture type.
       *  @param type Texture type to check for
       *  @return Number of textures for this type.
-      *  @note A texture can be easily queried using #GetTexture() */
+      *  @note A m_texture can be easily queried using #GetTexture() */
       uint32 GetTextureCount(eTextureType type) const
       {
          return GetMaterialTextureCount(this, type);
       }
 
       /** Helper function to get all parameters pertaining to a
-      *  particular texture slot from a material.
+      *  particular m_texture slot from a material.
       *
       *  This function is provided just for convenience, you could also
       *  read the single material properties manually.
@@ -455,7 +471,7 @@ namespace material
          eTextureMapping *out_Mapping = NULL,
          uint32 *out_UVIndex = NULL,
          float *out_Blend = NULL,
-         eTextureOperation *out_Operation = NULL, // operation to be performed between this and the previous texture.
+         eTextureOperation *out_Operation = NULL, // operation to be performed between this and the previous m_texture.
          eTextureMapMode *out_MapMode = NULL) const // if valid pre, it MUST point to an array of 3 (UVW) TEXTUREMAP_MODE
       {
          return GetMaterialTexture(this, type, textureIndex, out_Path, out_Mapping, out_UVIndex, out_Blend, out_Operation, out_MapMode);
@@ -515,6 +531,7 @@ namespace material
       static void CopyPropertyList(Material* pcDest, const Material* pcSrc);
    };
 
+
 //#define AI_MATKEY_NAME "?mat.name",0,0
 //#define AI_MATKEY_TWOSIDED "$mat.twosided",0,0
 //#define AI_MATKEY_SHADING_MODEL "$mat.shadingm",0,0
@@ -534,44 +551,44 @@ namespace material
 //#define AI_MATKEY_COLOR_REFLECTIVE "$clr.reflective",0,0
 //#define AI_MATKEY_GLOBAL_BACKGROUND_IMAGE "?bg.global",0,0
 
-   const char *MATERIAL_KEY_NAME = "?mat.name";
-   const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
-   const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
-   const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
-   const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
-   const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
-   const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
-   const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
-   const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
-   const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
-   const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
-   const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
-   const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
-   const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
-   const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
-   const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
-   const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
-   const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
+   extern const char *MATERIAL_KEY_NAME;
+   extern const char *MATERIAL_KEY_TWOSIDED;
+   extern const char *MATERIAL_KEY_SHADING_MODEL;
+   extern const char *MATERIAL_KEY_ENABLE_WIREFRAME;
+   extern const char *MATERIAL_KEY_BLEND_FUNC;
+   extern const char *MATERIAL_KEY_OPACITY;
+   extern const char *MATERIAL_KEY_BUMPSCALING;
+   extern const char *MATERIAL_KEY_SHININESS;
+   extern const char *MATERIAL_KEY_REFLECTIVITY;
+   extern const char *MATERIAL_KEY_SHININESS_STRENGTH;
+   extern const char *MATERIAL_KEY_REFRACTI;
+   extern const char *MATERIAL_KEY_COLOR_DIFFUSE;
+   extern const char *MATERIAL_KEY_COLOR_AMBIENT;
+   extern const char *MATERIAL_KEY_COLOR_SPECULAR;
+   extern const char *MATERIAL_KEY_COLOR_EMISSIVE;
+   extern const char *MATERIAL_KEY_COLOR_TRANSPARENT;
+   extern const char *MATERIAL_KEY_COLOR_REFLECTIVE;
+   extern const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE;
 
-   // pure key names for all texture-related properties
-   const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
-   const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
-   const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
-   const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
-   const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
-   const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
-   const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
-   const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
-   const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
-   const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
+   // pure key names for all m_texture-related properties
+   extern const char *MATERIAL_KEYNAME_TEXTURE_BASE;
+   extern const char *MATERIAL_KEYNAME_UVWSRC_BASE;
+   extern const char *MATERIAL_KEYNAME_TEXOP_BASE;
+   extern const char *MATERIAL_KEYNAME_MAPPING_BASE;
+   extern const char *MATERIAL_KEYNAME_TEXBLEND_BASE;
+   extern const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE;
+   extern const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE;
+   extern const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE;
+   extern const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE;
+   extern const char *MATERIAL_KEYNAME_TEXFLAGS_BASE;
 
    /** @brief Retrieve a material property with a specific key from the material
    *
    * @param pMat Pointer to the input material. May not be NULL
    * @param pKey Key to search for. One of the AI_MATKEY_XXX constants.
-   * @param type Specifies the type of the texture to be retrieved (
+   * @param type Specifies the type of the m_texture to be retrieved (
    *    e.g. diffuse, specular, height map ...)
-   * @param index Index of the texture to be retrieved.
+   * @param index Index of the m_texture to be retrieved.
    * @param pPropOut Pointer to receive a pointer to a valid MaterialProperty
    *        structure or NULL if the key has not been found. */
 
@@ -581,7 +598,7 @@ namespace material
    *  from the material
    *
    * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
-   * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse texture)
+   * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse m_texture)
    * @code
    * UVTransform trafo;
    * uint32 max = sizeof(UVTransform);
@@ -607,7 +624,7 @@ namespace material
    /** @brief Retrieve a single float property with a specific key from the material.
    *
    * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
-   * example reads the #AI_MATKEY_SHININESS_STRENGTH property of the first diffuse texture)
+   * example reads the #AI_MATKEY_SHININESS_STRENGTH property of the first diffuse m_texture)
    * @code
    * float specStrength = 1.f; // default value, remains unmodified if we fail.
    * aiGetMaterialFloat(mat, AI_MATKEY_SHININESS_STRENGTH,
@@ -677,58 +694,44 @@ namespace material
       uint32 index,
       std::string &pOut);
 
-   /** Get the number of textures for a particular texture type.
+   /** Get the number of textures for a particular m_texture type.
    *  @param[in] pMat Pointer to the input material. May not be NULL
    *  @param type Texture type to check for
    *  @return Number of textures for this type.
-   *  @note A texture can be easily queried using #aiGetMaterialTexture() */
-
-   uint32 GetMaterialTextureCount(const Material* pMat, eTextureType type);
+   *  @note A m_texture can be easily queried using #aiGetMaterialTexture() */
 
    /** @brief Helper function to get all values pertaining to a particular
-   *  texture slot from a material structure.
+   *  m_texture slot from a material structure.
    *
    *  This function is provided just for convenience. You could also read the
-   *  texture by parsing all of its properties manually. This function bundles
+   *  m_texture by parsing all of its properties manually. This function bundles
    *  all of them in a huge function monster.
    *
    *  @param[in] mat Pointer to the input material. May not be NULL
-   *  @param[in] type Specifies the texture stack to read from (e.g. diffuse,
+   *  @param[in] type Specifies the m_texture stack to read from (e.g. diffuse,
    *     specular, height map ...).
-   *  @param[in] index Index of the texture. The function fails if the
-   *     requested index is not available for this texture type.
+   *  @param[in] index Index of the m_texture. The function fails if the
+   *     requested index is not available for this m_texture type.
    *     #aiGetMaterialTextureCount() can be used to determine the number of
-   *     textures in a particular texture stack.
+   *     textures in a particular m_texture stack.
    *  @param[out] path Receives the output path
    *      This parameter must be non-null.
-   *  @param mapping The texture mapping mode to be used.
+   *  @param mapping The m_texture mapping mode to be used.
    *      Pass NULL if you're not interested in this information.
    *  @param[out] uvindex For UV-mapped textures: receives the index of the UV
    *      source channel. Unmodified otherwise.
    *      Pass NULL if you're not interested in this information.
-   *  @param[out] blend Receives the blend factor for the texture
+   *  @param[out] blend Receives the blend factor for the m_texture
    *      Pass NULL if you're not interested in this information.
-   *  @param[out] op Receives the texture blend operation to be perform between
-   *		this texture and the previous texture.
+   *  @param[out] op Receives the m_texture blend operation to be perform between
+   *		this m_texture and the previous m_texture.
    *      Pass NULL if you're not interested in this information.
-   *  @param[out] mapmode Receives the mapping modes to be used for the texture.
+   *  @param[out] mapmode Receives the mapping modes to be used for the m_texture.
    *      Pass NULL if you're not interested in this information. Otherwise,
    *      pass a pointer to an array of two aiTextureMapMode's (one for each
    *      axis, UV order).
-   *  @param[out] flags Receives the the texture flags.
+   *  @param[out] flags Receives the the m_texture flags.
    *  @return 0 on success, otherwise something else. Have fun.*/
-
-   int32 GetMaterialTexture(const Material* mat,
-      eTextureType type,
-      uint32  index,
-      std::string &path,
-      eTextureMapping* mapping = NULL,
-      uint32* uvindex = NULL,
-      float* blend = NULL,
-      eTextureOperation* op = NULL,
-      eTextureMapMode* mapmode = NULL,
-      uint32* flags = NULL);
-
 
    //inline int32 Material::GetTexture(eTextureType type,
    //   uint32  index,

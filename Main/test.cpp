@@ -170,10 +170,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
      
       glBindVertexArray(vaoID);
     
-      shader.Use();
-      glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+      //shader.Use();
+      //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
       //glDrawArrays(GL_TRIANGLES, 0, 8);
-      shader.Unuse();
+      //shader.Unuse();
       
       glBindVertexArray(0);
      

@@ -40,16 +40,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _OBJMTLIMPORTER_HPP_INCLUDED_
 
 #include <vector>
-
-//#include "core/string/string.hpp"
 //using core::string::String_c;
 
 #include "gfx/color4f.hpp"
 using gfx::color4f::Color4f;
 
-#include "OBJParser.hpp"
-using core::IsLineEnd;
-using core::IsSpaceOrNewLine;
+#include "OBJFile.hpp"
 
 namespace model
 {
@@ -97,7 +93,7 @@ namespace model
     	void GetTextureOption(bool &clamp);
 
     public:
-    	ObjMtlImporter( const std::vector<char> &buffer, const std::string &strAbsPath, objfile::Model *pModel );
+    	ObjMtlImporter( const std::vector<char> &buffer, objfile::Model *pModel );
     	~ObjMtlImporter();
     };
 

@@ -85,7 +85,7 @@ namespace objtools
    {
       while (!IsEndOfBuffer(pBuffer, pEnd))
       {
-         if (!IsSpaceOrNewLine(*pBuffer) || IsLineEnd(*pBuffer))
+         if (!IsSpaceOrNewLine(*pBuffer) || core::IsLineEnd(*pBuffer))
             break;
          pBuffer++;
       }
@@ -117,7 +117,7 @@ namespace objtools
    */
    template<typename TIterator>
    inline TIterator SkipLine(TIterator currentPos, TIterator end, uint32 &currentLine) {
-      while (!IsEndOfBuffer(currentPos, end) && !IsLineEnd(*currentPos)) {
+      while (!IsEndOfBuffer(currentPos, end) && !core::IsLineEnd(*currentPos)) {
          currentPos++;
       }
       if (currentPos != end)
@@ -147,11 +147,11 @@ namespace objtools
       }
 
       const char *pStart = &(*it);
-      while (!IsEndOfBuffer(it, end) && !IsLineEnd(*it)) {
+      while (!IsEndOfBuffer(it, end) && !core::IsLineEnd(*it)) {
          ++it;
       }
 
-      while (IsEndOfBuffer(it, end) || IsLineEnd(*it) || IsSpaceOrNewLine(*it)) {
+      while (IsEndOfBuffer(it, end) || core::IsLineEnd(*it) || IsSpaceOrNewLine(*it)) {
          --it;
       }
       ++it;
@@ -162,7 +162,7 @@ namespace objtools
          ++it;
       }
       std::string strName(pStart, &(*it));
-      if (strName.IsEmpty())
+      if (strName.empty())
          return it;
       else
          name = strName;
@@ -203,10 +203,9 @@ namespace objtools
    template<typename TChar>
    inline TChar GetFloat(TChar it, TChar end, float &value)
    {
-      static const size_t BUFFERSIZE = 1024;
-      char buffer[BUFFERSIZE];
-      it = CopyNextWord<TChar>(it, end, buffer, BUFFERSIZE);
-      value = (float)assimp::fast_atof(buffer);
+      char buffer[1024];
+      it = CopyNextWord<TChar>(it, end, buffer, 1024);
+      value = (float)core::fast_atof(buffer);
 
       return it;
    }

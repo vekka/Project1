@@ -45,25 +45,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mesh2.hpp"
 
 struct mesh2::Mesh;
-struct Node;
+//struct Node;
 
 #include "../core/fileio/file.hpp"
 using core::fileio::File;
 
 #include "OBJFile.hpp"
 
-#include "../scene/scene.hpp"
-using scene::Scene;
+#include "material.hpp"
+
+#include "ImporterDesc.hpp"
+
+#include "scene/scene.hpp"
 
 namespace objfileimporter
 {
-
-   //namespace objfile
-   //{
-   //   struct Object;
-   //   struct Model;
-   //}
-
    class ObjFileImporter
    {
    private:
@@ -75,14 +71,14 @@ namespace objfileimporter
       const eImporterDesc* GetInfo() const; // Appends the supported extension.
 
       //TODO: implement later, we need the scene.h code here
-      void InternReadFile(const std::string &filePath, Scene* pScene, File* pFile);
+      void InternReadFile(const std::string &filePath, scene::Scene* pScene, File* pFile);
 
       // Create the data from imported content.
-      void CreateDataFromImport(const objfile::Model* pModel, Scene* pScene);
+      void CreateDataFromImport(const objfile::Model* pModel, scene::Scene* pScene);
 
       // Creates all nodes stored in imported content.
-      Node *CreateNodes(const objfile::Model* pModel, const objfile::Object* pData,
-         Node *pParent, Scene* pScene, std::vector<mesh2::Mesh*> &MeshArray);
+      scene::Node *CreateNodes(const objfile::Model* pModel, const objfile::Object* pData,
+         scene::Node *pParent, scene::Scene* pScene, std::vector<mesh2::Mesh*> &MeshArray);
 
       // Creates topology data like faces and meshes for the geometry.
       mesh2::Mesh *CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
@@ -97,13 +93,13 @@ namespace objfileimporter
       void ObjFileImporter::AddTextureMappingModeProperty(material::Material* mat, material::eTextureType type, int32 clampMode = 1);
 
       //	Material creation.
-      void CreateMaterials(const objfile::Model* pModel, Scene* pScene);
+      void CreateMaterials(const objfile::Model* pModel, scene::Scene* pScene);
 
-      // Adds special property for the used texture mapping mode of the model.
+      // Adds special property for the used m_texture mapping mode of the model.
       //void addTextureMappingModeProperty(Material* mat, aiTextureType type, int32 clampMode = 1);
 
       //	Appends a child node to a parent node and updates the data structures.
-      void AppendChildToParentNode(Node *pParent, Node *pChild);
+      void AppendChildToParentNode(scene::Node *pParent, scene::Node *pChild);
 
    public:
       ObjFileImporter();
@@ -112,7 +108,6 @@ namespace objfileimporter
       //	See BaseImporter::CanRead() for details.
       bool CanRead(const std::string &fileName, File* file, bool checkSig) const;
    };
-
 } // namespace objfileimporter
 
 #endif

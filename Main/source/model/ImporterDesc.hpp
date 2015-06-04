@@ -48,22 +48,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *  common to many importers*/
 enum eImporterFlags
 {
-   /** Indicates that there is a textual encoding of the
-   *  file format; and that it is supported.*/
-   IMPORTERFLAGS_SUPPORT_TEXT_FLAVOUR = 0x1,
+   IMPORTERFLAGS_SUPPORT_TEXT_FLAVOUR = 0x1, // whether there is a textual encoding of the file format; and that it is supported
 
-   /** Indicates that there is a binary encoding of the
-   *  file format; and that it is supported.*/
-   IMPORTERFLAGS_SUPPORT_BINARY_FLAVOUR = 0x2,
+   IMPORTERFLAGS_SUPPORT_BINARY_FLAVOUR = 0x2, // whether there is a binary encoding of the file format; and that it is supported
 
-   /** Indicates that there is a compressed encoding of the
-   *  file format; and that it is supported.*/
-   IMPORTERFLAGS_SUPPORT_COMPRESSED_FLAVOUR = 0x4,
+   IMPORTERFLAGS_SUPPORT_COMPRESSED_FLAVOUR = 0x4, // whether there is a compressed encoding of the file format; and that it is supported
 
    /** Indicates that the importer reads only a very particular
    * subset of the file format. This happens commonly for
    * declarative or procedural formats which cannot easily
-   * be mapped to #aiScene */
+   * be mapped to #Scene */
    IMPORTERFLAGS_LIMITED_SUPPORT = 0x8,
 
    /** Indicates that the importer is highly experimental and
@@ -136,6 +130,6 @@ Will return a NULL-pointer if no assigned importer desc. was found for the given
 \param  extension   [in] The extension to look for
 \return A pointer showing to the ImporterDesc, \see eImporterDesc.
 */
-/*ASSIMP_API*/ const eImporterDesc* aiGetImporterDesc(const char *extension);
+const eImporterDesc* GetImporterDesc(const char *extension);
 
 #endif 
