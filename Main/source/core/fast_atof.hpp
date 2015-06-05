@@ -2,14 +2,12 @@
 // This file is part of the "Irrlicht Engine" and the "irrXML" project.
 // For conditions of distribution and use, see copyright notice in irrlicht.h and irrXML.h
 
------------------
 // Original description: (Schrompf)
 // Adapted to the ASSIMP library because the builtin atof indeed takes AGES to parse a
 // float inside a large string. Before parsing, it does a strlen on the given point.
 // Changes:
 //  22nd October 08 (Aramis_acg): Added temporary cast to double, added strtoul10_64
 //     to ensure long numbers are handled correctly
------------------
 
 
 #ifndef __FAST_A_TO_F_H_INCLUDED__

@@ -52,6 +52,8 @@ using core::math::Matrix4f;
 
 #include "core/BasicTypes.hpp"
 
+#include "model/ImporterDesc.hpp"
+
 #include "core/fileio/file.hpp"
 using core::fileio::File;
 
@@ -502,14 +504,14 @@ namespace importer
       * @param szOut String to receive the extension list.
       *   Format of the list: "*.3ds;*.obj;*.dae". This is useful for
       *   use with the WinAPI call GetOpenFileName(Ex). */
-      void GetExtensionList(std:string &szOut) const; // aiString was here
-
+      void GetExtensionList(std::string &szOut) const; // aiString was here
+      
       /** @brief Get a full list of all file extensions supported by ASSIMP.
       *
       * This function is provided for backward compatibility.
       * See the aiString version for detailed and up-to-date docs.
       * @see GetExtensionList(aiString&)*/
-      inline void GetExtensionList(std::string &szOut) const;
+      //inline void GetExtensionList(std::string &szOut) const;
 
       /** Get the number of importrs currently registered with Assimp. */
       size_t GetImporterCount() const;
@@ -558,7 +560,7 @@ namespace importer
       * @note The returned memory statistics refer to the actual
       *   size of the use data of the Scene. Heap-related overhead
       *   is (naturally) not included.*/
-      void GetMemoryRequirements(aiMemoryInfo& in) const;
+      //void GetMemoryRequirements(aiMemoryInfo& in) const;
 
       /** Enables "extra verbose" mode.
       *
@@ -586,11 +588,11 @@ namespace importer
       return ReadFile(pFile.c_str(), pFlags);
    }
 
-   void Importer::GetExtensionList(std::string& szOut) const	{
-      aiString s;
-      GetExtensionList(s);
-      szOut = s.data;
-   }
+   //void Importer::GetExtensionList(std::string& szOut) const	{
+   //   std::string s;
+   //   GetExtensionList(s);
+   //   szOut = s.data();
+   //}
 
    inline bool Importer::IsExtensionSupported(const std::string& szExtension) const	{
       return IsExtensionSupported(szExtension.c_str());
