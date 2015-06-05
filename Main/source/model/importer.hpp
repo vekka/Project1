@@ -42,19 +42,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file  Importer.hpp
 *  @brief Defines the C++-API to the Open Asset Import Library.
 */
-#ifndef INCLUDED_AI_ASSIMP_HPP
-#define INCLUDED_AI_ASSIMP_HPP
-
-#ifndef __cplusplus
-#	error This header requires C++ to be used. Use assimp.h for plain C. 
-#endif
+#ifndef _IMPORTER_HPP_INCLUDED_
+#define _IMPORTER_HPP_INCLUDED_
 
 #include <string>
 
 #include "core/math/Matrix4.hpp"
 using core::math::Matrix4f;
 
-// Public ASSIMP data structures
 #include "core/BasicTypes.hpp"
 
 #include "core/fileio/file.hpp"
@@ -62,8 +57,8 @@ using core::fileio::File;
 
 //#include "config.h"
 
-namespace Assimp	{
-
+namespace importer
+{
    // Public interface to Assimp 
    class Importer;
    class Exporter; // export.hpp
@@ -84,9 +79,7 @@ namespace Assimp	{
    // Holy stuff, only for members of the high council of the Jedi.
    class ImporterPimpl;
    class ExporterPimpl; // export.hpp
-} //! namespace Assimp
-
-#define AI_PROPERTY_WAS_NOT_EXISTING 0xffffffff
+} // namespace importer
 
 struct Scene;
 
@@ -96,6 +89,8 @@ struct aiImporterDesc;
 /** @namespace Assimp Assimp's CPP-API and all internal APIs */
 namespace importer
 {
+   const int32 PROPERTY_WAS_NOT_EXISTING = 0xffffffff;
+   
    /** CPP-API: The Importer class forms an C++ interface to the functionality of the
    *   Open Asset Import Library.
    *
@@ -116,7 +111,7 @@ namespace importer
    * If you do not assign a custion IO handler, a default handler using the
    * standard C++ IO logic will be used.
    *
-   * @note One Importer instance is not thread-safe. If you use multiple
+   * One Importer instance is not thread-safe. If you use multiple
    * threads for loading, each thread should maintain its own Importer instance.
    */
    class Importer
@@ -195,7 +190,7 @@ namespace importer
       *   floating-point property has no effect - the loader will call
       *   GetPropertyFloat() to read the property, but it won't be there.
       */
-      bool SetPropertyInteger(const char* szName, int iValue);
+      bool SetPropertyInteger(const char* szName, int32 iValue);
 
       /** Set a boolean configuration property. Boolean properties
       *  are stored on the integer stack internally so it's possible
@@ -203,7 +198,8 @@ namespace importer
       *  #GetPropertyBool and vice versa.
       * @see SetPropertyInteger()
       */
-      bool SetPropertyBool(const char* szName, bool value)	{
+      bool SetPropertyBool(const char* szName, bool value)
+      {
          return SetPropertyInteger(szName, value);
       }
 
@@ -234,8 +230,7 @@ namespace importer
       *   floating-point property has no effect - the loader will call
       *   GetPropertyFloat() to read the property, but it won't be there.
       */
-      int GetPropertyInteger(const char* szName,
-         int iErrorReturn = 0xffffffff) const;
+      int32 GetPropertyInteger(const char* szName, int32 iErrorReturn = 0xffffffff) const;
 
       /** Get a boolean configuration property. Boolean properties
       *  are stored on the integer stack internally so it's possible
@@ -243,32 +238,29 @@ namespace importer
       *  #GetPropertyBool and vice versa.
       * @see GetPropertyInteger()
       */
-      bool GetPropertyBool(const char* szName, bool bErrorReturn = false) const {
+      bool GetPropertyBool(const char* szName, bool bErrorReturn = false) const
+      {
          return GetPropertyInteger(szName, bErrorReturn) != 0;
       }
 
       /** Get a floating-point configuration property
       * @see GetPropertyInteger()
       */
-      float GetPropertyFloat(const char* szName,
-         float fErrorReturn = 10e10f) const;
+      float GetPropertyFloat(const char* szName, float fErrorReturn = 10e10f) const;
 
       /** Get a string configuration property
       *
       *  The return value remains valid until the property is modified.
       * @see GetPropertyInteger()
       */
-      const std::string GetPropertyString(const char* szName,
-         const std::string& sErrorReturn = "") const;
+      const std::string &GetPropertyString(const char* szName, const std::string &sErrorReturn = "") const;
 
       /** Get a matrix configuration property
       *
       *  The return value remains valid until the property is modified.
       * @see GetPropertyInteger()
       */
-      const Matrix4f GetPropertyMatrix(const char* szName,
-         const Matrix4f& sErrorReturn = Matrix4f()) const;
-
+      const Matrix4f GetPropertyMatrix(const char* szName, const Matrix4f &sErrorReturn = Matrix4f()) const;
       
       /** Supplies a custom IO handler to the importer to use to open and
       * access files. If you need the importer to use custion IO logic to
@@ -280,11 +272,8 @@ namespace importer
       * afterwards. The previously assigned handler will be deleted.
       * Pass NULL to take again ownership of your File and reset Assimp
       * to use its default implementation.
-      *
-      * @param pIOHandler The IO handler to be used in all file accesses
-      *   of the Importer.
       */
-      void SetIOHandler(File* file);
+      void SetFilePtr(File* file);
 
       
       /** Retrieves the IO handler that is currently set.
@@ -294,7 +283,7 @@ namespace importer
       * custom IO handler via #SetIOHandler().
       * @return A valid File interface, never NULL.
       */
-      File* GetIOHandler() const;
+      File* GetFilePtr() const;
 
       
       /** Checks whether a default IO handler is active
@@ -311,9 +300,9 @@ namespace importer
       *  isn't as periodically as you'd like it to have ...).
       *  This can be used to implement progress bars and loading
       *  timeouts.
-      *  @param pHandler Progress callback interface. Pass NULL to
+      *  pHandler Progress callback interface. Pass NULL to
       *    disable progress reporting.
-      *  @note Progress handlers can be used to abort the loading
+      *  Progress handlers can be used to abort the loading
       *    at almost any time.*/
       void SetProgressHandler(ProgressHandler* pHandler);
 
@@ -347,7 +336,7 @@ namespace importer
       *  @param pFlags Bitwise combination of the aiPostProcess flags.
       *  @return true if this flag combination is fine.
       */
-      bool ValidateFlags(unsigned int pFlags) const;
+      bool ValidateFlags(uint32 pFlags) const;
 
       
       /** Reads the given file and returns its contents if successful.
@@ -371,11 +360,8 @@ namespace importer
       * @note Assimp is able to determine the file format of a file
       * automatically.
       */
-      const Scene* ReadFile(
-         const char* pFile,
-         unsigned int pFlags);
+      const Scene* ReadFile(const char* pFile, uint32 pFlags);
 
-      
       /** Reads the given file from a memory buffer and returns its
       *  contents if successful.
       *
@@ -415,7 +401,7 @@ namespace importer
       const Scene* ReadFileFromMemory(
          const void* pBuffer,
          size_t pLength,
-         unsigned int pFlags,
+         uint32 pFlags,
          const char* pHint = "");
 
       
@@ -436,17 +422,15 @@ namespace importer
       *
       *  @note The method does nothing if no scene is currently bound
       *    to the #Importer instance.  */
-      const Scene* ApplyPostProcessing(unsigned int pFlags);
+      const Scene* ApplyPostProcessing(uint32 pFlags);
 
       
-      /** @brief Reads the given file and returns its contents if successful.
+      /** Reads the given file and returns its contents if successful.
       *
       * This function is provided for backward compatibility.
       * See the const char* version for detailled docs.
       * @see ReadFile(const char*, pFlags)  */
-      const Scene* ReadFile(
-         const std::string& pFile,
-         unsigned int pFlags);
+      const Scene* ReadFile(const std::string &pFile, uint32 pFlags);
 
       
       /** Frees the current scene.
@@ -518,14 +502,14 @@ namespace importer
       * @param szOut String to receive the extension list.
       *   Format of the list: "*.3ds;*.obj;*.dae". This is useful for
       *   use with the WinAPI call GetOpenFileName(Ex). */
-      void GetExtensionList(aiString& szOut) const;
+      void GetExtensionList(std:string &szOut) const; // aiString was here
 
       /** @brief Get a full list of all file extensions supported by ASSIMP.
       *
       * This function is provided for backward compatibility.
       * See the aiString version for detailed and up-to-date docs.
       * @see GetExtensionList(aiString&)*/
-      inline void GetExtensionList(std::string& szOut) const;
+      inline void GetExtensionList(std::string &szOut) const;
 
       /** Get the number of importrs currently registered with Assimp. */
       size_t GetImporterCount() const;
@@ -537,7 +521,7 @@ namespace importer
       *  @return Importer meta data structure, NULL if the index does not
       *     exist or if the importer doesn't offer meta information (
       *     importers may do this at the cost of being hated by their peers).*/
-      const aiImporterDesc* GetImporterInfo(size_t index) const;
+      const eImporterDesc* GetImporterInfo(size_t index) const;
 
       /** Find the importer corresponding to a specific index.
       *
@@ -592,13 +576,13 @@ namespace importer
 
       // Just because we don't want you to know how we're hacking around.
       ImporterPimpl* pimpl;
-   }; //! class Importer
+   }; // class Importer
 
    // For compatibility, the interface of some functions taking a std::string was
    // changed to const char* to avoid crashes between binary incompatible STL 
    // versions. This code her is inlined,  so it shouldn't cause any problems.
 
-   const Scene* Importer::ReadFile(const std::string& pFile, unsigned int pFlags){
+   const Scene* Importer::ReadFile(const std::string &pFile, uint32 pFlags){
       return ReadFile(pFile.c_str(), pFlags);
    }
 
@@ -608,10 +592,10 @@ namespace importer
       szOut = s.data;
    }
 
-   AI_FORCE_INLINE bool Importer::IsExtensionSupported(const std::string& szExtension) const	{
+   inline bool Importer::IsExtensionSupported(const std::string& szExtension) const	{
       return IsExtensionSupported(szExtension.c_str());
    }
 
 } // namespace importer
 
-#endif // INCLUDED_AI_ASSIMP_HPP
+#endif
