@@ -240,7 +240,7 @@
     <ClInclude Include="source\win32\win32timer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="source\shader\glsl\fragment\shader.frag" />
     <None Include="source\shader\glsl\fragment\triangle.frag" />
     <None Include="source\shader\glsl\vertex\shader.vert" />

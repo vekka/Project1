@@ -55,36 +55,36 @@ namespace material
 {
    const char *DEFAULT_MATERIAL_NAME = "DefaultMaterial";
 
-   static const char *MATERIAL_KEY_NAME = "?mat.name";
-   static const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
-   static const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
-   static const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
-   static const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
-   static const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
-   static const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
-   static const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
-   static const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
-   static const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
-   static const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
-   static const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
-   static const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
-   static const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
-   static const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
-   static const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
-   static const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
-   static const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
+   //static const char *MATERIAL_KEY_NAME = "?mat.name";
+   //static const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
+   //static const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
+   //static const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
+   //static const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
+   //static const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
+   //static const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
+   //static const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
+   //static const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
+   //static const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
+   //static const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
+   //static const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
+   //static const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
+   //static const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
+   //static const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
+   //static const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
+   //static const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
+   //static const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
 
    // pure key names for all m_texture-related properties
-   static const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
-   static const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
-   static const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
-   static const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
-   static const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
-   static const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
-   static const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
-   static const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
-   static const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
-   static const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
+   //static const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
+   //static const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
+   //static const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
+   //static const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
+   //static const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
+   //static const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
+   //static const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
+   //static const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
+   //static const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
+   //static const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
 
    // atually the one and only way to get an Material instance
    Material::Material()

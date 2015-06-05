@@ -44,8 +44,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include "ObjMtlImporter.hpp"
 
-#include "OBJFile.hpp"
-
 #include "ObjTools.hpp"
 using objtools::SkipLine;
 using objtools::GetNextToken;

@@ -46,21 +46,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OBJParser.hpp"
 using model::objparser::ObjParser;
 
-#include "OBJFile.hpp"
-
 using mesh2::Face;
+
+//#include "materialSystem.hpp"
 
 #include "../core/memory/scopedptr.hpp"
 using core::memory::ScopedPtr;
 
-#include "scene/scene.hpp"
 using scene::Node;
 using material::SHADING_MODE_FLAT;
 using material::SHADING_MODE_NOSHADING;
 using material::SHADING_MODE_GOURAUD;
 using material::SHADING_MODE_PHONG;
-
-#include "ImporterDesc.hpp"
 
 using mesh2::PRIMITIVE_TYPE_LINE;
 using mesh2::PRIMITIVE_TYPE_POLYGON;
@@ -568,8 +565,8 @@ namespace objfileimporter
 
          // multiplying the specular exponent with 2 seems to yield better results
          pCurrentMaterial->m_shineness *= 4.f;
-
-         // Adding material colors
+         
+         // Adding material colors 
          mat->AddProperty(&pCurrentMaterial->m_ambientColor, 1, material::MATERIAL_KEY_COLOR_AMBIENT);
          mat->AddProperty(&pCurrentMaterial->m_diffuseColor, 1, material::MATERIAL_KEY_COLOR_DIFFUSE);
          mat->AddProperty(&pCurrentMaterial->m_specularColor, 1, material::MATERIAL_KEY_COLOR_SPECULAR);

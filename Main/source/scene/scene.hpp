@@ -55,8 +55,7 @@ using mesh2::Mesh;
 //#include "material.h"
 //#include "anim.h"
 //#include "metadata.h"
-
-#include "material.hpp"
+#include "model/material.hpp"
 
 namespace scene
 {

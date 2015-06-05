@@ -6,6 +6,10 @@
 //#include "matrix3.hpp"
 //#include "string.hpp"
 //#include "win32main.hpp"
+
+#include "model/importer.hpp"
+#include "scene/scene.hpp"
+
 #include "shader/oglshader.hpp"
 #include "gfx/vertexbuffer.hpp"
 #include "win32/win32console.hpp"

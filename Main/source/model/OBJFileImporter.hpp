@@ -41,22 +41,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _OBJFILEIMPORTER_HPP_INCLUDED_
 
 #include <vector>
-
 #include "mesh2.hpp"
-
 struct mesh2::Mesh;
-//struct Node;
-
 #include "../core/fileio/file.hpp"
 using core::fileio::File;
 
 #include "OBJFile.hpp"
-
 #include "material.hpp"
-
-#include "ImporterDesc.hpp"
-
 #include "scene/scene.hpp"
+#include "ImporterDesc.hpp"
 
 namespace objfileimporter
 {

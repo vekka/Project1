@@ -63,24 +63,24 @@ namespace importer
 {
    // Public interface to Assimp 
    class Importer;
-   class Exporter; // export.hpp
-   class IOStream;
+//   class Exporter; // export.hpp
+//   class IOStream;
    class File;
-   class ProgressHandler;
+   //class ProgressHandler;
 
-   // Plugin development
-   //
-   // Include the following headers for the declarations:
-   // BaseImporter.h
-   // BaseProcess.h
-   class BaseImporter;
-   class BaseProcess;
-   class SharedPostProcessInfo;
-   class BatchLoader;
+   //// Plugin development
+   ////
+   //// Include the following headers for the declarations:
+   //// BaseImporter.h
+   //// BaseProcess.h
+   //class BaseImporter;
+   //class BaseProcess;
+   //class SharedPostProcessInfo;
+   //class BatchLoader;
 
-   // Holy stuff, only for members of the high council of the Jedi.
-   class ImporterPimpl;
-   class ExporterPimpl; // export.hpp
+   //// Holy stuff, only for members of the high council of the Jedi.
+   //class ImporterPimpl;
+   //class ExporterPimpl; // export.hpp
 } // namespace importer
 
 struct Scene;
@@ -145,7 +145,7 @@ namespace importer
       * @return AI_SUCCESS if the loader has been added. The registration
       *   fails if there is already a loader for a specific file extension.
       */
-      int32 RegisterLoader(BaseImporter* pImp);
+      //int32 RegisterLoader(BaseImporter* pImp);
 
       /** Unregisters a loader.
       *
@@ -155,7 +155,7 @@ namespace importer
       *   if the #Importer instance is used by more than one thread) or
       *   if it has not yet been registered.
       */
-      int32 UnregisterLoader(BaseImporter* pImp);
+      //int32 UnregisterLoader(BaseImporter* pImp);
 
       /** Registers a new post-process step.
       *
@@ -167,7 +167,7 @@ namespace importer
       *   deleted with the Importer instance.
       * @return AI_SUCCESS if the step has been added correctly.
       */
-      int32 RegisterPPStep(BaseProcess* pImp);
+      ////int32 RegisterPPStep(BaseProcess* pImp);
 
       /** Unregisters a post-process step.
       *
@@ -177,7 +177,7 @@ namespace importer
       *   if the #Importer instance is used by more than one thread) or
       *   if it has not yet been registered.
       */
-      int32 UnregisterPPStep(BaseProcess* pImp);
+      //int32 UnregisterPPStep(BaseProcess* pImp);
 
 
       /** Set an integer configuration property.
@@ -306,7 +306,7 @@ namespace importer
       *    disable progress reporting.
       *  Progress handlers can be used to abort the loading
       *    at almost any time.*/
-      void SetProgressHandler(ProgressHandler* pHandler);
+      //void SetProgressHandler(ProgressHandler* pHandler);
 
       
       /** Retrieves the progress handler that is currently set.
@@ -316,7 +316,7 @@ namespace importer
       * custom handler via #SetProgressHandler().
       * @return A valid ProgressHandler interface, never NULL.
       */
-      ProgressHandler* GetProgressHandler() const;
+      //ProgressHandler* GetProgressHandler() const;
 
       
       /** Checks whether a default progress handler is active
@@ -530,7 +530,7 @@ namespace importer
       *  @param index Index to query, must be within [0,GetImporterCount())
       *  @return Importer instance. NULL if the index does not
       *     exist. */
-      BaseImporter* GetImporter(size_t index) const;
+      //BaseImporter* GetImporter(size_t index) const;
 
       /** Find the importer corresponding to a specific file extension.
       *
@@ -541,7 +541,7 @@ namespace importer
       *    is case-insensitive), ".bah", "*.bah" (wild card and dot
       *    characters at the beginning of the extension are skipped).
       *  @return NULL if no importer is found*/
-      BaseImporter* GetImporter(const char* szExtension) const;
+      //BaseImporter* GetImporter(const char* szExtension) const;
 
       /** Find the importer index corresponding to a specific file extension.
       *
@@ -571,13 +571,13 @@ namespace importer
       void SetExtraVerbose(bool bDo);
 
       /** Private, do not use. */
-      ImporterPimpl* Pimpl() { return pimpl; }
-      const ImporterPimpl* Pimpl() const { return pimpl; }
+      //ImporterPimpl* Pimpl() { return pimpl; }
+      //const ImporterPimpl* Pimpl() const { return pimpl; }
 
    protected:
 
       // Just because we don't want you to know how we're hacking around.
-      ImporterPimpl* pimpl;
+      //ImporterPimpl* pimpl;
    }; // class Importer
 
    // For compatibility, the interface of some functions taking a std::string was
@@ -585,7 +585,8 @@ namespace importer
    // versions. This code her is inlined,  so it shouldn't cause any problems.
 
    const Scene* Importer::ReadFile(const std::string &pFile, uint32 pFlags){
-      return ReadFile(pFile.c_str(), pFlags);
+      return 0;
+      //return core::fileio::File::(pFile.c_str(), pFlags);
    }
 
    //void Importer::GetExtensionList(std::string& szOut) const	{
