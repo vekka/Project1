@@ -108,7 +108,7 @@ using gfx::color4f::Color4f;
 #	define AI_MAX_NUMBER_OF_TEXTURECOORDS 0x8
 #endif // !! AI_MAX_NUMBER_OF_TEXTURECOORDS
 
-   --------
+
    /** @brief A single face in a mesh, referring to multiple vertices.
    *
    * If m_numIndices is 3, we call the face 'triangle', for m_numIndices > 3
@@ -256,8 +256,6 @@ using gfx::color4f::Color4f;
          }
       };
 
-
-      --------
       /** @brief Enumerates the types of geometric primitives supported by Assimp.
       *
       *  @see Face Face data structure
@@ -310,8 +308,6 @@ using gfx::color4f::Color4f;
 	((n) > 3 ? PRIMITIVE_TYPE_POLYGON : (ePrimitiveType)(1u << ((n)-1)))
 
 
-
-      --------
       /** @brief NOT CURRENTLY IN USE. An AnimMesh is an attachment to an #Mesh stores per-vertex
       *  animations for a particular frame.
       *
@@ -421,8 +417,6 @@ using gfx::color4f::Color4f;
          }
       };
 
-
-      --------
       /** @brief A mesh represents a geometry or model with a single material.
       *
       * It usually consists of a number of vertices and a series of primitives/faces
