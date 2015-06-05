@@ -8,7 +8,7 @@
 //#include "win32main.hpp"
 
 #include "model/importer.hpp"
-#include "scene/scene.hpp"
+//#include "scene/scene.hpp"
 
 #include "shader/oglshader.hpp"
 #include "gfx/vertexbuffer.hpp"
@@ -16,6 +16,7 @@
 using win32console::Win32Console;
 
 using namespace oglshader;
+
 
 #include "win32/win32console.hpp"
 #include "gfx/vertexbuffer.hpp"

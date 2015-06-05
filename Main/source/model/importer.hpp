@@ -584,9 +584,9 @@ namespace importer
    // changed to const char* to avoid crashes between binary incompatible STL 
    // versions. This code her is inlined,  so it shouldn't cause any problems.
 
-   const Scene* Importer::ReadFile(const std::string &pFile, uint32 pFlags){
-      return 0;
-      //return core::fileio::File::(pFile.c_str(), pFlags);
+   inline const Scene* Importer::ReadFile(const std::string &pFile, uint32 pFlags){
+      //return 0;
+      return pFile.ReadFile(pFile.c_str(), pFlags);
    }
 
    //void Importer::GetExtensionList(std::string& szOut) const	{
