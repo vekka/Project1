@@ -28,6 +28,15 @@ namespace core
       public:
          using Point3<T>::operator=;
 
+         static const Vector3<T> ZERO;
+         static const Vector3<T> UNIT_X;
+         static const Vector3<T> UNIT_Y;
+         static const Vector3<T> UNIT_Z;
+         static const Vector3<T> NEG_UNIT_X;
+         static const Vector3<T> NEG_UNIT_Y;
+         static const Vector3<T> NEG_UNIT_Z;
+         static const Vector3<T> UNIT_SCALE;
+         
          //----------- constructors
          Vector3();
          Vector3(const eConstructorVector3 constructor);
@@ -106,6 +115,14 @@ namespace core
          this->x = x;
          this->y = y;
          this->z = z;
+      }
+      
+      template <class T>
+      inline Vector3<T>::Vector3(const T scaler)
+      {
+         this->x = scaler;
+         this->y = scaler;
+         this->z = scaler;        
       }
 
       template <class T>
