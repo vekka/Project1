@@ -63,8 +63,7 @@ namespace objfileimporter
 
       const eImporterDesc* GetInfo() const; // Appends the supported extension.
 
-      //TODO: implement later, we need the scene.h code here
-      void InternReadFile(const std::string &filePath, scene::Scene* pScene, File* pFile);
+     
 
       // Create the data from imported content.
       void CreateDataFromImport(const objfile::Model* pModel, scene::Scene* pScene);
@@ -100,6 +99,8 @@ namespace objfileimporter
       // Returns whether the class can handle the format of the given file. 
       //	See BaseImporter::CanRead() for details.
       bool CanRead(const std::string &fileName, File* file, bool checkSig) const;
+      //TODO: implement later, we need the scene.h code here
+      void InternReadFile(const std::string &filePath, scene::Scene* pScene, File* pFile);
    };
 } // namespace objfileimporter
 

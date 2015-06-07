@@ -59,7 +59,7 @@ namespace baseimporter
       // nothing to do here
    }
 
-   Scene* BaseImporter::ReadFile(const importer::Importer* pImp, const std::string& pFile, File* pIOHandler)
+   Scene* BaseImporter::ReadFile(const Importer* pImp, const std::string& pFile, File* pIOHandler)
    {
       //progress = pImp->GetProgressHandler();
       //assert(progress);
@@ -71,13 +71,17 @@ namespace baseimporter
       //FileSystemFilter filter(pFile, pIOHandler);
 
       // create a scene object to hold the data
-      ScopeGuard<Scene> sc(new scene::Scene());
+      
+      
+      ScopeGuard<Scene> sc(new Scene() );
+      
+      //scene::Scene *sc = new scene::Scene();
 
       // dispatch importing
 //      try
 //      {
-         InternReadFile(pFile, sc, &filter);
-
+//         InternReadFile(pFile, sc, &filter);
+      InternReadFile(pFile, sc, pIOHandler);
 //      }
       //catch (const std::exception& err)	{
       //   // extract error description
@@ -92,8 +96,6 @@ namespace baseimporter
    }
 
 }
-
-
 
 namespace importer
 {
