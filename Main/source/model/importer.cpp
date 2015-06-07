@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "importer.hpp"
 #include "core/memory/scopedptr.hpp"
-
+#include "model/objfileimporter.hpp"
 
 namespace baseimporter
 {
@@ -71,12 +71,12 @@ namespace baseimporter
       //FileSystemFilter filter(pFile, pIOHandler);
 
       // create a scene object to hold the data  
-      ScopeGuard<Scene> sc(new scene::Scene() );
+      ScopeGuard<Scene> sc(new Scene() );
    
       // dispatch importing
       try
       {
-         InternReadFile(pFile, sc, pIOHandler);
+        InternReadFile(pFile, sc, pIOHandler);
       }
       catch (const std::exception& err)	
       {

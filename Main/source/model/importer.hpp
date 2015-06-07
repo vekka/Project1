@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "core/math/Matrix4.hpp"
 using core::math::Matrix4f;
-#include "model/objfileimporter.hpp"
+
 #include "core/BasicTypes.hpp"
 //#include <assert.h>
 #include "model/ImporterDesc.hpp"
@@ -369,30 +369,12 @@ namespace importer
 {
    // Public interface to Assimp 
    class Importer;
-//   class Exporter; // export.hpp
-//   class IOStream;
    class File;
-   //class ProgressHandler;
-
-   //// Plugin development
-   ////
-   //// Include the following headers for the declarations:
-   //// BaseImporter.h
-   //// BaseProcess.h
-   //class BaseImporter;
-   //class BaseProcess;
-   //class SharedPostProcessInfo;
-   //class BatchLoader;
-
-   //// Holy stuff, only for members of the high council of the Jedi.
-   //class ImporterPimpl;
-   //class ExporterPimpl; // export.hpp
-} // namespace importer
+ 
 
 
 /** @namespace Assimp Assimp's CPP-API and all internal APIs */
-namespace importer
-{
+
    const int32 PROPERTY_WAS_NOT_EXISTING = 0xffffffff;
 
    /** CPP-API: The Importer class forms an C++ interface to the functionality of the
@@ -887,21 +869,14 @@ namespace importer
    // changed to const char* to avoid crashes between binary incompatible STL 
    // versions. This code her is inlined,  so it shouldn't cause any problems.
 
-   inline const Scene* Importer::ReadFile(const std::string& pFile, uint32 pFlags){
+   inline const Scene* Importer::ReadFile(const std::string& pFile, uint32 pFlags)
+   {
       return NULL;
       //return baseimporter::ReadFile(pFile.c_str(), pFlags);
    }
 
-   //void Importer::GetExtensionList(std::string& szOut) const	{
-   //   std::string s;
-   //   GetExtensionList(s);
-   //   szOut = s.data();
-   //}
-
- /*  inline bool Importer::IsExtensionSupported(const std::string& szExtension) const	{
-      return IsExtensionSupported(szExtension.c_str());
-   }*/
 
 } // namespace importer
 
+  
 #endif
