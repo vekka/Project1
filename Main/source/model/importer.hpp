@@ -58,7 +58,11 @@ using core::math::Matrix4f;
 #include "model/ImporterDesc.hpp"
 #include "core/fileio/file.hpp"
 using core::fileio::File;
-struct Scene;
+
+#include "scene/scene.hpp"
+using scene::Scene;
+
+class Scene;
 // importerdesc.h
 struct aiImporterDesc;
 

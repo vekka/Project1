@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "importer.hpp"
 #include "core/memory/scopedptr.hpp"
-#include "scene/scene.hpp"
+
 
 namespace baseimporter
 {
@@ -70,25 +70,21 @@ namespace baseimporter
       // Construct a file system filter to improve our success ratio at reading external files
       //FileSystemFilter filter(pFile, pIOHandler);
 
-      // create a scene object to hold the data
-      
-      
-      ScopeGuard<Scene> sc(new Scene() );
-      
-      //scene::Scene *sc = new scene::Scene();
-
+      // create a scene object to hold the data  
+      ScopeGuard<Scene> sc(new scene::Scene() );
+   
       // dispatch importing
-//      try
-//      {
-//         InternReadFile(pFile, sc, &filter);
-      InternReadFile(pFile, sc, pIOHandler);
-//      }
-      //catch (const std::exception& err)	{
+      try
+      {
+         InternReadFile(pFile, sc, pIOHandler);
+      }
+      catch (const std::exception& err)	
+      {
       //   // extract error description
       //   mErrorText = err.what();
       //   DefaultLogger::get()->error(mErrorText);
-      //   return NULL;
-      //}
+         return NULL;
+      }
 
       // return what we gathered from the import. 
       sc.dismiss();
