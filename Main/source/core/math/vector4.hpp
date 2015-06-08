@@ -8,21 +8,15 @@ namespace core
 
    namespace math
    {
-
-      enum eConstructorVector4
-      {
-         VEC4_CONST_NOTHING,
-         VEC4_CONST_ZERO
-      };
-
       template <class T>
       class Vector4
       {
-      private:
-         T x, y, z, w;
       public:
+         T x, y, z, w;
+
+         static const Vector4<T> ZERO;
+
          Vector4();
-         Vector4(const eConstructorVector4 constructor);
          Vector4(const T x, const T y, const T z, const T w);
          Vector4(const T scaler);
          void Zero();
@@ -60,22 +54,13 @@ namespace core
       typedef Vector4<double> Vector4d;
       typedef Vector4<long double> Vector4ld; // TODO: replace with new type
 
-      template <class T>
-      inline Vector4<T>::Vector4(const eConstructorVector4 constructor)
-      {
-         if (constructor == VEC4_CONST_NOTHING)
-         {
-         }
-         else if (constructor == VEC4_CONST_ZERO)
-         {
-            Zero();
-         }
-      }
+      template <typename T> const Vector4<T> Vector4<T>::ZERO(0, 0, 0, 0);
 
       template <class T>
       inline Vector4<T>::Vector4()
       {
-         x = y = z = w = (T)0;
+         // maybe we should not initialize vectors each time we declare it? (explain why)
+         //x = y = z = w = (T)0;
       }
 
       template <class T>
