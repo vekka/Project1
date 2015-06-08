@@ -1,6 +1,8 @@
 #ifndef _VECTOR4_HPP_INCLUDED_
 #define _VECTOR4_HPP_INCLUDED_
 
+#include <iostream>
+
 #include "mathcommon.hpp"
 
 namespace core
@@ -44,6 +46,16 @@ namespace core
          T SqLength() const;
          T Length() const;
          T Normalize();
+         
+         friend std::ostream &operator<<(std::ostream &out, Vector4<T> &vec)
+         {
+            out << "(" << vec.x << ", " <<
+               vec.y << ", " <<
+               vec.z << ", " <<
+               vec.w << ")";
+            return out;
+         }
+
       };
 
       typedef Vector4<int16> Vector4s;
