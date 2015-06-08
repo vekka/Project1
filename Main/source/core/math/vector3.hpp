@@ -8,21 +8,7 @@ namespace core
 
    namespace math
    {
-
-      enum eConstructorVector3
-      {
-         VEC3_CONST_NOTHING,
-         VEC3_CONST_ZERO,
-         VEC3_CONST_UNIT_X,
-         VEC3_CONST_UNIT_Y,
-         VEC3_CONST_UNIT_Z,
-         VEC3_CONST_NEG_UNIT_X,
-         VEC3_CONST_NEG_UNIT_Y,
-         VEC3_CONST_NEG_UNIT_Z,
-         VEC3_CONST_UNIT_SCALE
-      };
-
-      template <class T>
+      template <typename T>
       class Vector3 : public Point3 < T >
       {
       public:
@@ -39,17 +25,8 @@ namespace core
          
          //----------- constructors
          Vector3();
-         Vector3(const eConstructorVector3 constructor);
          Vector3(const T x, const T y, const T z);
          Vector3(const T scaler);
-
-         void SetUnitX();
-         void SetUnitY();
-         void SetUnitZ();
-         void SetNegUnitX();
-         void SetNegUnitY();
-         void SetNegUnitZ();
-         void SetUnitScale();
 
          T operator*(const Vector3<T> &other) const;
          T DotProd(const Vector3<T> &other) const;
@@ -68,48 +45,21 @@ namespace core
       typedef Vector3<double> Vector3d;
       typedef Vector3<long double> Vector3ld; // TODO: replace with new type
 
-      template <class T>
+      template <typename T> const Vector3<T> Vector3<T>::ZERO(0, 0, 0);
+      template <typename T> const Vector3<T> Vector3<T>::UNIT_X(1, 0, 0);
+      template <typename T> const Vector3<T> Vector3<T>::UNIT_Y(0, 1, 0);
+      template <typename T> const Vector3<T> Vector3<T>::UNIT_Z(0, 0, 1);
+      template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_X(-1, 0, 0);
+      template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_Y(0, -1, 0);
+      template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_Z(0, 0, -1);
+      template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_SCALE(1, 1, 1);
+
+      template <typename T>
       inline Vector3<T>::Vector3()
       {
       }
 
-      template <class T>
-      inline Vector3<T>::Vector3(const eConstructorVector3 constructor)
-      {
-         switch (constructor)
-         {
-         case VEC3_CONST_NOTHING:
-            break;
-         case VEC3_CONST_ZERO:
-            Zero();
-            break;
-         case VEC3_CONST_UNIT_X:
-            SetUnitX();
-            break;
-         case VEC3_CONST_UNIT_Y:
-            SetUnitY();
-            break;
-         case VEC3_CONST_UNIT_Z:
-            SetUnitZ();
-            break;
-         case VEC3_CONST_NEG_UNIT_X:
-            SetNegUnitX();
-            break;
-         case VEC3_CONST_NEG_UNIT_Y:
-            SetNegUnitY();
-            break;
-         case VEC3_CONST_NEG_UNIT_Z:
-            SetNegUnitZ();
-            break;
-         case VEC3_CONST_UNIT_SCALE:
-            SetUnitScale();
-            break;
-         default:
-            break;
-         }
-      }
-
-      template <class T>
+      template <typename T>
       inline Vector3<T>::Vector3(const T x, const T y, const T z)
       {
          this->x = x;
@@ -117,7 +67,7 @@ namespace core
          this->z = z;
       }
       
-      template <class T>
+      template <typename T>
       inline Vector3<T>::Vector3(const T scaler)
       {
          this->x = scaler;
@@ -125,61 +75,19 @@ namespace core
          this->z = scaler;        
       }
 
-      template <class T>
-      inline void Vector3<T>::SetUnitX()
-      {
-         x = (T)1; y = (T)0; z = (T)0;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetUnitY()
-      {
-         x = (T)0; y = (T)1; z = (T)0;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetUnitZ()
-      {
-         x = (T)0; y = (T)0; z = (T)1;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetNegUnitX()
-      {
-         x = (T)-1; y = (T)0; z = (T)0;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetNegUnitY()
-      {
-         x = (T)0; y = (T)-1; z = (T)0;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetNegUnitZ()
-      {
-         x = (T)0; y = (T)0; z = (T)-1;
-      }
-
-      template <class T>
-      inline void Vector3<T>::SetUnitScale()
-      {
-         x = (T)1; y = (T)1; z = (T)1;
-      }
-
-      template <class T>
+      template <typename T>
       inline T Vector3<T>::operator*(const Vector3<T> &other) const
       {
          return x * other.x + y * other.y + z * other.z;
       }
 
-      template <class T>
+      template <typename T>
       inline T Vector3<T>::DotProd(const Vector3<T> &other) const
       {
          return x * other.x + y * other.y + z * other.z;
       }
 
-      template <class T>
+      template <typename T>
       inline Vector3<T> Vector3<T>::CrossProd(const Vector3<T> &other) const
       {
          return Vector3<T>(
@@ -188,19 +96,19 @@ namespace core
             x * other.y - y * other.x);
       }
 
-      template <class T>
+      template <typename T>
       inline T Vector3<T>::SqLength() const
       {
          return x * x + y * y + z * z;
       }
 
-      template <class T>
+      template <typename T>
       inline T Vector3<T>::Length() const
       {
          return (T)sqrt((float)(x * x + y * y + z * z));
       }
 
-      template <class T>
+      template <typename T>
       inline T Vector3<T>::Normalize()
       {
          T length;
@@ -217,7 +125,7 @@ namespace core
          return length;
       }
 
-      template <class T>
+      template <typename T>
       bool Vector3<T>::IsUnit()
       {
          return core::Equals((T)(x * x + y * y + z * z), (T)1);
