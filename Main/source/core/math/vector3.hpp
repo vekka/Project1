@@ -22,7 +22,7 @@ namespace core
          static const Vector3<T> NEG_UNIT_Y;
          static const Vector3<T> NEG_UNIT_Z;
          static const Vector3<T> UNIT_SCALE;
-         
+         static const Vector3<T> NEG_UNIT_SCALE;
          //----------- constructors
          Vector3();
          Vector3(const T x, const T y, const T z);

@@ -48,8 +48,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _IMPORTER_HPP_INCLUDED_
 #define _IMPORTER_HPP_INCLUDED_
 
-#include <string>
-
 #include "core/math/Matrix4.hpp"
 using core::math::Matrix4f;
 #include "model/objfileimporter.hpp"
@@ -58,12 +56,11 @@ using core::math::Matrix4f;
 //#include <assert.h>
 #include "model/ImporterDesc.hpp"
 #include "core/fileio/file.hpp"
-using core::fileio::File;
 
-#include "scene/scene.hpp"
+using core::fileio::File;
 using scene::Scene;
 
-class Scene;
+//class Scene;
 // importerdesc.h
 struct aiImporterDesc;
 
