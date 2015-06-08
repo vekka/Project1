@@ -8,63 +8,49 @@ namespace core
 
    namespace math
    {
-
-      enum eConstructorMatrix3
+      template <class T>
+      class Matrix3
       {
-         MAT3_CONST_NOTHING,
-         MAT3_CONST_ZERO,
-         MAT3_CONST_IDENTITY
+      private:
+         T m[3][3];
+      public:
+         static const Matrix3<T> ZERO;
+         static const Matrix3<T> IDENTITY;
+    
+         Matrix3();
+         Matrix3(const T arr[3][3]);
+         Matrix3(
+            const T m00, const T m01, const T m02,
+            const T m10, const T m11, const T m12,
+            const T m20, const T m21, const T m22);
+         Matrix3(const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, bool rowMajor);
+         void Zero();
+         void SetIdentity();
+         void Set(
+            const T m00, const T m01, const T m02,
+            const T m10, const T m11, const T m12,
+            const T m20, const T m21, const T m22);
+         void SetDiagonal(const T d0, const T d1, const T d2);
+         T operator()(const uint8 index1, const uint8 index2) const;
+         T &operator()(const uint8 index1, const uint8 index2);
+         T operator[](const uint8 index) const;
+         T &operator[](const uint8 index);
+         Vector3<T> operator*(const Vector3<T> &vec) const;
+         Matrix3 operator*(const Matrix3 &other) const;
+         Matrix3 operator*(const T scalar) const;
+         Matrix3 &operator*=(const T scalar);
+         Matrix3 operator+(Matrix3 const &other) const;
+         Matrix3 operator-(Matrix3 const &other) const;
+         Matrix3 &operator+=(Matrix3 const &other);
+         Matrix3 &operator-=(Matrix3 const &other);
+         void Swap(Matrix3 &other);
+         Matrix3 Transpose() const;
+         T Determinant() const;
+         bool Inverse(Matrix3 &inv, const float tolerance) const;
+
+         //friend Matrix3	operator*( float a, Matrix3 const &b );
       };
-
-      namespace
-      {
-
-         template <class T>
-         class Matrix3
-         {
-         private:
-            T m[3][3];
-         public:
-            Matrix3();
-            Matrix3(const eConstructorMatrix3 constructor);
-            Matrix3(const T arr[3][3]);
-            Matrix3(
-               const T m00, const T m01, const T m02,
-               const T m10, const T m11, const T m12,
-               const T m20, const T m21, const T m22);
-            Matrix3(const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, bool rowMajor);
-            void Zero();
-            void SetIdentity();
-            void Set(
-               const T m00, const T m01, const T m02,
-               const T m10, const T m11, const T m12,
-               const T m20, const T m21, const T m22);
-            void SetDiagonal(const T d0, const T d1, const T d2);
-            T operator()(const uint8 index1, const uint8 index2) const;
-            T &operator()(const uint8 index1, const uint8 index2);
-            T operator[](const uint8 index) const;
-            T &operator[](const uint8 index);
-            Vector3<T> operator*(const Vector3<T> &vec) const;
-            Matrix3 operator*(const Matrix3 &other) const;
-            Matrix3 operator*(const T scalar) const;
-            Matrix3 &operator*=(const T scalar);
-            Matrix3 operator+(Matrix3 const &other) const;
-            Matrix3 operator-(Matrix3 const &other) const;
-            Matrix3 &operator+=(Matrix3 const &other);
-            Matrix3 &operator-=(Matrix3 const &other);
-            void Swap(Matrix3 &other);
-            Matrix3 Transpose() const;
-            T Determinant() const;
-            bool Inverse(Matrix3 &inv, const float tolerance) const;
-
-            //friend Matrix3	operator*( float a, Matrix3 const &b );
-
-            //static const Matrix3 ZERO;
-            //static const Matrix3 IDENTITY;
-         };
-
-      } // namespace
-
+         
       typedef Matrix3<int16> Matrix3s;
       typedef Matrix3<int32> Matrix3i;
       typedef Matrix3<uint16> Matrix3us;
@@ -73,23 +59,12 @@ namespace core
       typedef Matrix3<double> Matrix3d;
       typedef Matrix3<long double> Matrix3ld;
 
+      template <typename T> const Matrix3<T> Matrix3<T>::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);
+      template <typename T> const Matrix3<T> Matrix3<T>::IDENTITY(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
       template <class T>
       inline Matrix3<T>::Matrix3()
       {
-      }
-
-      template <class T>
-      inline Matrix3<T>::Matrix3(const eConstructorMatrix3 constructor)
-      {
-         if (constructor == MAT3_CONST_NOTHING) {}
-         else if (constructor == MAT3_CONST_ZERO)
-         {
-            Zero();
-         }
-         else if (constructor == MAT3_CONST_IDENTITY)
-         {
-            SetIdentity();
-         }
       }
 
       template <class T>
