@@ -21,7 +21,7 @@ namespace core
          static const Vector2<T> UNIT_Y;
          static const Vector2<T> NEG_UNIT_X;
          static const Vector2<T> NEG_UNIT_Y;
-         static const Vector2<T> NEG_UNIT_SCALE; 
+         static const Vector2<T> UNIT_SCALE; 
 
          //----------- constructors
          Vector2();
@@ -50,7 +50,7 @@ namespace core
       template <typename T> const Vector2<T> Vector2<T>::UNIT_Y(0, 1);
       template <typename T> const Vector2<T> Vector2<T>::NEG_UNIT_X(-1, 0);
       template <typename T> const Vector2<T> Vector2<T>::NEG_UNIT_Y(0, -1);
-      template <typename T> const Vector2<T> Vector2<T>::NEG_UNIT_SCALE(1, 1);
+      template <typename T> const Vector2<T> Vector2<T>::UNIT_SCALE(1, 1);
 
       template <typename T>
       inline Vector2<T>::Vector2()
@@ -58,10 +58,8 @@ namespace core
       }
 
       template <typename T>
-      inline Vector2<T>::Vector2(const T x, const T y)
+      inline Vector2<T>::Vector2(const T x, const T y) : Point2<T>(x, y)
       {
-         this->x = x;
-         this->y = y;
       }
 
       template <typename T>
