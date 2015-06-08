@@ -7,12 +7,11 @@ namespace core
    namespace math
    {
 
-      template <class T>
+      template <typename T>
       class Point2
       {
-      protected:
          T x, y;
-      public:
+
          //----------- constructors
          Point2();
          Point2(const T x, const T y);
@@ -60,70 +59,70 @@ namespace core
       typedef Point2<double> Point2d;
       typedef Point2<long double> Point2ld; // TODO: replace with new type
 
-      template <class T>
+      template <typename T>
       Point2<T>::Point2()
       {
       }
 
-      template <class T>
+      template <typename T>
       Point2<T>::~Point2()
       {
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T>::Point2(const T x, const T y)
       {
          this->x = x;
          this->y = y;
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T>::Point2(const T scaler)
       {
          x = y = scaler;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point2<T>::Zero()
       {
          x = y = (T)0;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point2<T>::Set(const T x, const T y)
       {
          this->x = x;
          this->y = y;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point2<T>::Set(const Point2<T> &other)
       {
          x = other.x;
          y = other.y;
       }
 
-      template <class T>
+      template <typename T>
       inline T Point2<T>::operator[](const uint8 index) const
       {
          assert(index < 2);
          return (&x)[index];
       }
 
-      template <class T>
+      template <typename T>
       inline T &Point2<T>::operator[](const uint8 index)
       {
          assert(index < 2);
          return (&x)[index];
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> Point2<T>::operator-() const
       {
          return Point2<T>(-x, -y);
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> &Point2<T>::operator=(const T scaler)
       {
          x = y = scaler;
@@ -131,26 +130,26 @@ namespace core
       }
 
       // pointer accessor for direct copying
-      template <class T>
+      template <typename T>
       inline T* Point2<T>::Ptr()
       {
          return &x;
       }
 
       // pointer accessor for direct copying
-      template <class T>
+      template <typename T>
       inline const T* Point2<T>::Ptr() const
       {
          return &x;
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> Point2<T>::operator+(const Point2<T> &other) const
       {
          return Point2<T>(x + other.x, y + other.y);
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> &Point2<T>::operator+=(const Point2<T> &other)
       {
          x += other.x;
@@ -158,13 +157,13 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> Point2<T>::operator-(const Point2<T> &other) const
       {
          return Point2<T>(x - other.x, y - other.y);
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> &Point2<T>::operator-=(const Point2<T> &other)
       {
          x -= other.x;
@@ -172,14 +171,14 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point2<T>::Swap(Point2<T> &other)
       {
          core::Swap(x, other.x);
          core::Swap(y, other.y);
       }
 
-      template <class T>
+      template <typename T>
       inline bool Point2<T>::operator==(const Point2<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -193,7 +192,7 @@ namespace core
          return true;
       }
 
-      template <class T>
+      template <typename T>
       inline bool Point2<T>::operator!=(const Point2<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -207,13 +206,13 @@ namespace core
          return false;
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> Point2<T>::operator*(const T scalar) const
       {
          return Point2<T>(x * scalar, y * scalar);
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> &Point2<T>::operator*=(const T scalar)
       {
          x += scalar;
@@ -221,7 +220,7 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> Point2<T>::operator/(const T scalar) const
       {
          assert(!core::IsZero(scalar));
@@ -230,7 +229,7 @@ namespace core
          return Point2<T>(x * inv, y * inv);
       }
 
-      template <class T>
+      template <typename T>
       inline Point2<T> &Point2<T>::operator/=(const T scalar)
       {
          assert(!core::IsZero(scalar));
