@@ -9,12 +9,12 @@ namespace core
    namespace math
    {
 
-      template <class T>
+      template <typename T>
       class Point3
       {
-      protected:
-         T x, y, z;
       public:
+         T x, y, z;
+
          Point3();
          Point3(const T x, const T y, const T z);
          Point3(const T scaler);
@@ -59,12 +59,12 @@ namespace core
       typedef Point3<double> Point3d;
       typedef Point3<long double> Point3ld; // TODO: replace with new type
 
-      template <class T>
+      template <typename T>
       inline Point3<T>::Point3()
       {
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T>::Point3(const T x, const T y, const T z)
       {
          this->x = x;
@@ -72,24 +72,24 @@ namespace core
          this->z = z;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T>::Point3(const T scaler)
       {
          x = y = z = scaler;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T>::~Point3()
       {
       }
 
-      template <class T>
+      template <typename T>
       inline void Point3<T>::Zero()
       {
          x = y = z = (T)0;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point3<T>::Set(const T x, const T y, const T z)
       {
          this->x = x;
@@ -97,7 +97,7 @@ namespace core
          this->z = z;
       }
 
-      template <class T>
+      template <typename T>
       void Point3<T>::Set(const Point3<T> &other)
       {
          x = other.x;
@@ -105,14 +105,14 @@ namespace core
          z = other.z;
       }
 
-      template <class T>
+      template <typename T>
       inline T Point3<T>::operator[](const uint8 index) const
       {
          assert(index < 3);
          return (&x)[index];
       }
 
-      template <class T>
+      template <typename T>
       inline T &Point3<T>::operator[](const uint8 index)
       {
          assert(index < 3);
@@ -120,13 +120,13 @@ namespace core
       }
 
 
-      template <class T>
+      template <typename T>
       inline Point3<T> Point3<T>::operator-() const
       {
          return Point3<T>(-x, -y, -z);
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> &Point3<T>::operator=(const T scaler)
       {
          x = y = z = scaler;
@@ -135,26 +135,26 @@ namespace core
       }
 
       // Pointer accessor for direct copying
-      template <class T>
+      template <typename T>
       inline T* Point3<T>::Ptr()
       {
          return &x;
       }
 
       // Pointer accessor for direct copying
-      template <class T>
+      template <typename T>
       inline const T* Point3<T>::Ptr() const
       {
          return &x;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> Point3<T>::operator+(const Point3<T> &other) const
       {
          return Point3<T>(x + other.x, y + other.y, z + other.z);
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> &Point3<T>::operator+=(const Point3<T> &other)
       {
          x += other.x;
@@ -163,13 +163,13 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> Point3<T>::operator-(const Point3<T> &other) const
       {
          return Point3<T>(x - other.x, y - other.y, z - other.z);
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> &Point3<T>::operator-=(const Point3<T> &other)
       {
          x -= other.x;
@@ -178,7 +178,7 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline void Point3<T>::Swap(Point3<T> &other)
       {
          core::Swap(x, other.x);
@@ -186,7 +186,7 @@ namespace core
          core::Swap(z, other.z);
       }
 
-      template <class T>
+      template <typename T>
       inline bool Point3<T>::operator==(const Point3<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -204,7 +204,7 @@ namespace core
          return true;
       }
 
-      template <class T>
+      template <typename T>
       inline bool Point3<T>::operator!=(const Point3<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -222,13 +222,13 @@ namespace core
          return false;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> Point3<T>::operator*(const T scalar) const
       {
          return Point3<T>(x * scalar, y * scalar, z * scalar);
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> &Point3<T>::operator*=(const T scalar)
       {
          x *= scalar;
@@ -237,7 +237,7 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> Point3<T>::operator/(const T scalar) const
       {
          assert(!core::IsZero(scalar));
@@ -246,7 +246,7 @@ namespace core
          return Point3<T>(x * inv, y * inv, z * inv);
       }
 
-      template <class T>
+      template <typename T>
       inline Point3<T> &Point3<T>::operator/=(const T scalar)
       {
          assert(!core::IsZero(scalar));
@@ -258,7 +258,7 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       T Point3<T>::GetDistanceFrom(const Point3<T> &other) const
       {
          return Point3<T>(x - other.x, y - other.y, z - other.z).Length();
