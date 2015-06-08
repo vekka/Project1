@@ -1,6 +1,8 @@
 #ifndef _POINT2_HPP_INCLUDED_
 #define _POINT2_HPP_INCLUDED_
 
+#include <iostream>
+
 namespace core
 {
 
@@ -50,6 +52,12 @@ namespace core
          Point2 &operator/=(const T scalar);
 
          Point2 operator-() const;
+         
+         friend std::ostream& operator<<(std::ostream &out, Point2 &point2)
+         {
+           out << "(" << point2.x << ", " << point2.y << ")";
+           return out;
+         }          
       };
 
       typedef Point2<int16> Point2s;
