@@ -1,6 +1,8 @@
 #ifndef _POINT3_HPP_INCLUDED_
 #define _POINT3_HPP_INCLUDED_
 
+#include <iostream>
+
 #include "mathcommon.hpp"
 
 namespace core
@@ -49,6 +51,14 @@ namespace core
          bool operator!=(const Point3 &other) const;
 
          T GetDistanceFrom(const Point3 &other) const;
+         
+         friend std::ostream& operator<<(std::ostream &out, Point3 &point3)
+         {
+           out << "(" << point3.x << ", " <<
+               point3.y << ", " <<
+               point3.z << ")";
+           return out;
+         }          
       };
 
       typedef Point3<int16> Point3s;
