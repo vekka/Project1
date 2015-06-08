@@ -60,11 +60,8 @@ namespace core
       }
 
       template <typename T>
-      inline Vector3<T>::Vector3(const T x, const T y, const T z)
+      inline Vector3<T>::Vector3(const T x, const T y, const T z)  : Point3<T>(x, y, z)
       {
-         this->x = x;
-         this->y = y;
-         this->z = z;
       }
       
       template <typename T>
