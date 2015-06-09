@@ -53,38 +53,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace material
 {
-   const char *DEFAULT_MATERIAL_NAME = "DefaultMaterial";
+   const char *Material::DEFAULT_MATERIAL_NAME = "default";
 
-   //static const char *MATERIAL_KEY_NAME = "?mat.name";
-   //static const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
-   //static const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
-   //static const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
-   //static const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
-   //static const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
-   //static const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
-   //static const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
-   //static const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
-   //static const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
-   //static const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
-   //static const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
-   //static const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
-   //static const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
-   //static const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
-   //static const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
-   //static const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
-   //static const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
+   const char *Material::KEY_NAME = "?mat.name";
+   const char *Material::KEY_TWOSIDED = "$mat.twosided";
+   const char *Material::KEY_SHADING_MODEL = "$mat.shadingm";
+   const char *Material::KEY_ENABLE_WIREFRAME = "$mat.wireframe";
+   const char *Material::KEY_BLEND_FUNC = "$mat.blend";
+   const char *Material::KEY_OPACITY = "$mat.opacity";
+   const char *Material::KEY_BUMPSCALING = "$mat.bumpscaling";
+   const char *Material::KEY_SHININESS = "$mat.shininess";
+   const char *Material::KEY_REFLECTIVITY = "$mat.reflectivity";
+   const char *Material::KEY_SHININESS_STRENGTH = "$mat.shinpercent";
+   const char *Material::KEY_REFRACTI = "$mat.refracti";
+   const char *Material::KEY_COLOR_DIFFUSE = "$clr.diffuse";
+   const char *Material::KEY_COLOR_AMBIENT = "$clr.ambient";
+   const char *Material::KEY_COLOR_SPECULAR = "$clr.specular";
+   const char *Material::KEY_COLOR_EMISSIVE = "$clr.emissive";
+   const char *Material::KEY_COLOR_TRANSPARENT = "$clr.transparent";
+   const char *Material::KEY_COLOR_REFLECTIVE = "$clr.reflective";
+   const char *Material::KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
 
-   // pure key names for all m_texture-related properties
-   //static const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
-   //static const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
-   //static const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
-   //static const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
-   //static const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
-   //static const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
-   //static const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
-   //static const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
-   //static const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
-   //static const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
+   const char *Material::KEYNAME_TEXTURE_BASE = "$tex.file";
+   const char *Material::KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
+   const char *Material::KEYNAME_TEXOP_BASE = "$tex.op";
+   const char *Material::KEYNAME_MAPPING_BASE = "$tex.mapping";
+   const char *Material::KEYNAME_TEXBLEND_BASE = "$tex.blend";
+   const char *Material::KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
+   const char *Material::KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
+   const char *Material::KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
+   const char *Material::KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
+   const char *Material::KEYNAME_TEXFLAGS_BASE = "$tex.flags";
 
    // atually the one and only way to get an Material instance
    Material::Material()
@@ -326,7 +325,7 @@ namespace material
          MaterialProperty* prop = pMat->GetProperty(i);
 
          if (prop /* just a sanity check ... */
-            && 0 == strcmp(prop->m_key.data(), material::MATERIAL_KEYNAME_TEXTURE_BASE)
+            && 0 == strcmp(prop->m_key.data(), material::Material::KEYNAME_TEXTURE_BASE)
             && prop->m_textureSemantic == type) {
 
             max = std::max(max, prop->m_textureIndex + 1);
@@ -350,35 +349,35 @@ namespace material
       assert(NULL != mat && !path.empty());
 
       // Get the path to the m_texture
-      if (0 != GetMaterialString(mat, material::MATERIAL_KEYNAME_TEXTURE_BASE, type, index, path))	{
+      if (0 != GetMaterialString(mat, material::Material::KEYNAME_TEXTURE_BASE, type, index, path))	{
          return -1;
       }
       // Determine mapping type 
       material::eTextureMapping mapping = material::TEXTURE_MAP_UV;
-      GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPING_BASE, type, index, (int32*)&mapping);
+      GetMaterialInteger(mat, material::Material::KEYNAME_MAPPING_BASE, type, index, (int32*)&mapping);
       if (_mapping)
          *_mapping = mapping;
 
       // Get UV index 
       if (material::TEXTURE_MAP_UV == mapping && uvindex)	{
-         GetMaterialInteger(mat, material::MATERIAL_KEYNAME_UVWSRC_BASE, type, index, (int32*)uvindex);
+         GetMaterialInteger(mat, material::Material::KEYNAME_UVWSRC_BASE, type, index, (int32*)uvindex);
       }
       // Get blend factor 
       if (blend)	{
-         GetMaterialFloat(mat, material::MATERIAL_KEYNAME_TEXBLEND_BASE, type, index, blend);
+         GetMaterialFloat(mat, material::Material::KEYNAME_TEXBLEND_BASE, type, index, blend);
       }
       // Get m_texture operation 
       if (op){
-         GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXOP_BASE, type, index, (int32*)op);
+         GetMaterialInteger(mat, material::Material::KEYNAME_TEXOP_BASE, type, index, (int32*)op);
       }
       // Get m_texture mapping modes
       if (mapmode)	{
-         GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_U_BASE, type, index, (int32*)&mapmode[0]);
-         GetMaterialInteger(mat, material::MATERIAL_KEYNAME_MAPPINGMODE_V_BASE, type, index, (int32*)&mapmode[1]);
+         GetMaterialInteger(mat, material::Material::KEYNAME_MAPPINGMODE_U_BASE, type, index, (int32*)&mapmode[0]);
+         GetMaterialInteger(mat, material::Material::KEYNAME_MAPPINGMODE_V_BASE, type, index, (int32*)&mapmode[1]);
       }
       // Get m_texture flags
       if (flags){
-         GetMaterialInteger(mat, material::MATERIAL_KEYNAME_TEXFLAGS_BASE, type, index, (int32*)flags);
+         GetMaterialInteger(mat, material::Material::KEYNAME_TEXFLAGS_BASE, type, index, (int32*)flags);
       }
       return 0;
    }

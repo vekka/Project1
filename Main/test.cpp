@@ -8,7 +8,7 @@
 //#include "win32main.hpp"
 
 #include "model/importer.hpp"
-//#include "scene/scene.hpp"
+#include "scene/scene.hpp"
 
 #include "shader/oglshader.hpp"
 #include "gfx/vertexbuffer.hpp"
@@ -58,14 +58,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
    File file;
+   const scene::Scene *sc;
+   importer::Importer importer;
 
-   //FreeCamera camera(FRUSTUM_PERSPECTIVE, -1.0f, 1.0f, 1.0f, -1.0f, 0.3f, 1000.0f);
-
-   //ObjFile cube;
-   //cube.Open("assets/testObjects/cubePNT.obj");
-
-   //cube.Read();
-   //cube.Close();
+   sc = importer.ReadFile("assets/testObjects/monkey.obj", &file );
    Win32Console debugConsole;
    debugConsole.Create(100, 50, 100, 50);
    bool resized = false;

@@ -337,9 +337,6 @@ namespace scene
       */
        //Camera** m_ppCameras;
 
-      Scene();
-      ~Scene();
-
       // Unless no special scene flags are set this will always be true.
       inline bool HasMeshes() const
       {

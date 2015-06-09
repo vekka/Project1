@@ -55,51 +55,19 @@ using core::math::Matrix4f;
 #include "core/BasicTypes.hpp"
 //#include <assert.h>
 #include "model/ImporterDesc.hpp"
-#include "core/fileio/file.hpp"
 
+#include "core/fileio/file.hpp"
 using core::fileio::File;
 using scene::Scene;
+
+#include "core/memory/pointer.hpp"
+using core::pointer::ScopeGuard;
 
 //class Scene;
 // importerdesc.h
 struct aiImporterDesc;
 
 
-template <typename T>
-struct ScopeGuard
-{
-   ScopeGuard(T* obj) : obj(obj), mdismiss() {}
-   ~ScopeGuard() throw() {
-      if (!mdismiss) {
-         delete obj;
-      }
-      obj = NULL;
-   }
-
-   T* dismiss() {
-      mdismiss = true;
-      return obj;
-   }
-
-   operator T*() {
-      return obj;
-   }
-
-   T* operator -> () {
-      return obj;
-   }
-
-private:
-   // no copying allowed.
-   ScopeGuard();
-   ScopeGuard(const ScopeGuard &);
-   ScopeGuard &operator = (const ScopeGuard &);
-
-   T* obj;
-   bool mdismiss;
-};
-
-// ---------------------------------------------------------------------------
 /** FOR IMPORTER PLUGINS ONLY: The BaseImporter defines a common interface
 *  for all importer worker classes.
 *
@@ -717,7 +685,7 @@ namespace importer
       * @see ReadFile(const char*, pFlags)  */
       //const Scene* ReadFile(const std::string &pFile, uint32 pFlags);
       
-      Scene* ReadFile(const std::string& pFile, core::fileio::File* pIOHandler);
+      Scene* ReadFile(const std::string &pFile, core::fileio::File* file);
 
       /** Frees the current scene.
       *

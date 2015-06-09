@@ -1,6 +1,8 @@
 #ifndef _MATRIX3_HPP_INCLUDED_
 #define _MATRIX3_HPP_INCLUDED_
 
+#include <iostream>
+
 #include "vector3.hpp"
 
 namespace core
@@ -13,6 +15,7 @@ namespace core
       {
       private:
          T m[3][3];
+
       public:
          static const Matrix3<T> ZERO;
          static const Matrix3<T> IDENTITY;
@@ -49,6 +52,14 @@ namespace core
          bool Inverse(Matrix3 &inv, const float tolerance) const;
 
          //friend Matrix3	operator*( float a, Matrix3 const &b );
+
+         friend std::ostream& operator<<(std::ostream &out, Matrix3 &mat3)
+         {
+            out << "((" << mat3[0][0] << ", " << mat3[0][1] << ", " << mat3[0][2] << "), " <<
+               "(" << mat3[1][0] << ", " << mat3[1][1] << ", " << mat3[1][2] << "), " <<
+               "(" << mat3[2][0] << ", " << mat3[2][1] ", " << << mat3[2][2] << "))";
+            return out;
+         }
       };
          
       typedef Matrix3<int16> Matrix3s;

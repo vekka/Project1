@@ -68,7 +68,6 @@ namespace material
    //int32 GetMaterialFloatArray(const Material* pMat, const char *pKey, uint32 type, uint32 index, float* pOut, uint32* pMax);
 
    // Name for default materials (2nd is used if meshes have UV coords)
-   extern const char *DEFAULT_MATERIAL_NAME;
 
    // Defines how the Nth m_texture of a specific type is combined with
    //  the result of all previous layers.
@@ -407,6 +406,38 @@ namespace material
       uint32 m_NumAllocated;
 
    public:
+      static const char *DEFAULT_MATERIAL_NAME;
+
+      static const char *KEY_NAME;
+      static const char *KEY_TWOSIDED;
+      static const char *KEY_SHADING_MODEL;
+      static const char *KEY_ENABLE_WIREFRAME;
+      static const char *KEY_BLEND_FUNC;
+      static const char *KEY_OPACITY;
+      static const char *KEY_BUMPSCALING;
+      static const char *KEY_SHININESS;
+      static const char *KEY_REFLECTIVITY;
+      static const char *KEY_SHININESS_STRENGTH;
+      static const char *KEY_REFRACTI;
+      static const char *KEY_COLOR_DIFFUSE;
+      static const char *KEY_COLOR_AMBIENT;
+      static const char *KEY_COLOR_SPECULAR;
+      static const char *KEY_COLOR_EMISSIVE;
+      static const char *KEY_COLOR_TRANSPARENT;
+      static const char *KEY_COLOR_REFLECTIVE;
+      static const char *KEY_GLOBAL_BACKGROUND_IMAGE;
+
+      static const char *KEYNAME_TEXTURE_BASE;
+      static const char *KEYNAME_UVWSRC_BASE;
+      static const char *KEYNAME_TEXOP_BASE;
+      static const char *KEYNAME_MAPPING_BASE;
+      static const char *KEYNAME_TEXBLEND_BASE;
+      static const char *KEYNAME_MAPPINGMODE_U_BASE;
+      static const char *KEYNAME_MAPPINGMODE_V_BASE;
+      static const char *KEYNAME_TEXMAP_AXIS_BASE;
+      static const char *KEYNAME_UVTRANSFORM_BASE;
+      static const char *KEYNAME_TEXFLAGS_BASE;
+
       Material();
       ~Material();
 
@@ -531,7 +562,6 @@ namespace material
       static void CopyPropertyList(Material* pcDest, const Material* pcSrc);
    };
 
-
 //#define AI_MATKEY_NAME "?mat.name",0,0
 //#define AI_MATKEY_TWOSIDED "$mat.twosided",0,0
 //#define AI_MATKEY_SHADING_MODEL "$mat.shadingm",0,0
@@ -569,43 +599,13 @@ namespace material
     //extern const char *MATERIAL_KEY_COLOR_TRANSPARENT;
     //extern const char *MATERIAL_KEY_COLOR_REFLECTIVE;
     //extern const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE;
-   const char *MATERIAL_KEY_NAME = "?mat.name";
-   const char *MATERIAL_KEY_TWOSIDED = "$mat.twosided";
-   const char *MATERIAL_KEY_SHADING_MODEL = "$mat.shadingm";
-   const char *MATERIAL_KEY_ENABLE_WIREFRAME = "$mat.wireframe";
-   const char *MATERIAL_KEY_BLEND_FUNC = "$mat.blend";
-   const char *MATERIAL_KEY_OPACITY = "$mat.opacity";
-   const char *MATERIAL_KEY_BUMPSCALING = "$mat.bumpscaling";
-   const char *MATERIAL_KEY_SHININESS = "$mat.shininess";
-   const char *MATERIAL_KEY_REFLECTIVITY = "$mat.reflectivity";
-   const char *MATERIAL_KEY_SHININESS_STRENGTH = "$mat.shinpercent";
-   const char *MATERIAL_KEY_REFRACTI = "$mat.refracti";
-   const char *MATERIAL_KEY_COLOR_DIFFUSE = "$clr.diffuse";
-   const char *MATERIAL_KEY_COLOR_AMBIENT = "$clr.ambient";
-   const char *MATERIAL_KEY_COLOR_SPECULAR = "$clr.specular";
-   const char *MATERIAL_KEY_COLOR_EMISSIVE = "$clr.emissive";
-   const char *MATERIAL_KEY_COLOR_TRANSPARENT = "$clr.transparent";
-   const char *MATERIAL_KEY_COLOR_REFLECTIVE = "$clr.reflective";
-   const char *MATERIAL_KEY_GLOBAL_BACKGROUND_IMAGE = "?bg.global";
 
-
-
-   const char *MATERIAL_KEYNAME_TEXTURE_BASE = "$tex.file";
-   const char *MATERIAL_KEYNAME_UVWSRC_BASE = "$tex.uvwsrc";
-   const char *MATERIAL_KEYNAME_TEXOP_BASE = "$tex.op";
-   const char *MATERIAL_KEYNAME_MAPPING_BASE = "$tex.mapping";
-   const char *MATERIAL_KEYNAME_TEXBLEND_BASE = "$tex.blend";
-   const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE = "$tex.mapmodeu";
-   const char *MATERIAL_KEYNAME_MAPPINGMODE_V_BASE = "$tex.mapmodev";
-   const char *MATERIAL_KEYNAME_TEXMAP_AXIS_BASE = "$tex.mapaxis";
-   const char *MATERIAL_KEYNAME_UVTRANSFORM_BASE = "$tex.uvtrafo";
-   const char *MATERIAL_KEYNAME_TEXFLAGS_BASE = "$tex.flags";
 
 
    // pure key names for all m_texture-related properties
-    //extern const char *MATERIAL_KEYNAME_TEXTURE_BASE;
-    //extern const char *MATERIAL_KEYNAME_UVWSRC_BASE;
-    //extern const char *MATERIAL_KEYNAME_TEXOP_BASE;
+    //const char *MATERIAL_KEYNAME_TEXTURE_BASE;
+    //const char *MATERIAL_KEYNAME_UVWSRC_BASE;
+    //const char *MATERIAL_KEYNAME_TEXOP_BASE;
     //extern const char *MATERIAL_KEYNAME_MAPPING_BASE;
     //extern const char *MATERIAL_KEYNAME_TEXBLEND_BASE;
     //extern const char *MATERIAL_KEYNAME_MAPPINGMODE_U_BASE;

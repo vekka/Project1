@@ -356,9 +356,6 @@
     <ClInclude Include="source\model\ImporterDesc.hpp">
       <Filter>Source Files\Model\Loaders</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\memory\scopedptr.hpp">
-      <Filter>Source Files\Core\MemoryLib</Filter>
-    </ClInclude>
     <ClInclude Include="source\core\string\stringext.hpp">
       <Filter>Source Files\Core\StringLib</Filter>
     </ClInclude>
@@ -391,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="source\model\importer.hpp">
       <Filter>Source Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\memory\pointer.hpp">
+      <Filter>Source Files\Core\MemoryLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

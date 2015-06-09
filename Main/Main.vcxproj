@@ -198,7 +198,7 @@
     <ClInclude Include="source\core\math\vector4.hpp" />
     <ClInclude Include="source\core\memory\allocator.hpp" />
     <ClInclude Include="source\core\memory\memory.hpp" />
-    <ClInclude Include="source\core\memory\scopedptr.hpp" />
+    <ClInclude Include="source\core\memory\pointer.hpp" />
     <ClInclude Include="source\core\poppack1.hpp" />
     <ClInclude Include="source\core\pushpack1.hpp" />
     <ClInclude Include="source\core\StringComparison.hpp" />

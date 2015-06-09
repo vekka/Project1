@@ -261,7 +261,7 @@ namespace model
         const uint32 numToken = tokenize<std::string>(line, token, " "); //tokenize<std::string>line.Tokenize(token);
         std::string name( "" );
         if ( numToken == 1 ) {
-            name = material::DEFAULT_MATERIAL_NAME;
+            name = material::Material::DEFAULT_MATERIAL_NAME;
         } else {
             name = token[1];
         }

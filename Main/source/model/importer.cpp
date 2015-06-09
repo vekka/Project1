@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "importer.hpp"
-#include "core/memory/scopedptr.hpp"
+#include "core/memory/pointer.hpp"
 
 
 //namespace baseimporter
@@ -125,18 +125,24 @@ namespace importer
    //   }
    }
 
+      Importer::~Importer()
+      {
+   //      // nothing to do here
+      }
 
-   Scene* Importer::ReadFile(const std::string& pFile, core::fileio::File* file)
+
+   Scene* Importer::ReadFile(const std::string &pFile, core::fileio::File* file)
          {
  
             // create a scene object to hold the data  
-            ScopeGuard<Scene> sc(new Scene() );
-         
+            //ScopeGuard<Scene> sc(new Scene);
+            
+            Scene *sc = new Scene;
             try
             {
               objFile.InternReadFile(pFile, sc, file);
             }
-            catch (const std::exception& err)	
+            catch (const std::exception &err)	
             {
             //   // extract error description
             //   mErrorText = err.what();
@@ -145,7 +151,7 @@ namespace importer
             }
       
             // return what we gathered from the import. 
-            sc.dismiss();
+            //sc.dismiss();
             return sc;
          }
 

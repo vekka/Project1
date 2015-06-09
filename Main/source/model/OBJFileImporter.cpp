@@ -50,8 +50,8 @@ using mesh2::Face;
 
 //#include "materialSystem.hpp"
 
-#include "../core/memory/scopedptr.hpp"
-using core::memory::ScopedPtr;
+#include "../core/memory/pointer.hpp"
+using core::pointer::ScopedPtr;
 
 using scene::Node;
 using material::SHADING_MODE_FLAT;
@@ -127,8 +127,9 @@ namespace objfileimporter
    {
      
       pFile->Open(pFileName, true);
-      ScopedPtr<File> file(pFile);
-      if (!file.Get()) {
+      ScopedPtr<File> file(pFileName);
+      //File *file = new File();
+      if (!file->Get()) {
          //throw DeadlyImportError("Failed to open file " + pFile + ".");
       }
 
@@ -509,8 +510,8 @@ namespace objfileimporter
    void ObjFileImporter::AddTextureMappingModeProperty(material::Material* mat, material::eTextureType type, int32 clampMode)
    {
       assert(NULL != mat);
-      mat->AddProperty<int32>(&clampMode, 1, material::MATERIAL_KEYNAME_MAPPINGMODE_U_BASE, type, 0);
-      mat->AddProperty<int32>(&clampMode, 1, material::MATERIAL_KEYNAME_MAPPINGMODE_V_BASE, type, 0);
+      mat->AddProperty<int32>(&clampMode, 1, material::Material::KEYNAME_MAPPINGMODE_U_BASE, type, 0);
+      mat->AddProperty<int32>(&clampMode, 1, material::Material::KEYNAME_MAPPINGMODE_V_BASE, type, 0);
    }
 
    //	Creates the material 
@@ -541,7 +542,7 @@ namespace objfileimporter
          material::Material* mat = new material::Material;
          objfile::ObjMaterial *pCurrentMaterial = (*it).second;
 
-         mat->AddProperty(pCurrentMaterial->m_materialName, material::MATERIAL_KEY_NAME);
+         mat->AddProperty(pCurrentMaterial->m_materialName, material::Material::KEY_NAME);
 
          // convert illumination model
          int32 sm = 0;
@@ -561,26 +562,26 @@ namespace objfileimporter
          //   DefaultLogger::get()->error("OBJ: unexpected illumination model (0-2 recognized)");
          }
 
-         mat->AddProperty<int32>(&sm, 1, material::MATERIAL_KEY_SHADING_MODEL);
+         mat->AddProperty<int32>(&sm, 1, material::Material::KEY_SHADING_MODEL);
 
          // multiplying the specular exponent with 2 seems to yield better results
          pCurrentMaterial->m_shineness *= 4.f;
          
          // Adding material colors 
-         mat->AddProperty(&pCurrentMaterial->m_ambientColor, 1, material::MATERIAL_KEY_COLOR_AMBIENT);
-         mat->AddProperty(&pCurrentMaterial->m_diffuseColor, 1, material::MATERIAL_KEY_COLOR_DIFFUSE);
-         mat->AddProperty(&pCurrentMaterial->m_specularColor, 1, material::MATERIAL_KEY_COLOR_SPECULAR);
-         mat->AddProperty(&pCurrentMaterial->m_emissiveColor, 1, material::MATERIAL_KEY_COLOR_EMISSIVE);
-         mat->AddProperty(&pCurrentMaterial->m_shineness, 1, material::MATERIAL_KEY_SHININESS);
-         mat->AddProperty(&pCurrentMaterial->m_alpha, 1, material::MATERIAL_KEY_OPACITY);
+         mat->AddProperty(&pCurrentMaterial->m_ambientColor, 1, material::Material::KEY_COLOR_AMBIENT);
+         mat->AddProperty(&pCurrentMaterial->m_diffuseColor, 1, material::Material::KEY_COLOR_DIFFUSE);
+         mat->AddProperty(&pCurrentMaterial->m_specularColor, 1, material::Material::KEY_COLOR_SPECULAR);
+         mat->AddProperty(&pCurrentMaterial->m_emissiveColor, 1, material::Material::KEY_COLOR_EMISSIVE);
+         mat->AddProperty(&pCurrentMaterial->m_shineness, 1, material::Material::KEY_SHININESS);
+         mat->AddProperty(&pCurrentMaterial->m_alpha, 1, material::Material::KEY_OPACITY);
 
          // Adding refraction index
-         mat->AddProperty(&pCurrentMaterial->m_indexOfRefraction, 1, material::MATERIAL_KEY_REFRACTI);
+         mat->AddProperty(&pCurrentMaterial->m_indexOfRefraction, 1, material::Material::KEY_REFRACTI);
 
          // Adding textures
          if (0 != pCurrentMaterial->m_texture.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_texture, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DIFFUSE, 0);
+            mat->AddProperty(pCurrentMaterial->m_texture, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DIFFUSE, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_DIFFUSE])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_DIFFUSE);
@@ -589,7 +590,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureAmbient.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureAmbient, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_AMBIENT, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureAmbient, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_AMBIENT, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_AMBIENT])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_AMBIENT);
@@ -597,11 +598,11 @@ namespace objfileimporter
          }
 
          if (0 != pCurrentMaterial->m_textureEmissive.size())
-            mat->AddProperty(pCurrentMaterial->m_textureEmissive, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_EMISSIVE, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureEmissive, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_EMISSIVE, 0);
 
          if (0 != pCurrentMaterial->textureSpecular.size())
          {
-            mat->AddProperty(pCurrentMaterial->textureSpecular, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SPECULAR, 0);
+            mat->AddProperty(pCurrentMaterial->textureSpecular, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SPECULAR, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_SPECULAR])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_SPECULAR);
@@ -610,7 +611,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureBump.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureBump, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_HEIGHTMAP, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureBump, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_HEIGHTMAP, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_BUMP])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_HEIGHTMAP);
@@ -619,7 +620,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureNormal.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureNormal, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_NORMALS, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureNormal, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_NORMALS, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_NORMALS])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_NORMALS);
@@ -628,7 +629,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureDisplacement.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureDisplacement, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DISPLACEMENT, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureDisplacement, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_DISPLACEMENT, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_DISPLACEMENT])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_DISPLACEMENT);
@@ -637,7 +638,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureOpacity.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureOpacity, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_OPACITY, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureOpacity, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_OPACITY, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_OPACITY])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_OPACITY);
@@ -646,7 +647,7 @@ namespace objfileimporter
 
          if (0 != pCurrentMaterial->m_textureSpecularity.size())
          {
-            mat->AddProperty(pCurrentMaterial->m_textureSpecularity, material::MATERIAL_KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SHININESS, 0);
+            mat->AddProperty(pCurrentMaterial->m_textureSpecularity, material::Material::KEYNAME_TEXTURE_BASE, material::TEXTURE_TYPE_SHININESS, 0);
             if (pCurrentMaterial->m_clamp[objfile::ObjMaterial::TEXTURE_TYPE_SHININESS])
             {
                AddTextureMappingModeProperty(mat, material::TEXTURE_TYPE_SHININESS);

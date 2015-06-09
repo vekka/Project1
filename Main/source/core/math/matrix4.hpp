@@ -1,6 +1,8 @@
 #ifndef _MATRIX4_HPP_INCLUDED_
 #define _MATRIX4_HPP_INCLUDED_
 
+#include <iostream>
+
 #include "vector3.hpp"
 #include "vector4.hpp"
 
@@ -12,21 +14,17 @@ namespace core
    namespace math
    {
 
-      enum eConstructorMatrix4
-      {
-         MAT4_CONST_NOTHING,
-         MAT4_CONST_ZERO,
-         MAT4_CONST_IDENTITY
-      };
-
       template <class T>
       class Matrix4
       {
       private:
          T m[4][4];
+
       public:
+         static const Matrix4<T> ZERO;
+         static const Matrix4<T> IDENTITY;
+
          Matrix4();
-         Matrix4(const eConstructorMatrix4 constructor);
          Matrix4(const T arr[4][4]);
          Matrix4(
             const T m00, const T m01, const T m02, const T m03,
@@ -69,6 +67,15 @@ namespace core
          void CreateTranslation(const T x, const T y, const T z);
          Matrix3<T> GetMatrix3(const Matrix4 &) const;
          bool IsAffine(void) const;
+
+         friend std::ostream& operator<<(std::ostream &out, Matrix4 &mat4)
+         {
+            out << "((" << mat3[0][0] << ", " << mat3[0][1] << ", " << mat3[0][2] << ", " << mat3[0][3] << "), " <<
+               "(" << mat3[1][0] << ", " << mat3[1][1] << ", " << mat3[1][2] << ", " << mat3[1][3] << "), " <<
+               "(" << mat3[2][0] << ", " << mat3[2][1] << ", " << mat3[2][2] << ", " << mat3[2][3] << "), " <<
+               "(" << mat3[3][0] << ", " << mat3[3][1] << ", " << mat3[3][2] << ", " << mat3[3][3] << "))";
+            return out;
+         }
       };
 
       typedef Matrix4<int16> Matrix4s;
@@ -79,25 +86,12 @@ namespace core
       typedef Matrix4<double> Matrix4d;
       typedef Matrix4<long double> Matrix4ld; // TODO: replace with new data type
 
+      template <typename T> const Matrix4<T> Matrix4<T>::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      template <typename T> const Matrix4<T> Matrix4<T>::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+
       template <class T>
       inline Matrix4<T>::Matrix4()
       {
-      }
-
-      template <class T>
-      inline Matrix4<T>::Matrix4(const eConstructorMatrix4 constructor)
-      {
-         switch (constructor)
-         {
-         case MAT4_CONST_NOTHING:
-            break;
-         case MAT4_CONST_ZERO:
-            Zero();
-            break;
-         case MAT4_CONST_IDENTITY:
-            SetIdentity();
-            break;
-         }
       }
 
       template <class T>
