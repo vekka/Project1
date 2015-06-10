@@ -42,6 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "importer.hpp"
 #include "core/memory/pointer.hpp"
 
+using core::fileio::File;
 
 //namespace baseimporter
 //{
@@ -131,16 +132,16 @@ namespace importer
       }
 
 
-   Scene* Importer::ReadFile(const std::string &pFile, core::fileio::File* file)
+   Scene* Importer::ReadFile(const std::string &path)
          {
  
             // create a scene object to hold the data  
             //ScopeGuard<Scene> sc(new Scene);
-            
-            Scene *sc = new Scene;
+
+            Scene *scene = new Scene;
             try
             {
-              objFile.InternReadFile(pFile, sc, file);
+               objFile.InternReadFile(path, scene);
             }
             catch (const std::exception &err)	
             {
@@ -152,7 +153,7 @@ namespace importer
       
             // return what we gathered from the import. 
             //sc.dismiss();
-            return sc;
+            return scene;
          }
 
 } // namespace importer

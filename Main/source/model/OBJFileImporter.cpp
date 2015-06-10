@@ -123,15 +123,18 @@ namespace objfileimporter
    }
 
    //	Obj-file import implementation
-   void ObjFileImporter::InternReadFile(const std::string &pFileName, scene::Scene* pScene, File* pFile)
+   void ObjFileImporter::InternReadFile(const std::string &pFileName, scene::Scene* pScene)
    {
      
-      pFile->Open(pFileName, true);
-      ScopedPtr<File> file(pFileName);
-      //File *file = new File();
-      if (!file->Get()) {
-         //throw DeadlyImportError("Failed to open file " + pFile + ".");
-      }
+      //pFile->Open(pFileName, true);
+      //ScopedPtr<File> file(pFileName);
+
+      File *file = new File();
+
+      file->Open(pFileName, true);
+      //if (!file->Get()) {
+      //   //throw DeadlyImportError("Failed to open file " + pFile + ".");
+      //}
 
       // Get the file-size and validate it, throwing an exception when fails
       size_t fileSize = file->GetSize();
@@ -172,13 +175,14 @@ namespace objfileimporter
       }
 
       // parse the file into a temporary representation
-      ObjParser parser(m_pDataBuffer, strModelName, pFile);
+      ObjParser parser(m_pDataBuffer, strModelName, file);
 
       // And create the proper return structures out of it
       CreateDataFromImport(parser.GetModel(), pScene);
 
       // Clean up allocated storage for the next import 
       m_pDataBuffer.clear();
+      file->Close();
    }
 
    //	Create the data from parsed obj-file

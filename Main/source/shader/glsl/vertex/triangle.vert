@@ -9,5 +9,6 @@ void main()
 {
 	
 	//color = vec4(vColor,1);
-	gl_Position = P*M*vec4(vVertex,1);
+	gl_Position = 
+	vec4(vVertex,1);
 }

@@ -100,7 +100,7 @@ namespace objfileimporter
       //	See BaseImporter::CanRead() for details.
       bool CanRead(const std::string &fileName, File* file, bool checkSig) const;
       //TODO: implement later, we need the scene.h code here
-      void InternReadFile(const std::string &filePath, scene::Scene* pScene, File* pFile);
+      void InternReadFile(const std::string &filePath, scene::Scene* pScene);
    };
 } // namespace objfileimporter
 
