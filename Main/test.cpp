@@ -53,8 +53,7 @@ using mesh2::Mesh;
 #include "source\model\mesh2.hpp"
 //using mesh2;
 
-void generateBufferFromScene( scene::Scene *sc);
-
+void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID);
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
@@ -101,7 +100,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    shader.Use();
    //shader.AddAttribute("vColor");
-   shader.AddAttribute("vVertex");   
+   shader.AddAttribute("vVertex"); 
+   shader.AddAttribute("vNormal");
    shader.AddUniform("P");
    shader.AddUniform("M");
    shader.Unuse();
@@ -126,22 +126,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
    shader.Unuse();
   
-   glGenBuffers(1, &vboVerticesID);
-   glGenBuffers(1, &vboIndicesID);
-   /////////////////////////////////////
-   glGenVertexArrays(1, &vaoID);
-   glBindVertexArray(vaoID);
-   
-   glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-   glBufferData(GL_ARRAY_BUFFER, 9*sizeof(float), (void*)triangleData, GL_STATIC_DRAW);
- 
-  
-   glEnableVertexAttribArray(shader["vVertex"]);
-   glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (const GLvoid*)0);
-
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(uint32), (const void*)triangleIndices, GL_STATIC_DRAW);
-
   // Process the messages
    while (1)
    {
@@ -185,80 +169,64 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // http://www.lighthouse3d.com/cg-topics/code-samples/importing-3d-models-with-assimp/
 //how to fill opengl vbo with assimp scene
 
-void generateBufferFromScene( scene *sc)
+void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID)
 {
    //vertex array and vertex buffer object IDs
-   GLuint vaoID = 0;
-   GLuint vboVerticesID;
-   GLuint vboIndicesID;
-   uint32 buffer;
+   vaoID = 0;
+   uint32 vboVerticesID;
+   uint32 vboIndicesID;
 
    // For each mesh
-   for (uint32 n = 0; n < sc->mNumMeshes; ++n)
+   for (uint32 n = 0; n < sc->m_numMeshes; ++n)
    {
-      const Mesh* mesh = sc->mMeshes[n];
+      const Mesh* mesh = sc->m_ppMeshes[n];
 
       // create array with faces
       // have to convert from Assimp format to array
       unsigned int *faceArray;
-      faceArray = (uint32 *)malloc(sizeof(uint32) * mesh->mNumFaces * 3);
+      faceArray = (uint32 *)malloc(sizeof(uint32) * mesh->m_numFaces * 3);
       unsigned int faceIndex = 0;
 
-      for (unsigned int t = 0; t < mesh->mNumFaces; ++t)
+      for (unsigned int t = 0; t < mesh->m_numFaces; ++t)
       {
-         const aiFace* face = &mesh->mFaces[t];
+         const Face* face = &mesh->m_pFaces[t];
 
-         memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(unsigned int));
+         memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(uint32));
          faceIndex += 3;
       }
-      aMesh.numFaces = sc->mMeshes[n]->mNumFaces;
-
+   
       // generate Vertex Array for mesh
-      glGenVertexArrays(1, &(aMesh.vao));
-      glBindVertexArray(aMesh.vao);
+      glGenVertexArrays(1, &vaoID);
+      glBindVertexArray(vaoID);
 
       // buffer for faces
-      glGenBuffers(1, &buffer);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
+      glGenBuffers(1, &vboIndicesID);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * mesh->m_numFaces * 3, faceArray, GL_STATIC_DRAW);
 
       // buffer for vertex positions
-      if (mesh->HasPositions()) {
-         glGenBuffers(1, &buffer);
-         glBindBuffer(GL_ARRAY_BUFFER, buffer);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->mNumVertices, mesh->mVertices, GL_STATIC_DRAW);
-         glEnableVertexAttribArray(vertexLoc);
-         glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
+      if (mesh->HasPositions())
+      {
+         glGenBuffers(1, &vboVerticesID);
+         glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
+         glEnableVertexAttribArray(shader["vVertex"]);
+         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices, GL_STATIC_DRAW);
+        
       }
       // buffer for vertex normals
-      if (mesh->HasNormals()) {
-         glGenBuffers(1, &buffer);
-         glBindBuffer(GL_ARRAY_BUFFER, buffer);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->mNumVertices, mesh->mNormals, GL_STATIC_DRAW);
-         glEnableVertexAttribArray(normalLoc);
-         glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+      if (mesh->HasNormals())
+      {
+         glEnableVertexAttribArray(shader["vNormal"]);
+         glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const GLvoid*)0);
+         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
+
       }
-
-
       // unbind buffers
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-      // create material uniform buffer
-      aiMaterial *mtl = sc->mMaterials[mesh->mMaterialIndex];
 
-      aiString texPath;   //contains filename of texture
-      if (AI_SUCCESS == mtl->GetTexture(aiTextureType_DIFFUSE, 0, &texPath)){
-         //bind texture
-         unsigned int texId = textureIdMap[texPath.data];
-         aMesh.texIndex = texId;
-         aMat.texCount = 1;
-      }
-      else
-         aMat.texCount = 0;
-
-       
-      myMeshes.push_back(aMesh);
+      //myMeshes.push_back(aMesh);
    }
 }
