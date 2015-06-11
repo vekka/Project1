@@ -16,7 +16,7 @@
 using win32console::Win32Console;
 
 using namespace oglshader;
-
+using mesh2::Face;
 
 #include "win32/win32console.hpp"
 #include "gfx/vertexbuffer.hpp"
@@ -53,12 +53,13 @@ using mesh2::Mesh;
 #include "source\model\mesh2.hpp"
 //using mesh2;
 
-void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID);
+void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID);
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
    File file;
+   uint32 vaoID = 0;
    const scene::Scene *sc;
    importer::Importer importer;
 
@@ -126,6 +127,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
    shader.Unuse();
   
+
+   //generateBufferFromScene(sc, shader, vaoID);
+
   // Process the messages
    while (1)
    {
@@ -145,8 +149,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindVertexArray(vaoID);
     
       shader.Use();
-      //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-      glDrawArrays(GL_TRIANGLES, 0, 3);
+      glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+      //glDrawArrays(GL_TRIANGLES, 0, 3);
       shader.Unuse();
       
       glBindVertexArray(0);
@@ -169,7 +173,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // http://www.lighthouse3d.com/cg-topics/code-samples/importing-3d-models-with-assimp/
 //how to fill opengl vbo with assimp scene
 
-void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID)
+void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID)
 {
    //vertex array and vertex buffer object IDs
    vaoID = 0;
@@ -177,21 +181,21 @@ void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID
    uint32 vboIndicesID;
 
    // For each mesh
-   for (uint32 n = 0; n < sc->m_numMeshes; ++n)
+   for (uint32 n = 0; n < 1; ++n)
    {
       const Mesh* mesh = sc->m_ppMeshes[n];
 
       // create array with faces
       // have to convert from Assimp format to array
-      unsigned int *faceArray;
+      uint32 *faceArray;
       faceArray = (uint32 *)malloc(sizeof(uint32) * mesh->m_numFaces * 3);
-      unsigned int faceIndex = 0;
+      uint32 faceIndex = 0;
 
-      for (unsigned int t = 0; t < mesh->m_numFaces; ++t)
+      for (uint32 t = 0; t < mesh->m_numFaces; ++t)
       {
          const Face* face = &mesh->m_pFaces[t];
 
-         memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(uint32));
+         memcpy(&faceArray[faceIndex], face->m_pIndexArray, 3 * sizeof(uint32));
          faceIndex += 3;
       }
    
@@ -216,9 +220,9 @@ void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID
       // buffer for vertex normals
       if (mesh->HasNormals())
       {
-         glEnableVertexAttribArray(shader["vNormal"]);
-         glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const GLvoid*)0);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
+         //glEnableVertexAttribArray(shader["vNormal"]);
+         //glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const GLvoid*)0);
+         //glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
 
       }
       // unbind buffers
@@ -228,5 +232,7 @@ void generateBufferFromScene(scene::Scene *sc, GLSLShader &shader, uint32 &vaoID
 
 
       //myMeshes.push_back(aMesh);
+      free(faceArray);
    }
+   
 }
