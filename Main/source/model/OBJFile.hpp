@@ -190,28 +190,28 @@ namespace objfile
    // data structure to store a mesh
    struct Mesh
    {
-      static const uint32 NoMaterial = ~0u;
-
       //	Array with pointer to all stored faces
       std::vector<ObjFace*> m_faces;
       //	Assigned material
       ObjMaterial *m_pMaterial;
       //	Number of stored indices.
-      uint32 m_uiNumIndices;
+      uint32 m_numIndices;
       // Number of UV
-      uint32 m_uiUVCoordinates[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+      uint32 m_numUVCoordinates[mesh2::MAX_NUMBER_OF_TEXTURECOORDS];
       //	Material index.
-      uint32 m_uiMaterialIndex;
+      uint32 m_materialIndex;
       //	True, if normals are stored.
       bool m_hasNormals;
 
+      static const uint32 m_noMaterial = ~0u;
+
       Mesh() :
          m_pMaterial(NULL),
-         m_uiNumIndices(0),
-         m_uiMaterialIndex(NoMaterial),
+         m_numIndices(0),
+         m_materialIndex(m_noMaterial),
          m_hasNormals(false)
       {
-         memset(m_uiUVCoordinates, 0, sizeof(uint32) * AI_MAX_NUMBER_OF_TEXTURECOORDS);
+         memset(m_numUVCoordinates, 0, sizeof(uint32) * mesh2::MAX_NUMBER_OF_TEXTURECOORDS);
       }
 
       ~Mesh()
@@ -222,6 +222,9 @@ namespace objfile
             delete *it;
          }
       }
+
+      bool HasNormals() { return m_hasNormals; }
+      uint32 GetMaterialIndex() { return m_materialIndex; }
    };
 
    // data structure to store all obj-specific model datas

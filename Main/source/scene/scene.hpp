@@ -337,6 +337,8 @@ namespace scene
       */
        //Camera** m_ppCameras;
 
+      Scene() : m_numMeshes(0) {}
+
       // Unless no special scene flags are set this will always be true.
       inline bool HasMeshes() const
       {
@@ -346,13 +348,11 @@ namespace scene
       // Unless no special scene flags are set this will always be true.
       inline bool HasMaterials() const
       {
-         return false;
-         //return m_ppMaterials != NULL && m_numMaterials > 0;
+         return m_ppMaterials != NULL && m_numMaterials > 0;
       }
 
       inline bool HasLights() const
       {
-         return false;
          //return m_ppLights != NULL && m_numLights > 0;
       }
 

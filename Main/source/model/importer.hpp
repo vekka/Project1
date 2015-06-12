@@ -389,7 +389,7 @@ namespace importer
       *  The function does nothing if no scene has previously been
       *  read via ReadFile(). FreeScene() is called automatically by the
       *  destructor and ReadFile() itself.  */
-      void FreeScene();
+      void FreeScene(const Scene *sc) { delete sc; sc = NULL; };
 
 
       /** Returns an error description of an error that occurred in ReadFile().

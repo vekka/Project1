@@ -455,8 +455,8 @@ namespace model
 
          // Store the face
          m_pModelInstance->m_pCurrentMesh->m_faces.push_back(face);
-         m_pModelInstance->m_pCurrentMesh->m_uiNumIndices += (uint32)face->m_pVertexIndices->size();
-         m_pModelInstance->m_pCurrentMesh->m_uiUVCoordinates[0] += (uint32)face->m_pTexCoordIndices[0].size();
+         m_pModelInstance->m_pCurrentMesh->m_numIndices += (uint32)face->m_pVertexIndices->size();
+         m_pModelInstance->m_pCurrentMesh->m_numUVCoordinates[0] += (uint32)face->m_pTexCoordIndices[0].size();
          if (!m_pModelInstance->m_pCurrentMesh->m_hasNormals && hasNormal)
          {
             m_pModelInstance->m_pCurrentMesh->m_hasNormals = true;
@@ -510,7 +510,7 @@ namespace model
             {
                CreateMesh();
             }
-            m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex = GetMaterialIndex(strName);
+            m_pModelInstance->m_pCurrentMesh->m_materialIndex = GetMaterialIndex(strName);
          }
 
          // Skip rest of line
@@ -602,7 +602,7 @@ namespace model
             {
                CreateMesh();
             }
-            m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex = GetMaterialIndex(strMat);
+            m_pModelInstance->m_pCurrentMesh->m_materialIndex = GetMaterialIndex(strMat);
          }
 
          m_dataIterator = SkipLine<ConstDataArrayIterator_t>(m_dataIterator, m_dataIteratorEndOfBuffer, m_currentLine);
@@ -729,7 +729,7 @@ namespace model
 
          if (m_pModelInstance->m_pCurrentMaterial)
          {
-            m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex =
+            m_pModelInstance->m_pCurrentMesh->m_materialIndex =
                GetMaterialIndex(m_pModelInstance->m_pCurrentMaterial->m_materialName);
             m_pModelInstance->m_pCurrentMesh->m_pMaterial = m_pModelInstance->m_pCurrentMaterial;
          }
@@ -762,8 +762,8 @@ namespace model
          }
          bool newMat = false;
          int32 matIdx = GetMaterialIndex(rMaterialName);
-         int32 curMatIdx = m_pModelInstance->m_pCurrentMesh->m_uiMaterialIndex;
-         if (curMatIdx != int32(objfile::Mesh::NoMaterial) || curMatIdx != matIdx)
+         int32 curMatIdx = m_pModelInstance->m_pCurrentMesh->m_materialIndex;
+         if (curMatIdx != int32(objfile::Mesh::m_noMaterial) || curMatIdx != matIdx)
          {
             // New material -> only one material per mesh, so we need to create a new 
             // material

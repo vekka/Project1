@@ -53,17 +53,19 @@ using mesh2::Mesh;
 #include "source\model\mesh2.hpp"
 //using mesh2;
 
-void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID);
+using core::math::Matrix4f;
+
+void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID);
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
    FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
-   File file;
    uint32 vaoID = 0;
+   uint32 vboIndicesID = 0;
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/monkey.obj" );
+   sc = importer.ReadFile("assets/testObjects/cow.obj" );
 
 
    Win32Console debugConsole;
@@ -92,7 +94,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    win.Update();
    oglContext.SetClearColor(clearColor);
    oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
-   //oglContext.EnableCulling();
+   oglContext.EnableCulling();
  
    GLSLShader shader;
    shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
@@ -107,29 +109,21 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniform("M");
    shader.Unuse();
 
-   float triangleData[] =
-   { 0.0f, 0.0f, 0.0f,
-   1.0f, 0.0f, 0.0f,
-   0.0f, 1.0f, 0.0f };
-   uint32 triangleIndices[] =
-   { 0,1,2 };
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f );
-   //for positioning cube in 3-space
-   float modelMatrix[] = {
-      1.0f, 0.0f, 0.0f, 0.0f,
-      0.0f, 1.0f, 0.0f, 0.0f,
-      0.0f, 0.0f, 1.0f, 0.0f,
-      2.4f,  0.0f, -5.0f, 1.0f
-   };
+   Matrix4f modelMatrix = Matrix4f::IDENTITY;
+   modelMatrix.SetTranslation(-1.0f, 0.0f, -5.0f);
+   modelMatrix = modelMatrix.Transpose();
+   modelMatrix.SetRotationRadians(0.24f);
+
    //you must activate shader program to give uniform variables data
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
-   shader.AddUniformData("M", modelMatrix, TYPE_FMAT4, 1);
+   shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
    shader.Unuse();
   
 
-   //generateBufferFromScene(sc, shader, vaoID);
-
+   generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
+   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
    while (1)
    {
@@ -147,10 +141,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
          msg.message = WM_QUIT;
      
       glBindVertexArray(vaoID);
-    
+      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
-      glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-      //glDrawArrays(GL_TRIANGLES, 0, 3);
+      //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
+      glDrawArrays(GL_TRIANGLES, 0, sc->m_ppMeshes[0]->m_numFaces * 3);
       shader.Unuse();
       
       glBindVertexArray(0);
@@ -159,13 +153,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    }
 
-   //f.CopyToBuffer( buf );
-	//while( !win.HandleSystemMessages(&msg) )
-	//{
-     
-     /* TranslateMessage(&Msg);
-      DispatchMessage(&Msg);*/
-	//}
+   importer.FreeScene(sc);
+   shader.DeleteProgram();
    return msg.wParam;
 }
 
@@ -173,15 +162,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 // http://www.lighthouse3d.com/cg-topics/code-samples/importing-3d-models-with-assimp/
 //how to fill opengl vbo with assimp scene
 
-void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID)
+void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID )
 {
    //vertex array and vertex buffer object IDs
    vaoID = 0;
-   uint32 vboVerticesID;
-   uint32 vboIndicesID;
-
+   uint32 vboVerticesID=0;
+  
    // For each mesh
-   for (uint32 n = 0; n < 1; ++n)
+   for (uint32 n = 0; n < sc->m_numMeshes; ++n)
    {
       const Mesh* mesh = sc->m_ppMeshes[n];
 
@@ -209,29 +197,29 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * mesh->m_numFaces * 3, faceArray, GL_STATIC_DRAW);
 
       // buffer for vertex positions
+      
       if (mesh->HasPositions())
       {
          glGenBuffers(1, &vboVerticesID);
          glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
          glEnableVertexAttribArray(shader["vVertex"]);
+         glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices, GL_STATIC_DRAW);
         
       }
       // buffer for vertex normals
       if (mesh->HasNormals())
       {
-         //glEnableVertexAttribArray(shader["vNormal"]);
-         //glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const GLvoid*)0);
-         //glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
+         glEnableVertexAttribArray(shader["vNormal"]);
+         glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,(GLvoid*)12);
+         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
 
       }
       // unbind buffers
-      glBindVertexArray(0);
+
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
-      //myMeshes.push_back(aMesh);
+      glBindVertexArray(0);
       free(faceArray);
    }
    

@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <cstring>
+
 #include "vector3.hpp"
 #include "vector4.hpp"
 
@@ -31,6 +33,7 @@ namespace core
             const T m10, const T m11, const T m12, const T m13,
             const T m20, const T m21, const T m22, const T m23,
             const T m30, const T m31, const T m32, const T m33);
+         //Matrix4 &Matrix4::operator=(const Matrix4 &other);
          void Zero();
          void SetIdentity();
          void Set(
@@ -63,6 +66,9 @@ namespace core
          void SetScale(const T scale);
          void SetScale(const T x, const T y, const T z);
          Vector3<T> GetScaleVec() const;
+         Matrix4<T> &SetRotationRadians(const Vector3<T> &rotation);
+         Matrix4<T> &SetRotationDegrees(const Vector3<T> &rotation);
+         Vector3<T> GetRotationDegrees() const;
          void CreateTranslation(const Vector3<T> &vec);
          void CreateTranslation(const T x, const T y, const T z);
          Matrix3<T> GetMatrix3(const Matrix4 &) const;
@@ -87,7 +93,7 @@ namespace core
       typedef Matrix4<long double> Matrix4ld; // TODO: replace with new data type
 
       template <typename T> const Matrix4<T> Matrix4<T>::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-      template <typename T> const Matrix4<T> Matrix4<T>::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+      template <typename T> const Matrix4<T> Matrix4<T>::IDENTITY(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
       template <class T>
       inline Matrix4<T>::Matrix4()
@@ -110,8 +116,17 @@ namespace core
          m[0][0] = m00; m[0][1] = m01; m[0][2] = m02; m[0][3] = m03;
          m[1][0] = m10; m[1][1] = m11; m[1][2] = m12; m[1][3] = m13;
          m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23;
-         m[3][0] = m30; m[3][1] = m21; m[3][2] = m22; m[3][3] = m33;
+         m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
       }
+
+      //template <class T>
+      //Matrix4<T> &Matrix4<T>::operator=(const Matrix4<T> &other)
+      //{
+      //   if (this == &other)
+      //      return *this;
+      //   std::memcpy(m, other.Ptr(), 16*sizeof(T));
+      //   return *this;
+      //}
 
       template <class T>
       inline void Matrix4<T>::Zero()
@@ -387,7 +402,47 @@ namespace core
          m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
       }
 
-      // Extracts the rotation / scaling part of the Matrix as a 3x3 matrix. 
+      template <class T>
+      Matrix4<T> &Matrix4<T>::SetRotationRadians(const Vector3<T> &rotation)
+      {
+         const float cr = cos(rotation.x); //float64?
+         const float sr = sin(rotation.x);
+         const float cp = cos(rotation.y);
+         const float sp = sin(rotation.y);
+         const float cy = cos(rotation.z);
+         const float sy = sin(rotation.z);
+
+         m[0][0] = (T)(cp*cy);
+         m[0][1] = (T)(cp*sy);
+         m[0][2] = (T)(-sp);
+
+         const float srsp = sr*sp;
+         const float crsp = cr*sp;
+
+         m[1][0] = (T)(srsp*cy - cr*sy);
+         m[1][1] = (T)(srsp*sy + cr*cy);
+         m[1][2] = (T)(sr*cp);
+
+         m[2][0] = (T)(crsp*cy + sr*sy);
+         m[2][1] = (T)(crsp*sy - sr*cy);
+         m[2][2] = (T)(cr*cp);
+
+         return *this;
+      }
+
+      //template <class T>
+      //Matrix4<T> &SetRotationDegrees(const Vector3<T> &rotation)
+      //{
+
+      //}
+
+      //template <class T>
+      //Vector3<T> GetRotationDegrees() const
+      //{
+      //   return Vector3(0, 2, 3);
+      //}
+
+      // Extracts the rotation / scaling part of the Matrix as a 3x3 matrix.
       template <class T>
       inline Matrix3<T> Matrix4<T>::GetMatrix3(const Matrix4<T> &mat4) const
       {

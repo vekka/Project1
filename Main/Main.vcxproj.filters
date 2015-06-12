@@ -392,6 +392,9 @@
     <ClInclude Include="source\core\memory\pointer.hpp">
       <Filter>Source Files\Core\MemoryLib</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\DebugLogger.hpp">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="source\shader\glsl\vertex\shader.vert">

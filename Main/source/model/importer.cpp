@@ -125,35 +125,34 @@ namespace importer
    //      (*it)->SetSharedData(pimpl->mPPShared);
    //   }
    }
-
       Importer::~Importer()
       {
    //      // nothing to do here
+
       }
+      Scene* Importer::ReadFile(const std::string &path)
+      {
 
+         // create a scene object to hold the data  
+         //ScopeGuard<Scene> sc(new Scene);
 
-   Scene* Importer::ReadFile(const std::string &path)
+         Scene *scene = new Scene;
+
+         try
          {
- 
-            // create a scene object to hold the data  
-            //ScopeGuard<Scene> sc(new Scene);
-
-            Scene *scene = new Scene;
-            try
-            {
-               objFile.InternReadFile(path, scene);
-            }
-            catch (const std::exception &err)	
-            {
+            objFile.InternReadFile(path, scene);
+         }
+         catch (const std::exception &err)
+         {
             //   // extract error description
             //   mErrorText = err.what();
             //   DefaultLogger::get()->error(mErrorText);
-               return NULL;
-            }
-      
-            // return what we gathered from the import. 
-            //sc.dismiss();
-            return scene;
+            return NULL;
          }
+
+         // return what we gathered from the import. 
+         //sc.dismiss();
+         return scene;
+      }
 
 } // namespace importer

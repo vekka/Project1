@@ -326,9 +326,9 @@ namespace objfileimporter
       if (pMesh->m_numFaces > 0)
       {
          pMesh->m_pFaces = new mesh2::Face[pMesh->m_numFaces];
-         if (pObjMesh->m_uiMaterialIndex != objfile::Mesh::NoMaterial)
+         if (pObjMesh->m_materialIndex != objfile::Mesh::m_noMaterial)
          {
-            pMesh->m_materialIndex = pObjMesh->m_uiMaterialIndex;
+            pMesh->m_materialIndex = pObjMesh->m_materialIndex;
          }
 
          uint32 outIndex(0);
@@ -383,7 +383,7 @@ namespace objfileimporter
 
       // Get current mesh
       objfile::Mesh *pObjMesh = pModel->m_meshes[uiMeshIndex];
-      if (NULL == pObjMesh || pObjMesh->m_uiNumIndices < 1)
+      if (NULL == pObjMesh || pObjMesh->m_numIndices < 1)
          return;
 
       // Copy vertices of this mesh instance
@@ -395,7 +395,7 @@ namespace objfileimporter
          pMesh->m_pNormals = new Vector3f[pMesh->m_numVertices];
 
       // Allocate buffer for m_texture coordinates
-      if (!pModel->m_textureCoord.empty() && pObjMesh->m_uiUVCoordinates[0])
+      if (!pModel->m_textureCoord.empty() && pObjMesh->m_numUVCoordinates[0])
       {
          pMesh->m_numUVComponents[0] = 2;
          pMesh->m_pTextureCoords[0] = new Vector3f[pMesh->m_numVertices];

@@ -62,53 +62,6 @@ using gfx::color4f::Color4f;
 
 #include <string.h>
 
-   // Limits. These values are required to match the settings Assimp was 
-   // compiled against. Therfore, do not redefine them unless you build the 
-   // library from source using the same definitions.
-
-   /** @def AI_MAX_FACE_INDICES
-   *  Maximum number of indices per face (polygon). */
-
-#ifndef AI_MAX_FACE_INDICES 
-#	define AI_MAX_FACE_INDICES 0x7fff
-#endif
-
-   /** @def AI_MAX_BONE_WEIGHTS
-   *  Maximum number of indices per face (polygon). */
-
-#ifndef AI_MAX_BONE_WEIGHTS
-#	define AI_MAX_BONE_WEIGHTS 0x7fffffff
-#endif
-
-   /** @def AI_MAX_VERTICES
-   *  Maximum number of vertices per mesh.  */
-
-#ifndef AI_MAX_VERTICES
-#	define AI_MAX_VERTICES 0x7fffffff
-#endif
-
-   /** @def AI_MAX_FACES
-   *  Maximum number of faces per mesh. */
-
-#ifndef AI_MAX_FACES
-#	define AI_MAX_FACES 0x7fffffff
-#endif
-
-   /** @def AI_MAX_NUMBER_OF_COLOR_SETS
-   *  Supported number of vertex color sets per mesh. */
-
-#ifndef AI_MAX_NUMBER_OF_COLOR_SETS
-#	define AI_MAX_NUMBER_OF_COLOR_SETS 0x8
-#endif // !! AI_MAX_NUMBER_OF_COLOR_SETS
-
-   /** @def AI_MAX_NUMBER_OF_TEXTURECOORDS
-   *  Supported number of m_texture coord sets (UV(W) channels) per mesh */
-
-#ifndef AI_MAX_NUMBER_OF_TEXTURECOORDS
-#	define AI_MAX_NUMBER_OF_TEXTURECOORDS 0x8
-#endif // !! AI_MAX_NUMBER_OF_TEXTURECOORDS
-
-
    /** @brief A single face in a mesh, referring to multiple vertices.
    *
    * If m_numIndices is 3, we call the face 'triangle', for m_numIndices > 3
@@ -133,10 +86,45 @@ using gfx::color4f::Color4f;
 
    namespace mesh2
    {
+
+      // Limits. These values are required to match the settings Assimp was 
+      // compiled against. Therfore, do not redefine them unless you build the 
+      // library from source using the same definitions.
+
+      /** @def MAX_FACE_INDICES
+      *  Maximum number of indices per face (polygon). */
+
+      static const uint32 MAX_FACE_INDICES = 0x7fff;
+
+      /** @def MAX_BONE_WEIGHTS
+      *  Maximum number of indices per face (polygon). */
+
+      static const uint32 MAX_BONE_WEIGHTS = 0x7fffffff;
+
+      /** @def MAX_VERTICES
+      *  Maximum number of vertices per mesh.  */
+
+      static const uint32 MAX_VERTICES = 0x7fffffff;
+
+      /** @def MAX_FACES
+      *  Maximum number of faces per mesh. */
+
+      static const uint32 MAX_FACES = 0x7fffffff;
+
+      /** @def MAX_NUMBER_OF_COLOR_SETS
+      *  Supported number of vertex color sets per mesh. */
+
+      static const uint32 MAX_NUMBER_OF_COLOR_SETS = 0x8;
+
+      /** @def MAX_NUMBER_OF_TEXTURECOORDS
+      *  Supported number of m_texture coord sets (UV(W) channels) per mesh */
+
+      static const uint32 MAX_NUMBER_OF_TEXTURECOORDS = 0x8;
+
       struct Face
       {
          // Number of indices defining this face. 
-         // The maximum value for this member is #AI_MAX_FACE_INDICES.
+         // The maximum value for this member is #MAX_FACE_INDICES.
          uint32 m_numIndices;
 
          // Pointer to the indices array. Size of the array is given in numIndices.
@@ -220,7 +208,7 @@ using gfx::color4f::Color4f;
          std::string m_name;
 
          //! The number of vertices affected by this bone
-         //! The maximum value for this member is #AI_MAX_BONE_WEIGHTS.
+         //! The maximum value for this member is #MAX_BONE_WEIGHTS.
          uint32 mNumWeights;
 
          //! The vertices affected by this bone
@@ -338,15 +326,15 @@ using gfx::color4f::Color4f;
          Vector3f* m_pBiTangets;
 
          /** Replacement for Mesh::m_pColors */
-         Color4f* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
+         Color4f* m_pColors[MAX_NUMBER_OF_COLOR_SETS];
 
          /** Replacement for Mesh::m_pTextureCoords */
-         Vector3f* m_pTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+         Vector3f* m_pTextureCoords[MAX_NUMBER_OF_TEXTURECOORDS];
 
          /** The number of vertices in the AnimMesh, and thus the length of all
          * the member arrays.
          *
-         * This has always the same value as the m_numVertices property in the
+         * This has always the same value as the m_numVerticesNUMBER property in the
          * corresponding Mesh. It is duplicated here merely to make the length
          * of the member arrays accessible even if the Mesh is not known, e.g.
          * from language bindings.
@@ -361,10 +349,10 @@ using gfx::color4f::Color4f;
             , m_numVertices(0)
          {
             // fixme consider moving this to the ctor initializer list as well
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++){
+            for (uint32 a = 0; a < MAX_NUMBER_OF_TEXTURECOORDS; a++){
                m_pTextureCoords[a] = NULL;
             }
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
+            for (uint32 a = 0; a < MAX_NUMBER_OF_COLOR_SETS; a++) {
                m_pColors[a] = NULL;
             }
          }
@@ -375,10 +363,10 @@ using gfx::color4f::Color4f;
             delete[] m_pNormals;
             delete[] m_pTangents;
             delete[] m_pBiTangets;
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++) {
+            for (uint32 a = 0; a < MAX_NUMBER_OF_TEXTURECOORDS; a++) {
                delete[] m_pTextureCoords[a];
             }
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
+            for (uint32 a = 0; a < MAX_NUMBER_OF_COLOR_SETS; a++) {
                delete[] m_pColors[a];
             }
          }
@@ -404,16 +392,16 @@ using gfx::color4f::Color4f;
 
          /** Check whether the anim mesh overrides a particular
          * set of vertex colors on his host mesh.
-         *  @param pIndex 0<index<AI_MAX_NUMBER_OF_COLOR_SETS */
+         *  @param pIndex 0<index<MAX_NUMBER_OF_COLOR_SETS */
          bool HasVertexColors(uint32 pIndex) const	{
-            return pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS ? false : m_pColors[pIndex] != NULL;
+            return pIndex >= MAX_NUMBER_OF_COLOR_SETS ? false : m_pColors[pIndex] != NULL;
          }
 
          /** Check whether the anim mesh overrides a particular
          * set of m_texture coordinates on his host mesh.
-         *  @param pIndex 0<index<AI_MAX_NUMBER_OF_TEXTURECOORDS */
+         *  @param pIndex 0<index<MAX_NUMBER_OF_TEXTURECOORDS */
          bool HasTextureCoords(uint32 pIndex) const	{
-            return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : m_pTextureCoords[pIndex] != NULL;
+            return pIndex >= MAX_NUMBER_OF_TEXTURECOORDS ? false : m_pTextureCoords[pIndex] != NULL;
          }
       };
 
@@ -446,13 +434,13 @@ using gfx::color4f::Color4f;
 
          /** The number of vertices in this mesh.
          * This is also the size of all of the per-vertex data arrays.
-         * The maximum value for this member is #AI_MAX_VERTICES.
+         * The maximum value for this member is #MAX_VERTICES.
          */
          uint32 m_numVertices;
 
          /** The number of primitives (triangles, polygons, lines) in this  mesh.
          * This is also the size of the m_pFaces array.
-         * The maximum value for this member is #AI_MAX_FACES.
+         * The maximum value for this member is #MAX_FACES.
          */
          uint32 m_numFaces;
 
@@ -508,17 +496,17 @@ using gfx::color4f::Color4f;
          Vector3f* m_pBiTangets;
 
          /** Vertex color sets.
-         * A mesh may contain 0 to #AI_MAX_NUMBER_OF_COLOR_SETS vertex
+         * A mesh may contain 0 to #MAX_NUMBER_OF_COLOR_SETS vertex
          * colors per vertex. NULL if not present. Each array is
          * m_numVertices in size if present.
          */
-         Color4f* m_pColors[AI_MAX_NUMBER_OF_COLOR_SETS];
+         Color4f* m_pColors[MAX_NUMBER_OF_COLOR_SETS];
 
          /** Vertex m_texture coords, also known as UV channels.
-         * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
+         * A mesh may contain 0 to MAX_NUMBER_OF_TEXTURECOORDS per
          * vertex. NULL if not present. The array is m_numVertices in size.
          */
-         Vector3f* m_pTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+         Vector3f* m_pTextureCoords[MAX_NUMBER_OF_TEXTURECOORDS];
 
          /** Specifies the number of components for a given UV channel.
          * Up to three channels are supported (UVW, for accessing volume
@@ -527,7 +515,7 @@ using gfx::color4f::Color4f;
          * If the value is 1 for a given channel, p.y is set to 0.0f, too.
          * @note 4D coords are not supported
          */
-         uint32 m_numUVComponents[AI_MAX_NUMBER_OF_TEXTURECOORDS];
+         uint32 m_numUVComponents[MAX_NUMBER_OF_TEXTURECOORDS];
 
          /** The faces the mesh is constructed from.
          * Each face refers to a number of vertices by their indices.
@@ -593,13 +581,13 @@ using gfx::color4f::Color4f;
             , m_numAnimMeshes(0)
             , m_ppAnimMeshes(NULL)
          {
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++)
+            for (uint32 a = 0; a < MAX_NUMBER_OF_TEXTURECOORDS; a++)
             {
                m_numUVComponents[a] = 0;
                m_pTextureCoords[a] = NULL;
             }
 
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++)
+            for (uint32 a = 0; a < MAX_NUMBER_OF_COLOR_SETS; a++)
                m_pColors[a] = NULL;
          }
 
@@ -610,10 +598,10 @@ using gfx::color4f::Color4f;
             delete[] m_pNormals;
             delete[] m_pTangents;
             delete[] m_pBiTangets;
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++) {
+            for (uint32 a = 0; a < MAX_NUMBER_OF_TEXTURECOORDS; a++) {
                delete[] m_pTextureCoords[a];
             }
-            for (uint32 a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
+            for (uint32 a = 0; a < MAX_NUMBER_OF_COLOR_SETS; a++) {
                delete[] m_pColors[a];
             }
 
@@ -668,7 +656,7 @@ using gfx::color4f::Color4f;
          //! \param pIndex Index of the vertex color set
          bool HasVertexColors(uint32 pIndex) const
          {
-            if (pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS)
+            if (pIndex >= MAX_NUMBER_OF_COLOR_SETS)
                return false;
             else
                return m_pColors[pIndex] != NULL && m_numVertices > 0;
@@ -678,7 +666,7 @@ using gfx::color4f::Color4f;
          //! \param pIndex Index of the m_texture coordinates set
          bool HasTextureCoords(uint32 pIndex) const
          {
-            if (pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS)
+            if (pIndex >= MAX_NUMBER_OF_TEXTURECOORDS)
                return false;
             else
                return m_pTextureCoords[pIndex] != NULL && m_numVertices > 0;
@@ -688,7 +676,7 @@ using gfx::color4f::Color4f;
          uint32 GetNumUVChannels() const
          {
             uint32 n = 0;
-            while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS && m_pTextureCoords[n])++n;
+            while (n < MAX_NUMBER_OF_TEXTURECOORDS && m_pTextureCoords[n])++n;
             return n;
          }
 
@@ -696,7 +684,7 @@ using gfx::color4f::Color4f;
          uint32 GetNumColorChannels() const
          {
             uint32 n = 0;
-            while (n < AI_MAX_NUMBER_OF_COLOR_SETS && m_pColors[n])++n;
+            while (n < MAX_NUMBER_OF_COLOR_SETS && m_pColors[n])++n;
             return n;
          }
 
