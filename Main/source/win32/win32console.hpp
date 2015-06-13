@@ -28,8 +28,7 @@ namespace win32console
    {
       REDIR_STDOUT = STD_OUTPUT_HANDLE,
       REDIR_STDIN = STD_INPUT_HANDLE,
-      REDIR_STDERR = STD_ERROR_HANDLE,
-      REDIR_STDIO
+      REDIR_STDERR = STD_ERROR_HANDLE
    };
 
    class Win32Console
@@ -47,7 +46,7 @@ namespace win32console
       CHAR_INFO *m_pScreenBuffer;
       CONSOLE_SCREEN_BUFFER_INFO m_screenBufferInfo;
    public:
-      Win32Console::Win32Console() { };
+      Win32Console::Win32Console() { }
       // width and height and buffer parameters are for the number of the characters
       Win32Console::Win32Console(
          const uint32 width, const uint32 height,
@@ -55,7 +54,7 @@ namespace win32console
       ~Win32Console( void );
 
       bool Create();
-      bool SetRedirection(eRedirection redir);
+      bool SetRedirection(eRedirection redir, bool useSTDIO = true);
       void Destroy( void );
       bool IsEnabled( void ) const;
       bool SetCaption( const std::string &caption );
