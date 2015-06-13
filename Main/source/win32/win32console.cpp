@@ -49,7 +49,7 @@ namespace win32console
       return true;
    }
 
-   bool Win32Console::SetRedirection(eRedirection redir, bool useSTDIO)
+   bool Win32Console::SetRedirection(eRedirection redir, bool syncWithSTDIO)
    {
       GetConsoleScreenBufferInfo(GetStdHandle(redir), &m_screenBufferInfo);
       if (!SetConsoleScreenBufferSize(GetStdHandle(redir), m_screenBufferInfo.dwSize))
