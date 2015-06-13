@@ -281,20 +281,13 @@ using gfx::color4f::Color4f;
          * triangles (which are much easier to handle).
          */
          PRIMITIVE_TYPE_POLYGON = 0x8,
-
-
-         /** This value is not used. It is just here to force the
-         *  compiler to map this enum to a 32 Bit integer.
-         */
-#ifndef SWIG
-         _aiPrimitiveType_Force32Bit = INT_MAX
-#endif
-      }; //! enum ePrimitiveType
+      }; 
 
       // Get the #ePrimitiveType flag for a specific number of face indices
-#define AI_PRIMITIVE_TYPE_FOR_N_INDICES(n) \
-	((n) > 3 ? PRIMITIVE_TYPE_POLYGON : (ePrimitiveType)(1u << ((n)-1)))
-
+      inline ePrimitiveType GetPrimitiveTypeFlag(int32 faceIdx)
+      {
+         return (faceIdx > 3 ? PRIMITIVE_TYPE_POLYGON : (ePrimitiveType)(1u << (faceIdx-1)));
+      }
 
       /** @brief NOT CURRENTLY IN USE. An AnimMesh is an attachment to an #Mesh stores per-vertex
       *  animations for a particular frame.
@@ -342,11 +335,11 @@ using gfx::color4f::Color4f;
          uint32 m_numVertices;
 
          AnimMesh()
-            : m_pVertices(NULL)
-            , m_pNormals(NULL)
-            , m_pTangents(NULL)
-            , m_pBiTangets(NULL)
-            , m_numVertices(0)
+            : m_pVertices(NULL),
+            m_pNormals(NULL),
+            m_pTangents(NULL),
+            m_pBiTangets(NULL),
+            m_numVertices(0)
          {
             // fixme consider moving this to the ctor initializer list as well
             for (uint32 a = 0; a < MAX_NUMBER_OF_TEXTURECOORDS; a++){
@@ -423,8 +416,9 @@ using gfx::color4f::Color4f;
       * Scene::m_flags
       * @endcode
       */
-      struct Mesh
+      class Mesh
       {
+      public:
          /** Bitwise combination of the members of the #ePrimitiveType enum.
          * This specifies which types of primitives are present in the mesh.
          * The "SortByPrimitiveType"-Step can be used to make sure the

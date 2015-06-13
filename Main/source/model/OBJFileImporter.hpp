@@ -63,8 +63,6 @@ namespace objfileimporter
 
       const eImporterDesc* GetInfo() const; // Appends the supported extension.
 
-     
-
       // Create the data from imported content.
       void CreateDataFromImport(const objfile::Model* pModel, scene::Scene* pScene);
 

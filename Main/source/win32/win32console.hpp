@@ -12,7 +12,7 @@
 
 namespace win32console
 {
-   
+
    const int32 MAX_CMDS = 10;
 
    enum eBkgConsoleColor
@@ -23,7 +23,15 @@ namespace win32console
       BKG_CONSOLE_GREEN = BACKGROUND_GREEN,
       BKG_CONSOLE_BLUE = BACKGROUND_BLUE
    };
-   
+
+   enum eRedirection
+   {
+      REDIR_STDOUT = STD_OUTPUT_HANDLE,
+      REDIR_STDIN = STD_INPUT_HANDLE,
+      REDIR_STDERR = STD_ERROR_HANDLE,
+      REDIR_STDIO
+   };
+
    class Win32Console
    {
    private:
@@ -32,22 +40,22 @@ namespace win32console
       char rgCmds[MAX_CMDS][512];
       int32 iCmdIndex;
       int32 inpos;
-      bool created;
-   
-      uint32 width, height;
-      uint32 bufferWidth, bufferHeight;
-      CHAR_INFO *screenBuffer;
+      bool m_created;
+
+      uint32 m_width, m_height;
+      //uint32 m_bufferWidth, m_bufferHeight;
+      CHAR_INFO *m_pScreenBuffer;
+      CONSOLE_SCREEN_BUFFER_INFO m_screenBufferInfo;
    public:
       Win32Console::Win32Console() { };
-      Win32Console::Win32Console( 
-         const uint32 width, const uint32 height,
-         const uint32 screenBufferWidth, const uint32 screenBufferHeight );
-      ~Win32Console( void );
-   
       // width and height and buffer parameters are for the number of the characters
-      bool Create( 
+      Win32Console::Win32Console(
          const uint32 width, const uint32 height,
-         const uint32 bufferWidth, const uint32 bufferHeight, const bool hasInputHandle = true, const bool hasErrorHandle = true );
+         const uint32 bufferWidth, const uint32 bufferHeight );
+      ~Win32Console( void );
+
+      bool Create();
+      bool SetRedirection(eRedirection redir);
       void Destroy( void );
       bool IsEnabled( void ) const;
       bool SetCaption( const std::string &caption );
@@ -57,7 +65,7 @@ namespace win32console
       void UpdatePosition( const uint32 newXPos, const uint32 newYPos );
       void GetPosition( uint32 &posX, uint32 &posY ) const;
       void UpdateScreenBufferDimension( const uint32 width, const uint32 height );
-   
+
       void ClearScreenBuffer( const eBkgConsoleColor bkgColor = BKG_CONSOLE_BLACK ) const;
       void printf( const char *string, ... ) const;
       void ProcessLine( const char *consoleLine ) const;

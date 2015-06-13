@@ -73,7 +73,8 @@ namespace objfileimporter
 {
    using namespace std;
 
-   static const eImporterDesc desc = {
+   static const eImporterDesc desc =
+   {
       "Wavefront Object Importer",
       "",
       "",
@@ -281,8 +282,7 @@ namespace objfileimporter
       return pNode;
    }
 
-   Mesh *ObjFileImporter::CreateTopology(const objfile::Model* pModel, const objfile::Object* pData,
-      uint32 meshIndex)
+   Mesh *ObjFileImporter::CreateTopology(const objfile::Model* pModel, const objfile::Object* pData, uint32 meshIndex)
    {
       // Checking preconditions
       assert(NULL != pModel);

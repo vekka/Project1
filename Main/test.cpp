@@ -59,17 +59,25 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
-   FreeCamera camera( FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f );
+   FreeCamera camera(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
    uint32 vaoID = 0;
    uint32 vboIndicesID = 0;
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/cow.obj" );
+   sc = importer.ReadFile("assets/testObjects/cow.obj");
 
+   Win32Console debugConsole(100, 100, 3, 3);
+   bool t = debugConsole.Create();
 
-   Win32Console debugConsole;
-   debugConsole.Create(100, 50, 100, 50);
+   t = debugConsole.SetRedirection(win32console::REDIR_STDOUT);
+
+   Matrix4f mat = Matrix4f::IDENTITY * 3;
+   Vector4f v(4, 5, 6, 7);
+   printf("hello\n");
+   std::cout << mat << std::endl;
+   std::cout << v << std::endl;
+
    bool resized = false;
    //The message class of the application
    MSG msg;
@@ -95,35 +103,42 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    oglContext.SetClearColor(clearColor);
    oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
    oglContext.EnableCulling();
- 
+
    GLSLShader shader;
    shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
    shader.Load(GL_FRAGMENT_SHADER, "source/shader/glsl/fragment/triangle.frag");
-   shader.CreateAndLink();
+   shader.CreateAndLink(std::cerr);
 
    shader.Use();
    //shader.AddAttribute("vColor");
-   shader.AddAttribute("vVertex"); 
+   shader.AddAttribute("vVertex");
    shader.AddAttribute("vNormal");
    shader.AddUniform("P");
    shader.AddUniform("M");
+   shader.AddUniform("light.position");
+   shader.AddUniform("light.color");
    shader.Unuse();
 
-   camera.SetupProjection(1.1693706f, 800.0f / 600.0f );
+   camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
    modelMatrix.SetTranslation(-1.0f, 0.0f, -5.0f);
    modelMatrix = modelMatrix.Transpose();
    modelMatrix.SetRotationRadians(0.24f);
 
    //you must activate shader program to give uniform variables data
+   Vector3f pos(-0.333f, 0.0f, 0.3333f);
+   Vector3f color(1.0f, 1.0f, 1.0f);
+
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
    shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
-   shader.Unuse();
-  
+   shader.AddUniformData("light.position", pos.Ptr(), TYPE_FVEC3, 1);
+   shader.AddUniformData("light.color", color.Ptr(), TYPE_FVEC3, 1);
 
+   shader.Unuse();
+ 
    generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
-   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
    while (1)
    {
@@ -150,7 +165,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindVertexArray(0);
      
       oglContext.SwapFrontAndBackBuffer();
-
    }
 
    importer.FreeScene(sc);

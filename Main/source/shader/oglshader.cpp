@@ -103,7 +103,7 @@ namespace oglshader
 
    }
 
-   void GLSLShader::CreateAndLink()
+   void GLSLShader::CreateAndLink(std::ostream &stream)
    {
       m_program = glCreateProgram();
       if (m_shaders[VERTEX_SHADER] != 0) {
@@ -126,7 +126,7 @@ namespace oglshader
          glGetProgramiv(m_program, GL_INFO_LOG_LENGTH, &infoLogLength);
          GLchar *infoLog = new GLchar[infoLogLength];
          glGetProgramInfoLog(m_program, infoLogLength, NULL, infoLog);
-         cerr << "Link log: " << infoLog << endl;
+         stream << "Link log: " << infoLog << endl;
          delete[] infoLog;
       }
 

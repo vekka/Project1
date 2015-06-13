@@ -8,7 +8,7 @@
 #include "shadertypes.hpp"
 
 #include "core/fileio/file.hpp"
-
+#include <iostream>
 #include <string>
 using std::getline;
 
@@ -52,7 +52,7 @@ namespace oglshader
       void Unuse();
       void AddAttribute(const std::string &);
       void DeleteProgram();
-      void CreateAndLink();
+      void CreateAndLink(std::ostream &stream);
       //void GetCompilationStatus(string &outStatus) const;
    };
 

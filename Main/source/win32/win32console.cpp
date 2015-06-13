@@ -1,6 +1,9 @@
 #include <stdarg.h>
-
 #include <assert.h>
+
+#include <ios>
+#include <io.h>
+#include <fcntl.h>
 
 #include "win32console.hpp"
 
@@ -9,47 +12,71 @@ namespace win32console
 
    Win32Console::Win32Console(
       const uint32 width, const uint32 height,
-      const uint32 screenBufferWidth, const uint32 screenBufferHeight)
+      const uint32 bufferWidth, const uint32 bufferHeight)
    {
-      created = false;
-      this->width = width;
-      this->height = height;
-      bufferWidth = screenBufferWidth;
-      bufferHeight = screenBufferHeight;
+      m_created = false;
+      m_width = width;
+      m_height = height;
+      m_screenBufferInfo.dwSize.X = bufferWidth;
+      m_screenBufferInfo.dwSize.Y = bufferHeight;
 
-      screenBuffer = new CHAR_INFO[screenBufferWidth*screenBufferHeight];
+      //screenBuffer = new CHAR_INFO[screenBufferWidth*screenBufferHeight];
    }
 
    Win32Console::~Win32Console(void)
    {
-      delete[] screenBuffer;
+      delete[] m_pScreenBuffer;
    }
 
-   bool Win32Console::Create(
-      const uint32 width, const uint32 height,
-      const uint32 bufferWidth, const uint32 bufferHeight,
-      const bool hasInputHandle, const bool hasErrorHandle)
+   bool Win32Console::Create()
    {
-      if (!AllocConsole()) // fails
+      if (!AllocConsole())
          return false;
 
-      stdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-      stdIn = hasInputHandle ? GetStdHandle(STD_INPUT_HANDLE) : NULL;
-      stdErr = hasErrorHandle ? GetStdHandle(STD_ERROR_HANDLE) : NULL;
+      //if (useSTDIO)
+      //{
+      //  if (!std::ios_base::sync_with_stdio())
+      //      return false;
+      //}
 
-      if (stdOut == INVALID_HANDLE_VALUE
-         || stdIn == INVALID_HANDLE_VALUE
-         || stdErr == INVALID_HANDLE_VALUE)
+      m_created = true;
+
+      //if (!UpdateDimension(width, height))
+      //   printf("Warning: Console Window is not set to requested dimension.\n");
+
+      //UpdateScreenBufferDimension(m_bufferWidth, m_bufferHeight);
+
+      return true;
+   }
+
+   bool Win32Console::SetRedirection(eRedirection redir)
+   {
+      GetConsoleScreenBufferInfo(GetStdHandle(REDIR_STDOUT), &m_screenBufferInfo);
+      if (!SetConsoleScreenBufferSize(GetStdHandle(REDIR_STDOUT), m_screenBufferInfo.dwSize))
+         return false;
+      int32 stdHandle = (int32)GetStdHandle(REDIR_STDOUT);
+      int32 hConHandle = _open_osfhandle(stdHandle, _O_TEXT);
+
+      if (redir == REDIR_STDOUT)
       {
-         return false;
+         FILE *fp = _fdopen(hConHandle, "w");
+         *stdout = *fp;
+         setvbuf(stdout, NULL, _IONBF, 0);
       }
-
-      created = true;
-
-      if (!UpdateDimension(width, height))
-         printf("Warning: Console Window is not set to requested dimension.\n");
-
-      UpdateScreenBufferDimension(bufferWidth, bufferHeight);
+      else if (redir == REDIR_STDIN)
+      {
+         FILE *fp = _fdopen(hConHandle, "r");
+         *stdin = *fp;
+         setvbuf(stdin, NULL, _IONBF, 0);
+      }
+      else if (redir == REDIR_STDERR)
+      {
+         FILE *fp = _fdopen(hConHandle, "w");
+         *stderr = *fp;
+         setvbuf(stderr, NULL, _IONBF, 0);
+      }
+      else if (redir == REDIR_STDIO)
+         std::ios::sync_with_stdio();
 
       return true;
    }
@@ -65,13 +92,13 @@ namespace win32console
 
    bool Win32Console::SetCaption(const std::string &caption)
    {
-      assert(created);
+      assert(m_created);
       return (bool)(SetConsoleTitle(caption.c_str()) != 0);
    }
 
    void Win32Console::GetCaption(std::string &caption) const
    {
-      assert(created);
+      assert(m_created);
 
       char buffer[512];
       /*int32 strLen = */GetConsoleTitle(buffer, 512);
@@ -89,10 +116,10 @@ namespace win32console
 
    bool Win32Console::UpdateDimension(const uint32 width, const uint32 height)
    {
-      assert(created);
+      assert(m_created);
 
-      this->width = width;
-      this->height = height;
+      m_width = width;
+      m_height = height;
       SMALL_RECT windowSize = { 0, 0, width - 1, height - 1 };
 
       return SetConsoleWindowInfo(stdOut, TRUE, &windowSize) != 0;
@@ -100,42 +127,42 @@ namespace win32console
 
    void Win32Console::GetDimension(uint32 &width, uint32 &height) const
    {
-      width = this->width;
-      height = this->height;
+      width = m_width;
+      height = m_height;
    }
 
    void Win32Console::UpdateScreenBufferDimension(const uint32 width, const uint32 height)
    {
-      assert(created);
+      assert(m_created);
 
-      bufferWidth = width;
-      bufferHeight = height;
-      COORD bufferSize = { width, height };
-      screenBuffer = new CHAR_INFO[width*height];
-      SetConsoleScreenBufferSize(stdOut, bufferSize);
+      //m_bufferWidth = width;
+      //m_bufferHeight = height;
+      //COORD bufferSize = { width, height };
+      //screenBuffer = new CHAR_INFO[width*height];
+      //SetConsoleScreenBufferSize(stdOut, bufferSize);
    }
 
    // clear the screen buffer with given background color
    void Win32Console::ClearScreenBuffer(const eBkgConsoleColor bkgColor) const
    {
-      assert(created);
+      //assert(created);
 
-      for (uint32 i = 0; i < bufferWidth * bufferHeight; i++)
-      {
-         screenBuffer[i].Char.AsciiChar = ' ';
-         screenBuffer[i].Attributes = bkgColor | BACKGROUND_INTENSITY;
-      }
+      //for (uint32 i = 0; i < m_bufferWidth * m_bufferHeight; i++)
+      //{
+      //   screenBuffer[i].Char.AsciiChar = ' ';
+      //   screenBuffer[i].Attributes = bkgColor | BACKGROUND_INTENSITY;
+      //}
 
-      COORD charBufSize = { bufferWidth, bufferHeight };
-      COORD characterPos = { 0, 0 };
-      SMALL_RECT writeArea = { 0, 0, bufferWidth - 1, bufferHeight - 1 };
+      //COORD charBufSize = { m_bufferWidth, m_bufferHeight };
+      //COORD characterPos = { 0, 0 };
+      //SMALL_RECT writeArea = { 0, 0, m_bufferWidth - 1, m_bufferHeight - 1 };
 
-      WriteConsoleOutputA(stdOut, screenBuffer, charBufSize, characterPos, &writeArea);
+      //WriteConsoleOutputA(stdOut, screenBuffer, charBufSize, characterPos, &writeArea);
    }
 
    void Win32Console::printf(const char *string, ...) const
    {
-      assert(created);
+      assert(m_created);
 
       static const int32 LINE_BUFFER_SIZE = 4096;
       static char buffer[LINE_BUFFER_SIZE];
@@ -165,7 +192,7 @@ namespace win32console
 
    void Win32Console::Process(void)
    {
-      assert(created);
+      assert(m_created);
 
       DWORD numEvents;
       GetNumberOfConsoleInputEvents(stdIn, &numEvents);
