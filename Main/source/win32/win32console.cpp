@@ -49,12 +49,12 @@ namespace win32console
       return true;
    }
 
-   bool Win32Console::SetRedirection(eRedirection redir)
+   bool Win32Console::SetRedirection(eRedirection redir, bool useSTDIO)
    {
-      GetConsoleScreenBufferInfo(GetStdHandle(REDIR_STDOUT), &m_screenBufferInfo);
-      if (!SetConsoleScreenBufferSize(GetStdHandle(REDIR_STDOUT), m_screenBufferInfo.dwSize))
+      GetConsoleScreenBufferInfo(GetStdHandle(redir), &m_screenBufferInfo);
+      if (!SetConsoleScreenBufferSize(GetStdHandle(redir), m_screenBufferInfo.dwSize))
          return false;
-      int32 stdHandle = (int32)GetStdHandle(REDIR_STDOUT);
+      int32 stdHandle = (int32)GetStdHandle(redir);
       int32 hConHandle = _open_osfhandle(stdHandle, _O_TEXT);
 
       if (redir == REDIR_STDOUT)
@@ -75,7 +75,8 @@ namespace win32console
          *stderr = *fp;
          setvbuf(stderr, NULL, _IONBF, 0);
       }
-      else if (redir == REDIR_STDIO)
+      
+      if (useSTDIO)
          std::ios::sync_with_stdio();
 
       return true;
