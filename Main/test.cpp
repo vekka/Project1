@@ -96,7 +96,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
    OGLDriver oglContext(hWnd, 800, 600, false);
-   Vector4f clearColor(0.0f, 0.0f, 0.0f, 1.0f);
+   Vector4f clearColor(-1.0f, 0.0f, 0.0f, -5.0f);
    /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
    win.Show();
    win.Update();
@@ -121,7 +121,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(-1.0f, 0.0f, -5.0f);
+   modelMatrix.SetTranslation(-1.0f, 0.0f, -7.0f);
    modelMatrix = modelMatrix.Transpose();
    modelMatrix.SetRotationRadians(0.24f);
 
@@ -138,8 +138,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Unuse();
  
    generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
-   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
+   int32 numIndicesInScene = 0;
+   for (int32 i = 0; i < sc->m_numMeshes; i++)
+      numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
    while (1)
    {
       oglContext.ClearBuffers();
@@ -159,7 +162,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
       //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
-      glDrawArrays(GL_TRIANGLES, 0, sc->m_ppMeshes[0]->m_numFaces * 3);
+
+      glDrawArrays(GL_TRIANGLES, 0, sc->m_ppMeshes[0]->m_numFaces*3);
       shader.Unuse();
       
       glBindVertexArray(0);
@@ -180,8 +184,11 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
 {
    //vertex array and vertex buffer object IDs
    vaoID = 0;
-   uint32 vboVerticesID=0;
-  
+   uint32 vboVerticesID = 0; 
+   
+   glGenVertexArrays(1, &vaoID);
+   glGenBuffers(1, &vboVerticesID);
+   glGenBuffers(1, &vboIndicesID);
    // For each mesh
    for (uint32 n = 0; n < sc->m_numMeshes; ++n)
    {
@@ -202,11 +209,10 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
       }
    
       // generate Vertex Array for mesh
-      glGenVertexArrays(1, &vaoID);
+     
       glBindVertexArray(vaoID);
-
       // buffer for faces
-      glGenBuffers(1, &vboIndicesID);
+      
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * mesh->m_numFaces * 3, faceArray, GL_STATIC_DRAW);
 
@@ -214,7 +220,7 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
       
       if (mesh->HasPositions())
       {
-         glGenBuffers(1, &vboVerticesID);
+         
          glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
          glEnableVertexAttribArray(shader["vVertex"]);
          glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
@@ -236,5 +242,4 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
       glBindVertexArray(0);
       free(faceArray);
    }
-   
 }

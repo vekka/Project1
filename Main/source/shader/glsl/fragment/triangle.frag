@@ -23,6 +23,6 @@ void main()
 	float brightness = dot( normal, surfaceToLight) / ( length(surfaceToLight)*length(normal)) ;
 	brightness = clamp(brightness, 0,1);
 
-	vec4 surfaceColor = vec4( 0.3f, 0.5f, 0.7f, 1.0f );
-	vFragColor =  vec4( brightness * light.color * surfaceColor.rgb, surfaceColor.a );
+	vec4 surfaceColor = vec4( 0.0f, 0.5f, 0.7f, 1.0f );
+	vFragColor =  vec4( surfaceColor.rgb, surfaceColor.a );
 }
