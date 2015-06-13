@@ -20,7 +20,7 @@ namespace win32console
       m_screenBufferInfo.dwSize.X = bufferWidth;
       m_screenBufferInfo.dwSize.Y = bufferHeight;
 
-      //screenBuffer = new CHAR_INFO[screenBufferWidth*screenBufferHeight];
+      // /screenBuffer = new CHAR_INFO[screenBufferWidth*screenBufferHeight];
    }
 
    Win32Console::~Win32Console(void)
