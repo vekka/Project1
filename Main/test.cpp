@@ -126,7 +126,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    modelMatrix.SetRotationRadians(0.24f);
 
    //you must activate shader program to give uniform variables data
-   Vector3f pos(-0.333f, 0.0f, 0.3333f);
+   Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
 
    shader.Use();
@@ -145,11 +145,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       oglContext.ClearBuffers();
       if (win.GetResizeFlag())
       {
-         //oglContext.SetViewportSize(100.0f, 100.0f);
-         //win.OnResize();
+         //oglContext.SetViewportSize(win.GetDimension[0], win.GetDimension[1]);
+         win.OnResize();
       }
       win.HandleSystemMessages(&msg);
-      //resized = win.GetResizeFlag();
+      resized = win.GetResizeFlag();
       if (msg.message == WM_QUIT)
          break;
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
@@ -221,16 +221,16 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices, GL_STATIC_DRAW);
         
       }
+  
       // buffer for vertex normals
       if (mesh->HasNormals())
-      {
+      {       
          glEnableVertexAttribArray(shader["vNormal"]);
          glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,(GLvoid*)12);
          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
 
       }
       // unbind buffers
-
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
       glBindVertexArray(0);
