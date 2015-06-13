@@ -54,7 +54,7 @@ namespace win32console
       ~Win32Console( void );
 
       bool Create();
-      bool SetRedirection(eRedirection redir, bool useSTDIO = true);
+      bool SetRedirection(eRedirection redir, bool syncWithSTDIO = true);
       void Destroy( void );
       bool IsEnabled( void ) const;
       bool SetCaption( const std::string &caption );
