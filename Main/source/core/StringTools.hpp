@@ -47,19 +47,20 @@ strncmp
 These functions are not consistently available on all platforms,
 or the provided implementations behave too differently.
 */
-#ifndef INCLUDED_AI_STRING_WORKERS_H
-#define INCLUDED_AI_STRING_WORKERS_H
+#ifndef _STRINGTOOLS_HPP_INCLUDED_
+#define _STRINGTOOLS_HPP_INCLUDED_
 
 #include <string.h>
 #include <stdint.h>
 #include <string>
 #include <cctype>
 
-#include <assert.h>
+#include <cassert>
 
 #include "BasicTypes.hpp"
 
-namespace assimp	{
+namespace stringtools
+{
 
    /** @brief itoa with a fixed base 10
    * 'itoa' is not consistently available on all platforms so it is quite useful
@@ -133,21 +134,7 @@ namespace assimp	{
    {
       assert(NULL != s1 && NULL != s2);
 
-#if (defined _MSC_VER)
-
       return ::_stricmp(s1, s2);
-#elif defined( __GNUC__ )
-
-      return ::strcasecmp(s1, s2);
-#else
-
-      char c1, c2;
-      do	{
-         c1 = tolower(*s1++);
-         c2 = tolower(*s2++);
-      } while (c1 && (c1 == c2));
-      return c1 - c2;
-#endif
    }
 
    /** @brief Case independent comparison of two std::strings
@@ -178,26 +165,7 @@ namespace assimp	{
       assert(NULL != s1 && NULL != s2);
       if (!n)return 0;
 
-#if (defined _MSC_VER)
-
       return ::_strnicmp(s1, s2, n);
-
-#elif defined( __GNUC__ )
-
-      return ::strncasecmp(s1, s2, n);
-
-#else
-      char c1, c2;
-      uint32 p = 0;
-      do
-      {
-         if (p++ >= n)return 0;
-         c1 = tolower(*s1++);
-         c2 = tolower(*s2++);
-      } while (c1 && (c1 == c2));
-
-      return c1 - c2;
-#endif
    }
 
    /**
@@ -212,6 +180,6 @@ namespace assimp	{
 
       return res;
    }
-} // end of namespace
+} // namespace stringtools
 
-#endif // !  AI_STRINGCOMPARISON_H_INC
+#endif

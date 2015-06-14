@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AI_MATERIALSYSTEM_H_INC
 
 //#include <stdint.h>
-#include <assert.h>
+#include <cassert>
 
 #include "material.hpp"
 using material::Material;

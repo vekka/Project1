@@ -42,17 +42,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //#include "FileSys.h"
 //#include "DefaultIOStream.h"
-//#include "StringComparison.h"
+//#include "StringTools.h"
 
 #include "filesys.hpp"
 
 //#include "../include/assimp/DefaultLogger.hpp"
-//#include "../include/assimp/assert.h"
+//#include "../include/assimp/cassert"
 #include <stdlib.h>
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 #include <cctype>
 

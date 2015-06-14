@@ -27,6 +27,7 @@ using hardwarebuffer::HardwareBuffer;
 using hardwarebuffer::eBufferBindingTarget;
 using hardwarebuffer::BBTARGET_ARRAY_BUFFER;
 using vertexformat::eVertexFormat;
+
 namespace vbo
 {
 

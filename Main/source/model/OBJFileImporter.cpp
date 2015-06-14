@@ -63,7 +63,7 @@ using mesh2::PRIMITIVE_TYPE_LINE;
 using mesh2::PRIMITIVE_TYPE_POLYGON;
 using mesh2::PRIMITIVE_TYPE_POINT;
 using mesh2::PRIMITIVE_TYPE_TRIANGLE;
-//#include "../include/assimp/assert.h"
+//#include "../include/assimp/cassert"
 //#include "../include/assimp/DefaultLogger.hpp"
 
 #include "../core/fileio/filesys.hpp"

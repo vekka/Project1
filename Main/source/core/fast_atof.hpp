@@ -18,7 +18,7 @@
 
 #include <stdexcept>
 
-#include "StringComparison.hpp"
+#include "StringTools.hpp"
 
 namespace core
 {

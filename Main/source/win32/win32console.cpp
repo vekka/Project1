@@ -1,5 +1,5 @@
 #include <stdarg.h>
-#include <assert.h>
+#include <cassert>
 
 #include <ios>
 #include <io.h>
@@ -76,7 +76,7 @@ namespace win32console
          setvbuf(stderr, NULL, _IONBF, 0);
       }
       
-      if (useSTDIO)
+      if (syncWithSTDIO)
          std::ios::sync_with_stdio();
 
       return true;

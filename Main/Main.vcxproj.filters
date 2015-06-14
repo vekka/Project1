@@ -125,23 +125,11 @@
     <ClCompile Include="source\shader\shadertypes.cpp">
       <Filter>Source Files\ShaderLib</Filter>
     </ClCompile>
-    <ClCompile Include="source\gfx\hardwarebuffer.cpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gfx\indexbuffer.cpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gfx\vertexbuffer.cpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClCompile>
     <ClCompile Include="source\gfx\color.cpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
     </ClCompile>
     <ClCompile Include="source\core\math\frustum.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gfx\vertexformat.cpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
     <ClCompile Include="source\core\math\camera.cpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -281,15 +269,6 @@
     <ClInclude Include="source\shader\shadertypes.hpp">
       <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
-    <ClInclude Include="source\gfx\hardwarebuffer.hpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gfx\indexbuffer.hpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gfx\vertexbuffer.hpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClInclude>
     <ClInclude Include="source\gfx\color.hpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
     </ClInclude>
@@ -301,12 +280,6 @@
     </ClInclude>
     <ClInclude Include="source\core\math\frustum.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gfx\vertexformat.hpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gfx\vertexstructs.hpp">
-      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
     <ClInclude Include="source\core\math\camera.hpp">
       <Filter>Source Files\Core\MathLib</Filter>
@@ -383,9 +356,6 @@
     <ClInclude Include="source\core\hash\hash.hpp">
       <Filter>Source Files\Core\Hash</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\StringComparison.hpp">
-      <Filter>Source Files\Core\StringLib</Filter>
-    </ClInclude>
     <ClInclude Include="source\model\importer.hpp">
       <Filter>Source Files\Model</Filter>
     </ClInclude>
@@ -394,6 +364,12 @@
     </ClInclude>
     <ClInclude Include="source\core\DebugLogger.hpp">
       <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\StringTools.hpp">
+      <Filter>Source Files\Core\StringLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\oglbuffer.hpp">
+      <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

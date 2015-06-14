@@ -4,7 +4,7 @@
 #include "core/BasicTypes.hpp"
 
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 
 namespace core
 {

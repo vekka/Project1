@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _CHARTYPES_HPP_INCLUDED_
 
 #include "BasicTypes.hpp"
-#include "StringComparison.hpp"
+#include "StringTools.hpp"
 
 #if (_MSC_VER >= 1300)
    typedef __int8 utf8;

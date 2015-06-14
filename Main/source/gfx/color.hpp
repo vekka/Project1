@@ -1,7 +1,7 @@
 #ifndef _COLOR_HPP_INCLUDED_
 #define _COLOR_HPP_INCLUDED_
 
-#include <assert.h>
+#include <cassert>
 
 #include "core/math/mathcommon.hpp"
 

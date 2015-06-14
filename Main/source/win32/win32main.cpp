@@ -2,7 +2,7 @@
 
 //using core::string::String_c;
 
-#include <assert.h>
+#include <cassert>
 
 using win32window::Win32Window;
 

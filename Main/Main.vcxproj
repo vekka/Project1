@@ -146,11 +146,7 @@
     <ClCompile Include="source\gfx\color.cpp" />
     <ClCompile Include="source\gfx\color3f.cpp" />
     <ClCompile Include="source\gfx\color4f.cpp" />
-    <ClCompile Include="source\gfx\hardwarebuffer.cpp" />
-    <ClCompile Include="source\gfx\indexbuffer.cpp" />
     <ClCompile Include="source\gfx\raw.cpp" />
-    <ClCompile Include="source\gfx\vertexbuffer.cpp" />
-    <ClCompile Include="source\gfx\vertexformat.cpp" />
     <ClCompile Include="source\model\importer.cpp" />
     <ClCompile Include="source\model\material.hpp" />
     <ClCompile Include="source\model\materialSystem.cpp" />
@@ -202,7 +198,7 @@
     <ClInclude Include="source\core\memory\pointer.hpp" />
     <ClInclude Include="source\core\poppack1.hpp" />
     <ClInclude Include="source\core\pushpack1.hpp" />
-    <ClInclude Include="source\core\StringComparison.hpp" />
+    <ClInclude Include="source\core\StringTools.hpp" />
     <ClInclude Include="source\core\string\string.hpp" />
     <ClInclude Include="source\core\string\stringext.hpp" />
     <ClInclude Include="source\core\xml\XMLReader.hpp" />
@@ -211,14 +207,10 @@
     <ClInclude Include="source\gfx\color.hpp" />
     <ClInclude Include="source\gfx\color3f.hpp" />
     <ClInclude Include="source\gfx\color4f.hpp" />
-    <ClInclude Include="source\gfx\hardwarebuffer.hpp" />
-    <ClInclude Include="source\gfx\indexbuffer.hpp" />
+    <ClInclude Include="source\gfx\oglbuffer.hpp" />
     <ClInclude Include="source\gfx\pixelformat.hpp" />
     <ClInclude Include="source\gfx\raw.hpp" />
     <ClInclude Include="source\gfx\texturemanager.hpp" />
-    <ClInclude Include="source\gfx\vertexbuffer.hpp" />
-    <ClInclude Include="source\gfx\vertexformat.hpp" />
-    <ClInclude Include="source\gfx\vertexstructs.hpp" />
     <ClInclude Include="source\model\daeloader.hpp" />
     <ClInclude Include="source\model\importer.hpp" />
     <ClInclude Include="source\model\ImporterDesc.hpp" />

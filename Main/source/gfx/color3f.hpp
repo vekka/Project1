@@ -1,7 +1,7 @@
 #ifndef _COLOR3F_HPP_INCLUDED_
 #define _COLOR3F_HPP_INCLUDED_
 
-#include <assert.h>
+#include <cassert>
 
 #include "color.hpp"
 

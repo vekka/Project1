@@ -53,7 +53,7 @@ using core::math::Matrix4f;
 #include "model/objfileimporter.hpp"
 
 #include "core/BasicTypes.hpp"
-//#include <assert.h>
+//#include <cassert>
 #include "model/ImporterDesc.hpp"
 
 #include "core/fileio/file.hpp"

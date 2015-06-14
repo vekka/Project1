@@ -1,7 +1,7 @@
 
 #include "memory.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void RefCounterBase::Grab() const
 {

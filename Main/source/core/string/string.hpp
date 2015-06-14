@@ -31,7 +31,7 @@ in the jpeglib, the zlib and libPng for further informations.
 
 #include <iostream>
 
-#include <assert.h>
+#include <cassert>
 
 #include <iostream>
 

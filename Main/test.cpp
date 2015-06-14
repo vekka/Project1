@@ -11,7 +11,6 @@
 #include "scene/scene.hpp"
 
 #include "shader/oglshader.hpp"
-#include "gfx/vertexbuffer.hpp"
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
 
@@ -19,10 +18,6 @@ using namespace oglshader;
 using mesh2::Face;
 
 #include "win32/win32console.hpp"
-#include "gfx/vertexbuffer.hpp"
-
-#include "gfx/vertexstructs.hpp"
-using vertexstructs::VertexPC;
 
 #include "model/ObjParser.hpp"
 using namespace model::objparser;
@@ -43,7 +38,6 @@ using camera::FreeCamera;
 using camera::AbstractCamera;
 using camera::FRUSTUM_ORTHOGRAPHIC;
 using camera::FRUSTUM_PERSPECTIVE;
-using vbo::VertexBuffer;
 
 using namespace ogldriver;
 
@@ -53,12 +47,32 @@ using mesh2::Mesh;
 #include "source\model\mesh2.hpp"
 //using mesh2;
 
+namespace tag
+{
+   struct Buffer {};
+}
+
+template <typename T>
+class A;
+
+template <>
+class A < tag::Buffer >
+{
+private:
+   int a;
+
+public:
+   A() : a(2) {}
+};
+
 using core::math::Matrix4f;
 
 void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID);
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
+   tag::Buffer b;
+
    FreeCamera camera(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
    uint32 vaoID = 0;
    uint32 vboIndicesID = 0;
