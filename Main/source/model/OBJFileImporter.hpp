@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <vector>
 #include "mesh2.hpp"
-struct mesh2::Mesh;
+class mesh2::Mesh;
 #include "../core/fileio/file.hpp"
 using core::fileio::File;
 

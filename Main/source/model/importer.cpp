@@ -44,56 +44,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using core::fileio::File;
 
-//namespace baseimporter
-//{
-//
-//   BaseImporter::BaseImporter()
-//  
-//   {
-//      // nothing to do here
-//   }
-//
-//   // ------------------------------------------------------------------------------------------------
-//   // Destructor, private as well
-//   BaseImporter::~BaseImporter()
-//   {
-//      // nothing to do here
-//   }
-//
-//   Scene* BaseImporter::ReadFile(const Importer* pImp, const std::string& pFile, File* pIOHandler)
-//   {
-//      //progress = pImp->GetProgressHandler();
-//      //assert(progress);
-//
-//      // Gather configuration properties for this run
-//      //SetupProperties(pImp);
-//
-//      // Construct a file system filter to improve our success ratio at reading external files
-//      //FileSystemFilter filter(pFile, pIOHandler);
-//
-//      // create a scene object to hold the data  
-//      ScopeGuard<Scene> sc(new Scene() );
-//   
-//      // dispatch importing
-//      try
-//      {
-//        InternReadFile(pFile, sc, pIOHandler);
-//      }
-//      catch (const std::exception& err)	
-//      {
-//      //   // extract error description
-//      //   mErrorText = err.what();
-//      //   DefaultLogger::get()->error(mErrorText);
-//         return NULL;
-//      }
-//
-//      // return what we gathered from the import. 
-//      sc.dismiss();
-//      return sc;
-//   }
-//
-//}
-
 namespace importer
 {
 
@@ -144,6 +94,7 @@ namespace importer
          }
          catch (const std::exception &err)
          {
+           
             //   // extract error description
             //   mErrorText = err.what();
             //   DefaultLogger::get()->error(mErrorText);

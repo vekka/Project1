@@ -50,6 +50,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "../model/mesh2.hpp"
 using mesh2::Mesh;
+using mesh2::Face;
 //#include "light.h"
 //#include "camera.h"
 //#include "material.h"
@@ -338,6 +339,29 @@ namespace scene
        //Camera** m_ppCameras;
 
       Scene() : m_numMeshes(0) {}
+
+      //scene size in bytes ...
+      inline void GetSceneByteSize(uint32 &verticesSize, uint32 &indicesSize ) const
+      {
+         verticesSize = 0;
+         indicesSize = 0;
+         for (uint32 i = 0; i < m_numMeshes; i++)
+         {
+            if (m_ppMeshes[i]->HasPositions())
+               verticesSize += m_ppMeshes[i]->m_numVertices * sizeof(Vector3f);
+            if (m_ppMeshes[i]->HasNormals())
+               verticesSize += m_ppMeshes[i]->m_numVertices * sizeof(Vector3f);
+
+            if (m_ppMeshes[i]->HasVertexColors(0))
+               verticesSize += m_ppMeshes[i]->m_numVertices * sizeof(Color4f);
+            
+            if (m_ppMeshes[i]->HasFaces())
+               indicesSize += m_ppMeshes[i]->m_numFaces * sizeof(Face);
+
+            if (m_ppMeshes[i]->HasTextureCoords(0))
+               verticesSize += m_ppMeshes[i]->m_numVertices * sizeof(Vector3f);
+         }  
+      }
 
       // Unless no special scene flags are set this will always be true.
       inline bool HasMeshes() const

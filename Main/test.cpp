@@ -79,7 +79,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/cow.obj");
+   sc = importer.ReadFile("assets/testObjects/twoCubes.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -150,7 +150,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniformData("light.color", color.Ptr(), TYPE_FVEC3, 1);
 
    shader.Unuse();
- 
+
    generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
@@ -191,18 +191,23 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 
-// http://www.lighthouse3d.com/cg-topics/code-samples/importing-3d-models-with-assimp/
-//how to fill opengl vbo with assimp scene
 
 void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID )
 {
    //vertex array and vertex buffer object IDs
    vaoID = 0;
    uint32 vboVerticesID = 0; 
-   
+   uint32 iboOffset = 0, vboOffset = 0;
+   uint32 vertsSize, idxSize;
+   sc->GetSceneByteSize(vertsSize, idxSize);
+
+
    glGenVertexArrays(1, &vaoID);
    glGenBuffers(1, &vboVerticesID);
+   glBufferData(GL_ARRAY_BUFFER, vertsSize, NULL, GL_STATIC_DRAW);
+
    glGenBuffers(1, &vboIndicesID);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxSize, NULL, GL_STATIC_DRAW);
    // For each mesh
    for (uint32 n = 0; n < sc->m_numMeshes; ++n)
    {
@@ -226,7 +231,6 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
      
       glBindVertexArray(vaoID);
       // buffer for faces
-      
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * mesh->m_numFaces * 3, faceArray, GL_STATIC_DRAW);
 
