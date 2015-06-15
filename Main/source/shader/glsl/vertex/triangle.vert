@@ -6,6 +6,7 @@ layout(location=1) in vec3 vNormal;
 
 uniform mat4 P;
 uniform mat4 M;
+uniform mat4 V;
 
 out vec3 fragNormal;
 out vec3 fragVert;

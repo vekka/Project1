@@ -59,7 +59,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/cow.obj");
+   sc = importer.ReadFile("assets/testObjects/fourCubes.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -69,8 +69,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    Matrix4f mat = Matrix4f::IDENTITY * 3;
    Vector4f v(4, 5, 6, 7);
    printf("hello\n");
-   std::cout << mat << std::endl;
-   std::cout << v << std::endl;
 
    bool resized = false;
    //The message class of the application
@@ -111,14 +109,17 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddAttribute("vNormal");
    shader.AddUniform("P");
    shader.AddUniform("M");
+   shader.AddUniform("V");
    shader.AddUniform("light.position");
    shader.AddUniform("light.color");
    shader.Unuse();
 
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(0.0f, -5.0f, -10.0f);
+   Matrix4f viewMatrix = Matrix4f::IDENTITY;
+   modelMatrix.SetTranslation(3.0f, -4.0f, -10.0f);
    modelMatrix = modelMatrix.Transpose();
+   modelMatrix.SetRotationRadians(3.3f);
 
    //you must activate shader program to give uniform variables data
    Vector3f pos(0.333f, 0.0f, 0.3333f);
@@ -127,6 +128,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
    shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
+   shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1, false);
    shader.AddUniformData("light.position", pos.Ptr(), TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), TYPE_FVEC3, 1);
 
@@ -150,8 +152,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       }
       win.HandleSystemMessages(&msg);
 
-      cursor.GetPosition(x, y);
-      resized = win.GetResizeFlag();
+      resized = win.GetResizeFlag();   
       if (msg.message == WM_QUIT)
          break;
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
@@ -160,7 +161,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindVertexArray(vaoID);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
-      
+
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
+      {
+         //std::cout << "W was pressed" << std::endl;
+         camera.SetTranslation(Vector3f(0.0f, 0.0f, -1.0f));
+      }
+      if (camera.IsDirty())
+      {
+         camera.Update();
+         shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1, false);
+      }
+
+
       //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();

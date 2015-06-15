@@ -105,9 +105,6 @@ namespace camera
       Vector3f nearPts[4];
    };
 
-
-
-  
   //floatemplate <typenamefloat>
    class FreeCamera : public AbstractCamera
    {
@@ -129,9 +126,15 @@ namespace camera
          this->nearBottom = nearBottom;
          this->nearDist = nearDist;
          this->farDist = farDist;
+
+         translation = Vector3f(0.0f, 0.0f, 0.0f);
+         position = Vector3f(0.0f, 0.0f, 0.0f);
+         forward = Vector3f(0.0f, 0.0f, -1.0f);
+         up = Vector3f(0.0f, 1.0f, 0.0f);
+         right = Vector3f(1.0f, 0.0f, 0.0f);
+
+         viewMatrix = Matrix4f::IDENTITY;
       }
-
-
       void Update();
       void Rotate(float angle, Vector3f axis);
 
@@ -145,8 +148,6 @@ namespace camera
 
       void SetTranslation(const Vector3f &t);
       Vector3f GetTranslation() const;
-
-
    };
 
 } // camera

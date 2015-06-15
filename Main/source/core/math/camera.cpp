@@ -44,9 +44,7 @@ namespace camera
 
    void FreeCamera::Update()
    {
-      position += translation;
-
-      Vector3f localForward, right, _up;
+      Vector3f localForward(0.0f,0.0f,0.0f), right, _up;
       Vector3f distance;
 
       //.Zero();
@@ -71,7 +69,7 @@ namespace camera
          right[0], _up[0], -forward[0], 0.0,
          right[1], _up[1], -forward[1], 0.0,
          right[2], _up[2], -forward[2], 0.0,
-         0.0, 0.0, 0.0, 1.0);
+         position[0], position[1], position[2], 1.0);
 
       isDirty = false;
    }//UPDATE
@@ -99,6 +97,7 @@ namespace camera
     void FreeCamera::SetTranslation(const Vector3f &t)
     {
          translation += t; 
+         isDirty = true;
     }
 
     Vector3f FreeCamera::GetTranslation() const
