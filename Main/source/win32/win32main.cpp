@@ -311,6 +311,7 @@ namespace win32window
          return 0;
       default:
          keyboard.Dispatch(msg, wParam, lParam);
+         cursor.Dispatch();
          return DefWindowProc(hWnd, msg, wParam, lParam);
       }
       return 0;

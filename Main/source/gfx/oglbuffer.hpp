@@ -7,6 +7,9 @@ using core::math::Vector3f;
 #include "scene/scene.hpp"
 using scene::Scene;
 
+#include "shader/oglshader.hpp"
+using oglshader::GLSLShader;
+
 #include "core/basicTypes.hpp"
 namespace oglbuffer
 {

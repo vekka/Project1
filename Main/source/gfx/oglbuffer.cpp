@@ -1,12 +1,8 @@
 
 #include "oglbuffer.hpp"
 
-#include "shader/oglshader.hpp"
-using oglshader::GLSLShader;
 namespace oglbuffer
 {
-
-
    void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID)
    {
       //vertex array and vertex buffer object IDs
@@ -16,12 +12,14 @@ namespace oglbuffer
       uint32 vertsSize, idxSize;
       sc->GetSceneByteSize(vertsSize, idxSize);
 
-
       glGenVertexArrays(1, &vaoID);
+      glBindVertexArray(vaoID);
       glGenBuffers(1, &vboVerticesID);
+      glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
       glBufferData(GL_ARRAY_BUFFER, vertsSize, NULL, GL_STATIC_DRAW);
 
       glGenBuffers(1, &vboIndicesID);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxSize, NULL, GL_STATIC_DRAW);
       // For each mesh
       for (uint32 n = 0; n < sc->m_numMeshes; ++n)
@@ -42,27 +40,18 @@ namespace oglbuffer
             faceIndex += 3;
          }
 
-         // generate Vertex Array for mesh
-
-         glBindVertexArray(vaoID);
          // buffer for faces
-         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
+        
          glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, iboOffset, sizeof(uint32) * mesh->m_numFaces * 3, faceArray);
          iboOffset += sizeof(uint32) * mesh->m_numFaces * 3;
          // buffer for vertex positions
 
          if (mesh->HasPositions())
          {
-            glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
             glEnableVertexAttribArray(shader["vVertex"]);
             glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
-
-
-            Vertex newVertex(;
-            //newVertex.position =
-
-               glBufferSubData(GL_ARRAY_BUFFER, vboOffset, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices);
-            vboOffset += sizeof(uint32) * mesh->m_numFaces * 3;
+            glBufferSubData(GL_ARRAY_BUFFER, vboOffset, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices);
+            vboOffset += sizeof(Vector3f) * mesh->m_numVertices ;
          }
 
          // buffer for vertex normals
@@ -73,13 +62,12 @@ namespace oglbuffer
          //   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
 
          //}
-
          // unbind buffers
-         glBindBuffer(GL_ARRAY_BUFFER, 0);
-         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-         glBindVertexArray(0);
+         
          free(faceArray);
       }
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      glBindVertexArray(0);
    }
-
 }

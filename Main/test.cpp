@@ -8,12 +8,10 @@
 //#include "win32main.hpp"
 
 #include "model/importer.hpp"
-#include "scene/scene.hpp"
 
 #include "gfx/oglbuffer.hpp"
-using oglbuffer::
+//using oglbuffer::
 
-#include "shader/oglshader.hpp"
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
 
@@ -47,26 +45,6 @@ using namespace ogldriver;
 #include "model\mesh2.hpp"
 using mesh2::Mesh;
 
-#include "source\model\mesh2.hpp"
-//using mesh2;
-
-namespace tag
-{
-   struct Buffer {};
-}
-
-template <typename T>
-class A;
-
-template <>
-class A < tag::Buffer >
-{
-private:
-   int a;
-
-public:
-   A() : a(2) {}
-};
 
 using core::math::Matrix4f;
 
@@ -74,7 +52,6 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
-   tag::Buffer b;
 
    FreeCamera camera(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
    uint32 vaoID = 0;
@@ -82,7 +59,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/twoCubes.obj");
+   sc = importer.ReadFile("assets/testObjects/cow.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -109,7 +86,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    win.Create(hInst, 20, 20, 800, 600);
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
+   Win32Window::Win32Cursor cursor;
 
+   
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
    OGLDriver oglContext(hWnd, 800, 600, false);
@@ -138,9 +117,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(-1.0f, 0.0f, -7.0f);
+   modelMatrix.SetTranslation(0.0f, -5.0f, -10.0f);
    modelMatrix = modelMatrix.Transpose();
-   modelMatrix.SetRotationRadians(0.24f);
 
    //you must activate shader program to give uniform variables data
    Vector3f pos(0.333f, 0.0f, 0.3333f);
@@ -154,9 +132,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    shader.Unuse();
 
-   generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
+   oglbuffer::generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
+   int32 x, y;
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
+
    int32 numIndicesInScene = 0;
    for (int32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
@@ -169,6 +149,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
          win.OnResize();
       }
       win.HandleSystemMessages(&msg);
+
+      cursor.GetPosition(x, y);
       resized = win.GetResizeFlag();
       if (msg.message == WM_QUIT)
          break;
@@ -176,11 +158,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
          msg.message = WM_QUIT;
      
       glBindVertexArray(vaoID);
-      //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
+      
       //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
-
-      glDrawArrays(GL_TRIANGLES, 0, sc->m_ppMeshes[0]->m_numFaces*3);
+      glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();
       
       glBindVertexArray(0);
