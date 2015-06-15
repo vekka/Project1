@@ -10,6 +10,9 @@
 #include "model/importer.hpp"
 #include "scene/scene.hpp"
 
+#include "gfx/oglbuffer.hpp"
+using oglbuffer::
+
 #include "shader/oglshader.hpp"
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
@@ -190,74 +193,3 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    return msg.wParam;
 }
 
-
-
-void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID )
-{
-   //vertex array and vertex buffer object IDs
-   vaoID = 0;
-   uint32 vboVerticesID = 0; 
-   uint32 iboOffset = 0, vboOffset = 0;
-   uint32 vertsSize, idxSize;
-   sc->GetSceneByteSize(vertsSize, idxSize);
-
-
-   glGenVertexArrays(1, &vaoID);
-   glGenBuffers(1, &vboVerticesID);
-   glBufferData(GL_ARRAY_BUFFER, vertsSize, NULL, GL_STATIC_DRAW);
-
-   glGenBuffers(1, &vboIndicesID);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxSize, NULL, GL_STATIC_DRAW);
-   // For each mesh
-   for (uint32 n = 0; n < sc->m_numMeshes; ++n)
-   {
-      const Mesh* mesh = sc->m_ppMeshes[n];
-
-      // create array with faces
-      // have to convert from Assimp format to array
-      uint32 *faceArray;
-      faceArray = (uint32 *)malloc(sizeof(uint32) * mesh->m_numFaces * 3);
-      uint32 faceIndex = 0;
-
-      for (uint32 t = 0; t < mesh->m_numFaces; ++t)
-      {
-         const Face* face = &mesh->m_pFaces[t];
-
-         memcpy(&faceArray[faceIndex], face->m_pIndexArray, 3 * sizeof(uint32));
-         faceIndex += 3;
-      }
-   
-      // generate Vertex Array for mesh
-     
-      glBindVertexArray(vaoID);
-      // buffer for faces
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * mesh->m_numFaces * 3, faceArray, GL_STATIC_DRAW);
-
-      // buffer for vertex positions
-      
-      if (mesh->HasPositions())
-      {
-         
-         glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID);
-         glEnableVertexAttribArray(shader["vVertex"]);
-         glVertexAttribPointer(shader["vVertex"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numVertices, mesh->m_pVertices, GL_STATIC_DRAW);
-        
-      }
-  
-      // buffer for vertex normals
-      if (mesh->HasNormals())
-      {       
-         glEnableVertexAttribArray(shader["vNormal"]);
-         glVertexAttribPointer(shader["vNormal"], 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,(GLvoid*)12);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh->m_numFaces, mesh->m_pNormals, GL_STATIC_DRAW);
-
-      }
-      // unbind buffers
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-      glBindVertexArray(0);
-      free(faceArray);
-   }
-}

@@ -146,6 +146,7 @@
     <ClCompile Include="source\gfx\color.cpp" />
     <ClCompile Include="source\gfx\color3f.cpp" />
     <ClCompile Include="source\gfx\color4f.cpp" />
+    <ClCompile Include="source\gfx\oglbuffer.cpp" />
     <ClCompile Include="source\gfx\raw.cpp" />
     <ClCompile Include="source\model\importer.cpp" />
     <ClCompile Include="source\model\material.hpp" />

@@ -171,6 +171,9 @@
     <ClCompile Include="source\model\importer.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="source\gfx\oglbuffer.cpp">
+      <Filter>Source Files\GFX\BufferLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
