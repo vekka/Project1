@@ -129,8 +129,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    translationMatrix.SetTranslation(0.1f, 0.0f, 0.0f);
    translationMatrix = translationMatrix.Transpose();
 
-
-
    //you must activate shader program to give uniform variables data
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
@@ -172,23 +170,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       shader.Use();
 
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
+         camera.OnKeyboard(win32keyboard::VKEY_W, 0.01f);
+      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
+         camera.OnKeyboard(win32keyboard::VKEY_S, 0.01f);
+
+      if (camera.IsDirty())
       {
-         //std::cout << "W was pressed" << std::endl;
-         
-
-         //translationMatrix[8] = 0.0f;
-
-         modelMatrix = modelMatrix * translationMatrix;
-         shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
+         camera.Update();
+         shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1);
       }
-      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
-      {
-        
-         modelMatrix = modelMatrix * translationMatrix;
-         shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
-      }
-
-
       //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();

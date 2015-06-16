@@ -22,10 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "win32/win32main.hpp"
 
-using win32keyboard::VKEY_UP;
-using win32keyboard::VKEY_DOWN;
-using win32keyboard::VKEY_LEFT;
-using win32keyboard::VKEY_RIGHT;
+using win32keyboard::VKEY_W;
+using win32keyboard::VKEY_S;
+using win32keyboard::VKEY_A;
+using win32keyboard::VKEY_D;
 
 namespace camera
 {
@@ -71,7 +71,7 @@ namespace camera
 
    void FreeCamera::Update()
    {
-      Vector3f localForward(0.0f,0.0f,0.0f), right, _up;
+      Vector3f forward, right, _up;
       Vector3f distance;
 
       //.Zero();
@@ -79,8 +79,8 @@ namespace camera
       //vec3_t m_forward;
 
       //find distance vector
-      m_forward = localForward - m_position;
-      m_forward.Normalize();
+      forward = m_target - m_position;
+      forward.Normalize();
       //Vec3Normalize(distance, m_forward);
       // f = m_forward vector
       // m_up = m_up vector
@@ -92,46 +92,61 @@ namespace camera
       //printf( "cu: %.16f , %.16f , %.16f \n", cameraUp[0], cameraUp[1], cameraUp[2] );
       //CrossProd( cameraUp, m_forward, leftDir );
 
+      
       m_viewMatrix.Set(
-         right[0], _up[0], -m_forward[0], 0.0,
-         right[1], _up[1], -m_forward[1], 0.0,
-         right[2], _up[2], -m_forward[2], 0.0,
-         m_position[0], m_position[1], m_position[2], 1.0);
-
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        -m_position[0], -m_position[1], -m_position[2], 1.0);
+ 
       m_isDirty = false;
    }//UPDATE
 
 
 
-   bool FreeCamera::OnKeyboard(int32 key, int32 stepScale)
+   bool FreeCamera::OnKeyboard(int32 key, float stepScale)
    {
 
       bool ret = false;
       switch (key)
       {
-         case VKEY_UP:
+         case VKEY_W:
          {
             m_position += (m_target * stepScale);
+            //m_position += 0.1;
             ret = true;
-            
+            m_isDirty = true;          
          }
          break;
-         case VK_DOWN:
+         case VKEY_S:
          {
             m_position -= (m_target * stepScale);
             ret = true;
+            m_isDirty = true;
          }
          break;
-         case VKEY_LEFT:
+         case VKEY_A:
          {
             Vector3f left = m_target.CrossProd(m_up);
             left.Normalize();
             left *= stepScale;
             m_position += left;
             ret = true;
+            m_isDirty = true;
+         }
+         break;
+         case VKEY_D:
+         {
+            Vector3f right = m_up.CrossProd(m_target);
+            right.Normalize();
+            right *= stepScale;
+            m_position += right;
+            ret = true;
+            m_isDirty = true;
          }
          break;
       }
+      return ret;
    }
 
    //quaternion multiply is not impl. this function should rotate m_forward vector by using Quaternion multiplication

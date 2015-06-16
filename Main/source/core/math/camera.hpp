@@ -1,6 +1,8 @@
 #include "vector3.hpp"
+#include "vector2.hpp"
 #include "matrix4.hpp"
 #include "quaternion.hpp"
+using core::math::Vector2i;
 using core::math::Vector3f;
 using core::math::Vector4f;
 using core::math::Matrix4f;
@@ -104,7 +106,14 @@ namespace camera
    {
    protected:
      float m_speed; //move speed of camera in m/s
+     float m_angleH;
+     float m_angleV;
      Vector3f m_translation;
+     Vector2i m_mousePos;
+     bool m_onUpperEdge;
+     bool m_onLowerEdge;
+     bool m_onLeftEdge;
+     bool m_onRightEdge;
    public: 
          // I want this to be synced with git repo!.
 
@@ -121,7 +130,13 @@ namespace camera
          m_up = up;
          m_up.Normalize();
 
-         m_viewMatrix = Matrix4f::IDENTITY;
+
+         m_viewMatrix.Set(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+            );
       }
       void Update();
 
@@ -133,7 +148,7 @@ namespace camera
          m_up = up;
       }
 
-      bool OnKeyboard(int32 key, int32 stepScale);
+      bool OnKeyboard(int32 key, float stepScale);
    };
 
 } // camera
