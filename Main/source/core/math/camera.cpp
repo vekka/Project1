@@ -1,44 +1,71 @@
 #include "camera.hpp"
 
+/*
+
+Copyright 2010 Etay Meiri
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// I added this notice, just in case. Need various sources to know what I am doing...
+
+#include "win32/win32main.hpp"
+
+using win32keyboard::VKEY_UP;
+using win32keyboard::VKEY_DOWN;
+using win32keyboard::VKEY_LEFT;
+using win32keyboard::VKEY_RIGHT;
+
 namespace camera
 {
    void AbstractCamera::SetupProjection(const float fovy, const float aspectRatio)
    {
-      this->aspectRatio = aspectRatio;
-      this->fov = fovy;
+      this->m_aspectRatio = aspectRatio;
+      this->m_fov = fovy;
 
-      projMatrix.Zero();
-      float invWidth = 1 / (nearRight - nearLeft);
-      float invHeight = 1 / (nearTop - nearBottom);
-      float invNearFarDist = 1 / (farDist - nearDist);
+      m_projMatrix.Zero();
+      float invWidth = 1 / (m_nearRight - m_nearLeft);
+      float invHeight = 1 / (m_nearTop - m_nearBottom);
+      float invNearFarDist = 1 / (m_farDist - m_nearDist);
 
-      if (projectionType == FRUSTUM_PERSPECTIVE)
+      if (m_projectionType == FRUSTUM_PERSPECTIVE)
       {
          float tanThetaY = std::tan(fovy*0.5f);
          float tanThetaX = aspectRatio *tanThetaY;
 
-         float halfWidth = nearDist * std::tan(tanThetaX);
-         float halfHeight = nearDist * std::tan(tanThetaY);
+         float halfWidth = m_nearDist * std::tan(tanThetaX);
+         float halfHeight = m_nearDist * std::tan(tanThetaY);
 
          // NB:floathis creates 'uniform' perspective projection matrix,
          // which depth range [-1,1], right-handed rules    
-         projMatrix(0, 0) = 2.0f * nearDist * invWidth;
-         projMatrix(0, 2) = (nearRight + nearLeft) * invWidth;
-         projMatrix(1, 1) = 2.0f * nearDist * invHeight;
-         projMatrix(1, 2) = (nearTop + nearBottom) * invHeight;
-         projMatrix(2, 2) = -(farDist + nearDist) * invNearFarDist;
-         projMatrix(2, 3) = -2.0f * farDist * nearDist * invNearFarDist;
-         projMatrix(3, 2) = -1.0f;
+         m_projMatrix(0, 0) = 2.0f * m_nearDist * invWidth;
+         m_projMatrix(0, 2) = (m_nearRight + m_nearLeft) * invWidth;
+         m_projMatrix(1, 1) = 2.0f * m_nearDist * invHeight;
+         m_projMatrix(1, 2) = (m_nearTop + m_nearBottom) * invHeight;
+         m_projMatrix(2, 2) = -(m_farDist + m_nearDist) * invNearFarDist;
+         m_projMatrix(2, 3) = -2.0f * m_farDist * m_nearDist * invNearFarDist;
+         m_projMatrix(3, 2) = -1.0f;
       }
-      else if (projectionType == FRUSTUM_ORTHOGRAPHIC)
+      else if (m_projectionType == FRUSTUM_ORTHOGRAPHIC)
       {
-         projMatrix(0, 0) = 2 * invWidth;
-         projMatrix(0, 3) = -(nearRight + nearLeft) * invWidth;
-         projMatrix(1, 1) = 2 * invHeight;
-         projMatrix(1, 3) = -(nearTop + nearBottom) * invHeight;
-         projMatrix(2, 2) = -2.0f * invNearFarDist;
-         projMatrix(2, 3) = -(farDist + nearDist) * invNearFarDist;
-         projMatrix(3, 3) = 1.0f;
+         m_projMatrix(0, 0) = 2 * invWidth;
+         m_projMatrix(0, 3) = -(m_nearRight + m_nearLeft) * invWidth;
+         m_projMatrix(1, 1) = 2 * invHeight;
+         m_projMatrix(1, 3) = -(m_nearTop + m_nearBottom) * invHeight;
+         m_projMatrix(2, 2) = -2.0f * invNearFarDist;
+         m_projMatrix(2, 3) = -(m_farDist + m_nearDist) * invNearFarDist;
+         m_projMatrix(3, 3) = 1.0f;
       }
    }
 
@@ -49,73 +76,65 @@ namespace camera
 
       //.Zero();
       //  vec3_t distance,floatemp;
-      //vec3_t forward;
+      //vec3_t m_forward;
 
       //find distance vector
-      forward = localForward - position;
-      forward.Normalize();
-      //Vec3Normalize(distance, forward);
-      // f = forward vector
-      // up = up vector
+      m_forward = localForward - m_position;
+      m_forward.Normalize();
+      //Vec3Normalize(distance, m_forward);
+      // f = m_forward vector
+      // m_up = m_up vector
       // right isfloathe cross product offloathefloatwo vectors above
-      right = forward.CrossProd(up);
+      right = m_forward.CrossProd(m_up);
       right.Normalize();
       //printf("cr %.16f, %.16f, %.16f\n", cameraRight[0], cameraRight[1], cameraRight[2]);
-      //printf( "fo: %.16f , %.16f , %.16f \n", forward[0], forward[1], forward[2] );
+      //printf( "fo: %.16f , %.16f , %.16f \n", m_forward[0], m_forward[1], m_forward[2] );
       //printf( "cu: %.16f , %.16f , %.16f \n", cameraUp[0], cameraUp[1], cameraUp[2] );
-      //CrossProd( cameraUp, forward, leftDir );
+      //CrossProd( cameraUp, m_forward, leftDir );
 
-      viewMatrix.Set(
-         right[0], _up[0], -forward[0], 0.0,
-         right[1], _up[1], -forward[1], 0.0,
-         right[2], _up[2], -forward[2], 0.0,
-         position[0], position[1], position[2], 1.0);
+      m_viewMatrix.Set(
+         right[0], _up[0], -m_forward[0], 0.0,
+         right[1], _up[1], -m_forward[1], 0.0,
+         right[2], _up[2], -m_forward[2], 0.0,
+         m_position[0], m_position[1], m_position[2], 1.0);
 
-      isDirty = false;
+      m_isDirty = false;
    }//UPDATE
 
-    //void FreeCamera::Walk(const float dt)
-    //{
-    //   translation += (forward * dt);
-    //  isDirty = true;
-    //}
 
-   //template <typenamefloat>
-    //void FreeCamera::Strafe(const float dt) 
-    //{
-    //  translation += (right*dt);
-    //  isDirty = true;
-    //}
 
-   //template <typenamefloat>
-    //void FreeCamera::Lift(const float dt) 
-    //{
-    //  translation += (up*dt);
-    //  isDirty = true;
-    //}
-    
-    void FreeCamera::SetTranslation(const Vector3f &t)
-    {
-         translation += t; 
-         isDirty = true;
-    }
+   bool FreeCamera::OnKeyboard(int32 key, int32 stepScale)
+   {
 
-    Vector3f FreeCamera::GetTranslation() const
-    { 
-       return translation; 
-    }
+      bool ret = false;
+      switch (key)
+      {
+         case VKEY_UP:
+         {
+            m_position += (m_target * stepScale);
+            ret = true;
+            
+         }
+         break;
+         case VK_DOWN:
+         {
+            m_position -= (m_target * stepScale);
+            ret = true;
+         }
+         break;
+         case VKEY_LEFT:
+         {
+            Vector3f left = m_target.CrossProd(m_up);
+            left.Normalize();
+            left *= stepScale;
+            m_position += left;
+            ret = true;
+         }
+         break;
+      }
+   }
 
-    void FreeCamera::SetSpeed(const float speed)
-    { 
-       this->speed = speed; 
-    }
-
-    const float FreeCamera::GetSpeed()
-    { 
-       return speed; 
-    }
-
-   //quaternion multiply is not impl. this function should rotate forward vector by using Quaternion multiplication
+   //quaternion multiply is not impl. this function should rotate m_forward vector by using Quaternion multiplication
     //void FreeCamera::Rotate( float angle, Vector3f axis )
     //{
     //   //Quaternion_f qview, temp, temp2, res;

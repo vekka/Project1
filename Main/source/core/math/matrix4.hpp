@@ -189,7 +189,7 @@ namespace core
       inline T &Matrix4<T>::operator[](const uint8 index)
       {
          assert(index < 16);
-         return (&x)[index];
+         return (m)[index];
       }
 
       template <typename T>

@@ -52,8 +52,6 @@ void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
-
-   FreeCamera camera(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
    uint32 vaoID = 0;
    uint32 vboIndicesID = 0;
    const scene::Scene *sc;
@@ -114,12 +112,24 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniform("light.color");
    shader.Unuse();
 
+   Vector3f cameraPosition(0.0f, 0.0f, 0.0f);
+   Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
+   Vector3f cameraUp(0.0f, 1.0f, 0.0f);
+   FreeCamera camera(800.0f, 600.0f,cameraPosition, cameraTarget,cameraUp );
+   camera.InitProjection(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
+
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
    modelMatrix.SetTranslation(3.0f, -4.0f, -10.0f);
    modelMatrix = modelMatrix.Transpose();
-   modelMatrix.SetRotationRadians(3.3f);
+
+
+   Matrix4f translationMatrix = Matrix4f::IDENTITY;
+   translationMatrix.SetTranslation(0.1f, 0.0f, 0.0f);
+   translationMatrix = translationMatrix.Transpose();
+
+
 
    //you must activate shader program to give uniform variables data
    Vector3f pos(0.333f, 0.0f, 0.3333f);
@@ -135,12 +145,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Unuse();
 
    oglbuffer::generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
-   int32 x, y;
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // Process the messages
 
    int32 numIndicesInScene = 0;
-   for (int32 i = 0; i < sc->m_numMeshes; i++)
+   for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
    while (1)
    {
@@ -165,12 +174,18 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
       {
          //std::cout << "W was pressed" << std::endl;
-         camera.SetTranslation(Vector3f(0.0f, 0.0f, -1.0f));
+         
+
+         //translationMatrix[8] = 0.0f;
+
+         modelMatrix = modelMatrix * translationMatrix;
+         shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
       }
-      if (camera.IsDirty())
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
       {
-         camera.Update();
-         shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1, false);
+        
+         modelMatrix = modelMatrix * translationMatrix;
+         shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
       }
 
 

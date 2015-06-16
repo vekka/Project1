@@ -24,74 +24,68 @@ namespace camera
    class AbstractCamera
    {
    protected:
-     float yaw, pitch, roll;
+     float m_yaw, m_pitch, m_roll;
     
-     float fov;
-     float aspectRatio;
-     float nearLeft;
-     float nearRight;
-     float nearTop;
-     float nearBottom;
-     float nearDist;
-     float farDist;
+     float m_fov;
+     float m_aspectRatio;
+     float m_nearLeft;
+     float m_nearRight;
+     float m_nearTop;
+     float m_nearBottom;
+     float m_nearDist;
+     float m_farDist;
 
       // class Frustum should probably be integrated intofloathis class?
       //It oughtfloato support different projectionsfloato be scalable
    public:
 
-      // a rather big contstructor...:S
-      //AbstractCamera::AbstractCamera(
-      //   const eProjectionType projectionType,
-      //   const float nearLeft, const float nearRight,
-      //   const float nearTop, const float nearBottom,
-      //   const float nearDist, const float farDist)
-      //{
-      //   assert(projectionType == FRUSTUM_PERSPECTIVE || projectionType == FRUSTUM_ORTHOGRAPHIC);
-      //   assert(!Equals(nearLeft, nearRight));
-      //   assert(!Equals(nearTop, nearBottom));
-      //   assert(!Equals(farDist, nearDist));
+      bool m_isDirty;
 
-      //   orientation.Set(0.0f, 0.0f, 0.0f, 0.0f);
-      //  isDirty = true;
-      //  this->projectionType = projectionType;
-      //  this->nearLeft = nearLeft;
-      //  this->nearRight = nearRight;
-      //  this->nearTop = nearTop;
-      //  this->nearBottom = nearBottom;
-      //  this->nearDist = nearDist;
-      //  this->farDist = farDist;
-      //}
-      //AbstractCamera();
-      //~AbstractCamera();
+      eProjectionType m_projectionType;
 
-      bool isDirty;
-
-      eProjectionType projectionType;
+      float m_windowWidth;
+      float m_windowHeight;
 
       // these vectors make up the view matrix. View matrix ~ "the camera"
-      Quaternion_f orientation;
-      Vector3f forward;
-      Vector3f up;
-      Vector3f right;
-      Vector3f position;
-      Matrix4f viewMatrix; //view matrix
-      Matrix4f projMatrix; //projection matrix
+      Quaternion_f m_orientation;
+      Vector3f m_forward;
+      Vector3f m_right;
+      Vector3f m_position;
+      Vector3f m_target;
+      Vector3f m_up;
+
+      Matrix4f m_viewMatrix; //view matrix
+      Matrix4f m_projMatrix; //projection matrix
       //Plane_f planes[6]; //Frustum planes
 
-      bool IsDirty() { return isDirty; }
+      bool IsDirty() { return m_isDirty; }
       void SetupProjection(const float fovy, const float aspectRatio);
+      void InitProjection(eProjectionType projectionType, float nearLeft, float nearRight,
+         float nearTop, float nearBottom, float nearDist, float farDist)
+      {
+         m_orientation.Set(0.0f, 0.0f, 0.0f, 0.0f);
+         m_isDirty = true;
+         this->m_projectionType = projectionType;
+         this->m_nearLeft = nearLeft;
+         this->m_nearRight = nearRight;
+         this->m_nearTop = nearTop;
+         this->m_nearBottom = nearBottom;
+         this->m_nearDist = nearDist;
+         this->m_farDist = farDist;
+      }
+
       virtual void Update() = 0;
       
       //virtual void Rotate( float angle, Vector3f axis );
-      const Matrix4f &GetViewMatrix() const { return viewMatrix; }
+      const Matrix4f &GetViewMatrix() const { return m_viewMatrix; }
 
-      const Matrix4f &GetProjectionMatrix() const { return projMatrix; }
+      const Matrix4f &GetProjectionMatrix() const { return m_projMatrix; }
 
-      void SetPosition(const Vector3f &v) { position = v; }
-      const Vector3f GetPosition() const { return position; }
-      void SetFOV(const float fov) {this->fov = fov; }
-      const float GetFOV() const { return fov; }
-      const float GetAspectRatio() const { return aspectRatio; }
+      void SetPosition(const Vector3f &v) { m_position = v; }
+      const Vector3f GetPosition() const { return m_position; }
+      void SetFOV(const float fov) {this->m_fov = fov; }
+      const float GetFOV() const { return m_fov; }
+      const float GetAspectRatio() const { return m_aspectRatio; }
 
 
       void CalcFrustumPlanes();
@@ -109,45 +103,37 @@ namespace camera
    class FreeCamera : public AbstractCamera
    {
    protected:
-     float speed; //move speed of camera in m/s
-     Vector3f translation;
+     float m_speed; //move speed of camera in m/s
+     Vector3f m_translation;
    public: 
          // I want this to be synced with git repo!.
 
-      FreeCamera( eProjectionType projectionType, float nearLeft, float nearRight,
-         float nearTop, float nearBottom, float nearDist, float farDist )
+      FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
+         const Vector3f &target, const Vector3f &up)
       {
-         orientation.Set(0.0f, 0.0f, 0.0f, 0.0f);
-         isDirty = true;
-         this->projectionType = projectionType;
-         this->nearLeft = nearLeft;
-         this->nearRight = nearRight;
-         this->nearTop = nearTop;
-         this->nearBottom = nearBottom;
-         this->nearDist = nearDist;
-         this->farDist = farDist;
+         m_windowWidth = windowWidth;
+         m_windowHeight = windowHeight;
+         m_position = pos;
 
-         translation = Vector3f(0.0f, 0.0f, 0.0f);
-         position = Vector3f(0.0f, 0.0f, 0.0f);
-         forward = Vector3f(0.0f, 0.0f, -1.0f);
-         up = Vector3f(0.0f, 1.0f, 0.0f);
-         right = Vector3f(1.0f, 0.0f, 0.0f);
+         m_target = target;
+         m_target.Normalize();
 
-         viewMatrix = Matrix4f::IDENTITY;
+         m_up = up;
+         m_up.Normalize();
+
+         m_viewMatrix = Matrix4f::IDENTITY;
       }
       void Update();
-      void Rotate(float angle, Vector3f axis);
-
-      void Walk(const float dt);
-      void Strafe(const float dt);
-      void Lift(const float dt);
 
 
-      void SetSpeed(const float speed);
-      const float GetSpeed();
+      void Set(const Vector3f &pos, const Vector3f &target, const Vector3f &up)
+      {
+         m_position = pos;
+         m_target = target;
+         m_up = up;
+      }
 
-      void SetTranslation(const Vector3f &t);
-      Vector3f GetTranslation() const;
+      bool OnKeyboard(int32 key, int32 stepScale);
    };
 
 } // camera
