@@ -22,7 +22,6 @@ namespace core
          static const Vector3<T> NEG_UNIT_Y;
          static const Vector3<T> NEG_UNIT_Z;
          static const Vector3<T> UNIT_SCALE;
-         static const Vector3<T> NEG_UNIT_SCALE;
          //----------- constructors
          Vector3();
          Vector3(const T x, const T y, const T z);
@@ -52,7 +51,7 @@ namespace core
       template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_X(-1, 0, 0);
       template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_Y(0, -1, 0);
       template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_Z(0, 0, -1);
-      template <typename T> const Vector3<T> Vector3<T>::NEG_UNIT_SCALE(1, 1, 1);
+      template <typename T> const Vector3<T> Vector3<T>::UNIT_SCALE(1, 1, 1);
 
       template <typename T>
       inline Vector3<T>::Vector3()
