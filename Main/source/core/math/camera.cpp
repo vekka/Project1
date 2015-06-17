@@ -20,12 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // I added this notice, just in case. Need various sources to know what I am doing...
 
-#include "win32/win32main.hpp"
 
-using win32keyboard::VKEY_W;
-using win32keyboard::VKEY_S;
-using win32keyboard::VKEY_A;
-using win32keyboard::VKEY_D;
 
 namespace camera
 {
@@ -34,7 +29,7 @@ namespace camera
       this->m_aspectRatio = aspectRatio;
       this->m_fov = fovy;
 
-      m_projMatrix.Zero();
+      m_projMatrix = Matrix4f::IDENTITY;
       float invWidth = 1 / (m_nearRight - m_nearLeft);
       float invHeight = 1 / (m_nearTop - m_nearBottom);
       float invNearFarDist = 1 / (m_farDist - m_nearDist);
@@ -54,8 +49,17 @@ namespace camera
          m_projMatrix(1, 1) = 2.0f * m_nearDist * invHeight;
          m_projMatrix(1, 2) = (m_nearTop + m_nearBottom) * invHeight;
          m_projMatrix(2, 2) = -(m_farDist + m_nearDist) * invNearFarDist;
-         m_projMatrix(2, 3) = -2.0f * m_farDist * m_nearDist * invNearFarDist;
+         m_projMatrix(2, 3) = -2.0f * (m_farDist * m_nearDist) * invNearFarDist;
          m_projMatrix(3, 2) = -1.0f;
+         m_projMatrix(3, 3) = 0.0f;
+         /*
+
+         0,0   0,1   0,2   0,3
+         1,0   1,1   1,2   1,3
+         2,0   2,1   2,2   2,3
+         3,0   3,1   3,2   3,3
+         
+         */
       }
       else if (m_projectionType == FRUSTUM_ORTHOGRAPHIC)
       {
@@ -65,27 +69,35 @@ namespace camera
          m_projMatrix(1, 3) = -(m_nearTop + m_nearBottom) * invHeight;
          m_projMatrix(2, 2) = -2.0f * invNearFarDist;
          m_projMatrix(2, 3) = -(m_farDist + m_nearDist) * invNearFarDist;
-         m_projMatrix(3, 3) = 1.0f;
+        
       }
    }
 
    void FreeCamera::Update()
    {
-     
-      //find distance vector
-      m_forward = m_target - m_position;
-      m_forward.Normalize();
-     
-      m_right = m_forward.CrossProd(m_up);
-      m_right.Normalize();
+      Vector3f forward, right, up;
 
-      m_up = m_right.CrossProd(m_forward);
-      m_up.Normalize();
+      forward = m_target - m_position;
+      forward.Normalize();
+
+      //bookeepin...
+      m_forward = forward;
+
+      //side = forward X up
+      right = forward.CrossProd(m_up);
+      right.Normalize();
+
+      m_right = right;
+
+      //recalculate up; up = side X forward
+      up = right.CrossProd(forward);
+
+      m_up = up;
 
       m_viewMatrix.Set(
-         m_right[0], m_up[0], m_forward[0], m_position[0],
-         m_right[1], m_up[1], m_forward[1], m_position[1],
-         m_right[2], m_up[2], m_forward[2], m_position[2],
+         right[0], up[0], forward[0], 0.0f,
+         right[1], up[1], forward[1], 0.0F,
+         right[2], up[2], forward[2], 0.0f,
         0, 0, 0, 1.0);
  
       m_isDirty = false;
@@ -93,49 +105,44 @@ namespace camera
 
 
 
-   bool FreeCamera::OnKeyboard(int32 key, float stepScale)
+   bool FreeCamera::OnKeyboard(Win32Window &w, float stepScale)
    {
 
       bool ret = false;
-      switch (key)
+      if( w.keyboard.KeyIsDown( VKEY_W ))
       {
-         case VKEY_W:
-         {
-        
-            m_position += (m_target * stepScale);
-    
+            m_position += (m_target * stepScale); 
             ret = true;
-            m_isDirty = true;          
-         }
-         break;
-         case VKEY_S:
-         {
+            m_isDirty = true;
+      }
+        
+      if (w.keyboard.KeyIsDown(VKEY_S))
+      {
             m_position -= (m_target * stepScale);
             ret = true;
             m_isDirty = true;
-         }
-         break;
-         case VKEY_A:
-         {
+      }
+
+      if (w.keyboard.KeyIsDown(VKEY_A))
+      {
             Vector3f left = m_target.CrossProd(m_up);
             left.Normalize();
             left *= stepScale;
             m_position += left;
             ret = true;
             m_isDirty = true;
-         }
-         break;
-         case VKEY_D:
-         {
+      }
+
+      if (w.keyboard.KeyIsDown(VKEY_D))
+      {
             Vector3f right = m_up.CrossProd(m_target);
             right.Normalize();
             right *= stepScale;
             m_position += right;
             ret = true;
             m_isDirty = true;
-         }
-         break;
-      }
+       }
+      
       return ret;
    }
 

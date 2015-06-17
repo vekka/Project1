@@ -12,6 +12,15 @@ using core::math::Equals;
 #undef near
 #undef far
 
+#include "win32/win32main.hpp"
+
+using win32keyboard::VKEY_W;
+using win32keyboard::VKEY_S;
+using win32keyboard::VKEY_A;
+using win32keyboard::VKEY_D;
+using win32keyboard::VKEY_ESCAPE;
+
+using win32window::Win32Window;
 namespace camera
 {
 
@@ -45,8 +54,8 @@ namespace camera
 
       eProjectionType m_projectionType;
 
-      float m_windowWidth;
-      float m_windowHeight;
+      int32 m_windowWidth;
+      int32 m_windowHeight;
 
       // these vectors make up the view matrix. View matrix ~ "the camera"
       Quaternion_f m_orientation;
@@ -150,7 +159,7 @@ namespace camera
          m_up = up;
       }
 
-      bool OnKeyboard(int32 key, float stepScale);
+      bool OnKeyboard(Win32Window &w, float stepScale);
    };
 
 } // camera

@@ -18,17 +18,14 @@ using win32console::Win32Console;
 using namespace oglshader;
 using mesh2::Face;
 
-#include "win32/win32console.hpp"
-
 #include "model/ObjParser.hpp"
 using namespace model::objparser;
 
-using win32window::Win32Window;
+#include "win32/win32main.hpp"
 
 #include "win32/win32console.hpp"
 #include "core/math/frustum.hpp"
 #include "core/math/camera.hpp"
-using namespace std;
 
 //#include "direct3D/D3DDriver.hpp"
 //using d3ddriver::D3DDriver;
@@ -39,6 +36,7 @@ using camera::FreeCamera;
 using camera::AbstractCamera;
 using camera::FRUSTUM_ORTHOGRAPHIC;
 using camera::FRUSTUM_PERSPECTIVE;
+using win32window::Win32Window;
 
 using namespace ogldriver;
 
@@ -82,13 +80,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    win.Create(hInst, 20, 20, 800, 600);
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
-   Win32Window::Win32Cursor cursor;
 
    
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
    OGLDriver oglContext(hWnd, 800, 600, false);
-   Vector4f clearColor(-1.0f, 0.0f, 0.0f, -5.0f);
+   Vector4f clearColor(-1.0f, 0.0f, 0.0f, -1.0f);
    /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
    win.Show();
    win.Update();
@@ -115,26 +112,21 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    Vector3f cameraPosition(0.0f, 0.0f, 0.0f);
    Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
    Vector3f cameraUp(0.0f, 1.0f, 0.0f);
-   FreeCamera camera(800.0f, 600.0f,cameraPosition, cameraTarget,cameraUp );
-   camera.InitProjection(FRUSTUM_ORTHOGRAPHIC, -1.0f, 1.0f, -1.0f, 1.0f, 0.3f, 1000.0f);
+   FreeCamera camera(800, 600,cameraPosition, cameraTarget,cameraUp );
+   camera.InitProjection(FRUSTUM_PERSPECTIVE, -1, 1, 1, -1, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
 
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(3.0f, -4.0f, -10.0f);
+   modelMatrix.SetTranslation(3.0f, 3.0f, 0.0f);
    modelMatrix = modelMatrix.Transpose();
-
-
-   Matrix4f translationMatrix = Matrix4f::IDENTITY;
-   translationMatrix.SetTranslation(0.1f, 0.0f, 0.0f);
-   translationMatrix = translationMatrix.Transpose();
 
    //you must activate shader program to give uniform variables data
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
 
    shader.Use();
-   shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1);
+   shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1, true);
    shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
    shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1, false);
    shader.AddUniformData("light.position", pos.Ptr(), TYPE_FVEC3, 1);
@@ -149,6 +141,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    int32 numIndicesInScene = 0;
    for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
+
    while (1)
    {
       oglContext.ClearBuffers();
@@ -159,6 +152,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       }
       win.HandleSystemMessages(&msg);
 
+      //camera.OnKeyboard(win, 0.01f);
       resized = win.GetResizeFlag();   
       if (msg.message == WM_QUIT)
          break;
@@ -169,16 +163,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
-      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
-         camera.OnKeyboard(win32keyboard::VKEY_W, 0.01f);
-      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
-         camera.OnKeyboard(win32keyboard::VKEY_S, 0.01f);
-      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
-         camera.OnKeyboard(win32keyboard::VKEY_D, 0.01f);
-      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_A))
-         camera.OnKeyboard(win32keyboard::VKEY_A, 0.01f);
-
-
+      
+      camera.OnKeyboard( win, 0.01f);
       if (camera.IsDirty())
       {
          camera.Update();

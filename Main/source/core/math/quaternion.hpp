@@ -28,6 +28,9 @@ namespace core
            void operator=( const Quaternion other );
            T *Ptr();
            const T *Ptr() const;
+
+           Quaternion Inverse(void);
+           
            Quaternion operator+( const Quaternion &other ) const;
            Quaternion &operator+=( const Quaternion &other );
            Quaternion operator-( const Quaternion &other ) const;
@@ -49,9 +52,12 @@ namespace core
            bool operator!=( const Quaternion &other ) const;
 
            /* .cpp methods */
-           void FromAngleAxis( float angle, Vector3<T> &vec );
+           //void Quaternion<T>::FromAngleAxis(const float angle, const Vector3<T> &axis);
+           void FromAngleAxis( const float angle, const Vector3<T> &vec );
            void ToAngleAxis( float &outAngle, Vector3<T> &outAxis ) const;
 
+
+           //void Quaternion<T>::FromAngleAxis(const float angle, const Vector3<T> &axis)
            //void FromRotationMatrix( const Matrix3 &rot );
            //void ToRotationMatrix( Matrix3 &rot ) const;
         };
