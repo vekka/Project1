@@ -19,9 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // I added this notice, just in case. Need various sources to know what I am doing...
-
-
-
 namespace camera
 {
    void AbstractCamera::SetupProjection(const float fovy, const float aspectRatio)
@@ -105,7 +102,7 @@ namespace camera
 
 
 
-   bool FreeCamera::OnKeyboard(Win32Window &w, float stepScale)
+   bool FreeCamera::OnKeyboard(win32window::Win32Window &w, float stepScale)
    {
 
       bool ret = false;

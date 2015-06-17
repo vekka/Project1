@@ -18,9 +18,7 @@ using win32keyboard::VKEY_W;
 using win32keyboard::VKEY_S;
 using win32keyboard::VKEY_A;
 using win32keyboard::VKEY_D;
-using win32keyboard::VKEY_ESCAPE;
 
-using win32window::Win32Window;
 namespace camera
 {
 
@@ -159,7 +157,7 @@ namespace camera
          m_up = up;
       }
 
-      bool OnKeyboard(Win32Window &w, float stepScale);
+      bool OnKeyboard(win32window::Win32Window &w, float stepScale);
    };
 
 } // camera

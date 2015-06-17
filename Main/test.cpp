@@ -15,25 +15,16 @@
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
 
-using namespace oglshader;
 using mesh2::Face;
 
 #include "model/ObjParser.hpp"
 using namespace model::objparser;
 
-#include "win32/win32main.hpp"
-
-#include "win32/win32console.hpp"
 #include "core/math/frustum.hpp"
 #include "core/math/camera.hpp"
 
-//#include "direct3D/D3DDriver.hpp"
-//using d3ddriver::D3DDriver;
-HINSTANCE hInst;
-
 using namespace core::math;
 using camera::FreeCamera;
-using camera::AbstractCamera;
 using camera::FRUSTUM_ORTHOGRAPHIC;
 using camera::FRUSTUM_PERSPECTIVE;
 using win32window::Win32Window;
@@ -46,7 +37,8 @@ using mesh2::Mesh;
 
 using core::math::Matrix4f;
 
-void generateBufferFromScene(const scene::Scene *sc, GLSLShader &shader, uint32 &vaoID, uint32 &vboIndicesID);
+HINSTANCE hInst;
+
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    LPSTR lpCmdLine, int32 nCmdShow)
 {
@@ -126,11 +118,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    Vector3f color(1.0f, 1.0f, 1.0f);
 
    shader.Use();
-   shader.AddUniformData("P", &camera.GetProjectionMatrix(), TYPE_FMAT4, 1, true);
-   shader.AddUniformData("M", modelMatrix.Ptr(), TYPE_FMAT4, 1, false);
-   shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1, false);
-   shader.AddUniformData("light.position", pos.Ptr(), TYPE_FVEC3, 1);
-   shader.AddUniformData("light.color", color.Ptr(), TYPE_FVEC3, 1);
+   shader.AddUniformData("P", &camera.GetProjectionMatrix(), oglshader::TYPE_FMAT4, 1, true);
+   shader.AddUniformData("M", modelMatrix.Ptr(), oglshader::TYPE_FMAT4, 1, false);
+   shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1, false);
+   shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
+   shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
 
    shader.Unuse();
 
@@ -152,11 +144,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       }
       win.HandleSystemMessages(&msg);
 
+
       //camera.OnKeyboard(win, 0.01f);
       resized = win.GetResizeFlag();   
       if (msg.message == WM_QUIT)
          break;
-      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
+      if (win.keyboard.KeyIsDown(VKEY_ESCAPE))
          msg.message = WM_QUIT;
      
       glBindVertexArray(vaoID);
@@ -165,10 +158,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
       
       camera.OnKeyboard( win, 0.01f);
+
       if (camera.IsDirty())
       {
          camera.Update();
-         shader.AddUniformData("V", &camera.GetViewMatrix(), TYPE_FMAT4, 1);
+         shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
       }
       //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
