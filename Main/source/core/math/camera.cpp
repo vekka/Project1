@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // I added this notice, just in case. Need various sources to know what I am doing...
+#include "win32/win32main.hpp"
+
 namespace camera
 {
    void AbstractCamera::SetupProjection(const float fovy, const float aspectRatio)
@@ -97,49 +99,64 @@ namespace camera
          right[2], up[2], forward[2], 0.0f,
         0, 0, 0, 1.0);
  
+      m_cameraTranslationMatrix.Set(
+         1, 0, 0, 0,
+         0, 1, 0, 0,
+         0, 0, 1, 0,
+         -m_position[0], -m_position[1], -m_position[2], 1
+         );
+      m_viewMatrix = m_cameraTranslationMatrix;
       m_isDirty = false;
    }//UPDATE
 
 
 
-   bool FreeCamera::OnKeyboard(win32window::Win32Window &w, float stepScale)
+   bool FreeCamera::OnKeyboard(int32 key, float stepScale)
    {
-
       bool ret = false;
-      if( w.keyboard.KeyIsDown( VKEY_W ))
-      {
-            m_position += (m_target * stepScale); 
-            ret = true;
-            m_isDirty = true;
-      }
-        
-      if (w.keyboard.KeyIsDown(VKEY_S))
-      {
-            m_position -= (m_target * stepScale);
-            ret = true;
-            m_isDirty = true;
-      }
 
-      if (w.keyboard.KeyIsDown(VKEY_A))
+      switch (key)
       {
-            Vector3f left = m_target.CrossProd(m_up);
+      case win32keyboard::VKEY_W:
+         {
+            m_position += (m_target * stepScale);
+            ret = true;
+            m_isDirty = true;
+         }
+         break;
+      case win32keyboard::VKEY_S:
+         {
+            m_position -= (m_target * stepScale);
+            
+            ret = true;
+            m_isDirty = true;
+         }
+         break;
+
+      case win32keyboard::VKEY_A:
+         {
+
+            Vector3f left = m_up.CrossProd(m_target);
+           
             left.Normalize();
             left *= stepScale;
             m_position += left;
             ret = true;
             m_isDirty = true;
-      }
+         }
+         break;
 
-      if (w.keyboard.KeyIsDown(VKEY_D))
-      {
-            Vector3f right = m_up.CrossProd(m_target);
+      case win32keyboard::VKEY_D:
+         {
+            Vector3f right = m_target.CrossProd(m_up);
             right.Normalize();
             right *= stepScale;
             m_position += right;
             ret = true;
             m_isDirty = true;
-       }
-      
+         }
+         break;
+      }//SWITCH
       return ret;
    }
 

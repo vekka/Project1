@@ -12,12 +12,7 @@ using core::math::Equals;
 #undef near
 #undef far
 
-#include "win32/win32main.hpp"
 
-using win32keyboard::VKEY_W;
-using win32keyboard::VKEY_S;
-using win32keyboard::VKEY_A;
-using win32keyboard::VKEY_D;
 
 namespace camera
 {
@@ -139,7 +134,12 @@ namespace camera
          m_up = up;
          m_up.Normalize();
 
-         m_cameraTranslationMatrix = Matrix4f::IDENTITY;
+         m_cameraTranslationMatrix.Set(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            m_position[0], m_position[1], m_position[2], 1
+            );
          m_viewMatrix.Set(
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -157,7 +157,7 @@ namespace camera
          m_up = up;
       }
 
-      bool OnKeyboard(win32window::Win32Window &w, float stepScale);
+      bool OnKeyboard(int32 k, float stepScale);
    };
 
 } // camera

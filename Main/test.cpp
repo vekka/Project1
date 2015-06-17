@@ -10,30 +10,27 @@
 #include "model/importer.hpp"
 
 #include "gfx/oglbuffer.hpp"
-//using oglbuffer::
 
 #include "win32/win32console.hpp"
 using win32console::Win32Console;
-
-using mesh2::Face;
 
 #include "model/ObjParser.hpp"
 using namespace model::objparser;
 
 #include "core/math/frustum.hpp"
+
+
 #include "core/math/camera.hpp"
 
-using namespace core::math;
 using camera::FreeCamera;
 using camera::FRUSTUM_ORTHOGRAPHIC;
 using camera::FRUSTUM_PERSPECTIVE;
-using win32window::Win32Window;
 
 using namespace ogldriver;
 
 #include "model\mesh2.hpp"
+using mesh2::Face;
 using mesh2::Mesh;
-
 
 using core::math::Matrix4f;
 
@@ -72,8 +69,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    win.Create(hInst, 20, 20, 800, 600);
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
-
-   
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
    OGLDriver oglContext(hWnd, 800, 600, false);
@@ -144,12 +139,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       }
       win.HandleSystemMessages(&msg);
 
-
-      //camera.OnKeyboard(win, 0.01f);
       resized = win.GetResizeFlag();   
       if (msg.message == WM_QUIT)
          break;
-      if (win.keyboard.KeyIsDown(VKEY_ESCAPE))
+
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
          msg.message = WM_QUIT;
      
       glBindVertexArray(vaoID);
@@ -157,7 +151,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       shader.Use();
 
       
-      camera.OnKeyboard( win, 0.01f);
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
+         camera.OnKeyboard(win32keyboard::VKEY_W, 0.01f);
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
+         camera.OnKeyboard(win32keyboard::VKEY_S, 0.01f);
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_A))
+         camera.OnKeyboard(win32keyboard::VKEY_A, 0.1f);
+      if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
+         camera.OnKeyboard(win32keyboard::VKEY_D, 0.1f);
 
       if (camera.IsDirty())
       {
