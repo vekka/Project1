@@ -19,12 +19,12 @@ namespace core
 
            /* inline methods */
            Quaternion();
-           Quaternion( const T x, const T y, const T z, const T w );
-           Quaternion( const Vector3<T> &v, const T w );
+           Quaternion( T x, T y, T z, T w );
+           Quaternion( const Vector3<T> &v, T w );
            Quaternion( const T* ptr );
-           void Set( const T x, const T y, const T z, const T w );
-           T operator[]( const int32 index ) const;
-           T &operator[]( const int32 index );
+           void Set( T x, T y, T z, T w );
+           T operator[]( int32 index ) const;
+           T &operator[]( int32 index );
            void operator=( const Quaternion other );
            T *Ptr();
            const T *Ptr() const;
@@ -32,12 +32,24 @@ namespace core
            Quaternion &operator+=( const Quaternion &other );
            Quaternion operator-( const Quaternion &other ) const;
            Quaternion &operator-=( const Quaternion &other );
+           Quaternion operator*( const Quaternion &other ) const;
+           Quaternion operator*( T scalar ) const;
+           Quaternion &operator*=( T scalar );
+           
+           T Real(void) const;
+           Vector3<T> Imag(void) const;
+           
+           T DotProduct( const Quaternion &q1, const Quaternion &q2 );
+           T Magnitude(void) const;
+           
+           bool IsUnit(void) const;
+           
            void Swap( Quaternion& other );
            bool operator==( const Quaternion &other ) const;
            bool operator!=( const Quaternion &other ) const;
 
            /* .cpp methods */
-           void FromAngleAxis( const float angle, const Vector3<T> &vec );
+           void FromAngleAxis( float angle, Vector3<T> &vec );
            void ToAngleAxis( float &outAngle, Vector3<T> &outAxis ) const;
 
            //void FromRotationMatrix( const Matrix3 &rot );
@@ -64,7 +76,7 @@ namespace core
         }
 
         template <class T>
-        inline Quaternion<T>::Quaternion( const T x, const T y, const T z, const T w )
+        inline Quaternion<T>::Quaternion( T x, T y, T z, T w )
         {
             this->x = x;
             this->y = y;
@@ -73,16 +85,16 @@ namespace core
         }
 
         template <class T>
-        inline Quaternion<T>::Quaternion( const Vector3<T> &v, const T w )
+        inline Quaternion<T>::Quaternion( const Vector3<T> &v, T w )
         {
-            this->x = v[X];
-            this->y = v[Y];
-            this->z = v[Z];
+            this->x = v.x;
+            this->y = v.y;
+            this->z = v.z;
             this->w = w;
         }
 
         template <class T>
-        inline void Quaternion<T>::Set( const T x, const T y, const T z, const T w )
+        inline void Quaternion<T>::Set( T x, T y, T z, T w )
         {
             this->x = x;
             this->y = y;
@@ -130,13 +142,7 @@ namespace core
         {
             return Quaternion<T>( x + other.x, y + other.y, z + other.z, w + other.w );
         }
-
-        template <class T>
-        inline Quaternion<T> Quaternion<T>::operator-( const Quaternion<T> &other ) const
-        {
-            return Quaternion<T>( x - other.x, y - other.y, z - other.z, w - other.w );
-        }
-
+        
         template <class T>
         inline Quaternion<T> &Quaternion<T>::operator+=( const Quaternion<T> &other )
         {
@@ -146,6 +152,12 @@ namespace core
             w += other.w;
 
             return *this;
+        }        
+
+        template <class T>
+        inline Quaternion<T> Quaternion<T>::operator-( const Quaternion<T> &other ) const
+        {
+            return Quaternion<T>( x - other.x, y - other.y, z - other.z, w - other.w );
         }
 
         template <class T>
@@ -158,7 +170,91 @@ namespace core
 
             return *this;
         }
+        
+        template <class T>
+        inline Quaternion<T> Quaternion<T>::operator*( const Quaternion<T> &other ) const
+        {
+	   return Quaternion<T>(
+		w*other.x + x*other.w + y*other.z - z*other.y,
+		w*other.y - x*other.z + y*other.w + z*other.x,
+		w*other.z + x*other.y - y*other.x + z*other.w,
+		w*other.w - x*other.x - y*other.y - z*other.z);
+        }
+        
+        template <class T>
+        inline Quaternion<T> Quaternion<T>::operator*( T scalar ) const
+        {
+           return Quaternion<T>(x*scalar, y*scalar, z*scalar, w*scalar);
+        }
+        
+        template <class T>
+        inline Quaternion<T> &Quaternion<T>::operator*=( T scalar )
+        {
+            x *= scalar;
+            y *= scalar;
+            z *= scalar;
+            w *= scalar;
 
+            return *this;
+        }
+        
+        template <class T>
+        inline T Quaternion<T>::Real(void) const
+        {
+           return w;
+        }
+        
+        template <class T>
+        inline Vector3<T> Quaternion<T>::Imag(void) const
+        {
+           return Vector3<T>(x, y, z);
+        }
+        
+        template <class T>
+        inline T Quaternion<T>::DotProduct( const Quaternion<T> &q1, const Quaternion<T> &q2 )
+        {
+            return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
+        }
+        
+        // should not be inlined
+        template <class T>
+	inline Quaternion<T> Quaternion<T>::Inverse(void)
+	{
+	   float magnitude = x*x + y*y + z*z + w*w;
+	   assert(!core::IsZero(magnitude));
+	   float invMagnitude;
+	   if( core::Equals(magnitude, T(1)) )    // special case: unit quaternion
+	   {
+	      x = -x;
+	      y = -y;
+	      z = -z;
+	   }
+	   else // else scale
+	   {
+	      if( core::IsZero(magnitude) )
+	         invMagnitude = T(1);
+	      else
+	         invMagnitude = T(1) / magnitude;
+	      x *= -invMagnitude;
+	      y *= -invMagnitude;
+	      z *= -invMagnitude;
+	      w *= invMagnitude;
+	   }
+	   return *this;
+	}        
+        
+        template <class T>
+        T Quaternion<T>::Magnitude(void) const
+        {
+            return std::sqrt(DotProduct(*this, *this));
+        }
+        
+        template <class T>
+        bool Quaternion<T>::IsUnit(void) const
+        {
+            return core::Equals(DotProduct(*this, *this), T(1));
+        }
+        
         template <class T>
         inline void Quaternion<T>::Swap( Quaternion& other )
         {
