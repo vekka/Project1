@@ -173,6 +173,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
          camera.OnKeyboard(win32keyboard::VKEY_W, 0.01f);
       else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
          camera.OnKeyboard(win32keyboard::VKEY_S, 0.01f);
+      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
+         camera.OnKeyboard(win32keyboard::VKEY_D, 0.01f);
+      else if (win.keyboard.KeyIsDown(win32keyboard::VKEY_A))
+         camera.OnKeyboard(win32keyboard::VKEY_A, 0.01f);
+
 
       if (camera.IsDirty())
       {

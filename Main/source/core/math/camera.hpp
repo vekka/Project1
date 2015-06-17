@@ -56,6 +56,8 @@ namespace camera
       Vector3f m_target;
       Vector3f m_up;
 
+      Matrix4f m_cameraTranslationMatrix;
+      Matrix4f m_cameraRotationMatrix;
       Matrix4f m_viewMatrix; //view matrix
       Matrix4f m_projMatrix; //projection matrix
       //Plane_f planes[6]; //Frustum planes
@@ -130,7 +132,7 @@ namespace camera
          m_up = up;
          m_up.Normalize();
 
-
+         m_cameraTranslationMatrix = Matrix4f::IDENTITY;
          m_viewMatrix.Set(
             1, 0, 0, 0,
             0, 1, 0, 0,

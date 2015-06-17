@@ -71,33 +71,22 @@ namespace camera
 
    void FreeCamera::Update()
    {
-      Vector3f forward, right, _up;
-      Vector3f distance;
-
-      //.Zero();
-      //  vec3_t distance,floatemp;
-      //vec3_t m_forward;
-
+     
       //find distance vector
-      forward = m_target - m_position;
-      forward.Normalize();
-      //Vec3Normalize(distance, m_forward);
-      // f = m_forward vector
-      // m_up = m_up vector
-      // right isfloathe cross product offloathefloatwo vectors above
-      right = m_forward.CrossProd(m_up);
-      right.Normalize();
-      //printf("cr %.16f, %.16f, %.16f\n", cameraRight[0], cameraRight[1], cameraRight[2]);
-      //printf( "fo: %.16f , %.16f , %.16f \n", m_forward[0], m_forward[1], m_forward[2] );
-      //printf( "cu: %.16f , %.16f , %.16f \n", cameraUp[0], cameraUp[1], cameraUp[2] );
-      //CrossProd( cameraUp, m_forward, leftDir );
+      m_forward = m_target - m_position;
+      m_forward.Normalize();
+     
+      m_right = m_forward.CrossProd(m_up);
+      m_right.Normalize();
 
-      
+      m_up = m_right.CrossProd(m_forward);
+      m_up.Normalize();
+
       m_viewMatrix.Set(
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        -m_position[0], -m_position[1], -m_position[2], 1.0);
+         m_right[0], m_up[0], m_forward[0], m_position[0],
+         m_right[1], m_up[1], m_forward[1], m_position[1],
+         m_right[2], m_up[2], m_forward[2], m_position[2],
+        0, 0, 0, 1.0);
  
       m_isDirty = false;
    }//UPDATE
@@ -112,8 +101,9 @@ namespace camera
       {
          case VKEY_W:
          {
+        
             m_position += (m_target * stepScale);
-            //m_position += 0.1;
+    
             ret = true;
             m_isDirty = true;          
          }

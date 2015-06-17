@@ -14,7 +14,7 @@ out vec3 fragVert;
 void main()
 {
 	
-	gl_Position = V*P*M*vec4(vVertex,1);
+	gl_Position = P*V*M*vec4(vVertex,1);
 
 
 	fragNormal = vNormal;
