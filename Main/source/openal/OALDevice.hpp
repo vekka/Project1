@@ -1,4 +1,0 @@
-#ifndef _OALDEVICE_HPP_INCLUDED_
-#define _OALDEVICE_HPP_INCLUDED_
-
-#endif
