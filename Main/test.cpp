@@ -163,9 +163,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (camera.IsDirty())
       {
          camera.Update();
-         shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
-
-         
+         shader.AddUniformData("V", &camera.GetTranslationMatrix(), oglshader::TYPE_FMAT4, 1);
       }
 
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);

@@ -111,24 +111,18 @@ namespace camera
       forward = m_target - m_position;
       forward.Normalize();
 
-      //bookeepin...
-      m_forward = forward;
-
+ 
       //side = forward X up
       right = forward.CrossProd(m_up);
       right.Normalize();
 
-      m_right = right;
 
       //recalculate up; up = side X forward
       up = right.CrossProd(forward);
 
       m_up = up;
 
-      m_viewMatrix.SetIdentity();
-      m_cameraTranslationMatrix.SetIdentity();
-
-      m_viewMatrix.Set(
+      m_cameraRotationMatrix.Set(
          right[0], up[0], forward[0], 0.0f,
          right[1], up[1], forward[1], 0.0F,
          right[2], up[2], forward[2], 0.0f,
@@ -140,7 +134,8 @@ namespace camera
          0, 0, 1, 0,
          m_position[0], m_position[1], m_position[2], 1
          );
-      m_viewMatrix = m_cameraTranslationMatrix;
+
+      m_viewMatrix = m_cameraRotationMatrix * m_cameraTranslationMatrix;
       m_isDirty = false;
    }//UPDATE
 
@@ -150,10 +145,13 @@ namespace camera
    {
       bool ret = false;
 
+      
+      
       switch (key)
       {
       case win32keyboard::VKEY_W:
          {
+            m_target.Normalize();
             m_position += (m_target * stepScale);
             ret = true;
             m_isDirty = true;
@@ -161,6 +159,7 @@ namespace camera
          break;
       case win32keyboard::VKEY_S:
          {
+            m_target.Normalize();
             m_position -= (m_target * stepScale);
             
             ret = true;
@@ -184,6 +183,7 @@ namespace camera
 
       case win32keyboard::VKEY_D:
          {
+    
             Vector3f right = m_target.CrossProd(m_up);
             right.Normalize();
             right *= stepScale;
@@ -211,7 +211,9 @@ namespace camera
 
         Quaternion_f ConjugateQ = RotationQ.Conjugate();
 
-        Quaternion_f W = RotationQ * vector * ConjugateQ;
+        //I am uncertain if it is possible to convert a vector to quaternion like this...
+        Quaternion_f vectorAsQuat(vector.x, vector.y, vector.z, 0);
+        Quaternion_f W = RotationQ * vectorAsQuat *ConjugateQ;
 
         vector.x = W.x;
         vector.y = W.y;

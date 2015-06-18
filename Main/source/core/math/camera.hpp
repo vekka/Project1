@@ -52,8 +52,8 @@ namespace camera
 
       // these vectors make up the view matrix. View matrix ~ "the camera"
       Quaternion_f m_orientation;
-      Vector3f m_forward;
-      Vector3f m_right;
+      
+      
       Vector3f m_position;
       Vector3f m_target;
       Vector3f m_up;
@@ -85,6 +85,8 @@ namespace camera
       //virtual void Rotate( float angle, Vector3f axis );
       const Matrix4f &GetViewMatrix() const { return m_viewMatrix; }
 
+      const Matrix4f &GetRotationMatrix() const { return m_cameraRotationMatrix; }
+      const Matrix4f &GetTranslationMatrix() const { return m_cameraTranslationMatrix; }
       const Matrix4f &GetProjectionMatrix() const { return m_projMatrix; }
 
       void SetPosition(const Vector3f &v) { m_position = v; }
@@ -124,6 +126,7 @@ namespace camera
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
          const Vector3f &target, const Vector3f &up)
       {
+         m_isDirty = false;
          m_windowWidth = windowWidth;
          m_windowHeight = windowHeight;
          m_position = pos;
@@ -158,7 +161,7 @@ namespace camera
       }
 
       bool OnKeyboard(int32 k, float stepScale);
-      void Rotate(Vector3f &vector, float angle, Vector3f axis)
+      void Rotate(Vector3f &vector, float angle, Vector3f axis);
 
    };
 
