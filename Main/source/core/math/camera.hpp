@@ -1,8 +1,8 @@
 #include "vector3.hpp"
-#include "vector2.hpp"
+#include "point2.hpp"
 #include "matrix4.hpp"
 #include "quaternion.hpp"
-using core::math::Vector2i;
+using core::math::Point2i;
 using core::math::Vector3f;
 using core::math::Vector4f;
 using core::math::Matrix4f;
@@ -11,8 +11,6 @@ using core::math::Quaternion_f;
 using core::math::Equals;
 #undef near
 #undef far
-
-
 
 namespace camera
 {
@@ -115,7 +113,7 @@ namespace camera
      float m_angleH;
      float m_angleV;
      Vector3f m_translation;
-     Vector2i m_mousePos;
+     Point2i m_mousePos;
      bool m_onUpperEdge;
      bool m_onLowerEdge;
      bool m_onLeftEdge;
