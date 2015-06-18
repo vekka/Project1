@@ -135,7 +135,7 @@ namespace camera
          m_position[0], m_position[1], m_position[2], 1
          );
 
-      m_viewMatrix = m_cameraRotationMatrix * m_cameraTranslationMatrix;
+      m_viewMatrix =  m_cameraTranslationMatrix;
       m_isDirty = false;
    }//UPDATE
 
@@ -151,16 +151,19 @@ namespace camera
       {
       case win32keyboard::VKEY_W:
          {
-            m_target.Normalize();
-            m_position += (m_target * stepScale);
+            Vector3f temp = m_target;
+            temp *= stepScale;
+
+            m_position += temp;
             ret = true;
             m_isDirty = true;
          }
          break;
       case win32keyboard::VKEY_S:
          {
-            m_target.Normalize();
-            m_position -= (m_target * stepScale);
+            Vector3f temp = m_target;
+            temp *= stepScale;
+            m_position -= temp;
             
             ret = true;
             m_isDirty = true;
@@ -170,7 +173,7 @@ namespace camera
       case win32keyboard::VKEY_A:
          {
 
-            Vector3f left = m_up.CrossProd(m_target);
+            Vector3f left = m_target.CrossProd(m_up);
            
             left.Normalize();
             left *= stepScale;
@@ -184,7 +187,7 @@ namespace camera
       case win32keyboard::VKEY_D:
          {
     
-            Vector3f right = m_target.CrossProd(m_up);
+            Vector3f right = m_up.CrossProd(m_target);
             right.Normalize();
             right *= stepScale;
             m_position += right;

@@ -7,6 +7,8 @@
 
 #include "core/BasicTypes.hpp"
 
+#include "core/math/vector2.hpp"
+using core::math::Vector2i;
 namespace win32keyboard
 {
 
@@ -221,6 +223,8 @@ namespace win32window
       uint32 height;
       uint32 width;
       uint32 bitsPerPel;
+      static bool do_mouse_move;
+      static Vector2i mousePos;
 
       void RegisterWindowClass() const;
       void UnregisterWindowClass() const;
@@ -254,6 +258,8 @@ namespace win32window
       void GetCaption(std::string &) const;
       void SetPosition(const uint32 newXPos, const uint32 newYPos);
       void GetPosition(uint32 &) const;
+
+      Vector2i &GetMousePos() { return mousePos; }
       //void SetDimension( const Dimension2u dimension );
       void OnResize() const;
       bool Show() const;
@@ -266,6 +272,8 @@ namespace win32window
       bool GetResizeFlag() const;
 
       void GetDimension(uint32 &width, uint32 &height) const;
+
+      static void WmMouseMove(HWND hwnd, WPARAM wp, LPARAM lp);
 
       static bool isResized;
       void HandleSystemMessages(MSG *);

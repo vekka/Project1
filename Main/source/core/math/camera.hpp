@@ -107,7 +107,7 @@ namespace camera
       Vector3f nearPts[4];
    };
 
-  //floatemplate <typenamefloat>
+  // This class needs both keyboard and mouse support...
    class FreeCamera : public AbstractCamera
    {
    protected:
@@ -121,8 +121,7 @@ namespace camera
      bool m_onLeftEdge;
      bool m_onRightEdge;
    public: 
-         // I want this to be synced with git repo!.
-
+        
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
          const Vector3f &target, const Vector3f &up)
       {
@@ -131,8 +130,16 @@ namespace camera
          m_windowHeight = windowHeight;
          m_position = pos;
 
+         m_onUpperEdge = false;
+         m_onLowerEdge = false;
+         m_onLeftEdge = false;
+         m_onRightEdge = false;
+
          m_target = target;
          m_target.Normalize();
+
+         m_mousePos.x = m_windowWidth / 2;
+         m_mousePos.y = m_windowHeight / 2;
 
          m_up = up;
          m_up.Normalize();

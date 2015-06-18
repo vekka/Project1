@@ -44,7 +44,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/fourCubes.obj");
+   sc = importer.ReadFile("assets/testObjects/randomScene.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -150,11 +150,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
-      
+      Vector2i test = win.GetMousePos();
+
+      std::cout << test << std::endl;
+
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
-         camera.OnKeyboard(win32keyboard::VKEY_W, 0.01f);
+         camera.OnKeyboard(win32keyboard::VKEY_W, 0.1f);
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
-         camera.OnKeyboard(win32keyboard::VKEY_S, 0.01f);
+         camera.OnKeyboard(win32keyboard::VKEY_S, 0.1f);
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_A))
          camera.OnKeyboard(win32keyboard::VKEY_A, 0.1f);
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
@@ -163,7 +166,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (camera.IsDirty())
       {
          camera.Update();
-         shader.AddUniformData("V", &camera.GetTranslationMatrix(), oglshader::TYPE_FMAT4, 1);
+         shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
       }
 
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);

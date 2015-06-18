@@ -9,6 +9,10 @@ using win32window::Win32Window;
 bool Win32Window::Win32Keyboard::keys[256];
 Win32Window::Win32Keyboard Win32Window::keyboard;
 
+bool Win32Window::do_mouse_move = false;
+
+Vector2i Win32Window::mousePos = Vector2i(0, 0);
+
 namespace win32window
 {
 
@@ -27,6 +31,7 @@ namespace win32window
       : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
    {
       Create(hInstance, x, y, width, height, bitsPerPel, dStyle, parentWnd);
+      
    }
 
    Win32Window::~Win32Window()
@@ -58,6 +63,7 @@ namespace win32window
       this->height = height;
       this->bitsPerPel = bitsPerPel;
 
+      do_mouse_move = false;
       hWnd = CreateWindowEx(NULL,
          className,
          wndName,
@@ -278,6 +284,20 @@ namespace win32window
       }
    }
 
+   void Win32Window::WmMouseMove(HWND hwnd, WPARAM wp, LPARAM lp)
+   {
+      //POINTS p;
+      //HDC hdc;
+      //if (!do_mouse_move) 
+      //   return;
+
+      //p = MAKEPOINTS(lp);
+
+      //MessageBox(hwnd, "hello", "hellod", NULL);
+
+   
+   }
+
    LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
    {
       switch (msg)
@@ -290,7 +310,13 @@ namespace win32window
          BeginPaint(hWnd, &ps);
          EndPaint(hWnd, &ps);
          return 0;
+      case WM_MOUSEMOVE:
+         
 
+         mousePos.x = LOWORD(lParam);
+         mousePos.y = HIWORD(lParam);
+         WmMouseMove(hWnd, wParam, lParam);
+         return 0;
       case WM_ACTIVATE:
          return 0;
       case WM_SIZE:
