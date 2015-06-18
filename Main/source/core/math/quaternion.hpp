@@ -56,6 +56,8 @@ namespace core
            void FromAngleAxis( const float angle, const Vector3<T> &vec );
            void ToAngleAxis( float &outAngle, Vector3<T> &outAxis ) const;
 
+           void Normalize();
+           Quaternion Conjugate();
 
            //void Quaternion<T>::FromAngleAxis(const float angle, const Vector3<T> &axis)
            //void FromRotationMatrix( const Matrix3 &rot );
@@ -88,6 +90,24 @@ namespace core
             this->y = y;
             this->z = z;
             this->w = w;
+        }
+
+        template <class T>
+        inline void Quaternion<T>::Normalize()
+        {
+           float length = sqrt(x*x, y*y, z*z, w*w);
+
+           x /= length;
+           y /= length;
+           z /= length;
+           w /= length;
+        }
+
+        template <class T>
+        Quaternion<T> Quaternion<T>::Conjugate()
+        {
+           Quaternion temp(-x, -y, -z, w);
+           return temp;
         }
 
         template <class T>

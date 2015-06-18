@@ -105,7 +105,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    Matrix4f modelMatrix = Matrix4f::IDENTITY;
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(3.0f, 3.0f, 0.0f);
+   modelMatrix.SetTranslation(3.0f, 3.0f, 10.0f);
    modelMatrix = modelMatrix.Transpose();
 
    //you must activate shader program to give uniform variables data
@@ -164,8 +164,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       {
          camera.Update();
          shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
+
+         
       }
-      //glDrawElements(GL_TRIANGLES, sc->m_ppMeshes[0]->m_numFaces * 3, GL_UNSIGNED_INT, 0);
+
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();
       

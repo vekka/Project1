@@ -158,6 +158,8 @@ namespace camera
       }
 
       bool OnKeyboard(int32 k, float stepScale);
+      void Rotate(Vector3f &vector, float angle, Vector3f axis)
+
    };
 
 } // camera
