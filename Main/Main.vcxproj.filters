@@ -177,6 +177,9 @@
     <ClCompile Include="source\openal\oaldriver.cpp">
       <Filter>Source Files\SoundLib</Filter>
     </ClCompile>
+    <ClCompile Include="source\shader\transformationPipeline.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="source\openal\oaldriver.hpp">
       <Filter>Source Files\SoundLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\transformationPipeline.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

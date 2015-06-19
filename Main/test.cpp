@@ -45,7 +45,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/randomScene.obj");
+   sc = importer.ReadFile("assets/testObjects/airboat.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -151,6 +151,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
+      Vector2i t = win.GetMousePos();
+      camera.OnMouse(t.x, t.y);
       //std::cout << win.GetMousePos() << std::endl;
 
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
@@ -162,9 +164,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
          camera.OnKeyboard(win32keyboard::VKEY_D, 0.1f);
 
+      
       if (camera.IsDirty())
       {
-         camera.Update();
+         //camera.Update();
          shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
       }
 

@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // I added this notice, just in case. Need various sources to know what I am doing...
 #include "win32/win32main.hpp"
 
+const int32 camera::FreeCamera::margin = 10;
+const float camera::FreeCamera::edge_step = 0.5f;
 namespace camera
 {
    //void Matrix4f::InitPersProjTransform(float FOV, float Width, float Height, float zNear, float zFar)
@@ -107,7 +109,8 @@ namespace camera
    void FreeCamera::Update()
    {
       Vector3f forward, right, up;
-
+      
+      
       forward = m_target - m_position;
       forward.Normalize();
 
@@ -135,7 +138,7 @@ namespace camera
          m_position[0], m_position[1], m_position[2], 1
          );
 
-      m_viewMatrix =  m_cameraTranslationMatrix;
+      m_viewMatrix =  m_cameraRotationMatrix * m_cameraTranslationMatrix;
       m_isDirty = false;
    }//UPDATE
 
@@ -223,4 +226,83 @@ namespace camera
         vector.z = W.z;
         m_isDirty = true;
     }
+
+
+    void FreeCamera::OnMouse(int32 x, int32 y)
+    {
+       const int32 DeltaX = x - m_mousePos.x;
+       const int32 DeltaY = y - m_mousePos.y;
+
+       m_mousePos.x = x;
+       m_mousePos.y = y;
+
+       m_angleH += (float)DeltaX / 200.0f;
+       m_angleV += (float)DeltaY / 200.0f;
+
+       if (DeltaX == 0) {
+          if (x <= margin) {
+             //    m_AngleH -= 1.0f;
+             m_onLeftEdge = true;
+          }
+          else if (x >= (m_windowWidth - margin)) {
+             //    m_AngleH += 1.0f;
+             m_onRightEdge = true;
+          }
+       }
+       else {
+          m_onLeftEdge = false;
+          m_onRightEdge = false;
+       }
+
+       if (DeltaY == 0) {
+          if (y <= margin) {
+             m_onUpperEdge = true;
+          }
+          else if (y >= (m_windowHeight - margin)) {
+             m_onLowerEdge = true;
+          }
+       }
+       else {
+          m_onUpperEdge = false;
+          m_onLowerEdge = false;
+       }
+
+       if (IsDirty())
+       {
+          Rotate(m_target, m_angleH, Vector3f(0.0, 1.0, 0.0));
+          Update();
+       }
+    }
+
+    void FreeCamera::OnRender()
+    {
+       bool ShouldUpdate = false;
+
+       if (m_onLeftEdge) {
+          m_angleH -= edge_step;
+          m_isDirty = true;
+       }
+       else if (m_onRightEdge) {
+          m_angleH += edge_step;
+          m_isDirty = true;
+       }
+
+       if (m_onUpperEdge) {
+          if (m_angleV > -90.0f) {
+             m_angleV -= edge_step;
+             m_isDirty = true;
+          }
+       }
+       else if (m_onLowerEdge) {
+          if (m_angleV < 90.0f) {
+             m_angleV += edge_step;
+             m_isDirty = true;
+          }
+       }
+
+       if (m_isDirty) {
+          Update();
+       }
+    }
+
 }
