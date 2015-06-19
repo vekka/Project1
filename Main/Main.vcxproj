@@ -66,9 +66,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\include;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Users\vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\include;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Users\vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source</IncludePath>
     <SourcePath>C:\Users\vekka\Documents\Visual Studio 2013\Projects\Project1\Main\source;$(SourcePath)</SourcePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <ExecutablePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -90,7 +90,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;OpenAL32.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio 12.0\VC\lib%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -154,6 +154,7 @@
     <ClCompile Include="source\model\OBJFileImporter.cpp" />
     <ClCompile Include="source\model\OBJMTLImporter.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
+    <ClCompile Include="source\openal\oaldriver.cpp" />
     <ClCompile Include="source\opengl\ogldriver.cpp" />
     <ClCompile Include="source\shader\glmaterialrenderer.cpp" />
     <ClCompile Include="source\shader\glshadermaterialrenderer.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="source\model\OBJMTLImporter.hpp" />
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
+    <ClInclude Include="source\openal\oaldriver.hpp" />
     <ClInclude Include="source\opengl\ogldriver.hpp" />
     <ClInclude Include="source\scene\scene.hpp" />
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />

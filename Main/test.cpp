@@ -9,6 +9,7 @@
 
 #include "model/importer.hpp"
 
+#include "openal/oaldriver.hpp"
 #include "gfx/oglbuffer.hpp"
 
 #include "win32/win32console.hpp"
@@ -150,9 +151,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
-      Vector2i test = win.GetMousePos();
-
-      std::cout << test << std::endl;
+      //std::cout << win.GetMousePos() << std::endl;
 
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
          camera.OnKeyboard(win32keyboard::VKEY_W, 0.1f);
