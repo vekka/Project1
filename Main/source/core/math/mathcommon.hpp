@@ -11,8 +11,6 @@ namespace core
 
    namespace math
    {
-      enum { X, Y, Z, W };
-
       const float ROUNDING_ERR_FLT = 0.000001f;
       const double ROUNDING_ERR_DBL = 0.00000001;
 
