@@ -5,18 +5,27 @@
 #include <alc.h>
 
 #include <cstdlib>
-namespace oaldriver
+
+#include "core/BasicTypes.hpp"
+
+namespace sound
 {
-   class OALDriver
+   namespace oaldriver
    {
-   private:
-       ALCdevice *m_pDevice;
-       ALCcontext *m_pContext;
-   public:
-      OALDriver() : m_pDevice(NULL), m_pContext(NULL) {}
-       ~OALDriver() {}
-       bool CreateContext();
-   };
-} // namespace oaldriver
+      class OALDriver
+      {
+      public:
+         static const int32 BUFFER_SIZE = 4096;
+      private:
+          ALCdevice *m_pDevice;
+          ALCcontext *m_pContext;
+          uint32 buffers[NUM_BUFFERS];
+      public:   
+         OALDriver() : m_pDevice(NULL), m_pContext(NULL) {}
+          ~OALDriver() {}
+          bool Init();
+      };
+   } // namespace oaldriver
+} // namespace sound
 
 #endif
