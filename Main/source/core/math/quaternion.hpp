@@ -5,6 +5,8 @@
 #include <cmath> // sqrt(), sin(), cos()
 
 #include "vector3.hpp"
+#include "matrix4.hpp"
+using core::math::Matrix4f;
 
 namespace core
 {
@@ -53,7 +55,7 @@ namespace core
 	           bool operator==( const Quaternion &other ) const;
 	           bool operator!=( const Quaternion &other ) const;
 	
-		   Matrix4<T> CreateMatrix() const;
+		   //Matrix4 CreateMatrix() const;
 	           void CreateMatrix( Matrix4<T> &dest, const Vector3<T> &center ) const;
 	           /* .cpp methods */
 	           //void Quaternion<T>::FromAngleAxis(const float angle, const Vector3<T> &axis);
@@ -335,7 +337,7 @@ namespace core
 //		}
 		
 		template <class T>
-	        void CreateMatrix( Matrix4<T> &dest, const Vector3<T> &center ) const
+	        void Quaternion<T>::CreateMatrix( Matrix4<T> &dest, const Vector3<T> &center ) const
 	        {
 	        	
 	        }
