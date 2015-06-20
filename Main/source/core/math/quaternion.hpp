@@ -10,7 +10,6 @@ using core::math::Matrix4f;
 
 namespace core
 {
-
 	namespace math
 	{
 	        template <class T>
@@ -19,17 +18,16 @@ namespace core
 	        public:
 	           T x, y, z, w;
 	
+		   static const Quaternion<T> ZERO;
+		   static const Quaternion<T> IDENTITY;
+		   
 	           /* inline methods */
 	           Quaternion();
 	           Quaternion( T x, T y, T z, T w );
 	           Quaternion( const Vector3<T> &v, T w );
 	           Quaternion( const T* ptr );
 	           void Set( T x, T y, T z, T w );
-	           T operator[]( int32 index ) const;
-	           T &operator[]( int32 index );
 	           void operator=( const Quaternion other );
-	           T *Ptr();
-	           const T *Ptr() const;
 	
 	           Quaternion Inverse(void);
 	           
@@ -38,6 +36,7 @@ namespace core
 	           Quaternion operator-( const Quaternion &other ) const;
 	           Quaternion &operator-=( const Quaternion &other );
 	           Quaternion operator*( const Quaternion &other ) const;
+	           Vector3<T> operator*( const Vector3<T> &vec3 ) const;
 	           Quaternion operator*( T scalar ) const;
 	           Quaternion &operator*=( T scalar );
 	           Quaternion operator/( T scalar ) const;
@@ -78,6 +77,9 @@ namespace core
 	        typedef Quaternion<double> Quaternion_d;
 	        typedef Quaternion<long double> Quaternion_ld;
 	
+		template <typename T> const Quaternion<T> Quaternion<T>::ZERO(0, 0, 0, 0);
+      		template <typename T> const Quaternion<T> Quaternion<T>::IDENTITY(0, 0, 0, 1); 
+
 	        template <class T>
 	        inline Quaternion<T>::Quaternion()
 	        {
@@ -86,6 +88,7 @@ namespace core
 	        template <class T>
 	        inline Quaternion<T>::Quaternion( const T* ptr )
 	        {
+	           assert(ptr != NULL);
 	           memcpy( &w, valptr, sizeof(T)*4 );
 	        }
 	
@@ -112,8 +115,7 @@ namespace core
 	        template <class T>
 	        Quaternion<T> Quaternion<T>::Conjugate()
 	        {
-	           Quaternion temp(-x, -y, -z, w);
-	           return temp;
+	           return Quaternion<T>(-x, -y, -z, w)
 	        }
 	
 	        template <class T>
@@ -141,32 +143,6 @@ namespace core
 	            y = other.y;
 	            z = other.z;
 	            w = other.w;
-	        }
-	
-	        template <class T>
-	        inline T* Quaternion<T>::Ptr()
-	        {
-	           return &x;
-	        }
-	
-	        template <class T>
-	        const inline T* Quaternion<T>::Ptr() const
-	        {
-	           return &x;
-	        }
-	
-	        template <class T>
-	        inline T Quaternion<T>::operator[]( const int32 index ) const
-	        {
-	            assert( ( index >= 0 ) && ( index < 4 ) );
-	            return (&x)[index];
-	        }
-	
-	        template <class T>
-	        inline T &Quaternion<T>::operator[]( const int32 index )
-	        {
-	            assert( ( index >= 0 ) && ( index < 4 ) );
-	            return (&x)[index];
 	        }
 	
 	        template <class T>
@@ -211,6 +187,19 @@ namespace core
 			w*other.y - x*other.z + y*other.w + z*other.x,
 			w*other.z + x*other.y - y*other.x + z*other.w,
 			w*other.w - x*other.x - y*other.y - z*other.z);
+	        }
+
+	        template <class T>
+	        inline Vector3<T> Quaternion<T>::operator*( const Vector3<T> &vec3 ) const
+	        {
+	           // nvidia SDK implementation
+	           Vector3<T> uv, uuv; 
+		   Vector3<T> qvec(x, y, z);
+		   uv = qvec.CrossProduct(v); 
+		   uuv = qvec.CrossProduct(uv);
+		   uv *= (2.0f * w);
+		   uuv *= 2.0f;
+		   return v + uv + uuv;
 	        }
 	        
 	        template <class T>
@@ -265,6 +254,31 @@ namespace core
 	            return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
 	        }
 	        
+	        Quaternion<T> Quaternion<T>::Inverse(void)
+  		{
+  		   float magnitude = x*x + y*y + z*z + w*w;
+  		   assert(!core::IsZero(magnitude));
+  		   float invMagnitude;
+  		   if( core::Equals(magnitude, T(1)) )    // special case: unit quaternion
+  		   {
+  		      x = -x;
+  		      y = -y;
+  		      z = -z;
+  		   }
+  		   else // else scale
+  		   {
+  		      if( core::IsZero(magnitude) )
+  		         invMagnitude = T(1);
+  		      else
+  		         invMagnitude = T(1) / magnitude;
+  		      x *= -invMagnitude;
+  		      y *= -invMagnitude;
+  		      z *= -invMagnitude;
+  		      w *= invMagnitude;
+  		   }
+  		   return *this;
+  		}
+  		
 	        template <class T>
 	        T Quaternion<T>::Magnitude(void) const
 	        {
@@ -330,11 +344,45 @@ namespace core
 	            return false;
 	        }
 	
-//		template <class T>
-//		Matrix4<T> CreateMatrix() const
-//		{
-		
-//		}
+		template <class T>
+		Quaternion<T> &RotationFromTo(const Vector3<T>f &from, const Vector3df &to)
+		{
+		   // Based on Stan Melax's article in Game Programming Gems
+		   // Copy, since cannot modify local
+		   Vector3<T> v0 = from;
+		   Vector3<T> v1 = to;
+		   v0.Normalize();
+		   v1.Normalize();
+	
+		   const float d = v0.DotProduct(v1);
+		   if (d >= 1.0f) // If dot == 1, vectors are the same
+		   {
+			return IDENTITY;
+		   }
+		  else if (d <= -1.0f) // exactly opposite
+		  {
+			Vector3<T> axis(1.0f, 0.0f, 0.0f);
+			axis = axis.CrossProduct(Vector3<T>(x, y, z));
+			if (IsEqual(axis.Length(), 0))
+			{
+				axis.Set(0.0f, 1.0f, 0.0f);
+				axis.CrossProduct(Vector3<T>(x, y, z));
+			}
+			return this->FromAngleAxis(PI, axis);
+		}
+	
+		const f32 s = sqrtf( (1+d)*2 ); // optimize inv_sqrt
+		const f32 invs = 1.f / s;
+		const vector3df c = v0.crossProduct(v1)*invs;
+		X = c.X;
+		Y = c.Y;
+		Z = c.Z;
+		W = s * 0.5f;
+	
+		return *this;
+
+		}
+
 		
 		template <class T>
 	        void Quaternion<T>::CreateMatrix( Matrix4<T> &dest, const Vector3<T> &center ) const
@@ -383,6 +431,7 @@ namespace core
 	           }
 	        }
 	
+		
 	        //template <class T>
 	        //void Quaternion::FromAxes( const Vector3<T> *axis )
 	        //{
