@@ -20,6 +20,7 @@ namespace sound
           ALCdevice *m_pDevice;
           ALCcontext *m_pContext;
           uint32 buffers[NUM_BUFFERS];
+          uint32 source;
       public:   
          OALDriver() : m_pDevice(NULL), m_pContext(NULL) {}
           ~OALDriver() {}
