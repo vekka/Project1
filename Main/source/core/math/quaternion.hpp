@@ -88,6 +88,7 @@ namespace core
 	        template <class T>
 	        inline Quaternion<T>::Quaternion( const T* ptr )
 	        {
+	           assert(ptr != NULL);
 	           memcpy( &w, valptr, sizeof(T)*4 );
 	        }
 	
