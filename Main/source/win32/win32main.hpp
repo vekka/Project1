@@ -7,8 +7,6 @@
 
 #include "core/BasicTypes.hpp"
 
-#include "core/math/vector2.hpp"
-using core::math::Vector2i;
 namespace win32keyboard
 {
 
@@ -186,32 +184,46 @@ namespace win32window
 
       static Win32Keyboard keyboard;
 
-      class Win32Cursor
+      class Win32Mouse
       {
+         friend LRESULT CALLBACK win32window::Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
       private:
-         int32 xPos, yPos;
+         static int32 xPos, yPos;
          uint32 winWidth, winHeight;
          int32 borderX, borderY;
          HWND hWnd;
          bool isVisible;
          HCURSOR hCursor;
+         static bool doMouseMove;
+
       public:
-         Win32Cursor();
-         ~Win32Cursor();
+         Win32Mouse();
+         ~Win32Mouse();
 
-         virtual void SetVisible(const bool visible);
-         virtual bool IsVisible() const;
-         virtual void SetPosition(const float x, const float y);
-         virtual void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
+         static int32 Dispatch(UINT msg, WPARAM wParam, LPARAM lParam)
+         {
+            switch (msg)
+            {
+            case WM_MOUSEMOVE:
+               //mouse.SetPosition();
+               xPos = LOWORD(lParam);
+               yPos = LOWORD(lParam);
+               return 0;
+            }
+         }
 
-         virtual void GetPosition(int32 &xPos, int32 &yPos) const;
-         virtual void GetRelativePosition(int32 &xPos, int32 &yPos) const;
-         virtual void OnResize(const int32 &sizeX, const int32 &sizeY);
-         virtual void UpdateBorderSize(const bool isFullScreen, const bool resizable);
-         void Dispatch(); // as in win32keyboard
+         void SetVisible(const bool visible);
+         bool IsVisible() const;
+         void SetPosition(const float x, const float y);
+         void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
+
+         void GetPosition(int32 &xPos, int32 &yPos) const;
+         void GetRelativePosition(int32 &xPos, int32 &yPos) const;
+         void OnResize(const int32 &sizeX, const int32 &sizeY);
+         void UpdateBorderSize(const bool isFullScreen, const bool resizable);
       };
 
-      static Win32Cursor cursor;
+      static Win32Mouse mouse;
 
    protected:
       HWND hWnd;
@@ -223,8 +235,6 @@ namespace win32window
       uint32 height;
       uint32 width;
       uint32 bitsPerPel;
-      static bool do_mouse_move;
-      static Vector2i mousePos;
 
       void RegisterWindowClass() const;
       void UnregisterWindowClass() const;
@@ -259,7 +269,7 @@ namespace win32window
       void SetPosition(const uint32 newXPos, const uint32 newYPos);
       void GetPosition(uint32 &) const;
 
-      Vector2i &GetMousePos() { return mousePos; }
+      //void GetMousePos( int32 &xPos, int32 &yPos ) { return mousePos; }
       //void SetDimension( const Dimension2u dimension );
       void OnResize() const;
       bool Show() const;
@@ -312,7 +322,7 @@ namespace win32window
 
    //   DWORD windowStyle;
    //   DEVMODE desktopMode;
-   //   Win32Cursor *cursor;
+   //   Win32Mouse *cursor;
    //
    //   friend class Win32WindowManager;
    //
@@ -359,7 +369,7 @@ namespace win32window
    //
    //   static void GetLastWin32Error();
    //
-   //   Win32Cursor *GetWin32Cursor() const;
+   //   Win32Mouse *GetWin32Cursor() const;
    //
    //   //virtual void setVideoMode( const GFXVideoMode &mode );
    //   //virtual const GFXVideoMode &GetVideoMode();

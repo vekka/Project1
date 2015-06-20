@@ -354,6 +354,7 @@ namespace core
          m[0][3] = x;
          m[1][3] = y;
          m[2][3] = z;
+         m[3][3] = 1.0f;
       }
 
       template <typename T>

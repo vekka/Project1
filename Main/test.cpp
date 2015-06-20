@@ -20,6 +20,8 @@ using namespace model::objparser;
 
 #include "core/math/frustum.hpp"
 
+#include "shader/transformationPipeline.hpp"
+using pipeline::Pipeline;
 
 #include "core/math/camera.hpp"
 
@@ -104,19 +106,23 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    camera.InitProjection(FRUSTUM_PERSPECTIVE, -1, 1, 1, -1, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
 
-   Matrix4f modelMatrix = Matrix4f::IDENTITY;
-   Matrix4f viewMatrix = Matrix4f::IDENTITY;
-   modelMatrix.SetTranslation(3.0f, 3.0f, 10.0f);
-   modelMatrix = modelMatrix.Transpose();
 
-   //you must activate shader program to give uniform variables data
+
+   Pipeline rorledning;
+
+   rorledning.Scale(1, 1, 1);
+   rorledning.SetWorldPos(3.0f, 3.0f, 10.0f);
+   Matrix4f viewMatrix = Matrix4f::IDENTITY;
+   
+
+   // light stuff, not in use yet
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
 
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), oglshader::TYPE_FMAT4, 1, true);
-   shader.AddUniformData("M", modelMatrix.Ptr(), oglshader::TYPE_FMAT4, 1, false);
-   shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1, false);
+   shader.AddUniformData("M", &rorledning.GetWorldTrans(), oglshader::TYPE_FMAT4, 1, true);
+   shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp() ), oglshader::TYPE_FMAT4, 1, false);
    shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
 
@@ -151,8 +157,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
-      Vector2i t = win.GetMousePos();
-      camera.OnMouse(t.x, t.y);
+      //Vector2i t = win.GetMousePos();
+      //camera.OnMouse(t.x, t.y);
       //std::cout << win.GetMousePos() << std::endl;
 
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
@@ -164,12 +170,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
          camera.OnKeyboard(win32keyboard::VKEY_D, 0.1f);
 
-      
-      if (camera.IsDirty())
-      {
-         //camera.Update();
-         shader.AddUniformData("V", &camera.GetViewMatrix(), oglshader::TYPE_FMAT4, 1);
-      }
+      Point2i pos;
+      win.mouse.GetPosition(pos.x, pos.y);
+
+      std::cout << pos << std::endl;
+
+      camera.OnRender();
+      shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp()), oglshader::TYPE_FMAT4, 1, true);
 
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();

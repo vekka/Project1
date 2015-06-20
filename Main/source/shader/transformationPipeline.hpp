@@ -9,8 +9,6 @@ using core::math::Vector3f;
 #include "core/math/Matrix4.hpp"
 using core::math::Matrix4f;
 
-#include "core/math/camera.hpp"
-using camera::FreeCamera;
 /*
 Copyright 2010 Etay Meiri
 
@@ -30,9 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // this interface is inspired by : see above
 
-
-
-
 namespace pipeline
 {
    class Pipeline
@@ -40,6 +35,14 @@ namespace pipeline
    public:
       Pipeline()
       {
+         
+         m_CameraTransformation = Matrix4f::IDENTITY;
+         m_VPtransformation = Matrix4f::IDENTITY;
+         m_WPtransformation = Matrix4f::IDENTITY;
+         m_Vtransformation = Matrix4f::IDENTITY;
+         m_Wtransformation = Matrix4f::IDENTITY;
+         m_WVtransformation = Matrix4f::IDENTITY;
+
          m_scale = Vector3f(1.0f, 1.0f, 1.0f);
          m_worldPos = Vector3f(0.0f, 0.0f, 0.0f);
          m_rotateInfo = Vector3f(0.0f, 0.0f, 0.0f);
@@ -64,6 +67,13 @@ namespace pipeline
       {
          m_worldPos = pos;
       }
+      void SetWorldPos(float x, float y, float z)
+      {
+         m_worldPos.x = x;
+         m_worldPos.y = y;
+         m_worldPos.z = z;
+      }
+
 
       void Rotate(float rotateX, float rotateY, float rotateZ)
       {
@@ -83,13 +93,15 @@ namespace pipeline
          m_projectionMatrix = p;
       }
 
+      const Matrix4f &InitCameraTransform(const Vector3f& target, const Vector3f& up);
 
       const Matrix4f& GetWPTrans();
       const Matrix4f& GetWVTrans();
       const Matrix4f& GetVPTrans();
       const Matrix4f& GetWVPTrans();
       const Matrix4f& GetWorldTrans();
-      const Matrix4f& GetViewTrans();
+
+      const Matrix4f& Pipeline::GetViewTrans(const Vector3f &cameraPosition, const Vector3f &target, const Vector3f up);
 
    private:
       Vector3f m_scale;
@@ -97,7 +109,7 @@ namespace pipeline
       Vector3f m_rotateInfo;
 
       Matrix4f m_projectionMatrix;
-
+      Matrix4f m_CameraTransformation;
       
       Matrix4f m_VPtransformation;
       Matrix4f m_WPtransformation;

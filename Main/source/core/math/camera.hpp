@@ -12,6 +12,26 @@ using core::math::Equals;
 #undef near
 #undef far
 
+
+/*
+
+Copyright 2010 Etay Meiri
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 namespace camera
 {
 
@@ -88,7 +108,12 @@ namespace camera
       const Matrix4f &GetProjectionMatrix() const { return m_projMatrix; }
 
       void SetPosition(const Vector3f &v) { m_position = v; }
-      const Vector3f GetPosition() const { return m_position; }
+      const Vector3f &GetPosition() const { return m_position; }
+
+      const Vector3f &GetTarget() const { return m_target; }
+      const Vector3f &GetUp() const { return m_up; }
+
+
       void SetFOV(const float fov) {this->m_fov = fov; }
       const float GetFOV() const { return m_fov; }
       const float GetAspectRatio() const { return m_aspectRatio; }
@@ -148,22 +173,15 @@ namespace camera
          m_up = up;
          m_up.Normalize();
 
-         m_cameraTranslationMatrix.Set(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            m_position[0], m_position[1], m_position[2], 1
-            );
-         m_viewMatrix.Set(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-            );
+         Init();
       }
+
       void Update();
 
 
+
+      void Init();
+      
       void Set(const Vector3f &pos, const Vector3f &target, const Vector3f &up)
       {
          m_position = pos;

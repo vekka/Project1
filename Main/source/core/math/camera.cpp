@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 // I added this notice, just in case. Need various sources to know what I am doing...
 #include "win32/win32main.hpp"
 
@@ -106,50 +107,87 @@ namespace camera
       }
    }
 
+   void FreeCamera::Init()
+   {
+      Vector3f Htarget(m_target.x, 0.0f, m_target.z);
+      Htarget.Normalize();
+
+      Vector3f HTarget(m_target.x, 0.0, m_target.z);
+      HTarget.Normalize();
+
+      if (HTarget.z >= 0.0f)
+      {
+         if (HTarget.x >= 0.0f)
+         {
+            m_angleH = 360.0f - core::math::RadToDeg(asin(HTarget.z));
+         }
+         else
+         {
+            m_angleH = 180.0f + core::math::RadToDeg(asin(HTarget.z));
+         }
+      }
+      else
+      {
+         if (HTarget.x >= 0.0f)
+         {
+            m_angleH = core::math::RadToDeg(asin(-HTarget.z));
+         }
+         else
+         {
+            m_angleH = 90.0f + core::math::RadToDeg(asin(-HTarget.z));
+         }
+      }
+
+      m_angleV = -core::math::RadToDeg(asin(m_target.y));
+
+      m_onUpperEdge = false;
+      m_onLowerEdge = false;
+      m_onLeftEdge = false;
+      m_onRightEdge = false;
+      m_mousePos.x = m_windowWidth / 2;
+      m_mousePos.y = m_windowHeight / 2;
+
+   }
+
    void FreeCamera::Update()
    {
-      Vector3f forward, right, up;
-      
-      
-      forward = m_target - m_position;
-      forward.Normalize();
+      const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
- 
-      //side = forward X up
-      right = forward.CrossProd(m_up);
-      right.Normalize();
+      Vector3f view(1.0f, 0.0f, 0.0f);
+      Rotate(view, m_angleH, vAxis);
+      view.Normalize();
 
 
-      //recalculate up; up = side X forward
-      up = right.CrossProd(forward);
+      Vector3f hAxis = vAxis.CrossProd(view);
+      hAxis.Normalize();
+      Rotate(view, m_angleV, hAxis);
 
-      m_up = up;
 
-      m_cameraRotationMatrix.Set(
-         right[0], up[0], forward[0], 0.0f,
-         right[1], up[1], forward[1], 0.0F,
-         right[2], up[2], forward[2], 0.0f,
-        0, 0, 0, 1.0);
- 
-      m_cameraTranslationMatrix.Set(
-         1, 0, 0, 0,
-         0, 1, 0, 0,
-         0, 0, 1, 0,
-         m_position[0], m_position[1], m_position[2], 1
-         );
+      m_target = view;
+      m_target.Normalize();
 
-      m_viewMatrix =  m_cameraRotationMatrix * m_cameraTranslationMatrix;
+      m_up = m_target.CrossProd(hAxis);
+      m_up.Normalize();
+      //Vector3f forward, right, up;
+      //      
+      //forward = m_target - m_position;
+      //forward.Normalize();
+
+      ////side = forward X up
+      //right = forward.CrossProd(m_up);
+      //right.Normalize();
+
+      ////recalculate up; up = side X forward
+      //up = right.CrossProd(forward);
+
+      //m_up = up;
+
       m_isDirty = false;
    }//UPDATE
-
-
 
    bool FreeCamera::OnKeyboard(int32 key, float stepScale)
    {
       bool ret = false;
-
-      
-      
       switch (key)
       {
       case win32keyboard::VKEY_W:
@@ -199,6 +237,8 @@ namespace camera
          }
          break;
       }//SWITCH
+
+      
       return ret;
    }
 
@@ -267,11 +307,7 @@ namespace camera
           m_onLowerEdge = false;
        }
 
-       if (IsDirty())
-       {
-          Rotate(m_target, m_angleH, Vector3f(0.0, 1.0, 0.0));
           Update();
-       }
     }
 
     void FreeCamera::OnRender()

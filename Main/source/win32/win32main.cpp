@@ -8,10 +8,10 @@ using win32window::Win32Window;
 
 bool Win32Window::Win32Keyboard::keys[256];
 Win32Window::Win32Keyboard Win32Window::keyboard;
-
-bool Win32Window::do_mouse_move = false;
-
-Vector2i Win32Window::mousePos = Vector2i(0, 0);
+Win32Window::Win32Mouse Win32Window::mouse;
+int32 Win32Window::Win32Mouse::xPos = 0;
+int32 Win32Window::Win32Mouse::yPos = 0;
+bool Win32Window::Win32Mouse::doMouseMove = false;
 
 namespace win32window
 {
@@ -63,7 +63,6 @@ namespace win32window
       this->height = height;
       this->bitsPerPel = bitsPerPel;
 
-      do_mouse_move = false;
       hWnd = CreateWindowEx(NULL,
          className,
          wndName,
@@ -294,8 +293,6 @@ namespace win32window
       //p = MAKEPOINTS(lp);
 
       //MessageBox(hwnd, "hello", "hellod", NULL);
-
-   
    }
 
    LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -309,13 +306,6 @@ namespace win32window
          PAINTSTRUCT ps;
          BeginPaint(hWnd, &ps);
          EndPaint(hWnd, &ps);
-         return 0;
-      case WM_MOUSEMOVE:
-         
-
-         mousePos.x = LOWORD(lParam);
-         mousePos.y = HIWORD(lParam);
-         WmMouseMove(hWnd, wParam, lParam);
          return 0;
       case WM_ACTIVATE:
          return 0;
@@ -337,7 +327,7 @@ namespace win32window
          return 0;
       default:
          keyboard.Dispatch(msg, wParam, lParam);
-         //cursor.Dispatch();
+         mouse.Dispatch(msg, wParam, lParam);
          return DefWindowProc(hWnd, msg, wParam, lParam);
       }
       return 0;
@@ -351,45 +341,51 @@ namespace win32window
 
 
 
-   // Win32Cursor is nested into class Win32Window
-   Win32Window::Win32Cursor::Win32Cursor()
+   // Win32Mouse is nested into class Win32Window
+   Win32Window::Win32Mouse::Win32Mouse()
    {
    }
 
-   Win32Window::Win32Cursor::~Win32Cursor()
+   Win32Window::Win32Mouse::~Win32Mouse()
    {
    }
 
-   void Win32Window::Win32Cursor::SetVisible(const bool visible)
+   void Win32Window::Win32Mouse::SetVisible(const bool visible)
    {
    }
 
-   bool Win32Window::Win32Cursor::IsVisible() const
+   bool Win32Window::Win32Mouse::IsVisible() const
    {
       return true;
    }
 
-   void Win32Window::Win32Cursor::SetPosition(const float x, const float y)
+   void Win32Window::Win32Mouse::SetPosition(const float x, const float y)
+   {
+      POINT pt;
+      ClientToScreen(hWnd, &pt);
+      SetCursorPos(pt.x, pt.y);
+
+      xPos = pt.x;
+      yPos = pt.y;
+   }
+
+   void Win32Window::Win32Mouse::SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen)
    {
    }
 
-   void Win32Window::Win32Cursor::SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen)
+   void Win32Window::Win32Mouse::GetPosition(int32 &xPos, int32 &yPos) const
    {
    }
 
-   void Win32Window::Win32Cursor::GetPosition(int32 &xPos, int32 &yPos) const
+   void Win32Window::Win32Mouse::GetRelativePosition(int32 &xPos, int32 &yPos) const
    {
    }
 
-   void Win32Window::Win32Cursor::GetRelativePosition(int32 &xPos, int32 &yPos) const
+   void Win32Window::Win32Mouse::OnResize(const int32 &sizeX, const int32 &sizeY)
    {
    }
 
-   void Win32Window::Win32Cursor::OnResize(const int32 &sizeX, const int32 &sizeY)
-   {
-   }
-
-   void Win32Window::Win32Cursor::UpdateBorderSize(const bool isFullScreen, const bool resizable)
+   void Win32Window::Win32Mouse::UpdateBorderSize(const bool isFullScreen, const bool resizable)
    {
    }
 
@@ -1301,7 +1297,7 @@ namespace win32window
    //	SetWindowPos(hWnd, HWND_TOP, windowLeft, windowTop, realWidth, realHeight,
    //		SWP_FRAMECHANGED | SWP_NOMOVE | SWP_SHOWWINDOW);
    //
-   //	//static_cast<Win32Cursor*>(Win32Cursor)->updateBorderSize(FullScreen, resizable);
+   //	//static_cast<Win32Mouse*>(Win32Mouse)->updateBorderSize(FullScreen, resizable);
    //}
    //
    //void Win32Window::Minimize()
@@ -1366,7 +1362,7 @@ namespace win32window
    //   return isFullScreen;
    //}
    //
-   //Win32Cursor *Win32Window::GetWin32Cursor() const
+   //Win32Mouse *Win32Window::GetWin32Cursor() const
    //{
    //   return cursor;
    //}
