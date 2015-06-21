@@ -13,6 +13,8 @@ int32 Win32Window::Win32Mouse::xPos = 0;
 int32 Win32Window::Win32Mouse::yPos = 0;
 bool Win32Window::Win32Mouse::doMouseMove = false;
 
+Win32Window::FPTR Win32Window::customCallback = NULL;
+
 namespace win32window
 {
 
@@ -375,6 +377,8 @@ namespace win32window
 
    void Win32Window::Win32Mouse::GetPosition(int32 &xPos, int32 &yPos) const
    {
+      xPos = this->xPos;
+      yPos = this->yPos;
    }
 
    void Win32Window::Win32Mouse::GetRelativePosition(int32 &xPos, int32 &yPos) const

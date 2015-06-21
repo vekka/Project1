@@ -157,10 +157,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
-      //Vector2i t = win.GetMousePos();
-      //camera.OnMouse(t.x, t.y);
-      //std::cout << win.GetMousePos() << std::endl;
-
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_W))
          camera.OnKeyboard(win32keyboard::VKEY_W, 0.1f);
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_S))
@@ -173,9 +169,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       Point2i pos;
       win.mouse.GetPosition(pos.x, pos.y);
 
-      std::cout << pos << std::endl;
-
-      camera.OnRender();
+      //camera.OnRender();
+      //camera.OnMouse(pos.x,pos.y);
       shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp()), oglshader::TYPE_FMAT4, 1, true);
 
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);

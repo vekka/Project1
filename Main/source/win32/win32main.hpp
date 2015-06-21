@@ -212,6 +212,8 @@ namespace win32window
             }
          }
 
+   
+
          void SetVisible(const bool visible);
          bool IsVisible() const;
          void SetPosition(const float x, const float y);
@@ -245,6 +247,10 @@ namespace win32window
          const uint32 width = 800, const uint32 height = 600,
          const uint32 bitsPerPel = 32, const DWORD dStyle = WS_OVERLAPPEDWINDOW,
          const HWND parentWnd = NULL);
+
+      typedef void(*FPTR)(int32 &v1, int32 &v2);
+      static FPTR customCallback;
+
 
       HWND Create(const HINSTANCE hinstance,
          const int32 x = CW_USEDEFAULT, const int32 y = CW_USEDEFAULT,
