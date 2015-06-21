@@ -31,6 +31,8 @@ namespace core
 	
 	           Quaternion Inverse(void);
 	           
+
+
 	           Quaternion operator+( const Quaternion &other ) const;
 	           Quaternion &operator+=( const Quaternion &other );
 	           Quaternion operator-( const Quaternion &other ) const;
@@ -61,6 +63,9 @@ namespace core
 	           void FromAngleAxis( const float angle, const Vector3<T> &vec );
 	           void ToAngleAxis( float &outAngle, Vector3<T> &outAxis ) const;
 	
+              Quaternion &RotationFromTo(const Vector3<T> &from, const Vector3<T> &to);
+
+
 	           void Normalize();
 	           Quaternion Conjugate();
 	
@@ -115,7 +120,7 @@ namespace core
 	        template <class T>
 	        Quaternion<T> Quaternion<T>::Conjugate()
 	        {
-	           return Quaternion<T>(-x, -y, -z, w)
+              return Quaternion<T>(-x, -y, -z, w);
 	        }
 	
 	        template <class T>
@@ -254,7 +259,10 @@ namespace core
 	            return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
 	        }
 	        
-	        Quaternion<T> Quaternion<T>::Inverse(void)
+
+
+           template <class T>
+	   Quaternion<T> Quaternion<T>::Inverse(void)
   		{
   		   float magnitude = x*x + y*y + z*z + w*w;
   		   assert(!core::IsZero(magnitude));
@@ -345,7 +353,7 @@ namespace core
 	        }
 	
 		template <class T>
-		Quaternion<T> &RotationFromTo(const Vector3<T>f &from, const Vector3df &to)
+		Quaternion<T> &Quaternion<T>::RotationFromTo(const Vector3<T> &from, const Vector3<T> &to)
 		{
 		   // Based on Stan Melax's article in Game Programming Gems
 		   // Copy, since cannot modify local

@@ -16,10 +16,11 @@ namespace sound
       {
       public:
          static const int32 BUFFER_SIZE = 4096;
+         const int32 NUM_BUFFERS = 4;
       private:
           ALCdevice *m_pDevice;
           ALCcontext *m_pContext;
-          uint32 buffers[NUM_BUFFERS];
+          uint32 buffers[1];
           uint32 source;
       public:   
          OALDriver() : m_pDevice(NULL), m_pContext(NULL) {}
