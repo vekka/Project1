@@ -70,22 +70,13 @@ namespace camera
          //m_projMatrix(3, 3) = 0.0f;
 
 
+         m_projMatrix = Matrix4f::ZERO;
+
          m_projMatrix(0,0) = 1.0f / (tanThetaY * m_aspectRatio);
-         m_projMatrix(0,1) = 0.0f;
-         m_projMatrix(0,2) = 0.0f;
-         m_projMatrix(0,3) = 0.0;
-         m_projMatrix(1,0) = 0.0f;
          m_projMatrix(1,1) = 1.0f / tanThetaY;
-         m_projMatrix(1,2) = 0.0f;
-         m_projMatrix(1,3) = 0.0;
-         m_projMatrix(2,0) = 0.0f;
-         m_projMatrix(2,1) = 0.0f;
          m_projMatrix(2,2) = -(m_nearDist - m_farDist) / zRange;
          m_projMatrix(2,3) = (-2.0f * m_farDist*m_nearDist) / zRange;
-         m_projMatrix(3,0) = 0.0f;
-         m_projMatrix(3,1) = 0.0f;
          m_projMatrix(3,2) = 1.0f;
-         m_projMatrix(3,3) = 0.0;
          /*
 
          0,0   0,1   0,2   0,3
@@ -194,8 +185,8 @@ namespace camera
          {
             Vector3f temp = m_target;
             temp *= stepScale;
-
             m_position += temp;
+            //std::cout << m_position << std::endl;
             ret = true;
             m_isDirty = true;
          }
@@ -236,8 +227,7 @@ namespace camera
             m_isDirty = true;
          }
          break;
-      }//SWITCH
-
+      } //SWITCH
       
       return ret;
    }
@@ -245,41 +235,40 @@ namespace camera
     // angle in radians
     void FreeCamera::Rotate( Vector3f &vector, float angle, Vector3f axis )
      {
-        const float SinHalfAngle = sinf(angle / 2);
-        const float CosHalfAngle = cosf(angle / 2);
+        const float sinHalfAngle = sinf(angle / 2);
+        const float cosHalfAngle = cosf(angle / 2);
 
-        const float Rx = axis.x * SinHalfAngle;
-        const float Ry = axis.y * SinHalfAngle;
-        const float Rz = axis.z * SinHalfAngle;
-        const float Rw = CosHalfAngle;
+        const float rx = axis.x * sinHalfAngle;
+        const float ry = axis.y * sinHalfAngle;
+        const float rz = axis.z * sinHalfAngle;
+        const float rw = cosHalfAngle;
 
-        Quaternion_f RotationQ(Rx, Ry, Rz, Rw);
+        Quaternion_f RotationQ(rx, ry, rz, rw);
 
         Quaternion_f ConjugateQ = RotationQ.Conjugate();
 
         //I am uncertain if it is possible to convert a vector to quaternion like this...
         Quaternion_f vectorAsQuat(vector.x, vector.y, vector.z, 0);
-        Quaternion_f W = RotationQ * vectorAsQuat *ConjugateQ;
+        Quaternion_f w = RotationQ * vectorAsQuat *ConjugateQ;
 
-        vector.x = W.x;
-        vector.y = W.y;
-        vector.z = W.z;
+        vector.x = w.x;
+        vector.y = w.y;
+        vector.z = w.z;
         m_isDirty = true;
     }
 
-
     void FreeCamera::OnMouse(int32 x, int32 y)
     {
-       const int32 DeltaX = x - m_mousePos.x;
-       const int32 DeltaY = y - m_mousePos.y;
+       const int32 deltaX = x - m_mousePos.x;
+       const int32 deltaY = y - m_mousePos.y;
 
        m_mousePos.x = x;
        m_mousePos.y = y;
 
-       m_angleH += (float)DeltaX / 200.0f;
-       m_angleV += (float)DeltaY / 200.0f;
+       m_angleH += (float)deltaX / 200.0f;
+       m_angleV += (float)deltaY / 200.0f;
 
-       if (DeltaX == 0) {
+       if (deltaX == 0) {
           if (x <= margin) {
              //    m_AngleH -= 1.0f;
              m_onLeftEdge = true;
@@ -294,7 +283,7 @@ namespace camera
           m_onRightEdge = false;
        }
 
-       if (DeltaY == 0) {
+       if (deltaY == 0) {
           if (y <= margin) {
              m_onUpperEdge = true;
           }

@@ -1,4 +1,4 @@
-#include "shadertypes.hpp"
+#include "OGLShaderTypes.hpp"
 
 namespace oglshader
 {

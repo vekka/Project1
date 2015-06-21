@@ -20,7 +20,7 @@ using namespace model::objparser;
 
 #include "core/math/frustum.hpp"
 
-#include "shader/transformationPipeline.hpp"
+#include "shader/TransPipeline.hpp"
 using pipeline::Pipeline;
 
 #include "core/math/camera.hpp"
@@ -36,6 +36,8 @@ using mesh2::Face;
 using mesh2::Mesh;
 
 using core::math::Matrix4f;
+//using win32window::funcptr_t;
+
 
 HINSTANCE hInst;
 
@@ -47,7 +49,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    const scene::Scene *sc;
    importer::Importer importer;
 
-   sc = importer.ReadFile("assets/testObjects/airboat.obj");
+   sc = importer.ReadFile("assets/testObjects/randomScene.obj");
 
    Win32Console debugConsole(100, 100, 3, 3);
    bool t = debugConsole.Create();
@@ -99,14 +101,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniform("light.color");
    shader.Unuse();
 
-   Vector3f cameraPosition(0.0f, 0.0f, 0.0f);
+   Vector3f cameraPosition(1.0f, 2.0f, 3.0f);
    Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
    Vector3f cameraUp(0.0f, 1.0f, 0.0f);
    FreeCamera camera(800, 600,cameraPosition, cameraTarget,cameraUp );
    camera.InitProjection(FRUSTUM_PERSPECTIVE, -1, 1, 1, -1, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
-
-
 
    Pipeline rorledning;
 
@@ -122,7 +122,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), oglshader::TYPE_FMAT4, 1, true);
    shader.AddUniformData("M", &rorledning.GetWorldTrans(), oglshader::TYPE_FMAT4, 1, true);
-   shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp() ), oglshader::TYPE_FMAT4, 1, false);
+   shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp() ), oglshader::TYPE_FMAT4, 1, true);
    shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
 
@@ -130,12 +130,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
    oglbuffer::generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  // Process the messages
-
+ 
+   //win.customCallback = camera.OnMouse(camera.GetPosition().x, camera.GetPosition().y);
+  
+   // Process the messages
    int32 numIndicesInScene = 0;
    for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
-
+   
+   win.mouse.SetPosition(800/2, 200/2);
    while (1)
    {
       oglContext.ClearBuffers();
@@ -169,10 +172,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       Point2i pos;
       win.mouse.GetPosition(pos.x, pos.y);
 
+      
       //camera.OnRender();
-      //camera.OnMouse(pos.x,pos.y);
+      camera.OnMouse(pos.x, pos.y);
+     
+      //Matrix4f debug = rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
       shader.AddUniformData("V", &rorledning.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp()), oglshader::TYPE_FMAT4, 1, true);
-
+      
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();
       
@@ -186,3 +192,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    return msg.wParam;
 }
 
+static void customCallback(int32 x, int32 y)
+{
+   
+}

@@ -31,7 +31,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 namespace camera
 {
 
@@ -60,7 +59,6 @@ namespace camera
       // class Frustum should probably be integrated intofloathis class?
       //It oughtfloato support different projectionsfloato be scalable
    public:
-
       bool m_isDirty;
 
       eProjectionType m_projectionType;
@@ -70,8 +68,6 @@ namespace camera
 
       // these vectors make up the view matrix. View matrix ~ "the camera"
       Quaternion_f m_orientation;
-      
-      
       Vector3f m_position;
       Vector3f m_target;
       Vector3f m_up;
@@ -108,17 +104,12 @@ namespace camera
       const Matrix4f &GetProjectionMatrix() const { return m_projMatrix; }
 
       void SetPosition(const Vector3f &v) { m_position = v; }
-      const Vector3f &GetPosition() const { return m_position; }
-
-      const Vector3f &GetTarget() const { return m_target; }
-      const Vector3f &GetUp() const { return m_up; }
-
-
+      const Vector3f GetPosition() const { return m_position; }
+      const Vector3f GetTarget() const { return m_target; }
+      const Vector3f GetUp() const { return m_up; }
       void SetFOV(const float fov) {this->m_fov = fov; }
       const float GetFOV() const { return m_fov; }
       const float GetAspectRatio() const { return m_aspectRatio; }
-
-
       void CalcFrustumPlanes();
       bool IsPointInFrustum(const Vector3f &point);
       bool IsSphereInFrustum(const Vector3f &center, const float
@@ -146,8 +137,7 @@ namespace camera
      const static int32 margin;
      const static float edge_step;
 
-   public: 
-        
+   public:       
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
          const Vector3f &target, const Vector3f &up)
       {
@@ -167,8 +157,8 @@ namespace camera
          m_target = target;
          m_target.Normalize();
 
-         m_mousePos.x = m_windowWidth / 2;
-         m_mousePos.y = m_windowHeight / 2;
+         m_mousePos.x = windowWidth/2;
+         m_mousePos.y = windowHeight/2;
 
          m_up = up;
          m_up.Normalize();
@@ -177,9 +167,6 @@ namespace camera
       }
 
       void Update();
-
-
-
       void Init();
       
       void Set(const Vector3f &pos, const Vector3f &target, const Vector3f &up)

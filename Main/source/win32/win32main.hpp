@@ -9,7 +9,7 @@
 
 namespace win32keyboard
 {
-
+   
    enum eVirtualKey
    {
       VKEY_LBUTTON = VK_LBUTTON,
@@ -147,8 +147,10 @@ namespace win32window
    {
    private:
       static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-     
+
    public:
+      typedef void(*funcptr_t)(int32 v1, int32 v2);
+
       class Win32Keyboard
       {
          friend LRESULT CALLBACK win32window::Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -208,15 +210,16 @@ namespace win32window
                //mouse.SetPosition();
                xPos = LOWORD(lParam);
                yPos = LOWORD(lParam);
+
+               if ( customCallback != NULL )
+                  customCallback(xPos, yPos);
                return 0;
             }
          }
 
-   
-
          void SetVisible(const bool visible);
          bool IsVisible() const;
-         void SetPosition(const float x, const float y);
+         void SetPosition(int32 x, int32 y);
          void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
 
          void GetPosition(int32 &xPos, int32 &yPos) const;
@@ -240,7 +243,10 @@ namespace win32window
 
       void RegisterWindowClass() const;
       void UnregisterWindowClass() const;
+
    public:
+      static funcptr_t customCallback;
+
       Win32Window();
       Win32Window(const HINSTANCE hinstance,
          const int32 x = CW_USEDEFAULT, const int32 y = CW_USEDEFAULT,
@@ -248,9 +254,10 @@ namespace win32window
          const uint32 bitsPerPel = 32, const DWORD dStyle = WS_OVERLAPPEDWINDOW,
          const HWND parentWnd = NULL);
 
-      typedef void(*FPTR)(int32 &v1, int32 &v2);
-      static FPTR customCallback;
-
+      //void SetCallback(const funcptr_t &callback)
+      //{
+      //   customCallback = callback;
+      //}
 
       HWND Create(const HINSTANCE hinstance,
          const int32 x = CW_USEDEFAULT, const int32 y = CW_USEDEFAULT,

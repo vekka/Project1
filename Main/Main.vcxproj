@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\core\assert.cpp" />
     <ClCompile Include="source\core\containers\_vector.cpp" />
     <ClCompile Include="source\core\fileio\file.cpp" />
     <ClCompile Include="source\core\fileio\filesys.cpp" />
@@ -154,13 +155,13 @@
     <ClCompile Include="source\model\OBJFileImporter.cpp" />
     <ClCompile Include="source\model\OBJMTLImporter.cpp" />
     <ClCompile Include="source\model\OBJParser.cpp" />
-    <ClCompile Include="source\openal\oaldriver.cpp" />
+    <ClCompile Include="source\openal\OALDriver.cpp" />
     <ClCompile Include="source\opengl\ogldriver.cpp" />
     <ClCompile Include="source\shader\glmaterialrenderer.cpp" />
     <ClCompile Include="source\shader\glshadermaterialrenderer.cpp" />
     <ClCompile Include="source\shader\OGLShader.cpp" />
-    <ClCompile Include="source\shader\shadertypes.cpp" />
-    <ClCompile Include="source\shader\transformationPipeline.cpp" />
+    <ClCompile Include="source\shader\OGLShaderTypes.cpp" />
+    <ClCompile Include="source\shader\TransPipeline.cpp" />
     <ClCompile Include="source\win32\win32console.cpp" />
     <ClCompile Include="source\win32\win32ctrl.cpp" />
     <ClCompile Include="source\win32\win32main.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core\array.hpp" />
+    <ClInclude Include="source\core\assert.hpp" />
     <ClInclude Include="source\core\BasicTypes.hpp" />
     <ClInclude Include="source\core\bits.hpp" />
     <ClInclude Include="source\core\chartypes.hpp" />
@@ -225,13 +227,13 @@
     <ClInclude Include="source\model\OBJMTLImporter.hpp" />
     <ClInclude Include="source\model\OBJParser.hpp" />
     <ClInclude Include="source\model\OBJTools.hpp" />
-    <ClInclude Include="source\openal\oaldriver.hpp" />
+    <ClInclude Include="source\openal\OALDriver.hpp" />
     <ClInclude Include="source\opengl\ogldriver.hpp" />
     <ClInclude Include="source\scene\scene.hpp" />
     <ClInclude Include="source\shader\glshadermaterialrenderer.hpp" />
     <ClInclude Include="source\shader\OGLShader.hpp" />
-    <ClInclude Include="source\shader\shadertypes.hpp" />
-    <ClInclude Include="source\shader\transformationPipeline.hpp" />
+    <ClInclude Include="source\shader\OGLShaderTypes.hpp" />
+    <ClInclude Include="source\shader\TransPipeline.hpp" />
     <ClInclude Include="source\win32\win32console.hpp" />
     <ClInclude Include="source\win32\win32ctrl.hpp" />
     <ClInclude Include="source\win32\win32main.hpp" />

@@ -5,7 +5,7 @@
 #include <map>
 
 #include "../opengl/ogldriver.hpp"
-#include "shadertypes.hpp"
+#include "OGLShaderTypes.hpp"
 
 #include "core/fileio/file.hpp"
 #include <iostream>

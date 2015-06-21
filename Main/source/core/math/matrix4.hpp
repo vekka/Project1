@@ -42,6 +42,7 @@ namespace core
             const T m20, const T m21, const T m22, const T m23,
             const T m30, const T m31, const T m32, const T m33);
          void SetDiagonal(const T d0, const T d1, const T d2, const T d3);
+         //Matrix4<T> operator=(const T arr[4][4]);
          T operator()(const uint8 index1, const uint8 index2) const;
          T &operator()(const uint8 index1, const uint8 index2);
          T operator[](const uint8 index) const;
@@ -118,15 +119,6 @@ namespace core
          m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23;
          m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
       }
-
-      //template <typename T>
-      //Matrix4<T> &Matrix4<T>::operator=(const Matrix4<T> &other)
-      //{
-      //   if (this == &other)
-      //      return *this;
-      //   std::memcpy(m, other.Ptr(), 16*sizeof(T));
-      //   return *this;
-      //}
 
       template <typename T>
       inline void Matrix4<T>::Zero()
@@ -354,7 +346,7 @@ namespace core
          m[0][3] = x;
          m[1][3] = y;
          m[2][3] = z;
-         m[3][3] = 1.0f;
+         m[3][3] = T(1);
       }
 
       template <typename T>

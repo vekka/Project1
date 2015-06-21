@@ -1,3 +1,5 @@
+#ifndef _TRANSPIPELINE_HPP_INCLUDED_
+#define _TRANSPIPELINE_HPP_INCLUDED_
 
 #include "core/math/quaternion.hpp"
 using core::math::Quaternion_f;
@@ -35,8 +37,7 @@ namespace pipeline
    public:
       Pipeline()
       {
-         
-         m_CameraTransformation = Matrix4f::IDENTITY;
+         m_cameraTransformation = Matrix4f::IDENTITY;
          m_VPtransformation = Matrix4f::IDENTITY;
          m_WPtransformation = Matrix4f::IDENTITY;
          m_Vtransformation = Matrix4f::IDENTITY;
@@ -52,10 +53,12 @@ namespace pipeline
       {
          Scale(s, s, s);
       }
+
       void Scale(const Vector3f &scale)
       {
          Scale(scale.x, scale.y, scale.z);
       }
+
       void Scale(float scaleX, float scaleY, float scaleZ)
       {
          m_scale.x = scaleX;
@@ -67,13 +70,13 @@ namespace pipeline
       {
          m_worldPos = pos;
       }
+
       void SetWorldPos(float x, float y, float z)
       {
          m_worldPos.x = x;
          m_worldPos.y = y;
          m_worldPos.z = z;
       }
-
 
       void Rotate(float rotateX, float rotateY, float rotateZ)
       {
@@ -84,7 +87,6 @@ namespace pipeline
 
       void Rotate(const Vector3f &r)
       {
-         
          Rotate(r.x, r.y, r.z);
       }
 
@@ -95,13 +97,13 @@ namespace pipeline
 
       const Matrix4f &InitCameraTransform(const Vector3f& target, const Vector3f& up);
 
-      const Matrix4f& GetWPTrans();
-      const Matrix4f& GetWVTrans();
-      const Matrix4f& GetVPTrans();
-      const Matrix4f& GetWVPTrans();
-      const Matrix4f& GetWorldTrans();
+      const Matrix4f &GetWPTrans();
+      const Matrix4f &GetWVTrans();
+      const Matrix4f &GetVPTrans();
+      const Matrix4f &GetWVPTrans();
+      const Matrix4f &GetWorldTrans();
 
-      const Matrix4f& Pipeline::GetViewTrans(const Vector3f &cameraPosition, const Vector3f &target, const Vector3f up);
+      const Matrix4f &Pipeline::GetViewTrans(const Vector3f &cameraPosition, const Vector3f &target, const Vector3f &up);
 
    private:
       Vector3f m_scale;
@@ -109,7 +111,7 @@ namespace pipeline
       Vector3f m_rotateInfo;
 
       Matrix4f m_projectionMatrix;
-      Matrix4f m_CameraTransformation;
+      Matrix4f m_cameraTransformation;
       
       Matrix4f m_VPtransformation;
       Matrix4f m_WPtransformation;
@@ -118,4 +120,6 @@ namespace pipeline
       Matrix4f m_WVtransformation;
    };
 
-}
+} // namespace pipeline
+
+#endif

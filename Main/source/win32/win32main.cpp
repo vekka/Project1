@@ -6,17 +6,16 @@
 
 using win32window::Win32Window;
 
-bool Win32Window::Win32Keyboard::keys[256];
-Win32Window::Win32Keyboard Win32Window::keyboard;
-Win32Window::Win32Mouse Win32Window::mouse;
-int32 Win32Window::Win32Mouse::xPos = 0;
-int32 Win32Window::Win32Mouse::yPos = 0;
-bool Win32Window::Win32Mouse::doMouseMove = false;
-
-Win32Window::FPTR Win32Window::customCallback = NULL;
-
 namespace win32window
 {
+   bool Win32Window::Win32Keyboard::keys[256];
+   Win32Window::Win32Keyboard Win32Window::keyboard;
+   Win32Window::Win32Mouse Win32Window::mouse;
+   int32 Win32Window::Win32Mouse::xPos = 0;
+   int32 Win32Window::Win32Mouse::yPos = 0;
+   bool Win32Window::Win32Mouse::doMouseMove = false;
+
+   Win32Window::funcptr_t Win32Window::customCallback = NULL;
 
    bool Win32Window::isResized = false;
 
@@ -361,14 +360,14 @@ namespace win32window
       return true;
    }
 
-   void Win32Window::Win32Mouse::SetPosition(const float x, const float y)
+   void Win32Window::Win32Mouse::SetPosition(int32 x, int32 y)
    {
       POINT pt;
-      ClientToScreen(hWnd, &pt);
-      SetCursorPos(pt.x, pt.y);
+      //ClientToScreen(hWnd, &pt);
+      SetCursorPos(x, y);
 
-      xPos = pt.x;
-      yPos = pt.y;
+      xPos = x;
+      yPos = y;
    }
 
    void Win32Window::Win32Mouse::SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen)

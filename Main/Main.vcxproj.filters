@@ -122,9 +122,6 @@
     <ClCompile Include="source\win32\win32timer.cpp">
       <Filter>Source Files\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="source\shader\shadertypes.cpp">
-      <Filter>Source Files\ShaderLib</Filter>
-    </ClCompile>
     <ClCompile Include="source\gfx\color.cpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
     </ClCompile>
@@ -174,11 +171,17 @@
     <ClCompile Include="source\gfx\oglbuffer.cpp">
       <Filter>Source Files\GFX\BufferLib</Filter>
     </ClCompile>
-    <ClCompile Include="source\openal\oaldriver.cpp">
+    <ClCompile Include="source\shader\TransPipeline.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shader\OGLShaderTypes.cpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClCompile>
+    <ClCompile Include="source\openal\OALDriver.cpp">
       <Filter>Source Files\SoundLib</Filter>
     </ClCompile>
-    <ClCompile Include="source\shader\transformationPipeline.cpp">
-      <Filter>Source Files\ShaderLib</Filter>
+    <ClCompile Include="source\core\assert.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +277,6 @@
     </ClInclude>
     <ClInclude Include="source\win32\win32timer.hpp">
       <Filter>Source Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="source\shader\shadertypes.hpp">
-      <Filter>Source Files\ShaderLib</Filter>
     </ClInclude>
     <ClInclude Include="source\gfx\color.hpp">
       <Filter>Source Files\GFX\PixelLib</Filter>
@@ -380,11 +380,17 @@
     <ClInclude Include="source\gfx\oglbuffer.hpp">
       <Filter>Source Files\GFX\BufferLib</Filter>
     </ClInclude>
-    <ClInclude Include="source\openal\oaldriver.hpp">
-      <Filter>Source Files\SoundLib</Filter>
+    <ClInclude Include="source\core\assert.hpp">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="source\shader\transformationPipeline.hpp">
+    <ClInclude Include="source\shader\TransPipeline.hpp">
       <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shader\OGLShaderTypes.hpp">
+      <Filter>Source Files\ShaderLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\openal\OALDriver.hpp">
+      <Filter>Source Files\SoundLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
