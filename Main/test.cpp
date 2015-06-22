@@ -137,8 +137,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    int32 numIndicesInScene = 0;
    for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
-   
-   win.mouse.SetPosition(800/2, 200/2);
+
+   win.mouse.SetPosition(800/2, 600/2);
    while (1)
    {
       oglContext.ClearBuffers();

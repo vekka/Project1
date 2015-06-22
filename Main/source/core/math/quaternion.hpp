@@ -12,7 +12,7 @@ namespace core
 {
 	namespace math
 	{
-      template <class T>
+      template <typename T>
       class Quaternion
       {
       public:
@@ -36,7 +36,6 @@ namespace core
          Quaternion operator-(const Quaternion &other) const;
          Quaternion &operator-=(const Quaternion &other);
          Quaternion operator*(const Quaternion &other) const;
-         Vector3<T> operator*(const Vector3<T> &vec3) const;
          Quaternion operator*(T scalar) const;
          Quaternion &operator*=(T scalar);
          Quaternion operator/(T scalar) const;
@@ -63,7 +62,6 @@ namespace core
 
          Quaternion &RotationFromTo(const Vector3<T> &from, const Vector3<T> &to);
 
-
          void Normalize();
          Quaternion Conjugate();
 
@@ -83,19 +81,19 @@ namespace core
       template <typename T> const Quaternion<T> Quaternion<T>::ZERO(0, 0, 0, 0);
       template <typename T> const Quaternion<T> Quaternion<T>::IDENTITY(0, 0, 0, 1);
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T>::Quaternion()
       {
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T>::Quaternion(const T* ptr)
       {
          assert(ptr != NULL);
          memcpy(&w, valptr, sizeof(T) * 4);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T>::Quaternion(T x, T y, T z, T w)
       {
          this->x = x;
@@ -104,7 +102,7 @@ namespace core
          this->w = w;
       }
 
-      template <class T>
+      template <typename T>
       inline void Quaternion<T>::Normalize()
       {
          float length = sqrt(x*x, y*y, z*z, w*w);
@@ -115,13 +113,13 @@ namespace core
          w /= length;
       }
 
-      template <class T>
+      template <typename T>
       Quaternion<T> Quaternion<T>::Conjugate()
       {
          return Quaternion<T>(-x, -y, -z, w);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T>::Quaternion(const Vector3<T> &v, T w)
       {
          this->x = v.x;
@@ -130,7 +128,7 @@ namespace core
          this->w = w;
       }
 
-      template <class T>
+      template <typename T>
       inline void Quaternion<T>::Set(T x, T y, T z, T w)
       {
          this->x = x;
@@ -139,7 +137,7 @@ namespace core
          this->w = w;
       }
 
-      template <class T>
+      template <typename T>
       inline void Quaternion<T>::operator=(const Quaternion<T> other)
       {
          x = other.x;
@@ -148,13 +146,13 @@ namespace core
          w = other.w;
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> Quaternion<T>::operator+(const Quaternion<T> &other) const
       {
          return Quaternion<T>(x + other.x, y + other.y, z + other.z, w + other.w);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> &Quaternion<T>::operator+=(const Quaternion<T> &other)
       {
          x += other.x;
@@ -165,13 +163,13 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> Quaternion<T>::operator-(const Quaternion<T> &other) const
       {
          return Quaternion<T>(x - other.x, y - other.y, z - other.z, w - other.w);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> &Quaternion<T>::operator-=(const Quaternion<T> &other)
       {
          x -= other.x;
@@ -182,7 +180,7 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> Quaternion<T>::operator*(const Quaternion<T> &other) const
       {
          return Quaternion<T>(
@@ -192,26 +190,13 @@ namespace core
             w*other.w - x*other.x - y*other.y - z*other.z);
       }
 
-      template <class T>
-      inline Vector3<T> Quaternion<T>::operator*(const Vector3<T> &vec3) const
-      {
-         // nvidia SDK implementation
-         Vector3<T> uv, uuv;
-         Vector3<T> qvec(x, y, z);
-         uv = qvec.CrossProduct(v);
-         uuv = qvec.CrossProduct(uv);
-         uv *= (T(2) * w);
-         uuv *= T(2);
-         return v + uv + uuv;
-      }
-
-      template <class T>
+      template <typename T>
       inline Quaternion<T> Quaternion<T>::operator*(T scalar) const
       {
          return Quaternion<T>(x*scalar, y*scalar, z*scalar, w*scalar);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> &Quaternion<T>::operator*=(T scalar)
       {
          x *= scalar;
@@ -222,13 +207,13 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> Quaternion<T>::operator/(T scalar) const
       {
          return Quaternion<T>(x / scalar, y / scalar, z / scalar, w / scalar);
       }
 
-      template <class T>
+      template <typename T>
       inline Quaternion<T> &Quaternion<T>::operator/=(T scalar)
       {
          x /= scalar;
@@ -239,25 +224,25 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       inline T Quaternion<T>::Real(void) const
       {
          return w;
       }
 
-      template <class T>
+      template <typename T>
       inline Vector3<T> Quaternion<T>::Imag(void) const
       {
          return Vector3<T>(x, y, z);
       }
 
-      template <class T>
+      template <typename T>
       inline T Quaternion<T>::DotProduct(const Quaternion<T> &q1, const Quaternion<T> &q2)
       {
          return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
       }
 
-      template <class T>
+      template <typename T>
       Quaternion<T> Quaternion<T>::Inverse(void)
       {
          float magnitude = x*x + y*y + z*z + w*w;
@@ -283,19 +268,19 @@ namespace core
          return *this;
       }
 
-      template <class T>
+      template <typename T>
       T Quaternion<T>::Magnitude(void) const
       {
          return std::sqrt(DotProduct(*this, *this));
       }
 
-      template <class T>
+      template <typename T>
       bool Quaternion<T>::IsUnit(void) const
       {
          return core::Equals(DotProduct(*this, *this), T(1));
       }
 
-      template <class T>
+      template <typename T>
       inline void Quaternion<T>::Swap(Quaternion& other)
       {
          core::Swap(w, other.w);
@@ -304,7 +289,7 @@ namespace core
          core::Swap(z, other.z);
       }
 
-      template <class T>
+      template <typename T>
       inline bool Quaternion<T>::operator==(const Quaternion<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -326,7 +311,7 @@ namespace core
          return true;
       }
 
-      template <class T>
+      template <typename T>
       inline bool Quaternion<T>::operator!=(const Quaternion<T> &other) const
       {
          if (!core::Equals(x, other.x)) {
@@ -348,7 +333,7 @@ namespace core
          return false;
       }
 
-      template <class T>
+      template <typename T>
       Quaternion<T> &Quaternion<T>::RotationFromTo(const Vector3<T> &from, const Vector3<T> &to)
       {
          // Based on Stan Melax's article in Game Programming Gems
@@ -387,13 +372,13 @@ namespace core
 
       }
 
-      template <class T>
+      template <typename T>
       void Quaternion<T>::CreateMatrix(Matrix4<T> &dest, const Vector3<T> &center) const
       {
 
       }
 
-      template <class T>
+      template <typename T>
       void Quaternion<T>::FromAngleAxis(const float angle, const Vector3<T> &axis)
       {
          assert(axis.IsUnit());
@@ -408,7 +393,7 @@ namespace core
          z = fSin * axis[2];
       }
 
-      template <class T>
+      template <typename T>
       void Quaternion<T>::ToAngleAxis(float &outAngle, Vector3<T> &outAxis) const
       {
          // The quaternion representing the rotation is
@@ -434,7 +419,7 @@ namespace core
          }
       }
 
-      //template <class T>
+      //template <typename T>
       //void Quaternion::FromAxes( const Vector3<T> *axis )
       //{
       //   Matrix3 rot;
@@ -448,6 +433,41 @@ namespace core
       //
       //   FromRotationMatrix(kRot);
       //}
+
+      // outside Quaternion class scope
+
+      template <typename T>
+      inline Vector3<T> operator*(const Quaternion<T> &q, const Vector3<T> &v)
+      {
+         // nvidia SDK implementation
+
+         Vector3<T> uv, uuv;
+         Vector3<T> qvec(q.x, q.y, q.z);
+         uv = qvec.CrossProd(v);
+         uuv = qvec.CrossProd(uv);
+         uv *= (T(2) * q.w);
+         uuv *= T(2);
+
+         // cannot assign or return expressions made of Vector3<T> types directly
+         // possibly somehow due to inheritance from Point3<T>
+         Vector3<T> ret;
+         ret = v + uv + uuv;
+
+         return ret;
+      }
+
+      //template <typename T>
+      //inline Quaternion<T> operator*(const Vector3<T> &vec3) const
+      //{
+      //   // naive implementation
+
+      //   return Quaternion<T>(
+      //      (w * vec3.x) + (y * vec3.z) - (z * vec3.y),
+      //      (w * vec3.y) + (z * vec3.x) - (x * vec3.z),
+      //      (w * vec3.z) + (x * vec3.y) - (y * vec3.x),
+      //      -(x * vec3.x) - (y * vec3.y) - (z * vec3.z));
+      //}
+
 
 	} // namespace math
 

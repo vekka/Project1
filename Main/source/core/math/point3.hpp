@@ -116,21 +116,6 @@ namespace core
       }
 
       template <typename T>
-      inline T Point3<T>::operator[](const uint8 index) const
-      {
-         assert(index < 3);
-         return (&x)[index];
-      }
-
-      template <typename T>
-      inline T &Point3<T>::operator[](const uint8 index)
-      {
-         assert(index < 3);
-         return (&x)[index];
-      }
-
-
-      template <typename T>
       inline Point3<T> Point3<T>::operator-() const
       {
          return Point3<T>(-x, -y, -z);

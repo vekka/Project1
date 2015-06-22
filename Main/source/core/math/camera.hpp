@@ -112,8 +112,7 @@ namespace camera
       const float GetAspectRatio() const { return m_aspectRatio; }
       void CalcFrustumPlanes();
       bool IsPointInFrustum(const Vector3f &point);
-      bool IsSphereInFrustum(const Vector3f &center, const float
-         radius);
+      bool IsSphereInFrustum(const Vector3f &center, const float radius);
       bool IsBoxInFrustum(const Vector3f &min, const Vector3f &max);
 
       void GetFrustumPlanes(Vector4f planes[6]);

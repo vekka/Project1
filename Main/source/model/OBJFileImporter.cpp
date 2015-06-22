@@ -439,7 +439,7 @@ namespace objfileimporter
                //   throw DeadlyImportError("OBJ: m_texture coordinate index out of range");
 
                const Vector3f &coord3d = pModel->m_textureCoord[tex];
-               pMesh->m_pTextureCoords[0][newIndex] = Vector3f(coord3d[0], coord3d[1], coord3d[2]);
+               pMesh->m_pTextureCoords[0][newIndex] = Vector3f(coord3d.x, coord3d.y, coord3d.z);
             }
 
             assert(pMesh->m_numVertices > newIndex);

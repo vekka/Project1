@@ -63,6 +63,11 @@ namespace core
       }
 
       template <typename T>
+      inline Vector2<T>::Vector2(T scaler) : Point2<T>(scaler)
+      {
+      }
+
+      template <typename T>
       inline T Vector2<T>::operator*(const Vector2<T> &other) const
       {
          return x * other.x + y * other.y;

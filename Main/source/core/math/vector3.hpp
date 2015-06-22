@@ -3,13 +3,16 @@
 
 #include "point3.hpp"
 
+// cannot assign or return expressions made of Vector3<T> types and its operators directly
+// possibly somehow due to inheritance from Point3<T>
+
 namespace core
 {
 
    namespace math
    {
       template <typename T>
-      class Vector3 : public Point3 < T >
+      class Vector3 : public Point3 <T>
       {
       public:
          using Point3<T>::operator=;
@@ -34,6 +37,7 @@ namespace core
          T Length() const;
          T Normalize();
          bool IsUnit();
+         void Rotate(float angle, const Vector3<T> &axis);
       };
 
       typedef Vector3<int16> Vector3s;
@@ -54,21 +58,18 @@ namespace core
       template <typename T> const Vector3<T> Vector3<T>::UNIT_SCALE(1, 1, 1);
 
       template <typename T>
-      inline Vector3<T>::Vector3()
+      inline Vector3<T>::Vector3() : Point3<T>()
       {
       }
 
       template <typename T>
-      inline Vector3<T>::Vector3(const T x, const T y, const T z)  : Point3<T>(x, y, z)
+      inline Vector3<T>::Vector3(const T x, const T y, const T z) : Point3<T>(x, y, z)
       {
       }
       
       template <typename T>
-      inline Vector3<T>::Vector3(const T scaler)
-      {
-         this->x = scaler;
-         this->y = scaler;
-         this->z = scaler;        
+      inline Vector3<T>::Vector3(const T scaler) : Point3<T>(scaler)
+      {    
       }
 
       template <typename T>
@@ -125,6 +126,30 @@ namespace core
       bool Vector3<T>::IsUnit()
       {
          return core::Equals((T)(x * x + y * y + z * z), (T)1);
+      }
+
+      // angle in radians
+      template <typename T>
+      void Vector3<T>::Rotate(float angle, const Vector3<T> &axis)
+      {
+         const T sinHalfAngle = sinf(angle / 2);
+         const T cosHalfAngle = cosf(angle / 2);
+
+         const T rx = axis.x * sinHalfAngle;
+         const T ry = axis.y * sinHalfAngle;
+         const T rz = axis.z * sinHalfAngle;
+         const T rw = cosHalfAngle;
+
+         Quaternion<T> rotationQ(rx, ry, rz, rw);
+
+         Quaternion<T> conjugateQ = rotationQ.Conjugate();
+
+         //Quaternion_f vectorAsQuat(vector.x, vector.y, vector.z, 0);
+         Vector3<T> w = rotationQ * (*this); // *conjugateQ;
+
+         x = w.x;
+         y = w.y;
+         z = w.z;
       }
 
    } // namespace math

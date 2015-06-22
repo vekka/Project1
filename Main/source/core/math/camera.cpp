@@ -144,15 +144,13 @@ namespace camera
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
-      Vector3f view(1.0f, 0.0f, 0.0f);
-      Rotate(view, m_angleH, vAxis);
+      Vector3f view(-1.0f, 0.0f, 0.0f);
+      view.Rotate(m_angleH, vAxis);
       view.Normalize();
-
 
       Vector3f hAxis = vAxis.CrossProd(view);
       hAxis.Normalize();
-      Rotate(view, m_angleV, hAxis);
-
+      view.Rotate(m_angleV, hAxis);
 
       m_target = view;
       m_target.Normalize();
@@ -174,7 +172,7 @@ namespace camera
       //m_up = up;
 
       m_isDirty = false;
-   }//UPDATE
+   }
 
    bool FreeCamera::OnKeyboard(int32 key, float stepScale)
    {
@@ -232,31 +230,6 @@ namespace camera
       return ret;
    }
 
-    // angle in radians
-    void FreeCamera::Rotate( Vector3f &vector, float angle, Vector3f axis )
-     {
-        const float sinHalfAngle = sinf(angle / 2);
-        const float cosHalfAngle = cosf(angle / 2);
-
-        const float rx = axis.x * sinHalfAngle;
-        const float ry = axis.y * sinHalfAngle;
-        const float rz = axis.z * sinHalfAngle;
-        const float rw = cosHalfAngle;
-
-        Quaternion_f RotationQ(rx, ry, rz, rw);
-
-        Quaternion_f ConjugateQ = RotationQ.Conjugate();
-
-        //I am uncertain if it is possible to convert a vector to quaternion like this...
-        Quaternion_f vectorAsQuat(vector.x, vector.y, vector.z, 0);
-        Quaternion_f w = RotationQ * vectorAsQuat *ConjugateQ;
-
-        vector.x = w.x;
-        vector.y = w.y;
-        vector.z = w.z;
-        m_isDirty = true;
-    }
-
     void FreeCamera::OnMouse(int32 x, int32 y)
     {
        const int32 deltaX = x - m_mousePos.x;
@@ -265,8 +238,10 @@ namespace camera
        m_mousePos.x = x;
        m_mousePos.y = y;
 
-       m_angleH += (float)deltaX / 200.0f;
-       m_angleV += (float)deltaY / 200.0f;
+       m_angleH += (float)deltaX / 500.0f;
+       m_angleV += (float)deltaY / 500.0f;
+
+       std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
 
        if (deltaX == 0) {
           if (x <= margin) {
@@ -295,7 +270,7 @@ namespace camera
           m_onUpperEdge = false;
           m_onLowerEdge = false;
        }
-
+       
           Update();
     }
 
