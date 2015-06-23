@@ -142,7 +142,7 @@ namespace camera
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
-      std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
+      //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
 
 
       Vector3f view(1.0f, 0.0f, 0.0f);
@@ -150,8 +150,8 @@ namespace camera
       view.Normalize();
 
       Vector3f hAxis = vAxis.CrossProd(view);
-      //hAxis.Normalize();
-      //view.Rotate(m_angleV, hAxis);
+      hAxis.Normalize();
+      view.Rotate(m_angleV, hAxis);
 
       m_target = view;
       m_target.Normalize();
@@ -169,10 +169,7 @@ namespace camera
 
       ////recalculate up; up = side X forward
       //up = right.CrossProd(forward);
-
       //m_up = up;
-
-      m_isDirty = false;
    }
 
    bool FreeCamera::OnKeyboard(int32 key, float stepScale)

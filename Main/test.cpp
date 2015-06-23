@@ -114,7 +114,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    pipeline.SetWorldPos(0.0f, 3.0f, -10.0f);
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
    
-
    // light stuff, not in use yet
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
@@ -122,7 +121,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), oglshader::TYPE_FMAT4, 1, true);
    shader.AddUniformData("M", &pipeline.GetWorldTrans(), oglshader::TYPE_FMAT4, 1, true);
-   shader.AddUniformData("V", &pipeline.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp()), oglshader::TYPE_FMAT4, 1, true);
+   shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);
+
    shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
 
@@ -131,9 +131,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    oglbuffer::generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
  
-   //win.customCallback = camera.OnMouse(camera.GetPosition().x, camera.GetPosition().y);
-  
-   // Process the messages
    int32 numIndicesInScene = 0;
    for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
@@ -173,9 +170,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       Point2i pos;
       win.mouse.GetPosition(pos.x, pos.y);
 
+      std::cout << "X: " << pos.x << "      Y: " << pos.y << std::endl;
       //camera.OnRender();
       camera.OnMouse(pos.x, pos.y);
-      shader.AddUniformData("V", &pipeline.GetViewTrans(camera.GetPosition(), camera.GetTarget(), camera.GetUp()), oglshader::TYPE_FMAT4, 1, true);
+
+      pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
+      shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);
       
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();   

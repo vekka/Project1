@@ -209,7 +209,7 @@ namespace win32window
             case WM_MOUSEMOVE:
                //mouse.SetPosition();
                xPos = LOWORD(lParam);
-               yPos = LOWORD(lParam);
+               yPos = HIWORD(lParam);
 
                if ( customCallback != NULL )
                   customCallback(xPos, yPos);
