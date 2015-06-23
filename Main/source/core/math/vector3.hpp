@@ -144,8 +144,13 @@ namespace core
 
          Quaternion<T> conjugateQ = rotationQ.Conjugate();
 
-         //Quaternion_f vectorAsQuat(vector.x, vector.y, vector.z, 0);
-         Vector3<T> w = rotationQ * (*this); // *conjugateQ;
+         Quaternion<T> vectorAsQuat((*this).x, (*this).y, (*this).z, 0);
+         
+         Quaternion<T> w;
+         
+         w = rotationQ * vectorAsQuat * conjugateQ;
+         
+         //w = w * conjugateQ;
 
          x = w.x;
          y = w.y;

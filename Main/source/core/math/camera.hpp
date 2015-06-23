@@ -145,8 +145,6 @@ namespace camera
          m_windowHeight = windowHeight;
          m_position = pos;
 
-         m_angleH = 0.0f;
-         m_angleV = 0.0f;
 
          m_onUpperEdge = false;
          m_onLowerEdge = false;
@@ -155,10 +153,6 @@ namespace camera
 
          m_target = target;
          m_target.Normalize();
-
-         m_mousePos.x = windowWidth/2;
-         m_mousePos.y = windowHeight/2;
-
          m_up = up;
          m_up.Normalize();
 

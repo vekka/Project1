@@ -100,36 +100,34 @@ namespace camera
 
    void FreeCamera::Init()
    {
-      Vector3f Htarget(m_target.x, 0.0f, m_target.z);
-      Htarget.Normalize();
+      Vector3f hTarget(m_target.x, 0.0f, m_target.z);
+      hTarget.Normalize();
 
-      Vector3f HTarget(m_target.x, 0.0, m_target.z);
-      HTarget.Normalize();
 
-      if (HTarget.z >= 0.0f)
+      if (hTarget.z >= 0.0f)
       {
-         if (HTarget.x >= 0.0f)
+         if (hTarget.x >= 0.0f)
          {
-            m_angleH = 360.0f - core::math::RadToDeg(asin(HTarget.z));
+            m_angleH = 360.0f - core::math::RadToDeg(asin(hTarget.z));
          }
          else
          {
-            m_angleH = 180.0f + core::math::RadToDeg(asin(HTarget.z));
+            m_angleH = 180.0f + core::math::RadToDeg(asin(hTarget.z));
          }
       }
       else
       {
-         if (HTarget.x >= 0.0f)
+         if (hTarget.x >= 0.0f)
          {
-            m_angleH = core::math::RadToDeg(asin(-HTarget.z));
+            m_angleH = core::math::RadToDeg(asin(-hTarget.z));
          }
          else
          {
-            m_angleH = 90.0f + core::math::RadToDeg(asin(-HTarget.z));
+            m_angleH = 90.0f + core::math::RadToDeg(asin(-hTarget.z));
          }
       }
 
-      m_angleV = -core::math::RadToDeg(asin(m_target.y));
+      m_angleV = -(core::math::RadToDeg(asin(m_target.y)));
 
       m_onUpperEdge = false;
       m_onLowerEdge = false;
@@ -144,13 +142,16 @@ namespace camera
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
-      Vector3f view(-1.0f, 0.0f, 0.0f);
+      std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
+
+
+      Vector3f view(1.0f, 0.0f, 0.0f);
       view.Rotate(m_angleH, vAxis);
       view.Normalize();
 
       Vector3f hAxis = vAxis.CrossProd(view);
-      hAxis.Normalize();
-      view.Rotate(m_angleV, hAxis);
+      //hAxis.Normalize();
+      //view.Rotate(m_angleV, hAxis);
 
       m_target = view;
       m_target.Normalize();
@@ -241,7 +242,7 @@ namespace camera
        m_angleH += (float)deltaX / 500.0f;
        m_angleV += (float)deltaY / 500.0f;
 
-       std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
+       //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
 
        if (deltaX == 0) {
           if (x <= margin) {
@@ -276,7 +277,7 @@ namespace camera
 
     void FreeCamera::OnRender()
     {
-       bool ShouldUpdate = false;
+       bool m_isDirty = false;
 
        if (m_onLeftEdge) {
           m_angleH -= edge_step;
