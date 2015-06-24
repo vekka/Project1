@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 const int32 camera::FreeCamera::margin = 10;
 const float camera::FreeCamera::edge_step = 0.5f;
+
 namespace camera
 {
    //void Matrix4f::InitPersProjTransform(float FOV, float Width, float Height, float zNear, float zFar)
@@ -40,8 +41,8 @@ namespace camera
 
    void AbstractCamera::SetupProjection(const float fovy, const float aspectRatio)
    {
-      this->m_aspectRatio = aspectRatio;
-      this->m_fov = fovy;
+      m_aspectRatio = aspectRatio;
+      m_fov = fovy;
 
       m_projMatrix = Matrix4f::IDENTITY;
       float invWidth = 1 / (m_nearRight - m_nearLeft);
@@ -68,8 +69,7 @@ namespace camera
          //m_projMatrix(2, 3) = -2.0f * (m_farDist * m_nearDist) * invNearFarDist;
          //m_projMatrix(3, 2) = -1.0f;
          //m_projMatrix(3, 3) = 0.0f;
-
-
+         
          m_projMatrix = Matrix4f::ZERO;
 
          m_projMatrix(0,0) = 1.0f / (tanThetaY * m_aspectRatio);
@@ -94,7 +94,6 @@ namespace camera
          m_projMatrix(1, 3) = -(m_nearTop + m_nearBottom) * invHeight;
          m_projMatrix(2, 2) = -2.0f * invNearFarDist;
          m_projMatrix(2, 3) = -(m_farDist + m_nearDist) * invNearFarDist;
-        
       }
    }
 
@@ -102,7 +101,6 @@ namespace camera
    {
       Vector3f hTarget(m_target.x, 0.0f, m_target.z);
       hTarget.Normalize();
-
 
       if (hTarget.z >= 0.0f)
       {
@@ -135,7 +133,6 @@ namespace camera
       m_onRightEdge = false;
       m_mousePos.x = m_windowWidth / 2;
       m_mousePos.y = m_windowHeight / 2;
-
    }
 
    void FreeCamera::Update()
@@ -143,7 +140,6 @@ namespace camera
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
       //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
-
 
       Vector3f view(1.0f, 0.0f, 0.0f);
       view.Rotate(m_angleH, vAxis);
@@ -187,6 +183,7 @@ namespace camera
             m_isDirty = true;
          }
          break;
+         
       case win32keyboard::VKEY_S:
          {
             Vector3f temp = m_target;
@@ -200,7 +197,6 @@ namespace camera
 
       case win32keyboard::VKEY_A:
          {
-
             Vector3f left = m_target.CrossProd(m_up);
            
             left.Normalize();
@@ -214,7 +210,6 @@ namespace camera
 
       case win32keyboard::VKEY_D:
          {
-    
             Vector3f right = m_up.CrossProd(m_target);
             right.Normalize();
             right *= stepScale;
@@ -223,7 +218,7 @@ namespace camera
             m_isDirty = true;
          }
          break;
-      } //SWITCH
+      }
       
       return ret;
    }
@@ -241,30 +236,38 @@ namespace camera
 
        //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
 
-       if (deltaX == 0) {
-          if (x <= margin) {
+       if (deltaX == 0)
+       {
+          if (x <= margin)
+          {
              //    m_AngleH -= 1.0f;
              m_onLeftEdge = true;
           }
-          else if (x >= (m_windowWidth - margin)) {
+          else if (x >= (m_windowWidth - margin))
+          {
              //    m_AngleH += 1.0f;
              m_onRightEdge = true;
           }
        }
-       else {
+       else
+       {
           m_onLeftEdge = false;
           m_onRightEdge = false;
        }
 
-       if (deltaY == 0) {
-          if (y <= margin) {
+       if (deltaY == 0)
+       {
+          if (y <= margin)
+          {
              m_onUpperEdge = true;
           }
-          else if (y >= (m_windowHeight - margin)) {
+          else if (y >= (m_windowHeight - margin))
+          {
              m_onLowerEdge = true;
           }
        }
-       else {
+       else
+       {
           m_onUpperEdge = false;
           m_onLowerEdge = false;
        }
@@ -276,29 +279,36 @@ namespace camera
     {
        bool m_isDirty = false;
 
-       if (m_onLeftEdge) {
+       if (m_onLeftEdge)
+       {
           m_angleH -= edge_step;
           m_isDirty = true;
        }
-       else if (m_onRightEdge) {
+       else if (m_onRightEdge)
+       {
           m_angleH += edge_step;
           m_isDirty = true;
        }
 
-       if (m_onUpperEdge) {
-          if (m_angleV > -90.0f) {
+       if (m_onUpperEdge)
+       {
+          if (m_angleV > -90.0f)
+          {
              m_angleV -= edge_step;
              m_isDirty = true;
           }
        }
-       else if (m_onLowerEdge) {
-          if (m_angleV < 90.0f) {
+       else if (m_onLowerEdge)
+       {
+          if (m_angleV < 90.0f)
+          {
              m_angleV += edge_step;
              m_isDirty = true;
           }
        }
 
-       if (m_isDirty) {
+       if (m_isDirty)
+       {
           Update();
        }
     }
