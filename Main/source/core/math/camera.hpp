@@ -80,18 +80,19 @@ namespace camera
 
       bool IsDirty() { return m_isDirty; }
       void SetupProjection(const float fovy, const float aspectRatio);
+      
       void InitProjection(eProjectionType projectionType, float nearLeft, float nearRight,
          float nearTop, float nearBottom, float nearDist, float farDist)
       {
          m_orientation.Set(0.0f, 0.0f, 0.0f, 0.0f);
          m_isDirty = true;
-         this->m_projectionType = projectionType;
-         this->m_nearLeft = nearLeft;
-         this->m_nearRight = nearRight;
-         this->m_nearTop = nearTop;
-         this->m_nearBottom = nearBottom;
-         this->m_nearDist = nearDist;
-         this->m_farDist = farDist;
+         m_projectionType = projectionType;
+         m_nearLeft = nearLeft;
+         m_nearRight = nearRight;
+         m_nearTop = nearTop;
+         m_nearBottom = nearBottom;
+         m_nearDist = nearDist;
+         m_farDist = farDist;
       }
 
       virtual void Update() = 0;
@@ -144,8 +145,7 @@ namespace camera
          m_windowWidth = windowWidth;
          m_windowHeight = windowHeight;
          m_position = pos;
-
-
+         
          m_onUpperEdge = false;
          m_onLowerEdge = false;
          m_onLeftEdge = false;
