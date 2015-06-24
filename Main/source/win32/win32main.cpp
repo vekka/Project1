@@ -353,6 +353,7 @@ namespace win32window
 
    void Win32Window::Win32Mouse::SetVisible(const bool visible)
    {
+      ShowCursor(visible);
    }
 
    bool Win32Window::Win32Mouse::IsVisible() const

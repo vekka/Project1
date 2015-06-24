@@ -136,6 +136,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
 
    // This is temporary, yes
+   win.mouse.SetVisible(false);
    win.mouse.SetPosition(800/2, 600/2);
    while (1)
    {
