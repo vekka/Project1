@@ -136,6 +136,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
 
    // This is temporary, yes
+
+   //for confining mouse within a rectangular area of window see:
+   // https://msdn.microsoft.com/en-us/library/windows/desktop/ms648380(v=vs.85).aspx#_win32_Confining_a_Cursor
+
    win.mouse.SetVisible(false);
    win.mouse.SetPosition(800/2, 600/2);
    while (1)
