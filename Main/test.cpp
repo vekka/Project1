@@ -76,6 +76,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    HWND hWnd = win.GetWindowHandle();
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
+   int32 winHeight, winWidth;
+   win.GetDimension(winWidth, winHeight);
+
    OGLDriver oglContext(hWnd, 800, 600, false);
    Vector4f clearColor(-1.0f, 0.0f, 0.0f, -1.0f);
    /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
@@ -104,12 +107,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    Vector3f cameraPosition(1.0f, 2.0f, 3.0f);
    Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
    Vector3f cameraUp(0.0f, 1.0f, 0.0f);
-   FreeCamera camera(800, 600,cameraPosition, cameraTarget,cameraUp );
+
+
+   FreeCamera camera( winWidth, winHeight,cameraPosition, cameraTarget,cameraUp );
    camera.InitProjection(FRUSTUM_PERSPECTIVE, -1, 1, 1, -1, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
 
    Pipeline pipeline;
-
    pipeline.Scale(1, 1, 1);
    pipeline.SetWorldPos(0.0f, 3.0f, -10.0f);
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
@@ -135,12 +139,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    for (uint32 i = 0; i < sc->m_numMeshes; i++)
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
 
-   // This is temporary, yes
-
-   //for confining mouse within a rectangular area of window see:
-   // https://msdn.microsoft.com/en-us/library/windows/desktop/ms648380(v=vs.85).aspx#_win32_Confining_a_Cursor
-
-   win.mouse.SetVisible(false);
+   win.mouse.SetVisible(true);
    win.mouse.SetPosition(800/2, 600/2);
    while (1)
    {
@@ -159,7 +158,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_ESCAPE))
          msg.message = WM_QUIT;
      
-      glBindVertexArray(vaoID);
+      glBindVertexArray(vaoID);    
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID);
       shader.Use();
 
@@ -172,12 +171,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
          camera.OnKeyboard(win32keyboard::VKEY_D, 0.1f);
 
-      Point2i pos;
-      win.mouse.GetPosition(pos.x, pos.y);
-
-      std::cout << "X: " << pos.x << "      Y: " << pos.y << std::endl;
-      //camera.OnRender();
-      camera.OnMouse(pos.x, pos.y);
+      Point2i posClient;
+      win.mouse.GetClientPosition(posClient.x, posClient.y);
+      camera.OnMouse( posClient.x, posClient.y);
 
       pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
       shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);

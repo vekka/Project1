@@ -221,8 +221,11 @@ namespace win32window
          bool IsVisible() const;
          void SetPosition(int32 x, int32 y);
          void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
+         void WarpTo(int32 newX, int32 newY);
 
-         void GetPosition(int32 &xPos, int32 &yPos) const;
+         void GetClientPosition(int32 &xPos, int32 &yPos) const;
+         void GetScreenPosition(int32 &xPos, int32 &yPos) const;
+
          void GetRelativePosition(int32 &xPos, int32 &yPos) const;
          void OnResize(const int32 &sizeX, const int32 &sizeY);
          void UpdateBorderSize(const bool isFullScreen, const bool resizable);
@@ -280,6 +283,8 @@ namespace win32window
       bool SetCaption(const std::string &);
       void GetCaption(std::string &) const;
       void SetPosition(const uint32 newXPos, const uint32 newYPos);
+
+
       void GetPosition(uint32 &) const;
 
       //void GetMousePos( int32 &xPos, int32 &yPos ) { return mousePos; }
@@ -294,7 +299,7 @@ namespace win32window
       bool Resize(const int32 width, const int32 height);
       bool GetResizeFlag() const;
 
-      void GetDimension(uint32 &width, uint32 &height) const;
+      void GetDimension(int32 &width, int32 &height) const;
 
       static void WmMouseMove(HWND hwnd, WPARAM wp, LPARAM lp);
 

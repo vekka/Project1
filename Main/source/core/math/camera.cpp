@@ -21,9 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // I added this notice, just in case. Need various sources to know what I am doing...
 #include "win32/win32main.hpp"
-
+using win32window::Win32Window;
 const int32 camera::FreeCamera::margin = 10;
-const float camera::FreeCamera::edge_step = 0.5f;
 
 namespace camera
 {
@@ -223,7 +222,8 @@ namespace camera
       return ret;
    }
 
-    void FreeCamera::OnMouse(int32 x, int32 y)
+   // Only temporary, yes: window handle 
+   void FreeCamera::OnMouse( int32 x, int32 y)
     {
        const int32 deltaX = x - m_mousePos.x;
        const int32 deltaY = y - m_mousePos.y;
@@ -231,10 +231,18 @@ namespace camera
        m_mousePos.x = x;
        m_mousePos.y = y;
 
-       m_angleH += (float)deltaX / 500.0f;
-       m_angleV += (float)deltaY / 500.0f;
+       m_angleH += (float)deltaX / 200.0f;
+       m_angleV += (float)deltaY / 200.0f;
+
+       //if (m_mousePos.x < 10)
+       //{
+       //   m_mousePos.x = 400;
+       //   win.mouse.WarpTo(400, m_mousePos.y);
+       //}
+
 
        //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
+
 
        if (deltaX == 0)
        {
@@ -281,12 +289,15 @@ namespace camera
 
        if (m_onLeftEdge)
        {
-          m_angleH -= edge_step;
+          m_angleH -= 0.1f;
+          std::cout << "hit!" << std::endl;
           m_isDirty = true;
        }
        else if (m_onRightEdge)
        {
-          m_angleH += edge_step;
+          m_angleH += 0.1f;
+          std::cout << "hit!" << std::endl;
+
           m_isDirty = true;
        }
 
@@ -294,7 +305,9 @@ namespace camera
        {
           if (m_angleV > -90.0f)
           {
-             m_angleV -= edge_step;
+             m_angleV -= 0.1f;
+             std::cout << "hit!" << std::endl;
+
              m_isDirty = true;
           }
        }
@@ -302,7 +315,9 @@ namespace camera
        {
           if (m_angleV < 90.0f)
           {
-             m_angleV += edge_step;
+             m_angleV += 0.1f;
+             std::cout << "hit!" << std::endl;
+
              m_isDirty = true;
           }
        }
@@ -311,6 +326,8 @@ namespace camera
        {
           Update();
        }
-    }
 
+       std::cout << std::endl << std::endl;
+
+    }
 }

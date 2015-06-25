@@ -248,7 +248,7 @@ namespace win32window
       return ShowWindow(hWnd, SW_HIDE) != 0;
    }
 
-   void Win32Window::GetDimension(uint32 &width, uint32 &height) const
+   void Win32Window::GetDimension(int32 &width, int32 &height) const
    {
       width = this->width;
       height = this->height;
@@ -355,6 +355,42 @@ namespace win32window
    {
       ShowCursor(visible);
    }
+   void Win32Window::Win32Mouse::WarpTo( int32 newX, int32 newY )
+   {
+      POINT pt;
+    
+      pt.x = newX;
+      pt.y = newY;
+
+      // converts client area coordinates to screen coordinates... SetCursorPos needs screen coord.
+      ClientToScreen(hWnd, &pt);
+      SetCursorPos(pt.x, pt.y);
+
+      //RECT rcClip;           // new area for ClipCursor
+      //RECT rcOldClip;        // previous area for ClipCursor
+
+      //// Record the area in which the cursor can move. 
+
+      //GetClipCursor(&rcOldClip);
+
+
+      //// Get the dimensions of the application's window. 
+
+      //GetWindowRect(hwnd, &rcClip);
+      //
+      //// Confine the cursor to the application's window. 
+
+      //ClipCursor(&rcClip);
+
+      //// 
+      //// Process input from the confined cursor. 
+      //// 
+
+      //// Restore the cursor to its previous area. 
+
+      //ClipCursor(&rcOldClip);
+
+   }
 
    bool Win32Window::Win32Mouse::IsVisible() const
    {
@@ -375,10 +411,19 @@ namespace win32window
    {
    }
 
-   void Win32Window::Win32Mouse::GetPosition(int32 &xPos, int32 &yPos) const
+   void Win32Window::Win32Mouse::GetClientPosition(int32 &xPos, int32 &yPos) const
    {
       xPos = this->xPos;
       yPos = this->yPos;
+   }
+
+   void Win32Window::Win32Mouse::GetScreenPosition(int32 &xPos, int32 &yPos) const
+   {
+      POINT point;
+      GetCursorPos(&point);
+      ClientToScreen(hWnd, &point);
+      xPos = point.x;
+      yPos = point.y;
    }
 
    void Win32Window::Win32Mouse::GetRelativePosition(int32 &xPos, int32 &yPos) const
