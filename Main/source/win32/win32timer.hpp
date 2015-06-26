@@ -3,7 +3,7 @@
 
 #include "core/BasicTypes.hpp"
 
-namespace timer
+namespace win32timer
 {
    
 // high-resolution timer (64-bit)
@@ -39,6 +39,6 @@ public:
     void Reset();
 };
 
-} // namespace timer
+} // namespace win32timer
 
 #endif
