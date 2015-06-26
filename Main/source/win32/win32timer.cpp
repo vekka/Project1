@@ -4,7 +4,25 @@
 
 namespace win32timer
 {
+   bool Win32Timer::m_initialized = false;
    
+   Win32Timer::Win32Timer()
+   {
+   }
+   
+   const int32 Win32Timer::GetMilliSecs()
+   {
+      int32 currentTime;
+      
+      if (!m_initialized)
+      {
+		   m_timeBase = GetTickCount();
+		   m_initialized = true;
+	   }
+	   currentTime = GetTickCount() - m_timeBase;
+	   
+	   return currentTime;
+   }
 } // namespace win32timer
 
 //Win32Timer::Win32Timer()
