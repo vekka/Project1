@@ -173,7 +173,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
       Point2i posClient;
       win.mouse.GetClientPosition(posClient.x, posClient.y);
-      camera.OnMouse( posClient.x, posClient.y);
+      camera.OnMouse(  posClient.x, posClient.y);
 
       pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
       shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);
@@ -187,9 +187,4 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    importer.FreeScene(sc);
    shader.DeleteProgram();
    return msg.wParam;
-}
-
-static void customCallback(int32 x, int32 y)
-{
-   
 }

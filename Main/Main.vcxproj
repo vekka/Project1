@@ -87,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_USING_V110_SDK71_;</PreprocessorDefinitions>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -240,6 +241,7 @@
     <ClInclude Include="source\win32\win32timer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="source\shader\glsl\fragment\shader.frag" />
     <None Include="source\shader\glsl\fragment\triangle.frag" />
     <None Include="source\shader\glsl\vertex\shader.vert" />

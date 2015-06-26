@@ -134,7 +134,8 @@ namespace camera
      bool m_onLowerEdge;
      bool m_onLeftEdge;
      bool m_onRightEdge;
-     const static int32 margin;
+     int32 m_margin;
+
    public:       
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
          const Vector3f &target, const Vector3f &up)
@@ -144,6 +145,7 @@ namespace camera
          m_windowHeight = windowHeight;
          m_position = pos;
          
+         m_margin = 10;
          m_onUpperEdge = false;
          m_onLowerEdge = false;
          m_onLeftEdge = false;
@@ -168,8 +170,7 @@ namespace camera
       }
 
       bool OnKeyboard(int32 k, float stepScale);
-      void Rotate(Vector3f &vector, float angle, Vector3f axis);
-      void OnMouse( int32 x, int32 y);
+      void OnMouse(  int32 x, int32 y);
       void OnRender();
    };
 

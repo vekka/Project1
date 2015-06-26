@@ -18,11 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-// I added this notice, just in case. Need various sources to know what I am doing...
 #include "win32/win32main.hpp"
 using win32window::Win32Window;
-const int32 camera::FreeCamera::margin = 10;
 
 namespace camera
 {
@@ -222,9 +219,16 @@ namespace camera
       return ret;
    }
 
-   // Only temporary, yes: window handle 
    void FreeCamera::OnMouse( int32 x, int32 y)
-    {
+   {
+ 
+
+       POINT pt;
+       pt.x = m_windowWidth/2;
+       pt.y = m_windowHeight/2;
+ /*      ClientToScreen(hWnd, &pt);*/
+       SetCursorPos(pt.x, pt.y);
+
        const int32 deltaX = x - m_mousePos.x;
        const int32 deltaY = y - m_mousePos.y;
 
@@ -233,6 +237,7 @@ namespace camera
 
        m_angleH += (float)deltaX / 200.0f;
        m_angleV += (float)deltaY / 200.0f;
+
 
        //if (m_mousePos.x < 10)
        //{
@@ -246,12 +251,12 @@ namespace camera
 
        if (deltaX == 0)
        {
-          if (x <= margin)
+          if (x <= m_margin)
           {
              //    m_AngleH -= 1.0f;
              m_onLeftEdge = true;
           }
-          else if (x >= (m_windowWidth - margin))
+          else if (x >= (m_windowWidth - m_margin))
           {
              //    m_AngleH += 1.0f;
              m_onRightEdge = true;
@@ -265,11 +270,11 @@ namespace camera
 
        if (deltaY == 0)
        {
-          if (y <= margin)
+          if (y <= m_margin)
           {
              m_onUpperEdge = true;
           }
-          else if (y >= (m_windowHeight - margin))
+          else if (y >= (m_windowHeight - m_margin))
           {
              m_onLowerEdge = true;
           }

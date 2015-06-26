@@ -406,5 +406,6 @@
     <None Include="source\shader\glsl\fragment\triangle.frag">
       <Filter>Source Files\ShaderLib\ShaderSources\FragmentShaders</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
