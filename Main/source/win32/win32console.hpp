@@ -46,7 +46,7 @@ namespace win32console
       CHAR_INFO *m_pScreenBuffer;
       CONSOLE_SCREEN_BUFFER_INFO m_screenBufferInfo;
    public:
-      Win32Console::Win32Console() { }
+      Win32Console::Win32Console() : m_width(80), m_height(25) { }
       // width and height and buffer parameters are for the number of the characters
       Win32Console::Win32Console(
          const uint32 width, const uint32 height,
