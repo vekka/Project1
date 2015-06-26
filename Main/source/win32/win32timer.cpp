@@ -2,6 +2,11 @@
 
 #include <Windows.h>
 
+namespace win32timer
+{
+   
+} // namespace win32timer
+
 //Win32Timer::Win32Timer()
 //{
 //   perfCountRemainderCurrent = 0.0;
