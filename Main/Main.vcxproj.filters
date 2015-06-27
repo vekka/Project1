@@ -183,6 +183,12 @@
     <ClCompile Include="source\core\assert.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="source\winmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\win32\win32io.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
@@ -391,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="source\openal\OALDriver.hpp">
       <Filter>Source Files\SoundLib</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32io.hpp">
+      <Filter>Source Files\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

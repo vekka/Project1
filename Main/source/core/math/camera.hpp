@@ -1,10 +1,12 @@
 #include "vector3.hpp"
-#include "point2.hpp"
+#include "vector2.hpp"
 #include "matrix4.hpp"
 #include "quaternion.hpp"
 using core::math::Point2i;
 using core::math::Vector3f;
+using core::math::Vector3i;
 using core::math::Vector4f;
+using core::math::Vector2i;
 using core::math::Matrix4f;
 using core::math::Quaternion_f;
 
@@ -135,6 +137,8 @@ namespace camera
      bool m_onLeftEdge;
      bool m_onRightEdge;
      int32 m_margin;
+     Vector2i m_mouseDirection;
+
 
    public:       
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
@@ -170,7 +174,7 @@ namespace camera
       }
 
       bool OnKeyboard(int32 k, float stepScale);
-      void OnMouse(  int32 x, int32 y);
+      void OnMouse(int32 x, int32 y);
       void OnRender();
    };
 

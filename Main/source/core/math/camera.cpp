@@ -137,19 +137,37 @@ namespace camera
 
       //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
 
-      Vector3f view(1.0f, 0.0f, 0.0f);
-      view.Rotate(m_angleH, vAxis);
-      view.Normalize();
+      // get the axis to rotate around the x-axis.
+      Vector3f temp;
+      temp = m_target - m_position;
 
-      Vector3f hAxis = vAxis.CrossProd(view);
-      hAxis.Normalize();
-      view.Rotate(m_angleV, hAxis);
+      Vector3f axis = temp.CrossProd( m_up);
+      // To be able to use the quaternion conjugate, the axis to
+      // rotate around must be normalized.
+      axis.Normalize();
 
-      m_target = view;
-      m_target.Normalize();
+      // Rotate around the y axis
+      //RotateCamera(MouseDirection.y, Axis.x, Axis.y, Axis.z);
+      // Rotate around the x axis
+       
+      std::cout << m_mouseDirection.x << std::endl;
+      m_target.Rotate(m_mouseDirection.x, vAxis);
 
-      m_up = m_target.CrossProd(hAxis);
-      m_up.Normalize();
+
+
+      //Vector3f view(1.0f, 0.0f, 0.0f);
+      //view.Rotate(m_mouseDirection.x, vAxis);
+      //view.Normalize();
+
+      //Vector3f hAxis = vAxis.CrossProd(view);
+      //hAxis.Normalize();
+      ////view.Rotate(m_angleV, hAxis)*/;
+
+      //m_target = view;
+      //m_target.Normalize();
+
+      //m_up = m_target.CrossProd(hAxis);
+      //m_up.Normalize();
       //Vector3f forward, right, up;
       //      
       //forward = m_target - m_position;
@@ -219,37 +237,29 @@ namespace camera
       return ret;
    }
 
-   void FreeCamera::OnMouse( int32 x, int32 y)
+   void FreeCamera::OnMouse(  int32 x, int32 y)
    {
- 
+         
+       int32 middleOfScreenX = m_windowWidth / 2;
+       int32 middleOfScreenY = m_windowHeight / 2;
+       //ClientToScreen( Win32Window::hWnd, &pt);
+      
+       m_mouseDirection = Vector2i(middleOfScreenX - x, middleOfScreenY - y);
 
-       POINT pt;
-       pt.x = m_windowWidth/2;
-       pt.y = m_windowHeight/2;
- /*      ClientToScreen(hWnd, &pt);*/
-       SetCursorPos(pt.x, pt.y);
 
-       const int32 deltaX = x - m_mousePos.x;
-       const int32 deltaY = y - m_mousePos.y;
-
+       //SetCursorPos(middleOfScreen.x, middleOfScreen.y);
        m_mousePos.x = x;
        m_mousePos.y = y;
+       if ((x == middleOfScreenX) && (y == middleOfScreenY))
+          return;
 
-       m_angleH += (float)deltaX / 200.0f;
-       m_angleV += (float)deltaY / 200.0f;
+  /*     m_angleH += (float)deltaX / 200.0f;
+       m_angleV += (float)deltaY / 200.0f;*/
 
+       m_mouseDirection.x = (middleOfScreenX - x) / 200.0f;
+       m_mouseDirection.y = (middleOfScreenY - y) / 200.0f;
 
-       //if (m_mousePos.x < 10)
-       //{
-       //   m_mousePos.x = 400;
-       //   win.mouse.WarpTo(400, m_mousePos.y);
-       //}
-
-
-       //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
-
-
-       if (deltaX == 0)
+       if (m_mouseDirection.x == 0)
        {
           if (x <= m_margin)
           {
@@ -268,7 +278,7 @@ namespace camera
           m_onRightEdge = false;
        }
 
-       if (deltaY == 0)
+       if (m_mouseDirection.y == 0)
        {
           if (y <= m_margin)
           {

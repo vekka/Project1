@@ -11,8 +11,8 @@ namespace win32window
    bool Win32Window::Win32Keyboard::keys[256];
    Win32Window::Win32Keyboard Win32Window::keyboard;
    Win32Window::Win32Mouse Win32Window::mouse;
-   int32 Win32Window::Win32Mouse::xPos = 0;
-   int32 Win32Window::Win32Mouse::yPos = 0;
+   int32 Win32Window::Win32Mouse::m_xPos = 0;
+   int32 Win32Window::Win32Mouse::m_yPos = 0;
    bool Win32Window::Win32Mouse::doMouseMove = false;
 
    Win32Window::funcptr_t Win32Window::customCallback = NULL;
@@ -32,7 +32,7 @@ namespace win32window
       : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
    {
       Create(hInstance, x, y, width, height, bitsPerPel, dStyle, parentWnd);
-      
+
    }
 
    Win32Window::~Win32Window()
@@ -132,7 +132,7 @@ namespace win32window
       dm.dmBitsPerPel = bitsPerPel;
       dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
 
-      long result = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
+      int32 result = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
       if (result != DISP_CHANGE_SUCCESSFUL)
       { // try again without forcing display frequency
          dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
@@ -212,7 +212,6 @@ namespace win32window
       caption = buffer;
    }
 
-
    void Win32Window::SetPosition(const uint32 newXPos, const uint32 newYPos)
    {
       SetWindowPos(hWnd, HWND_TOP, newXPos, newYPos, 0, 0, SWP_NOSIZE);
@@ -288,7 +287,7 @@ namespace win32window
    {
       //POINTS p;
       //HDC hdc;
-      //if (!do_mouse_move) 
+      //if (!do_mouse_move)
       //   return;
 
       //p = MAKEPOINTS(lp);
@@ -318,7 +317,7 @@ namespace win32window
          //   switch (wParam)
          //   {
          //   case SC_SCREENSAVE:
-         //   case SC_MONITORPOWER: 
+         //   case SC_MONITORPOWER:
          //   //case SC_KEYMENU:
          //      return 0;
          //   }
@@ -340,10 +339,9 @@ namespace win32window
       return true;
    }
 
-
-
+   //////////////////////////////////////////////////
    // Win32Mouse is nested into class Win32Window
-   Win32Window::Win32Mouse::Win32Mouse()
+   Win32Window::Win32Mouse::Win32Mouse() : m_isActive(false), m_isInitialized(false)
    {
    }
 
@@ -351,42 +349,67 @@ namespace win32window
    {
    }
 
+   void Win32Window::Win32Mouse::Activate()
+   {
+       if (!m_isInitialized)
+         return;
+       // ...
+       int32 width, height;
+       RECT winRect;
+
+       width = GetSystemMetrics (SM_CXSCREEN);
+       height = GetSystemMetrics (SM_CYSCREEN);
+
+   	GetWindowRect(m_hWnd, &winRect);
+	if (winRect.left < 0)
+		winRect.left = 0;
+	if (winRect.top < 0)
+		winRect.top = 0;
+	if (winRect.right >= width)
+		winRect.right = width-1;
+	if (winRect.bottom >= height-1)
+		winRect.bottom = height-1;
+	//m_window_center_x = (winRect.right + winRect.left)/2;
+	//window_center_y = (winRect.top + winRect.bottom)/2;
+   }
+
    void Win32Window::Win32Mouse::SetVisible(const bool visible)
    {
       ShowCursor(visible);
    }
+
    void Win32Window::Win32Mouse::WarpTo( int32 newX, int32 newY )
    {
       POINT pt;
-    
+
       pt.x = newX;
       pt.y = newY;
 
       // converts client area coordinates to screen coordinates... SetCursorPos needs screen coord.
-      ClientToScreen(hWnd, &pt);
+      ClientToScreen(m_hWnd, &pt);
       SetCursorPos(pt.x, pt.y);
 
       //RECT rcClip;           // new area for ClipCursor
       //RECT rcOldClip;        // previous area for ClipCursor
 
-      //// Record the area in which the cursor can move. 
+      //// Record the area in which the cursor can move.
 
       //GetClipCursor(&rcOldClip);
 
 
-      //// Get the dimensions of the application's window. 
+      //// Get the dimensions of the application's window.
 
       //GetWindowRect(hwnd, &rcClip);
       //
-      //// Confine the cursor to the application's window. 
+      //// Confine the cursor to the application's window.
 
       //ClipCursor(&rcClip);
 
-      //// 
-      //// Process input from the confined cursor. 
-      //// 
+      ////
+      //// Process input from the confined cursor.
+      ////
 
-      //// Restore the cursor to its previous area. 
+      //// Restore the cursor to its previous area.
 
       //ClipCursor(&rcOldClip);
 
@@ -403,8 +426,8 @@ namespace win32window
       //ClientToScreen(hWnd, &pt);
       SetCursorPos(x, y);
 
-      xPos = x;
-      yPos = y;
+      m_xPos = x;
+      m_yPos = y;
    }
 
    void Win32Window::Win32Mouse::SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen)
@@ -413,15 +436,15 @@ namespace win32window
 
    void Win32Window::Win32Mouse::GetClientPosition(int32 &xPos, int32 &yPos) const
    {
-      xPos = this->xPos;
-      yPos = this->yPos;
+      xPos = m_xPos;
+      yPos = m_yPos;
    }
 
    void Win32Window::Win32Mouse::GetScreenPosition(int32 &xPos, int32 &yPos) const
    {
       POINT point;
       GetCursorPos(&point);
-      ClientToScreen(hWnd, &point);
+      ClientToScreen(m_hWnd, &point);
       xPos = point.x;
       yPos = point.y;
    }
@@ -1156,7 +1179,7 @@ namespace win32window
    //   return DefWindowProc(hWnd, message, wParam, lParam);
    //}
    //
-   //Win32Window::Win32Window() 
+   //Win32Window::Win32Window()
    //   : hWnd(NULL),
    //   hParentWnd(NULL),
    //   hMenu(NULL),
@@ -1369,7 +1392,7 @@ namespace win32window
    //{
    //   Dimension2u oldExtent = GetClientExtent();
    //	if (oldExtent == newExtent)
-   //		return;   
+   //		return;
    //
    //	RECT rtClient;
    //	DWORD style, exStyle;
@@ -1379,9 +1402,9 @@ namespace win32window
    //	exStyle = GetWindowLong( hWnd, GWL_EXSTYLE );
    //
    //	AdjustWindowRectEx( &rtClient, style, GetMenuHandle() != NULL, exStyle );
-   //	if( style & WS_VSCROLL ) 
+   //	if( style & WS_VSCROLL )
    //		rtClient.right += GetSystemMetrics( SM_CXVSCROLL );
-   //	if( style & WS_HSCROLL ) 
+   //	if( style & WS_HSCROLL )
    //		rtClient.bottom += GetSystemMetrics( SM_CYVSCROLL );
    //
    //	SetWindowPos( hWnd, NULL, 0, 0,
@@ -1394,7 +1417,7 @@ namespace win32window
    //{
    //   // Fetch Client Rect from Windows
    //	RECT clientRect;
-   //	
+   //
    //   ::GetClientRect(hWnd, &clientRect);
    //
    //	// we don't care about origin as it's always 0, 0

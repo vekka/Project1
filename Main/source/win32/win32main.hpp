@@ -9,7 +9,7 @@
 
 namespace win32keyboard
 {
-   
+
    enum eVirtualKey
    {
       VKEY_LBUTTON = VK_LBUTTON,
@@ -190,13 +190,17 @@ namespace win32window
       {
          friend LRESULT CALLBACK win32window::Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
       private:
-         static int32 xPos, yPos;
-         uint32 winWidth, winHeight;
-         int32 borderX, borderY;
-         HWND hWnd;
-         bool isVisible;
-         HCURSOR hCursor;
+         static int32 m_xPos, m_yPos;
+         uint32 m_winWidth, m_winHeight;
+         int32 m_borderX, m_borderY;
+         HWND m_hWnd;
+         bool m_isVisible;
+         HCURSOR m_hCursor;
          static bool doMouseMove;
+
+         int32 m_oldButtonState;
+         bool m_isActive;
+         bool m_isInitialized;
 
       public:
          Win32Mouse();
@@ -216,6 +220,8 @@ namespace win32window
                return 0;
             }
          }
+
+         void Activate();
 
          void SetVisible(const bool visible);
          bool IsVisible() const;
