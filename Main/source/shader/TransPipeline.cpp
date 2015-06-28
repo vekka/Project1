@@ -20,27 +20,33 @@ namespace pipeline
    }
 
 
-   const Matrix4f &Pipeline::InitCameraTransform(const Vector3f& target, const Vector3f& up)
+   const Matrix4f &Pipeline::InitCameraTransform(const Vector3f &position,const Vector3f& target, const Vector3f& up)
    {
+      Vector3f forward, _up, right;
+   
+      forward = target - position;
+      forward.Normalize();
 
-      Vector3f n = target;
-      n.Normalize();
+      right = forward.CrossProd(up);
+      right.Normalize();
 
-      Vector3f u = up;
-      u.Normalize();
-      u = u.CrossProd(n);
+      _up = right.CrossProd(forward);
+      _up.Normalize();
 
-      Vector3f v = n.CrossProd(u);
+    
+      Vector3f temp_right = right;
+      Vector3f temp_up = _up;
+      Vector3f temp_forward = forward;
 
       m_cameraTransformation =
       { 
-         u.x, u.y, u.z, 0.0f,
-         v.x, v.y, v.z, 0.0f,
-         n.x, n.y, n.z, 0.0f,
-         0.0f, 0.0f, 0.0f, 1.0f
+         right.x, _up.x, forward.x, 0.0f,
+         right.y, _up.y, forward.y, 0.0f,
+         right.z, _up.z, forward.z, 0.0f,
+         0.0f,0.0f,0.0f,1.0f //-temp_right.DotProd(position), -temp_up.DotProd(position), -temp_forward.DotProd(position), 1.0f
       };
 
-
+      
       //m_cameraTransformation(0,0) = u.x;
       //m_cameraTransformation(0,1) = u.y;   
       //m_cameraTransformation(0,2) = u.z;
@@ -66,17 +72,17 @@ namespace pipeline
 
    const Matrix4f &Pipeline::GetViewTrans()
    {
-      Matrix4f cameraTranslationMatrix, cameraRotateTrans;
+      Matrix4f cameraRotation, cameraTranslation;
       
-      cameraTranslationMatrix = Matrix4f::IDENTITY;
-      cameraRotateTrans = Matrix4f::IDENTITY;
-      
-      
-      cameraTranslationMatrix.SetTranslation(-m_camera.pos.x, -m_camera.pos.y, -m_camera.pos.z);
-       
-      cameraRotateTrans = InitCameraTransform(m_camera.target, m_camera.up);
-      
-      m_Vtransformation = cameraRotateTrans * cameraTranslationMatrix;
+      cameraTranslation = Matrix4f::IDENTITY;
+      cameraRotation = Matrix4f::IDENTITY;
+
+      cameraTranslation.SetTranslation(m_camera.pos);
+     
+      cameraRotation = InitCameraTransform(m_camera.pos, m_camera.target, m_camera.up);
+
+
+      m_Vtransformation = cameraRotation*cameraTranslation;
 
       return m_Vtransformation;
    }

@@ -11,16 +11,16 @@ namespace win32window
    bool Win32Window::Win32Keyboard::keys[256];
    Win32Window::Win32Keyboard Win32Window::keyboard;
    Win32Window::Win32Mouse Win32Window::mouse;
-   int32 Win32Window::Win32Mouse::m_xPos = 0;
-   int32 Win32Window::Win32Mouse::m_yPos = 0;
-   bool Win32Window::Win32Mouse::doMouseMove = false;
-
-   Win32Window::funcptr_t Win32Window::customCallback = NULL;
+   int32 Win32Window::Win32Mouse::m_xPos;
+   int32 Win32Window::Win32Mouse::m_yPos;
+   int32 Win32Window::m_centerX;
+   int32 Win32Window::m_centerY;
+   Win32EventQueue Win32Window::win32EventQueue;
 
    bool Win32Window::isResized = false;
 
    Win32Window::Win32Window()
-      : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
+      : m_hWnd(NULL), m_fullscreen(false), m_externalWindow(false), m_close(false)
    {
    }
 
@@ -29,10 +29,9 @@ namespace win32window
       const uint32 width, const uint32 height,
       const uint32 bitsPerPel, const DWORD dStyle,
       const HWND parentWnd)
-      : hWnd(NULL), fullscreen(false), externalWindow(false), close(false)
+      : m_hWnd(NULL), m_fullscreen(false), m_externalWindow(false), m_close(false)
    {
-      Create(hInstance, x, y, width, height, bitsPerPel, dStyle, parentWnd);
-
+      Create(m_hInstance, x, y, width, height, bitsPerPel, dStyle, parentWnd);
    }
 
    Win32Window::~Win32Window()
@@ -41,12 +40,12 @@ namespace win32window
 
    HWND Win32Window::GetWindowHandle() const
    {
-      return hWnd;
+      return m_hWnd;
    }
 
    HMENU Win32Window::GetMenuHandle() const
    {
-      return hMenu;
+      return m_hMenu;
    }
 
    LPCTSTR className = "BasicApp";
@@ -60,11 +59,11 @@ namespace win32window
       const HWND parentWnd)
    {
       RegisterWindowClass();
-      this->width = width;
-      this->height = height;
-      this->bitsPerPel = bitsPerPel;
+      this->m_width = width;
+      this->m_height = height;
+      this->m_bitsPerPel = bitsPerPel;
 
-      hWnd = CreateWindowEx(NULL,
+      m_hWnd = CreateWindowEx(NULL,
          className,
          wndName,
          dStyle,
@@ -77,7 +76,7 @@ namespace win32window
          hinstance,
          NULL);
 
-      return hWnd;
+      return m_hWnd;
    }
 
    void Win32Window::RegisterWindowClass() const
@@ -114,7 +113,7 @@ namespace win32window
 
    bool Win32Window::SwitchToFullScreen()
    {
-      if (fullscreen)
+      if (m_fullscreen)
          return true;
 
       //if (changedtofullscreen)
@@ -127,9 +126,9 @@ namespace win32window
       dm.dmSize = sizeof(dm);
 
       EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
-      dm.dmPelsWidth = width;
-      dm.dmPelsHeight = height;
-      dm.dmBitsPerPel = bitsPerPel;
+      dm.dmPelsWidth = m_width;
+      dm.dmPelsHeight = m_height;
+      dm.dmBitsPerPel = m_bitsPerPel;
       dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
 
       int32 result = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
@@ -165,25 +164,25 @@ namespace win32window
       }
 
       // Clear the menu bar from the window for full screen
-      HMENU menu = GetMenu(hWnd);
+      HMENU menu = GetMenu(m_hWnd);
       if (menu)
       {
-         SetMenu(hWnd, NULL);
+         SetMenu(m_hWnd, NULL);
       }
 
-      fullscreen = true;
+      m_fullscreen = true;
 
       return true;
    }
 
    HINSTANCE Win32Window::GetInstance() const
    {
-      return hInstance;
+      return m_hInstance;
    }
 
    bool Win32Window::IsFullScreen() const
    {
-      return fullscreen;
+      return m_fullscreen;
    }
 
    void Win32Window::OnResize() const
@@ -193,7 +192,7 @@ namespace win32window
 
    bool Win32Window::SetCaption(const std::string &caption)
    {
-      return (bool)(SetWindowTextA(hWnd, caption.c_str()) != 0);
+      return (bool)(SetWindowTextA(m_hWnd, caption.c_str()) != 0);
    }
 
    bool Win32Window::GetResizeFlag() const
@@ -204,7 +203,7 @@ namespace win32window
    void Win32Window::GetCaption(std::string &caption) const
    {
       char buffer[512];
-      /*int32 strLen = */GetWindowTextA(hWnd, buffer, 512);
+      /*int32 strLen = */GetWindowTextA(m_hWnd, buffer, 512);
 
       //if (strLen == 0)
       //   caption = NULL;
@@ -214,43 +213,43 @@ namespace win32window
 
    void Win32Window::SetPosition(const uint32 newXPos, const uint32 newYPos)
    {
-      SetWindowPos(hWnd, HWND_TOP, newXPos, newYPos, 0, 0, SWP_NOSIZE);
+      SetWindowPos(m_hWnd, HWND_TOP, newXPos, newYPos, 0, 0, SWP_NOSIZE);
    }
 
    bool Win32Window::Show() const
    {
-      return ShowWindow(hWnd, SW_SHOWNORMAL) != 0;
+      return ShowWindow(m_hWnd, SW_SHOWNORMAL) != 0;
    }
 
    bool Win32Window::Update() const
    {
-      return UpdateWindow(hWnd) != 0;
+      return UpdateWindow(m_hWnd) != 0;
    }
 
    bool Win32Window::Minimize() const
    {
-      return ShowWindow(hWnd, SW_HIDE) != 0;
+      return ShowWindow(m_hWnd, SW_HIDE) != 0;
    }
 
    bool Win32Window::Maximize() const
    {
-      return ShowWindow(hWnd, SW_MAXIMIZE) != 0;
+      return ShowWindow(m_hWnd, SW_MAXIMIZE) != 0;
    }
 
    bool Win32Window::Restore() const
    {
-      return ShowWindow(hWnd, SW_RESTORE) != 0;
+      return ShowWindow(m_hWnd, SW_RESTORE) != 0;
    }
 
    bool Win32Window::Hide() const
    {
-      return ShowWindow(hWnd, SW_HIDE) != 0;
+      return ShowWindow(m_hWnd, SW_HIDE) != 0;
    }
 
    void Win32Window::GetDimension(int32 &width, int32 &height) const
    {
-      width = this->width;
-      height = this->height;
+      width = this->m_width;
+      height = this->m_height;
    }
 
    void Win32Window::HandleSystemMessages(MSG *msg)
@@ -357,62 +356,48 @@ namespace win32window
        int32 width, height;
        RECT winRect;
 
-       width = GetSystemMetrics (SM_CXSCREEN);
-       height = GetSystemMetrics (SM_CYSCREEN);
+       width = GetSystemMetrics(SM_CXSCREEN);
+       height = GetSystemMetrics(SM_CYSCREEN);
 
-   	GetWindowRect(m_hWnd, &winRect);
-	if (winRect.left < 0)
-		winRect.left = 0;
-	if (winRect.top < 0)
-		winRect.top = 0;
-	if (winRect.right >= width)
-		winRect.right = width-1;
-	if (winRect.bottom >= height-1)
-		winRect.bottom = height-1;
-	//m_window_center_x = (winRect.right + winRect.left)/2;
-	//window_center_y = (winRect.top + winRect.bottom)/2;
+        GetWindowRect(m_hWnd, &winRect);
+        if (winRect.left < 0)
+            winRect.left = 0;
+        if (winRect.top < 0)
+            winRect.top = 0;
+        if (winRect.right >= width)
+            winRect.right = width-1;
+        if (winRect.bottom >= height-1)
+             winRect.bottom = height-1;
+        m_centerX = (winRect.right + winRect.left)/2;
+        m_centerY = (winRect.top + winRect.bottom)/2;
+        SetCursorPos(m_centerX, m_centerY);
+        SetCapture(m_hWnd);
+        ClipCursor(&winRect);
+        SetVisible(false);
    }
 
-   void Win32Window::Win32Mouse::SetVisible(const bool visible)
+   void Win32Window::Win32Mouse::SetVisible(bool visible)
    {
-      ShowCursor(visible);
+     if (visible)
+       while(ShowCursor(TRUE) <= 0);
+     else
+       while (ShowCursor (FALSE) >= 0);
    }
 
-   void Win32Window::Win32Mouse::WarpTo( int32 newX, int32 newY )
+   // DO NOT TOUCH!!!!
+   void Win32Window::Win32Mouse::WarpTo(int32 *newX, int32 *newY)
    {
-      POINT pt;
+      POINT currentPos; // DO NOT TOUCH!!!!
 
-      pt.x = newX;
-      pt.y = newY;
+	  // find mouse movement
+      GetCursorPos(&currentPos); // DO NOT TOUCH!!!!
+	  // force the mouse to the center, so there's room to move
+      SetCursorPos (m_centerX, m_centerY); // DO NOT TOUCH!!!!
 
-      // converts client area coordinates to screen coordinates... SetCursorPos needs screen coord.
-      ClientToScreen(m_hWnd, &pt);
-      SetCursorPos(pt.x, pt.y);
+     *newX = currentPos.x - m_centerX; // DO NOT TOUCH!!!!
+	  *newY = currentPos.y - m_centerY; // DO NOT TOUCH!!!!
 
-      //RECT rcClip;           // new area for ClipCursor
-      //RECT rcOldClip;        // previous area for ClipCursor
-
-      //// Record the area in which the cursor can move.
-
-      //GetClipCursor(&rcOldClip);
-
-
-      //// Get the dimensions of the application's window.
-
-      //GetWindowRect(hwnd, &rcClip);
-      //
-      //// Confine the cursor to the application's window.
-
-      //ClipCursor(&rcClip);
-
-      ////
-      //// Process input from the confined cursor.
-      ////
-
-      //// Restore the cursor to its previous area.
-
-      //ClipCursor(&rcOldClip);
-
+     win32EventQueue.Enqueue(0, win32event::TYPE_MOUSE, *newX, *newY, 0, NULL);
    }
 
    bool Win32Window::Win32Mouse::IsVisible() const
@@ -422,7 +407,6 @@ namespace win32window
 
    void Win32Window::Win32Mouse::SetPosition(int32 x, int32 y)
    {
-      POINT pt;
       //ClientToScreen(hWnd, &pt);
       SetCursorPos(x, y);
 

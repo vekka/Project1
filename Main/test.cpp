@@ -108,7 +108,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
    Vector3f cameraUp(0.0f, 1.0f, 0.0f);
 
-
    FreeCamera camera( winWidth, winHeight,cameraPosition, cameraTarget,cameraUp );
    camera.InitProjection(FRUSTUM_PERSPECTIVE, -1, 1, 1, -1, 0.3f, 1000.0f);
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
@@ -117,7 +116,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    pipeline.Scale(1, 1, 1);
    pipeline.SetWorldPos(0.0f, 3.0f, -10.0f);
    Matrix4f viewMatrix = Matrix4f::IDENTITY;
-   
+   pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
+
    // light stuff, not in use yet
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
@@ -125,7 +125,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.Use();
    shader.AddUniformData("P", &camera.GetProjectionMatrix(), oglshader::TYPE_FMAT4, 1, true);
    shader.AddUniformData("M", &pipeline.GetWorldTrans(), oglshader::TYPE_FMAT4, 1, true);
-   shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);
+   shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1,true);
 
    shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
@@ -173,9 +173,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
       Point2i posClient;
       win.mouse.GetClientPosition(posClient.x, posClient.y);
-      camera.OnMouse(  posClient.x, posClient.y);
+      //camera.OnMouse(  posClient.x, posClient.y);
 
       pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
+
       shader.AddUniformData("V", &pipeline.GetViewTrans(), oglshader::TYPE_FMAT4, 1, true);
       
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);

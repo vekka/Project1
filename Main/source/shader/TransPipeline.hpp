@@ -102,7 +102,7 @@ namespace pipeline
          m_camera.up = up;
       }
 
-      const Matrix4f &InitCameraTransform( const Vector3f& target, const Vector3f& up);
+      const Matrix4f &InitCameraTransform( const Vector3f &pos, const Vector3f& target, const Vector3f& up);
 
       const Matrix4f &GetWPTrans();
       const Matrix4f &GetWVTrans();

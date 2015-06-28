@@ -5,7 +5,8 @@
 
 #include <string>
 
-#include "core/BasicTypes.hpp"
+#include "win32event.hpp"
+using win32event::Win32EventQueue;
 
 namespace win32keyboard
 {
@@ -147,10 +148,11 @@ namespace win32window
    {
    private:
       static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+      static int32 m_centerX, m_centerY;
+
+      static Win32EventQueue win32EventQueue;
 
    public:
-      typedef void(*funcptr_t)(int32 v1, int32 v2);
-
       class Win32Keyboard
       {
          friend LRESULT CALLBACK win32window::Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -191,12 +193,12 @@ namespace win32window
          friend LRESULT CALLBACK win32window::Win32Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
       private:
          static int32 m_xPos, m_yPos;
-         uint32 m_winWidth, m_winHeight;
+
          int32 m_borderX, m_borderY;
          HWND m_hWnd;
          bool m_isVisible;
          HCURSOR m_hCursor;
-         static bool doMouseMove;
+         static bool m_doMouseMove;
 
          int32 m_oldButtonState;
          bool m_isActive;
@@ -212,27 +214,26 @@ namespace win32window
             {
             case WM_MOUSEMOVE:
                //mouse.SetPosition();
-               xPos = LOWORD(lParam);
-               yPos = HIWORD(lParam);
+               m_xPos = LOWORD(lParam);
+               m_yPos = HIWORD(lParam);
 
-               if ( customCallback != NULL )
-                  customCallback(xPos, yPos);
                return 0;
             }
+            return 0;
          }
 
          void Activate();
 
-         void SetVisible(const bool visible);
+         void SetVisible(bool visible);
          bool IsVisible() const;
          void SetPosition(int32 x, int32 y);
          void SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen);
-         void WarpTo(int32 newX, int32 newY);
+         void WarpTo(int32 *newX, int32 *newY);
 
-         void GetClientPosition(int32 &xPos, int32 &yPos) const;
-         void GetScreenPosition(int32 &xPos, int32 &yPos) const;
+         void GetClientPosition(int32 &m_xPos, int32 &m_yPos) const;
+         void GetScreenPosition(int32 &m_xPos, int32 &m_yPos) const;
 
-         void GetRelativePosition(int32 &xPos, int32 &yPos) const;
+         void GetRelativePosition(int32 &m_xPos, int32 &m_yPos) const;
          void OnResize(const int32 &sizeX, const int32 &sizeY);
          void UpdateBorderSize(const bool isFullScreen, const bool resizable);
       };
@@ -240,33 +241,26 @@ namespace win32window
       static Win32Mouse mouse;
 
    protected:
-      HWND hWnd;
-      HMENU hMenu;
-      HINSTANCE hInstance;
-      bool fullscreen; // ogldriver or d3ddriver should psbly hav this option alone ? fullscreen need psbly anyway nne set in here. maybe also same for height/width/bpp.
-      bool externalWindow;
-      bool close;
-      uint32 height;
-      uint32 width;
-      uint32 bitsPerPel;
+      HWND m_hWnd;
+      HMENU m_hMenu;
+      HINSTANCE m_hInstance;
+      bool m_fullscreen; // ogldriver or d3ddriver should psbly hav this option alone ? fullscreen need psbly anyway nne set in here. maybe also same for height/width/bpp.
+      bool m_externalWindow;
+      bool m_close;
+      uint32 m_height;
+      uint32 m_width;
+      uint32 m_bitsPerPel;
 
       void RegisterWindowClass() const;
       void UnregisterWindowClass() const;
 
    public:
-      static funcptr_t customCallback;
-
       Win32Window();
       Win32Window(const HINSTANCE hinstance,
          const int32 x = CW_USEDEFAULT, const int32 y = CW_USEDEFAULT,
          const uint32 width = 800, const uint32 height = 600,
          const uint32 bitsPerPel = 32, const DWORD dStyle = WS_OVERLAPPEDWINDOW,
          const HWND parentWnd = NULL);
-
-      //void SetCallback(const funcptr_t &callback)
-      //{
-      //   customCallback = callback;
-      //}
 
       HWND Create(const HINSTANCE hinstance,
          const int32 x = CW_USEDEFAULT, const int32 y = CW_USEDEFAULT,
@@ -288,12 +282,10 @@ namespace win32window
 
       bool SetCaption(const std::string &);
       void GetCaption(std::string &) const;
-      void SetPosition(const uint32 newXPos, const uint32 newYPos);
-
-
+      void SetPosition(const uint32 m_xPos, const uint32 m_yPos);
       void GetPosition(uint32 &) const;
 
-      //void GetMousePos( int32 &xPos, int32 &yPos ) { return mousePos; }
+      //void GetMousePos( int32 &m_xPos, int32 &m_yPos ) { return mousePos; }
       //void SetDimension( const Dimension2u dimension );
       void OnResize() const;
       bool Show() const;

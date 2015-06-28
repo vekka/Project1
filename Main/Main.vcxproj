@@ -165,6 +165,7 @@
     <ClCompile Include="source\shader\TransPipeline.cpp" />
     <ClCompile Include="source\win32\win32console.cpp" />
     <ClCompile Include="source\win32\win32ctrl.cpp" />
+    <ClCompile Include="source\win32\win32event.cpp" />
     <ClCompile Include="source\win32\win32io.cpp" />
     <ClCompile Include="source\win32\win32main.cpp" />
     <ClCompile Include="source\win32\win32timer.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="source\shader\TransPipeline.hpp" />
     <ClInclude Include="source\win32\win32console.hpp" />
     <ClInclude Include="source\win32\win32ctrl.hpp" />
+    <ClInclude Include="source\win32\win32event.hpp" />
     <ClInclude Include="source\win32\win32io.hpp" />
     <ClInclude Include="source\win32\win32main.hpp" />
     <ClInclude Include="source\win32\win32timer.hpp" />

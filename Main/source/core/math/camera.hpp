@@ -6,7 +6,7 @@ using core::math::Point2i;
 using core::math::Vector3f;
 using core::math::Vector3i;
 using core::math::Vector4f;
-using core::math::Vector2i;
+using core::math::Vector2f;
 using core::math::Matrix4f;
 using core::math::Quaternion_f;
 
@@ -137,7 +137,7 @@ namespace camera
      bool m_onLeftEdge;
      bool m_onRightEdge;
      int32 m_margin;
-     Vector2i m_mouseDirection;
+     Vector2f m_mouseDirection;
 
 
    public:       
@@ -149,6 +149,7 @@ namespace camera
          m_windowHeight = windowHeight;
          m_position = pos;
          
+
          m_margin = 10;
          m_onUpperEdge = false;
          m_onLowerEdge = false;

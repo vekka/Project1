@@ -189,6 +189,9 @@
     <ClCompile Include="source\win32\win32io.cpp">
       <Filter>Source Files\Win32</Filter>
     </ClCompile>
+    <ClCompile Include="source\win32\win32event.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\model\md5model.hpp">
@@ -399,6 +402,9 @@
       <Filter>Source Files\SoundLib</Filter>
     </ClInclude>
     <ClInclude Include="source\win32\win32io.hpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="source\win32\win32event.hpp">
       <Filter>Source Files\Win32</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,7 @@
 
 namespace win32io
 {
-     Win32Window::Win32Mouse Win32IO::win32Mouse;
+    Win32Window::Win32Mouse Win32IO::win32Mouse;
 
     void Win32IO::Frame()
     {

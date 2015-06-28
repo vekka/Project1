@@ -135,26 +135,15 @@ namespace camera
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
-      //std::cout << "hor. angle: " << m_angleH << "ver. angle: " << m_angleV << std::endl;
-
       // get the axis to rotate around the x-axis.
       Vector3f temp;
       temp = m_target - m_position;
 
       Vector3f axis = temp.CrossProd( m_up);
-      // To be able to use the quaternion conjugate, the axis to
-      // rotate around must be normalized.
       axis.Normalize();
-
-      // Rotate around the y axis
-      //RotateCamera(MouseDirection.y, Axis.x, Axis.y, Axis.z);
-      // Rotate around the x axis
-       
       std::cout << m_mouseDirection.x << std::endl;
+
       m_target.Rotate(m_mouseDirection.x, vAxis);
-
-
-
       //Vector3f view(1.0f, 0.0f, 0.0f);
       //view.Rotate(m_mouseDirection.x, vAxis);
       //view.Normalize();
@@ -239,26 +228,20 @@ namespace camera
 
    void FreeCamera::OnMouse(  int32 x, int32 y)
    {
-         
+       m_mouseDirection.x = 0.0f;
+       m_mouseDirection.y = 0.0f;
        int32 middleOfScreenX = m_windowWidth / 2;
        int32 middleOfScreenY = m_windowHeight / 2;
        //ClientToScreen( Win32Window::hWnd, &pt);
-      
-       m_mouseDirection = Vector2i(middleOfScreenX - x, middleOfScreenY - y);
-
-
-       //SetCursorPos(middleOfScreen.x, middleOfScreen.y);
-       m_mousePos.x = x;
-       m_mousePos.y = y;
        if ((x == middleOfScreenX) && (y == middleOfScreenY))
           return;
 
   /*     m_angleH += (float)deltaX / 200.0f;
        m_angleV += (float)deltaY / 200.0f;*/
 
-       m_mouseDirection.x = (middleOfScreenX - x) / 200.0f;
-       m_mouseDirection.y = (middleOfScreenY - y) / 200.0f;
-
+       m_mouseDirection.x = (middleOfScreenX - x) / 2000.0f;
+       m_mouseDirection.y = (middleOfScreenY - y) / 2000.0f;
+       //SetCursorPos(middleOfScreenX, middleOfScreenY);
        if (m_mouseDirection.x == 0)
        {
           if (x <= m_margin)
@@ -341,8 +324,5 @@ namespace camera
        {
           Update();
        }
-
-       std::cout << std::endl << std::endl;
-
     }
 }
