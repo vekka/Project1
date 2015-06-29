@@ -135,15 +135,25 @@ namespace camera
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
 
-      // get the axis to rotate around the x-axis.
-      Vector3f temp;
-      temp = m_target - m_position;
 
-      Vector3f axis = temp.CrossProd( m_up);
-      axis.Normalize();
-      std::cout << m_mouseDirection.x << std::endl;
+      Vector3f view(1.0f, 0.0f, 0.0f);
 
-      m_target.Rotate(m_mouseDirection.x, vAxis);
+      //rotate around the vertical axis by m_angleH degrees
+      view.Rotate(m_angleH, vAxis);
+      view.Normalize();
+      
+      //rotate around the horizontal axis by m_angleV degrees
+      Vector3f hAxis;
+      hAxis = view.CrossProd(vAxis);
+      hAxis.Normalize();
+      view.Rotate(m_angleV, hAxis);
+
+      m_target = view;
+      m_target.Normalize();
+
+      m_up = m_target.CrossProd(hAxis);
+      m_up.Normalize();
+
       //Vector3f view(1.0f, 0.0f, 0.0f);
       //view.Rotate(m_mouseDirection.x, vAxis);
       //view.Normalize();
@@ -174,6 +184,8 @@ namespace camera
    bool FreeCamera::OnKeyboard(int32 key, float stepScale)
    {
       bool ret = false;
+      std::cout << m_target << std::endl;
+
       switch (key)
       {
       case win32keyboard::VKEY_W:
@@ -226,30 +238,29 @@ namespace camera
       return ret;
    }
 
-   void FreeCamera::OnMouse(  int32 x, int32 y)
+   void FreeCamera::OnMouse(  int32 newX, int32 newY)
    {
-       m_mouseDirection.x = 0.0f;
-       m_mouseDirection.y = 0.0f;
-       int32 middleOfScreenX = m_windowWidth / 2;
-       int32 middleOfScreenY = m_windowHeight / 2;
+       const int32 deltaX = newX - m_mousePos.x;
+       const int32 deltaY = newY - m_mousePos.y;
+
+
+       m_mousePos.x = newX;
+       m_mousePos.y = newY;
+
+
+       m_angleH += (float)deltaX / 200.0f;
+       m_angleV += (float)deltaY / 200.0f;
        //ClientToScreen( Win32Window::hWnd, &pt);
-       if ((x == middleOfScreenX) && (y == middleOfScreenY))
-          return;
 
-  /*     m_angleH += (float)deltaX / 200.0f;
-       m_angleV += (float)deltaY / 200.0f;*/
-
-       m_mouseDirection.x = (middleOfScreenX - x) / 2000.0f;
-       m_mouseDirection.y = (middleOfScreenY - y) / 2000.0f;
        //SetCursorPos(middleOfScreenX, middleOfScreenY);
-       if (m_mouseDirection.x == 0)
+       if (deltaX == 0)
        {
-          if (x <= m_margin)
+          if (newX <= m_margin)
           {
              //    m_AngleH -= 1.0f;
              m_onLeftEdge = true;
           }
-          else if (x >= (m_windowWidth - m_margin))
+          else if (newX >= (m_windowWidth - m_margin))
           {
              //    m_AngleH += 1.0f;
              m_onRightEdge = true;
@@ -261,13 +272,13 @@ namespace camera
           m_onRightEdge = false;
        }
 
-       if (m_mouseDirection.y == 0)
+       if (deltaY == 0)
        {
-          if (y <= m_margin)
+          if (newY <= m_margin)
           {
              m_onUpperEdge = true;
           }
-          else if (y >= (m_windowHeight - m_margin))
+          else if (newY >= (m_windowHeight - m_margin))
           {
              m_onLowerEdge = true;
           }

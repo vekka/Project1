@@ -20,30 +20,27 @@ namespace pipeline
    }
 
 
-   const Matrix4f &Pipeline::InitCameraTransform(const Vector3f &position,const Vector3f& target, const Vector3f& up)
+   const Matrix4f &Pipeline::InitCameraTransform(const Vector3f& target, const Vector3f& up)
    {
       Vector3f forward, _up, right;
    
-      forward = target - position;
+      forward = target;
       forward.Normalize();
 
-      right = forward.CrossProd(up);
-      right.Normalize();
+
+      Vector3f temp = up;
+      temp.Normalize();
+      right = target.CrossProd(temp);
 
       _up = right.CrossProd(forward);
       _up.Normalize();
-
-    
-      Vector3f temp_right = right;
-      Vector3f temp_up = _up;
-      Vector3f temp_forward = forward;
 
       m_cameraTransformation =
       { 
          right.x, _up.x, forward.x, 0.0f,
          right.y, _up.y, forward.y, 0.0f,
          right.z, _up.z, forward.z, 0.0f,
-         0.0f,0.0f,0.0f,1.0f //-temp_right.DotProd(position), -temp_up.DotProd(position), -temp_forward.DotProd(position), 1.0f
+         0.0f,0.0f,0.0f,1.0f
       };
 
       
@@ -76,15 +73,43 @@ namespace pipeline
       
       cameraTranslation = Matrix4f::IDENTITY;
       cameraRotation = Matrix4f::IDENTITY;
+      m_Vtransformation = Matrix4f::IDENTITY;
 
-      cameraTranslation.SetTranslation(m_camera.pos);
-     
-      cameraRotation = InitCameraTransform(m_camera.pos, m_camera.target, m_camera.up);
-
-
-      m_Vtransformation = cameraRotation*cameraTranslation;
+      cameraTranslation.SetTranslation(m_camera.pos.x, m_camera.pos.y, m_camera.pos.z);
+      cameraTranslation = cameraTranslation.Transpose();
+      cameraRotation = InitCameraTransform(m_camera.target, m_camera.up);
+      m_Vtransformation = cameraTranslation * cameraRotation;
 
       return m_Vtransformation;
+   }
+
+
+   const Matrix4f &Pipeline::GetWVPTrans()
+   {
+      Matrix4f scaleTrans, rotateTrans, translationTrans;
+      Matrix4f cameraRotation, cameraTranslation;
+
+      scaleTrans = Matrix4f::IDENTITY;
+      rotateTrans = Matrix4f::IDENTITY;
+      translationTrans = Matrix4f::IDENTITY;
+      cameraTranslation = Matrix4f::IDENTITY;
+      cameraRotation = Matrix4f::IDENTITY;
+      m_Vtransformation = Matrix4f::IDENTITY;
+      m_WVPtransformation = Matrix4f::IDENTITY;
+
+      //World transforms
+      scaleTrans.SetScale(m_scale.x, m_scale.y, m_scale.z);
+      rotateTrans.SetRotationRadians(m_rotateInfo);
+      translationTrans.SetTranslation(m_worldPos.x, m_worldPos.y, m_worldPos.z);
+
+      //camera transforms
+      cameraTranslation.SetTranslation(m_camera.pos.x, m_camera.pos.y, m_camera.pos.z);
+      cameraTranslation = cameraTranslation.Transpose();
+      cameraRotation = InitCameraTransform(m_camera.target, m_camera.up);
+
+      m_projectionMatrix = m_projectionMatrix.Transpose();
+      m_WVPtransformation = cameraTranslation * cameraRotation * m_projectionMatrix;// *rotateTrans * translationTrans;
+      return m_WVPtransformation;
    }
 
 }

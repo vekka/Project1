@@ -137,8 +137,6 @@ namespace camera
      bool m_onLeftEdge;
      bool m_onRightEdge;
      int32 m_margin;
-     Vector2f m_mouseDirection;
-
 
    public:       
       FreeCamera(int32 windowWidth, int32 windowHeight, const Vector3f &pos,
@@ -149,6 +147,9 @@ namespace camera
          m_windowHeight = windowHeight;
          m_position = pos;
          
+         m_angleH = 0.0f;
+         m_angleV = 0.0f;
+
 
          m_margin = 10;
          m_onUpperEdge = false;

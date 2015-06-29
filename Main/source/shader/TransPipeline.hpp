@@ -38,10 +38,8 @@ namespace pipeline
       Pipeline()
       {
          m_cameraTransformation = Matrix4f::IDENTITY;
-         m_VPtransformation = Matrix4f::IDENTITY;
          m_WPtransformation = Matrix4f::IDENTITY;
          m_Vtransformation = Matrix4f::IDENTITY;
-         m_Wtransformation = Matrix4f::IDENTITY;
          m_WVtransformation = Matrix4f::IDENTITY;
 
          m_scale = Vector3f(1.0f, 1.0f, 1.0f);
@@ -102,14 +100,11 @@ namespace pipeline
          m_camera.up = up;
       }
 
-      const Matrix4f &InitCameraTransform( const Vector3f &pos, const Vector3f& target, const Vector3f& up);
+      const Matrix4f &InitCameraTransform(const Vector3f& target, const Vector3f& up);
 
       const Matrix4f &GetWPTrans();
       const Matrix4f &GetWVTrans();
-      const Matrix4f &GetVPTrans();
       const Matrix4f &GetWVPTrans();
-      const Matrix4f &GetWorldTrans();
-
       const Matrix4f &Pipeline::GetViewTrans( );
 
    private:
@@ -119,12 +114,11 @@ namespace pipeline
 
       Matrix4f m_projectionMatrix;
       Matrix4f m_cameraTransformation;
-      
-      Matrix4f m_VPtransformation;
+    
       Matrix4f m_WPtransformation;
       Matrix4f m_Vtransformation;
-      Matrix4f m_Wtransformation;
       Matrix4f m_WVtransformation;
+      Matrix4f m_WVPtransformation;
 
       struct {
          Vector3f pos;
