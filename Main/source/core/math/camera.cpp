@@ -127,15 +127,13 @@ namespace camera
       m_onLowerEdge = false;
       m_onLeftEdge = false;
       m_onRightEdge = false;
-      m_mousePos.x = m_windowWidth / 2;
-      m_mousePos.y = m_windowHeight / 2;
+      m_mousePos.x = 0;
+      m_mousePos.y = 0;
    }
 
    void FreeCamera::Update()
    {
       const Vector3f vAxis(0.0f, 1.0f, 0.0f);
-
-
       Vector3f view(1.0f, 0.0f, 0.0f);
 
       //rotate around the vertical axis by m_angleH degrees
@@ -240,19 +238,34 @@ namespace camera
 
    void FreeCamera::OnMouse(  int32 newX, int32 newY)
    {
+      
+      // Any point in this? avoid unnecessary operations if no change in mouse Pos is detected
+      if ((newX == m_mousePos.x) && (newY == m_mousePos.y))
+         return;
        const int32 deltaX = newX - m_mousePos.x;
        const int32 deltaY = newY - m_mousePos.y;
-
 
        m_mousePos.x = newX;
        m_mousePos.y = newY;
 
-
-       m_angleH += (float)deltaX / 200.0f;
-       m_angleV += (float)deltaY / 200.0f;
+       m_angleH += (float)deltaX / 100.0f;
+       m_angleV += (float)deltaY / 100.0f;
        //ClientToScreen( Win32Window::hWnd, &pt);
 
-       //SetCursorPos(middleOfScreenX, middleOfScreenY);
+       std::cout << m_angleV << std::endl;
+
+       if (m_angleH > 2.0f * core::math::PI)
+          m_angleH = 0.0f;
+
+       // Cap the yaw between 0 and 360
+       if (m_angleH < 0.0f)
+          m_angleH = 2.0f * core::math::PI;
+
+       if (m_angleV > core::math::DegToRad(75.0f))
+          m_angleV = core::math::DegToRad(75.0f);
+       if (m_angleV < core::math::DegToRad(-75.0f))
+          m_angleV = core::math::DegToRad(-75.0f);
+
        if (deltaX == 0)
        {
           if (newX <= m_margin)

@@ -102,7 +102,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    shader.AddUniform("light.color");
    shader.Unuse();
 
-   Vector3f cameraPosition(.0f, .0f, .0f);
+   Vector3f cameraPosition(1.0f, 2.0f, 3.0f);
    Vector3f cameraTarget(0.0f, 0.0f, -1.0f);
    Vector3f cameraUp(0.0f, 1.0f, 0.0f);
 
@@ -111,21 +111,22 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    camera.SetupProjection(1.1693706f, 800.0f / 600.0f);
 
    Pipeline pipeline;
-   pipeline.Scale(1, 1, 1);
+   pipeline.Scale(1.0, 1.0, 1.0);
    pipeline.SetWorldPos(0.0f, 3.0f, -10.0f);
-   Matrix4f viewMatrix = Matrix4f::IDENTITY;
    pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
    pipeline.SetPerspectiveProj(camera.GetProjectionMatrix());
+
+   Matrix4f viewMatrix = Matrix4f::IDENTITY;
+  
 
    // light stuff, not in use yet
    Vector3f pos(0.333f, 0.0f, 0.3333f);
    Vector3f color(1.0f, 1.0f, 1.0f);
 
    shader.Use();
-   shader.AddUniformData("MVP", &pipeline.GetWVPTrans(), oglshader::TYPE_FMAT4, 1);
+   shader.AddUniformData("MVP", &pipeline.GetWVPTrans(), oglshader::TYPE_FMAT4, 1, true);
    shader.AddUniformData("light.position", pos.Ptr(), oglshader::TYPE_FVEC3, 1);
    shader.AddUniformData("light.color", color.Ptr(), oglshader::TYPE_FVEC3, 1);
-
    shader.Unuse();
 
    oglbuffer::generateBufferFromScene(sc, shader, vaoID, vboIndicesID);
@@ -136,7 +137,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
 
    win.mouse.SetVisible(true);
-   win.mouse.SetPosition(800/2, 600/2);
+   win.mouse.SetPosition(0,0);
    while (1)
    {
       oglContext.ClearBuffers();
@@ -172,8 +173,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       camera.OnMouse(  posClient.x, posClient.y);
 
       pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
-      shader.AddUniformData("V", &pipeline.GetWVPTrans(), oglshader::TYPE_FMAT4, 1);
-      
+      shader.AddUniformData("MVP", &pipeline.GetWVPTrans(), oglshader::TYPE_FMAT4, 1, true);
+
+
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();   
       glBindVertexArray(0);  

@@ -3,23 +3,6 @@
 namespace pipeline
 {
 
-   const Matrix4f& Pipeline::GetWorldTrans()
-   {
-      Matrix4f scaleTrans, rotateTrans, translationTrans;
-
-      scaleTrans = Matrix4f::IDENTITY;
-      rotateTrans = Matrix4f::IDENTITY;
-      translationTrans = Matrix4f::IDENTITY;
-
-      scaleTrans.SetScale(m_scale.x, m_scale.y, m_scale.z);
-      rotateTrans.SetRotationRadians(m_rotateInfo);
-      translationTrans.SetTranslation(m_worldPos.x, m_worldPos.y, m_worldPos.z);
-
-      m_Wtransformation = translationTrans * rotateTrans * scaleTrans;
-      return m_Wtransformation;
-   }
-
-
    const Matrix4f &Pipeline::InitCameraTransform(const Vector3f& target, const Vector3f& up)
    {
       Vector3f forward, _up, right;
@@ -37,9 +20,9 @@ namespace pipeline
 
       m_cameraTransformation =
       { 
-         right.x, _up.x, forward.x, 0.0f,
-         right.y, _up.y, forward.y, 0.0f,
-         right.z, _up.z, forward.z, 0.0f,
+         right.x, right.y, right.z, 0.0f,
+         _up.x, _up.y, _up.z, 0.0f,
+         forward.x, forward.y, forward.z, 0.0f,
          0.0f,0.0f,0.0f,1.0f
       };
 
@@ -104,11 +87,9 @@ namespace pipeline
 
       //camera transforms
       cameraTranslation.SetTranslation(m_camera.pos.x, m_camera.pos.y, m_camera.pos.z);
-      cameraTranslation = cameraTranslation.Transpose();
       cameraRotation = InitCameraTransform(m_camera.target, m_camera.up);
 
-      m_projectionMatrix = m_projectionMatrix.Transpose();
-      m_WVPtransformation = cameraTranslation * cameraRotation * m_projectionMatrix;// *rotateTrans * translationTrans;
+      m_WVPtransformation = m_projectionMatrix * cameraRotation * cameraTranslation * rotateTrans * translationTrans * scaleTrans;
       return m_WVPtransformation;
    }
 
