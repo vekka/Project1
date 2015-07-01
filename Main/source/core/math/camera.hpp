@@ -2,7 +2,9 @@
 #include "vector2.hpp"
 #include "matrix4.hpp"
 #include "quaternion.hpp"
+using core::math::Point2f;
 using core::math::Point2i;
+
 using core::math::Vector3f;
 using core::math::Vector3i;
 using core::math::Vector4f;
@@ -14,6 +16,7 @@ using core::math::Equals;
 #undef near
 #undef far
 
+#include <Windows.h>
 
 /*
 
@@ -131,7 +134,7 @@ namespace camera
      float m_angleH;
      float m_angleV;
      Vector3f m_translation;
-     Point2i m_mousePos;
+     Point2f m_mousePos;
      bool m_onUpperEdge;
      bool m_onLowerEdge;
      bool m_onLeftEdge;
@@ -176,7 +179,7 @@ namespace camera
       }
 
       bool OnKeyboard(int32 k, float stepScale);
-      void OnMouse(int32 x, int32 y);
+      void OnMouse(HWND hWnd);
       void OnRender();
    };
 

@@ -70,23 +70,27 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
    // Create the window object
    Win32Window win;
 
+   int32 winWidth = 800, winHeight = 600;
    //create window
-   win.Create(hInst, 20, 20, 800, 600);
+   win.Create(hInst, 20, 20, winWidth, winHeight);
    //Get window handle
    HWND hWnd = win.GetWindowHandle();
+
+   win.SwitchToFullScreen();
+
    //D3DDriver(HWND hWnd, float viewportWidth, float viewportHeight, float screenWidth, float screenHeight, bool fullscreen = false);
 
-   int32 winHeight, winWidth;
-   win.GetDimension(winWidth, winHeight);
-
-   OGLDriver oglContext(hWnd, 800, 600, false);
+   OGLDriver oglContext(hWnd, winWidth, winHeight, false);
    Vector4f clearColor(-1.0f, 0.0f, 0.0f, -1.0f);
    /*D3DDriver d3dDriver(hWnd, 30, 30, 800, 600, false);*/
    win.Show();
    win.Update();
+
    oglContext.SetClearColor(clearColor);
    oglContext.SetDepthTest(ZBUF_LESSEQUAL, 0.0f, 1.0f, 1.0f);
    oglContext.EnableCulling();
+
+
 
    GLSLShader shader;
    shader.Load(GL_VERTEX_SHADER, "source/shader/glsl/vertex/triangle.vert");
@@ -137,7 +141,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       numIndicesInScene +=( sc->m_ppMeshes[i]->m_numFaces * 3);
 
    win.mouse.SetVisible(true);
-   win.mouse.SetPosition(0,0);
+   win.mouse.SetPosition(winWidth/2, winHeight/2);
    while (1)
    {
       oglContext.ClearBuffers();
@@ -168,14 +172,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (win.keyboard.KeyIsDown(win32keyboard::VKEY_D))
          camera.OnKeyboard(win32keyboard::VKEY_D, 0.1f);
 
-      Point2i posClient;
-      win.mouse.GetClientPosition(posClient.x, posClient.y);
-      camera.OnMouse(  posClient.x, posClient.y);
-
+      camera.OnMouse(win.GetWindowHandle());
       pipeline.SetCamera(camera.GetPosition(), camera.GetTarget(), camera.GetUp());
       shader.AddUniformData("MVP", &pipeline.GetWVPTrans(), oglshader::TYPE_FMAT4, 1, true);
-
-
+  
       glDrawArrays(GL_TRIANGLES, 0, numIndicesInScene);
       shader.Unuse();   
       glBindVertexArray(0);  

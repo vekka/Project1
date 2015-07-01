@@ -127,8 +127,8 @@ namespace camera
       m_onLowerEdge = false;
       m_onLeftEdge = false;
       m_onRightEdge = false;
-      m_mousePos.x = 0;
-      m_mousePos.y = 0;
+      m_mousePos.x = m_windowWidth/2.0f;
+      m_mousePos.y = m_windowHeight/2.0f;
    }
 
    void FreeCamera::Update()
@@ -236,23 +236,34 @@ namespace camera
       return ret;
    }
 
-   void FreeCamera::OnMouse(  int32 newX, int32 newY)
+   void FreeCamera::OnMouse(HWND hWnd)
    {
-      
-      // Any point in this? avoid unnecessary operations if no change in mouse Pos is detected
-      if ((newX == m_mousePos.x) && (newY == m_mousePos.y))
-         return;
-       const int32 deltaX = newX - m_mousePos.x;
-       const int32 deltaY = newY - m_mousePos.y;
+       POINT currentPos; // DO NOT TOUCH!!!!
+       RECT windowRect;
+       GetWindowRect(hWnd, &windowRect);
 
-       m_mousePos.x = newX;
-       m_mousePos.y = newY;
+       int32 centerX = (windowRect.right - windowRect.left) / 2;
+       int32 centerY = (windowRect.bottom - windowRect.top) / 2;
+       // find mouse movement
+       GetCursorPos(&currentPos); // DO NOT TOUCH!!!!
+       if ((currentPos.x == m_mousePos.x) && (currentPos.y == m_mousePos.y))
+          return;
 
-       m_angleH += (float)deltaX / 100.0f;
-       m_angleV += (float)deltaY / 100.0f;
-       //ClientToScreen( Win32Window::hWnd, &pt);
+       // force the mouse to the center, so there's room to move
+       SetCursorPos(centerX, centerY); // DO NOT TOUCH!!!!
 
-       std::cout << m_angleV << std::endl;
+       //m_mousePos.x = currentPos.x - centerX; // DO NOT TOUCH!!!!
+       //m_mousePos.y = currentPos.y - centerY; // DO NOT TOUCH!!!!
+       const int32 mx = currentPos.x - centerX;
+       const int32 my = currentPos.y - centerY; // DO NOT TOUCH!!!!
+
+       m_mousePos.x = currentPos.x;
+       m_mousePos.y = currentPos.y;
+
+       m_angleH += mx / 200.0f;
+       m_angleV += my / 200.0f;
+
+       //std::cout << m_angleV << std::endl;
 
        if (m_angleH > 2.0f * core::math::PI)
           m_angleH = 0.0f;
@@ -266,41 +277,41 @@ namespace camera
        if (m_angleV < core::math::DegToRad(-75.0f))
           m_angleV = core::math::DegToRad(-75.0f);
 
-       if (deltaX == 0)
-       {
-          if (newX <= m_margin)
-          {
-             //    m_AngleH -= 1.0f;
-             m_onLeftEdge = true;
-          }
-          else if (newX >= (m_windowWidth - m_margin))
-          {
-             //    m_AngleH += 1.0f;
-             m_onRightEdge = true;
-          }
-       }
-       else
-       {
-          m_onLeftEdge = false;
-          m_onRightEdge = false;
-       }
+       //if (deltaX == 0)
+       //{
+       //   if (newX <= m_margin)
+       //   {
+       //      //    m_AngleH -= 1.0f;
+       //      m_onLeftEdge = true;
+       //   }
+       //   else if (newX >= (m_windowWidth - m_margin))
+       //   {
+       //      //    m_AngleH += 1.0f;
+       //      m_onRightEdge = true;
+       //   }
+       //}
+       //else
+       //{
+       //   m_onLeftEdge = false;
+       //   m_onRightEdge = false;
+       //}
 
-       if (deltaY == 0)
-       {
-          if (newY <= m_margin)
-          {
-             m_onUpperEdge = true;
-          }
-          else if (newY >= (m_windowHeight - m_margin))
-          {
-             m_onLowerEdge = true;
-          }
-       }
-       else
-       {
-          m_onUpperEdge = false;
-          m_onLowerEdge = false;
-       }
+       //if (deltaY == 0)
+       //{
+       //   if (newY <= m_margin)
+       //   {
+       //      m_onUpperEdge = true;
+       //   }
+       //   else if (newY >= (m_windowHeight - m_margin))
+       //   {
+       //      m_onLowerEdge = true;
+       //   }
+       //}
+       //else
+       //{
+       //   m_onUpperEdge = false;
+       //   m_onLowerEdge = false;
+       //}
        
           Update();
     }

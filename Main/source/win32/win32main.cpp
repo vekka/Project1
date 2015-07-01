@@ -116,26 +116,33 @@ namespace win32window
       if (m_fullscreen)
          return true;
 
+      int32 width, height;
+      width  = GetSystemMetrics(SM_CXSCREEN);
+      height = GetSystemMetrics(SM_CYSCREEN);
+
       //if (changedtofullscreen)
       //   return (changedisplaysettings(&desktopmode, 0) == disp_change_successful);
       //else
       //   return true;
+      
 
-      DEVMODE dm;
-      memset(&dm, 0, sizeof(dm));
-      dm.dmSize = sizeof(dm);
+      DEVMODE dmScreenSettings;                   // Device Mode
+      memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));       // Makes Sure Memory's Cleared
+      dmScreenSettings.dmSize = sizeof(dmScreenSettings);       // Size Of The Devmode Structure
+      dmScreenSettings.dmPelsWidth = width;            // Selected Screen Width
+      dmScreenSettings.dmPelsHeight = height;           // Selected Screen Height
+      dmScreenSettings.dmBitsPerPel = m_bitsPerPel;             // Selected Bits Per Pixel
+      dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
-      EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
-      dm.dmPelsWidth = m_width;
-      dm.dmPelsHeight = m_height;
-      dm.dmBitsPerPel = m_bitsPerPel;
-      dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
+      EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings);
 
-      int32 result = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
+      SetDisplayConfig();
+      int32 result = ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
       if (result != DISP_CHANGE_SUCCESSFUL)
       { // try again without forcing display frequency
-         dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-         result = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
+         dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+         result = ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+         return false;
       }
 
       switch (result)
@@ -407,11 +414,18 @@ namespace win32window
 
    void Win32Window::Win32Mouse::SetPosition(int32 x, int32 y)
    {
-      //ClientToScreen(hWnd, &pt);
-      SetCursorPos(x, y);
 
-      m_xPos = x;
-      m_yPos = y;
+      // position in Client window? confusing..
+      POINT pt;
+
+      pt.x = x;
+      pt.y = y;
+      ScreenToClient(m_hWnd, &pt);
+
+      SetCursorPos(pt.x, pt.y);
+
+      m_xPos = pt.x;
+      m_yPos = pt.y;
    }
 
    void Win32Window::Win32Mouse::SetCursor(const HWND hWnd, const uint32 winWidth, const uint32 winHeight, const bool isFullScreen)
